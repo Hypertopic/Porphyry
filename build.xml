@@ -1,0 +1,123 @@
+<!--
+	Ant file [http://ant.apache.org/] 
+	To compile and run Porphyry: ant
+	To run Porphyry: ant run
+	To deploy Porphyry: ant deploy -Duser=XXX -Dpass=XXX
+	To launch unit tests: ant unitTest
+-->
+<project name="Porphyry v5" default="unitTest">
+
+	<target name="init">
+		<mkdir dir="build"/>
+	</target>
+
+	<target name="lib" depends="init" description="unjar the dependent libraries">
+		<unjar dest="build"> 
+			<fileset dir="lib" includes="*.jar" /> 
+			<patternset includes="org/**" /> 
+		</unjar> 
+	</target>
+	
+	<target name="compileModel" depends="init, lib">
+		<javac srcdir="src/org/porphyry/model" destdir="build" target="1.5"/>
+	</target>
+
+	<target name="compilePresenter" depends="init, lib">
+		<javac srcdir="src/org/porphyry/presenter" destdir="build" target="1.5"/>
+	</target>
+
+	<target name="compileView" depends="init, lib">
+		<javac srcdir="src/org/porphyry/view" destdir="build" target="1.5"/>
+	</target>
+	
+	<target name="compile" depends="compileModel, compilePresenter, compileView" description="compile the source"/>
+
+	<target name="compileTest" depends="init, lib" description="compile the unit tests source">
+		<javac srcdir="src/org/porphyry/test" destdir="build" target="1.5"/>
+	</target>
+		
+	<target name="resources" depends="init">
+		<copy todir="build">
+			<fileset dir="src" excludes="**/*.java build.xml **/*.rnc"/> 
+		</copy>
+	</target>
+
+	<target name="schemas" depends="init">
+		<java jar="trang.jar" fork="true">
+			<arg value="src/org/porphyry/model/Actor.rnc"/>
+			<arg value="build/org/porphyry/model/Actor.xsd"/>
+		</java>
+		<java jar="trang.jar" fork="true">
+			<arg value="src/org/porphyry/model/Actors.rnc"/>
+			<arg value="build/org/porphyry/model/Actors.xsd"/>
+		</java>
+		<java jar="trang.jar" fork="true">
+			<arg value="src/org/porphyry/model/Entity.rnc"/>
+			<arg value="build/org/porphyry/model/Entity.xsd"/>
+		</java>
+		<java jar="trang.jar" fork="true">
+			<arg value="src/org/porphyry/model/Viewpoint.rnc"/>
+			<arg value="build/org/porphyry/model/Viewpoint.xsd"/>
+		</java>
+		<java jar="trang.jar" fork="true">
+			<arg value="src/org/porphyry/model/Topic.rnc"/>
+			<arg value="build/org/porphyry/model/Topic.xsd"/>
+		</java>
+	</target>
+
+	<target name="unitTest" depends="compileModel, compileTest, resources, schemas"> 
+		<junit>
+			<batchtest> 
+				<fileset dir="build" includes="**/Test*.class"/> 
+			</batchtest> 
+		</junit> 
+	</target> 
+
+	<target name="run">
+		<java classname="org.porphyry.view.Portfolio" 
+			classpath="build" fork="true">
+			<arg value="http://localhost/viewpoint/1/topic/1/"/>
+			<jvmarg value="-Xdock:name=Porphyry"/>
+			<sysproperty key="apple.laf.useScreenMenuBar" value="true"/>
+		</java>
+	</target>
+		 
+	<target name="test" depends="compile, resources, schemas, run"/>
+
+	<target name="jar" depends="compile, resources, schemas"
+		description="generate the client distribution" >
+		<mkdir dir="manifest"/>
+		<manifest file="manifest/CLIENT.MF">
+			<attribute name="Main-Class" 
+				value="org.porphyry.view.Portfolio"/>
+		</manifest>
+		<mkdir dir="dist"/>
+		<jar jarfile="dist/Porphyry.jar" 
+			basedir="build"
+			manifest="manifest/CLIENT.MF">
+			<include name="org/porphyry/model/**"/>
+			<include name="org/porphyry/presenter/**"/>
+			<include name="org/porphyry/view/**"/>
+		</jar>
+	</target>
+
+	<target name="sign" depends="jar">
+		<signjar jar="dist/Porphyry.jar"
+			keystore="../${user}.p12" 
+			alias="My key" 
+			storepass="${pass}"
+			storetype="PKCS12"/>
+	</target>
+
+	<target name="deploy" depends="sign">
+		<scp trust="yes" file="dist/Porphyry.jar" 
+		todir="${user}:${pass}@shell.sf.net:/home/groups/p/po/porphyry/htdocs"/>
+	</target>
+	
+	<target name="clean" description="clean up"> 
+		<delete dir="build"/>
+		<delete dir="dist"/>
+		<delete dir="manifest"/>
+	</target>
+
+</project>

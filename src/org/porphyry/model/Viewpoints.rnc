@@ -1,0 +1,6 @@
+element viewpoints {
+	element viewpoint {
+		attribute href {xsd:anyURI},
+		text
+	}*
+}

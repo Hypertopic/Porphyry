@@ -1,0 +1,17 @@
+element viewpoint {
+	attribute name {text}?,
+	(
+		element topic {
+			attribute href {xsd:anyURI},
+			text
+		}
+
+	|
+		element actor {
+			attribute href {xsd:anyURI},
+			attribute role {text}?,
+			text
+		}
+	)*
+}
+

@@ -1,0 +1,20 @@
+element topic {
+	attribute name {text}?,
+	element viewpoint {
+		attribute href {xsd:anyURI},
+		text
+	}?,
+	(
+		element entity {
+			attribute href {xsd:anyURI},
+			text
+		}
+	|
+		element relatedTopic {
+			attribute href {xsd:anyURI},
+			attribute relationType {text}?,
+			text
+		}
+	)*
+	
+}

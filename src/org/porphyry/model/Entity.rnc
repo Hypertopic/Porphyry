@@ -1,0 +1,22 @@
+element entity {
+	(
+		element topic {
+			attribute href {xsd:anyURI},
+			text
+		}
+
+	|
+		element \attribute {
+			attribute name {text},
+			attribute value {text},
+			attribute href {xsd:anyURI}?
+		}
+	|
+		element resource {
+			attribute name {text},
+			attribute href {xsd:anyURI}
+		}
+	)*
+}
+
+
