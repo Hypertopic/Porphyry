@@ -35,6 +35,7 @@ private final XMLHandler xmlHandler = new XMLHandler() { /////////////
 
 	private String url;
 
+	@Override
 	public void startElement(
 		String u, String n, String element, Attributes attr
 	) throws SAXException {
@@ -43,6 +44,7 @@ private final XMLHandler xmlHandler = new XMLHandler() { /////////////
 		} 
 	}
 
+	@Override
 	public void characters(char[] ch, int start, int length) {
 		try {
 			if (this.url != null) {
@@ -57,6 +59,7 @@ private final XMLHandler xmlHandler = new XMLHandler() { /////////////
 		}
 	}
 
+	@Override
 	public void endElement(String u, String n, String element) {
 		if (element.equals("viewpoint")) {
 			this.url = null;
@@ -99,21 +102,24 @@ public Vector<LabeledURL> getViewpoints() {
 	return new Vector<LabeledURL>(this.viewpoints);
 }
 
+@Override
 public String toXML(){
 	String xml = super.toXML() + "<viewpoints>\n";
-	for(int i=0;i<viewpoints.size();i++) {
-		xml += "<viewpoint href=\""+ viewpoints.get(i).getURL() + "\">" 
-		+ viewpoints.get(i).getLabel() + "</viewpoint>\n";
+	for(int i=0;i<this.viewpoints.size();i++) {
+		xml += "<viewpoint href=\""+ this.viewpoints.get(i).getURL() + "\">" 
+		+ this.viewpoints.get(i).getLabel() + "</viewpoint>\n";
 	}
 	return xml + "</viewpoints>\n";
 }
 
+@Override
 public void httpPut() 
 	throws UnsupportedOperationException
 {
 	throw new UnsupportedOperationException();
 }
 
+@Override
 public void httpPostCreate() 
 	throws UnsupportedOperationException
 {
@@ -126,6 +132,7 @@ public void httpPostUpdate()
 	throw new UnsupportedOperationException();
 }
 
+@Override
 public void httpDelete() 
 	throws UnsupportedOperationException
 {

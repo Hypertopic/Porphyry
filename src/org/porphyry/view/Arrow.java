@@ -37,6 +37,7 @@ public abstract Point getSource();
 
 public abstract Point getDestination();
 
+@Override
 public void doLayout() {
 	if (this.isVisible()) {
 	Point p1 = this.getSource();
@@ -63,6 +64,7 @@ public void doLayout() {
 	}
 }
 
+@Override
 public void paint(Graphics g) {
 	Graphics2D g2D = (Graphics2D) g;
 	g2D.setRenderingHint(

@@ -67,7 +67,7 @@ protected Portfolio() {
 		this.viewpointsPane, 
 		this.itemsPane
 	);
-	this.setContentPane(splitPane);
+	this.setContentPane(this.splitPane);
 	this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	MenuBar menu = new MenuBar(this.presenter, this, this);
 
@@ -138,12 +138,14 @@ private org.porphyry.presenter.Viewpoint presenter;
 private JLabel label = new JLabel();
 
 private JLayeredPane graphPane = new JLayeredPane() {
+	@Override
 	public void doLayout() {
 		Viewpoint.this.nodePane.setSize(this.getSize());
 	}
 };
 
 private JPanel nodePane = new JPanel() {
+	@Override
 	public void doLayout() {
 		super.doLayout();
 		for(Component c : Viewpoint.this.graphPane.getComponentsInLayer(1)) {
@@ -169,6 +171,7 @@ public Viewpoint(org.porphyry.presenter.Viewpoint presenter) {
 	);
 	this.label.addMouseListener(
 		new MouseAdapter() {
+			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (e.getButton()==MouseEvent.BUTTON1) { 
 					Viewpoint.this.switchClosure();
@@ -404,10 +407,12 @@ public void draw(Topic other) {
 	this.setVisible(true);
 }
 
+@Override
 public Point getSource() {
 	return this.source.getAnchor();
 }
 
+@Override
 public Point getDestination() {
 	return this.destination.getAnchor();
 }
@@ -582,7 +587,7 @@ public Entity(URL url) throws Exception {
 	this.url = url;
 	org.porphyry.model.Entity model = new org.porphyry.model.Entity(url);
 	model.httpGet(false);
-	java.util.regex.Matcher key = pattern.matcher(url.toString());
+	java.util.regex.Matcher key = this.pattern.matcher(url.toString());
 	key.matches(); 
 	this.setToolTipText(key.group(1));
 	java.util.List<String> names = model.getValues("name");
@@ -611,12 +616,15 @@ public Entity(URL url) throws Exception {
 	this.level = model.getLevel();
 	this.addMouseListener(
 		new MouseAdapter() {
+			@Override
 			public void mouseEntered(MouseEvent e) {
 				Entity.this.showDetails();
 			}
+			@Override
 			public void mouseExited(MouseEvent e) {
 				Entity.this.hideDetails();
 			}
+			@Override
 			public void mouseClicked(MouseEvent e) {
 				try {
 					URL url = Entity.this.source;

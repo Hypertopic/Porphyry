@@ -158,6 +158,7 @@ protected void reload() {
 	this.revalidate(); //TODO refactor
 }
 
+@Override
 public void doLayout() {
 	try {
 		for (Component c : this.getComponents()) {

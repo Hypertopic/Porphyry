@@ -39,7 +39,7 @@ private final Set<RelatedTopic> relatedTopics = new HashSet<RelatedTopic>();
 private final Set<URL> entities = new HashSet<URL>();//TODO optimize by using String instead?
 
 private final XMLHandler xmlHandler = new XMLHandler() { /////////////
-	//Override 
+	@Override 
 	public void startElement (
 		String u, String n, String element, Attributes attr
 	) throws SAXException {
@@ -92,6 +92,7 @@ public class RelatedTopic {
 		return url;
 	}
 
+	@Override
 	public boolean equals(Object that) {
 		return that instanceof RelatedTopic
 		&& this.href.equals(((RelatedTopic) that).href)
@@ -232,8 +233,9 @@ public List<URL> getEntities() {
 	return new ArrayList<URL>(this.entities);
 }
 
+@Override
 public String toXML() {
-	String xml = super.toXML() + "<topic name=\"" + name +"\">\n";
+	String xml = super.toXML() + "<topic name=\"" + this.name +"\">\n";
 	for (RelatedTopic relatedTopic : this.relatedTopics) {
 		xml += "<relatedTopic relationType=\"" 
 			+ relatedTopic.getRelationType() + "\" href=\"" 

@@ -37,6 +37,7 @@ private final Set<URL> topics = new HashSet<URL>(); //upper topics
 private final Vector<URL> actors = new Vector<URL>();
 
 private final XMLHandler xmlHandler = new XMLHandler() { /////////////
+	@Override
 	public void startElement (
 		String u, String n, String element, Attributes attr
 	) throws SAXException {
@@ -139,8 +140,9 @@ public List<URL> getUpperTopics() {
 	return new ArrayList<URL>(this.topics);
 }
 
+@Override
 public String toXML() {
-	String xml = super.toXML() + "<viewpoint name=\"" + name +"\">\n";
+	String xml = super.toXML() + "<viewpoint name=\"" + this.name +"\">\n";
 	for (URL url : this.actors) {
 		xml += "<actor href=\"" + url + "\"/>\n";
 	}

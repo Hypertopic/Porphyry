@@ -60,10 +60,12 @@ public String getLabel() {
 	return this.label;
 }
 
+@Override
 public String toString() {
 	return this.label;
 }
 
+@Override
 public boolean equals(Object that) {
 	return that instanceof LabeledURL
 	&& this.url.equals(((LabeledURL)that).url);

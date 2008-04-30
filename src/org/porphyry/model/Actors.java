@@ -35,6 +35,7 @@ private final XMLHandler xmlHandler = new XMLHandler() { /////////////
 
 	private String url;
 
+	@Override
 	public void startElement(
 		String u, String n, String element, Attributes attr
 	) throws SAXException {
@@ -43,6 +44,7 @@ private final XMLHandler xmlHandler = new XMLHandler() { /////////////
 		} 
 	}
 
+	@Override
 	public void characters(char[] ch, int start, int length) {
 		try {
 			if (this.url != null) {
@@ -57,6 +59,7 @@ private final XMLHandler xmlHandler = new XMLHandler() { /////////////
 		}
 	}
 
+	@Override
 	public void endElement(String u, String n, String element) {
 		if (element.equals("actor")) {
 			this.url = null;
@@ -99,18 +102,21 @@ public Vector<LabeledURL> getActors() {
 	return new Vector<LabeledURL>(this.actors);
 }
 
+@Override
 public String toXML() 
 	throws UnsupportedOperationException
 {
 	throw new UnsupportedOperationException();
 }
 
+@Override
 public void httpPut() 
 	throws UnsupportedOperationException
 {
 	throw new UnsupportedOperationException();
 }
 
+@Override
 public void httpPostCreate() 
 	throws UnsupportedOperationException
 {
@@ -123,6 +129,7 @@ public void httpPostUpdate()
 	throw new UnsupportedOperationException();
 }
 
+@Override
 public void httpDelete() 
 	throws UnsupportedOperationException
 {

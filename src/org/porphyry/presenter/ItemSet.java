@@ -37,6 +37,7 @@ public static final Comparator<URL> comparator = new Comparator<URL>() {
 	public int compare(URL one, URL other) {
 		return one.toString().compareTo(other.toString());	
 	}
+	@Override
 	public boolean equals(Object o) {
 		return false;
 	}
@@ -154,7 +155,7 @@ public void clear() {
 /**
 * Deep and efficient copy.
 */
-//@Override
+@Override
 public Object clone() {
 	ItemSet newSet = new ItemSet();
 	for (Map.Entry<URL, WholeItem> oldItem : this.wholeItems.entrySet()) {
@@ -211,7 +212,7 @@ public boolean isEmpty() {
 	return this.wholeItems.isEmpty();
 }
 
-//@Override
+@Override
 public String toString() {
 	return this.wholeItems.toString();
 }
@@ -286,7 +287,7 @@ public void retainAll(WholeItem that) {
 	}
 }
 
-//@Override
+@Override
 public Object clone() {
 	WholeItem newItem = new WholeItem(this.url, this.level);
 	newItem.fragments.addAll(this.fragments);
@@ -322,13 +323,13 @@ abstract class Fragment implements Cloneable {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 /**
 * @return the fragment parameters as formatted in a URL 
 **/
-//@Override
+@Override
 abstract public String toString();
 
-//@Override
+@Override
 abstract public boolean equals(Object that);
 
-//@Override 
+@Override 
 abstract public Object clone();
 
 abstract public boolean intersects(Fragment that);
@@ -350,7 +351,7 @@ public TextFragment(int begin, int end) {
 	this.end = end;
 }
 
-//@Override
+@Override
 public boolean intersects(Fragment that) {
 	return that instanceof TextFragment && (
 		this.begin<=((TextFragment) that).begin
@@ -361,7 +362,7 @@ public boolean intersects(Fragment that) {
 	);
 }
 
-//@Override
+@Override
 public Fragment createUnion(Fragment that) {
 	return new TextFragment(
 		Math.min(this.begin, ((TextFragment) that).begin),
@@ -369,19 +370,19 @@ public Fragment createUnion(Fragment that) {
 	);
 }
 
-//@Override
+@Override
 public String toString() {
 	return ""+this.begin+"+"+this.end;
 }
 
-//@Override
+@Override
 public boolean equals(Object that) {
 	return that instanceof TextFragment
 		&& ((TextFragment) that).begin==this.begin
 		&& ((TextFragment) that).end==this.end;
 }
 
-//@Override 
+@Override 
 public Object clone() {
 	return new TextFragment(this.begin, this.end);
 }
@@ -404,20 +405,20 @@ public ImageFragment(Rectangle2D rectangle) {
 	this.rectangle = rectangle.getBounds();
 }
 
-//@Override
+@Override
 public boolean intersects(Fragment that) {
 	return that instanceof ImageFragment 
 		&& this.rectangle.intersects(((ImageFragment) that).rectangle);
 }
 
-//@Override
+@Override
 public Fragment createUnion(Fragment that) {
 	return new ImageFragment(
 		this.rectangle.createUnion(((ImageFragment) that).rectangle)
 	);
 }
 
-//@Override
+@Override
 public String toString() {
 	return "" + this.rectangle.x
 		+ "+" + this.rectangle.y
@@ -425,13 +426,13 @@ public String toString() {
 		+ "+" + (this.rectangle.y + this.rectangle.height);
 }
 
-//@Override
+@Override
 public boolean equals(Object that) {
 	return that instanceof ImageFragment
 		&& ((ImageFragment) that).rectangle.equals(this.rectangle);
 }
 
-//@Override 
+@Override 
 public Object clone() {
 	return new ImageFragment(this.rectangle);
 }

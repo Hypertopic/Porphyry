@@ -32,7 +32,7 @@ protected abstract void runOnReceive();
 public boolean isUnique() {
 	boolean unique;
 	try {
-		final ServerSocket server = new ServerSocket(port);
+		final ServerSocket server = new ServerSocket(this.port);
 		unique = true;
 		Thread portListenerThread = new Thread("UniqueInstance-PortListenerThread") {
 			{
@@ -67,9 +67,9 @@ public boolean isUnique() {
 private void send() {
 	PrintWriter pw = null;
 	try {
-		Socket socket = new Socket("localhost", port);
+		Socket socket = new Socket("localhost", this.port);
 		pw = new PrintWriter(socket.getOutputStream());
-		pw.write(message);
+		pw.write(this.message);
 	} catch(IOException e) {
 		Logger.getLogger("UniqueInstance").warning("Socket writing failure.");
 	} finally {

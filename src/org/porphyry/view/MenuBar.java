@@ -127,17 +127,17 @@ private final ExtendedFrame frame;
 
 private final MenuItem actorSuscribe = 
 	new MenuItem("ACTOR_SUSCRIBE") {
-		void run() {}
+		@Override void run() {}
 	};
 
 private final MenuItem actorUnsuscribe = 
 	new MenuItem("ACTOR_UNSUSCRIBE") {
-		void run() {}
+		@Override void run() {}
 	};
 
 private final MenuItem actorCreate = 
 	new MenuItem("ACTOR_CREATE") {
-		void run() {}
+		@Override void run() {}
 	};
 
 private final Menu actorMenu = 
@@ -145,6 +145,7 @@ private final Menu actorMenu =
 
 private final MenuItem viewpointLoad = 
 	new MenuItem("VIEWPOINT_LOAD") {
+		@Override 
 		void run() {
 			MenuBar.this.askForViewpoints( 
 				MenuBar.this.askForActor(
@@ -154,6 +155,7 @@ private final MenuItem viewpointLoad =
 				this.getText()
 			);
 		}
+		@Override
 		boolean mustBeEnabled() {
 			return true;
 		}
@@ -164,6 +166,7 @@ private final Menu viewpointClose =
 
 private final MenuItem viewpointCreate = 
 	new MenuItem("VIEWPOINT_CREATE") {
+		@Override
 		void run() {
 			MenuBar.this.createViewpoint( 
 				MenuBar.this.askForActor(
@@ -173,6 +176,7 @@ private final MenuItem viewpointCreate =
 				this.getText()
 			);
 		}
+		@Override
 		boolean mustBeEnabled() {
 			return true;
 		}
@@ -186,10 +190,12 @@ private final Menu viewpointMenu =
 
 private final MenuItem topicCreateIsolated = 
 	new MenuItem("ISOLATED_TOPIC") {
+		@Override
 		void run() {
 			((Viewpoint) MenuBar.this.frame)
 				.createIsolatedTopic();
 		}
+		@Override
 		boolean mustBeEnabled() {
 			return MenuBar.this.frame instanceof Viewpoint;
 		}
@@ -197,10 +203,12 @@ private final MenuItem topicCreateIsolated =
 
 private final MenuItem topicCreateGeneric = 
 	new MenuItem("GENERIC_TOPIC") {
+		@Override
 		void run() {
 			((Viewpoint) MenuBar.this.frame)
 				.createTopic("includes");
 		}
+		@Override
 		boolean mustBeEnabled() {
 			return MenuBar.this.frame instanceof Viewpoint;
 		}
@@ -208,10 +216,12 @@ private final MenuItem topicCreateGeneric =
 
 private final MenuItem topicCreateSpecific = 
 	new MenuItem("SPECIFIC_TOPIC") {
+		@Override
 		void run() {
 			((Viewpoint) MenuBar.this.frame)
 				.createTopic("includedIn");
 		}
+		@Override
 		boolean mustBeEnabled() {
 			return MenuBar.this.frame instanceof Viewpoint;
 		}
@@ -222,9 +232,11 @@ private final Menu topicCreate =
 
 private final MenuItem topicDestroy = 
 	new MenuItem("TOPIC_DESTROY") {
+		@Override
 		void run() {
 			((Viewpoint) MenuBar.this.frame).destroyTopics();
 		}
+		@Override
 		boolean mustBeEnabled() {
 			return MenuBar.this.frame instanceof Viewpoint;
 		}
@@ -241,41 +253,49 @@ private final JMenuItem topicPaste =
 
 private final MenuItem itemInsert = 
 	new MenuItem("ITEM_INSERT") {
+		@Override
 		void run() {}
 	};
 
 private final MenuItem itemUnlink = 
 	new MenuItem("ITEM_UNLINK") {
+		@Override
 		void run() {}
 	};
 
 private final MenuItem itemCut = 
 	new MenuItem("ITEM_CUT") {
+		@Override
 		void run() {}
 	};
 
 private final MenuItem itemCopy= 
 	new MenuItem("ITEM_COPY") {
+		@Override
 		void run() {}
 	};
 
 private final MenuItem itemPaste = 
 	new MenuItem("ITEM_PASTE") {
+		@Override
 		void run() {}
 	};
 
 private final MenuItem corpusLoad = 
 	new MenuItem("CORPUS_LOAD") {
+		@Override
 		void run() {}
 	};
 
 private final MenuItem corpusClose = 
 	new MenuItem("CORPUS_CLOSE") {
+		@Override
 		void run() {}
 	};
 
 private final MenuItem corpusCreate = 
 	new MenuItem("CORPUS_CREATE") {
+		@Override	
 		void run() {}
 	};
 

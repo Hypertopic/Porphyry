@@ -40,6 +40,7 @@ private final List<URL> topics =
 	new ArrayList<URL>();
 
 private final XMLHandler xmlHandler = new XMLHandler() {
+	@Override
 	public void startElement (
 		String u, String n, String element, Attributes attr
 	) throws SAXException {
@@ -185,6 +186,7 @@ public List<String> getValues(String key) {
 	return values;
 }
 
+@Override
 public String toXML() {
 	String xml = super.toXML() + "<entity>\n";
 	for(Attribute attribute : this.attributes) {
@@ -194,6 +196,7 @@ public String toXML() {
 	return xml + "</entity>\n";
 }
 
+@Override
 public void httpPostCreate()
         throws UnsupportedOperationException
 {

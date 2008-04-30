@@ -18,10 +18,12 @@ public class WrapLayout extends FlowLayout {
 		super(align);
 	}
 
+	@Override
 	public Dimension preferredLayoutSize(Container target) {
 		return layoutSize(target, true);
 	}
 
+	@Override
 	public Dimension minimumLayoutSize(Container target) {
 		return layoutSize(target, false);
 	}
@@ -72,12 +74,13 @@ public class WrapLayout extends FlowLayout {
 		dim.height += rowHeight;
 	}
 
+	@Override
 	public void layoutContainer(final Container target) {
 		Dimension size = preferredLayoutSize(target);
-		if (size.equals(preferredLayoutSize)) {
+		if (size.equals(this.preferredLayoutSize)) {
 			super.layoutContainer(target);
 		} else {
-			preferredLayoutSize = size;
+			this.preferredLayoutSize = size;
 			target.invalidate();
 			Container top = target;
 			while (top.getParent() != null) {
