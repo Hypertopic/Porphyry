@@ -25,7 +25,6 @@ package org.porphyry.view;
 
 import javax.swing.*;
 import javax.swing.plaf.*;
-import javax.swing.plaf.metal.*;
 import java.awt.*;
 
 public class PorphyryTheme /*extends OceanTheme*/ {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>

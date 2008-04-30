@@ -24,14 +24,11 @@ http://www.gnu.org/licenses/gpl.html
 package org.porphyry.view;
 
 import java.util.*;
-import java.net.*;
 import java.awt.*;
-import java.awt.dnd.*;
 import java.awt.event.*;
 import java.beans.*;
 import javax.swing.*;
 import javax.swing.border.*;
-import javax.swing.plaf.metal.*;
 
 public class Viewpoint extends ExtendedFrame 
 	implements Observer, PropertyChangeListener {//>>>>>>>>>>>>>>>>>>>>>>>>

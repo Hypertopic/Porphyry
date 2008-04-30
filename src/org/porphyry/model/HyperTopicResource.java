@@ -25,8 +25,6 @@ package org.porphyry.model;
 
 import java.net.*;
 import java.io.*;
-import java.util.*;
-import java.util.regex.*;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.*;
 import javax.xml.validation.*;
@@ -210,7 +208,7 @@ public void httpGet(boolean validating)
 		parserFactory.setSchema(
 			schemaFactory.newSchema(
 				thisClass.getResource(
-					thisClass.getSimpleName()+".xsd"
+					this.getClass().getSimpleName()+".xsd"
 				)
 			)
 		);

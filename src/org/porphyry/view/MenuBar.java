@@ -231,13 +231,13 @@ private final MenuItem topicDestroy =
 	};
 
 private final JMenuItem topicCut = 
-	new JMenuItem(TopicsTransferHandler.getSingleton().getCutAction());
+	new JMenuItem(TopicsTransferHandler.getCutAction());
 
 private final JMenuItem topicCopy = 
-	new JMenuItem(TopicsTransferHandler.getSingleton().getCopyAction());
+	new JMenuItem(TopicsTransferHandler.getCopyAction());
 
 private final JMenuItem topicPaste = 
-	new JMenuItem(TopicsTransferHandler.getSingleton().getPasteAction());
+	new JMenuItem(TopicsTransferHandler.getPasteAction());
 
 private final MenuItem itemInsert = 
 	new MenuItem("ITEM_INSERT") {

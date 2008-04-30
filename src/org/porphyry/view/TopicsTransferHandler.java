@@ -24,7 +24,6 @@ http://www.gnu.org/licenses/gpl.html
 package org.porphyry.view;
 
 import java.util.*;
-import java.net.URL;
 import java.awt.datatransfer.*;
 import java.io.IOException;
 import javax.swing.*;

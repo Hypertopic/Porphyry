@@ -6,8 +6,6 @@ package org.porphyry.view;
 
 import java.awt.*;
 
-import javax.swing.*;
-
 public class WrapLayout extends FlowLayout {
 
 	private Dimension preferredLayoutSize;

@@ -30,7 +30,6 @@ import java.net.*;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
-import javax.swing.plaf.metal.*;
 import org.porphyry.model.LabeledURL;
 import org.porphyry.presenter.ItemSet;
 

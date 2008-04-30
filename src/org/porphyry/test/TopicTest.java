@@ -2,8 +2,6 @@ package org.porphyry.test;
 
 import static org.junit.Assert.*;
 
-import javax.print.DocFlavor.URL;
-
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;

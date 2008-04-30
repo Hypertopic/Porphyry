@@ -24,7 +24,6 @@ http://www.gnu.org/licenses/gpl.html
 package org.porphyry.model;
 
 import java.net.*;
-import java.io.*;
 import java.util.*;
 import org.xml.sax.*;
 

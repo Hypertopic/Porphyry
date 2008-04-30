@@ -50,7 +50,7 @@ private static final Pattern parentPattern =
 //TODO a new data structure to optimize getSize(level)?
 
 public Set<URL> getAll() {
-	Set<URL> c = new TreeSet<URL>(this.comparator);
+	Set<URL> c = new TreeSet<URL>(comparator);
 	for(Map.Entry<URL, WholeItem> entry : this.wholeItems.entrySet()) {
 		c.add(entry.getKey());
 		WholeItem item = entry.getValue();

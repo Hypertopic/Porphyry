@@ -265,7 +265,7 @@ public void unlinkItems(Collection<URL> items)  throws Exception {
 
 //Implement
 public int compareTo(Topic that) {
-	int value = Viewpoint.this.collator.compare(
+	int value = Viewpoint.collator.compare(
 		this.getName(),
 		that.getName()
 	);
