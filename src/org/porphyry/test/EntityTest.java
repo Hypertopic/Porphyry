@@ -1,11 +1,11 @@
-package src.org.porphyry.test;
+package org.porphyry.test;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 
-import src.org.porphyry.model.Entity;
-import src.org.porphyry.model.HyperTopicException;
+import org.porphyry.model.Entity;
+import org.porphyry.model.HyperTopicException;
 import junit.framework.TestCase;
 
 public class EntityTest extends TestCase {
