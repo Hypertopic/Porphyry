@@ -6,42 +6,12 @@
 -->
 <project name="Porphyry v5" default="run">
 
-	<target name="init">
+	<target name="prepare">
 		<mkdir dir="build"/>
 	</target>
-
-	<target name="lib" depends="init" description="unjar the dependent libraries">
-		<unjar dest="build"> 
-			<fileset dir="lib" includes="*.jar" /> 
-			<patternset includes="org/**" /> 
-		</unjar> 
-	</target>
 	
-	<target name="compileModel" depends="init, lib">
-		<javac srcdir="src/org/porphyry/model" destdir="build" target="1.5"/>
-	</target>
-
-	<target name="compilePresenter" depends="init, lib">
-		<javac srcdir="src/org/porphyry/presenter" destdir="build" target="1.5"/>
-	</target>
-
-	<target name="compileView" depends="init, lib">
-		<javac srcdir="src/org/porphyry/view" destdir="build" target="1.5"/>
-	</target>
-	
-	<target name="compile" depends="compileModel, compilePresenter, compileView" description="compile the source"/>
-
-	<target name="compileTest" depends="init, lib" description="compile the unit tests source">
-		<javac srcdir="src/org/porphyry/test" destdir="build" target="1.5"/>
-	</target>
-		
-	<target name="resources" depends="init">
-		<copy todir="build">
-			<fileset dir="src" excludes="**/*.java build.xml **/*.rnc"/> 
-		</copy>
-	</target>
-
-	<target name="schemas" depends="init">
+	<target name="compile-common" depends="prepare">
+		<javac srcdir="src/org/porphyry/model" destdir="build" target="1.5" />
 		<java jar="trang.jar" fork="true">
 			<arg value="src/org/porphyry/model/Actor.rnc"/>
 			<arg value="build/org/porphyry/model/Actor.xsd"/>
@@ -61,18 +31,30 @@
 		<java jar="trang.jar" fork="true">
 			<arg value="src/org/porphyry/model/Topic.rnc"/>
 			<arg value="build/org/porphyry/model/Topic.xsd"/>
-		</java>
+		</java>		
+	</target>
+	
+	<target name="compile" depends="compile-common" description="Compile application sources">
+		<javac srcdir="src/org/porphyry/presenter" destdir="build" target="1.5" />
+		<javac srcdir="src/org/porphyry/view" destdir="build" target="1.5" />
+		<copy todir="build/org/porphyry/view">
+			<fileset dir="src/org/porphyry/view" excludes="**/*.java"/> 
+		</copy>
 	</target>
 
-	<target name="unitTest" depends="compileModel, compileTest, resources, schemas"> 
-		<junit>
+	<target name="compile-test" depends="compile-common" description="Compile unit tests sources">
+		<javac srcdir="src/org/porphyry/test" destdir="build" target="1.5"/>
+	</target>
+		
+	<target name="test" depends="compile-test" description="Start unit tests"> 
+		<junit printsummary="yes">
 			<batchtest> 
-				<fileset dir="build" includes="**/Test*.class"/> 
+				<fileset dir="build" includes="**/*Test*.class"/> 
 			</batchtest> 
 		</junit> 
 	</target> 
 
-	<target name="run" depends="compile, resources, schemas">
+	<target name="run" depends="compile" description="Start application">
 		<java classname="org.porphyry.view.Portfolio" 
 			classpath="build" fork="true">
 			<arg value="http://localhost/viewpoint/1/topic/1/"/>
@@ -81,7 +63,7 @@
 		</java>
 	</target>
 		 
-	<target name="jar" depends="compile, resources, schemas"
+	<target name="dist" depends="compile"
 		description="generate the client distribution" >
 		<mkdir dir="manifest"/>
 		<manifest file="manifest/CLIENT.MF">
@@ -96,22 +78,19 @@
 			<include name="org/porphyry/presenter/**"/>
 			<include name="org/porphyry/view/**"/>
 		</jar>
-	</target>
-
-	<target name="sign" depends="jar">
 		<signjar jar="dist/Porphyry.jar"
-			keystore="../${user}.p12" 
+			keystore="~/${user}.p12" 
 			alias="My key" 
 			storepass="${pass}"
 			storetype="PKCS12"/>
 	</target>
 
-	<target name="deploy" depends="sign">
+	<target name="deploy" depends="dist" description="Publish on SourceForge">
 		<scp trust="yes" file="dist/Porphyry.jar" 
 		todir="${user}:${pass}@shell.sf.net:/home/groups/p/po/porphyry/htdocs"/>
 	</target>
 	
-	<target name="clean" description="clean up"> 
+	<target name="clean" description="Delete what ant has built"> 
 		<delete dir="build"/>
 		<delete dir="dist"/>
 		<delete dir="manifest"/>
