@@ -257,9 +257,9 @@ public Topic getTopic(URL url) throws Exception {//TODO precise exception
 
 class Topic extends JLabel implements Observer, MouseListener {//>>>>>>>>>>>>>>
 
-private final int MAX_FONT_GROWTH = 20;
-private final int MIN_FONT_SIZE = 10;
-private final int NULL_FONT_SIZE = 5;
+private static final int MAX_FONT_GROWTH = 20;
+private static final int MIN_FONT_SIZE = 10;
+private static final int NULL_FONT_SIZE = 5;
 private final Border MARGINS = new EmptyBorder(0, 3, 0, 3);
 
 private double ratio = 0;
@@ -271,7 +271,7 @@ private final Inclusion inclusion = new Inclusion();
 public Topic(URL url) throws Exception {
 	this.presenter = Viewpoint.this.presenter.getTopic(url);
 	this.setText(this.presenter.getName());
-	this.setBorder(MARGINS);
+	this.setBorder(this.MARGINS);
 	this.setCursor(
 		new Cursor(Cursor.HAND_CURSOR)
 	);

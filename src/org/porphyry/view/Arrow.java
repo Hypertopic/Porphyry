@@ -31,7 +31,7 @@ abstract class Arrow extends JComponent {
 
 private Line2D line;
 private EquilateralTriangle triangle;
-protected final int TRIANGLE_RADIUS = 5;
+protected static final int TRIANGLE_RADIUS = 5;
 
 public abstract Point getSource();
 
