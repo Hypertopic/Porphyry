@@ -1,11 +1,10 @@
 <!--
 	Ant file [http://ant.apache.org/] 
 	To compile and run Porphyry: ant
-	To run Porphyry: ant run
 	To deploy Porphyry: ant deploy -Duser=XXX -Dpass=XXX
-	To launch unit tests: ant unitTest
+	To run unit tests: ant unitTest
 -->
-<project name="Porphyry v5" default="unitTest">
+<project name="Porphyry v5" default="run">
 
 	<target name="init">
 		<mkdir dir="build"/>
@@ -73,7 +72,7 @@
 		</junit> 
 	</target> 
 
-	<target name="run">
+	<target name="run" depends="compile, resources, schemas">
 		<java classname="org.porphyry.view.Portfolio" 
 			classpath="build" fork="true">
 			<arg value="http://localhost/viewpoint/1/topic/1/"/>
@@ -82,8 +81,6 @@
 		</java>
 	</target>
 		 
-	<target name="test" depends="compile, resources, schemas, run"/>
-
 	<target name="jar" depends="compile, resources, schemas"
 		description="generate the client distribution" >
 		<mkdir dir="manifest"/>
