@@ -1,8 +1,6 @@
 <!--
 	Ant file [http://ant.apache.org/] 
-	To compile and run Porphyry: ant
-	To deploy Porphyry: ant deploy -Duser=XXX -Dpass=XXX
-	To run unit tests: ant test
+	List targets: ant -projecthelp
 -->
 <project name="Porphyry v5" default="run">
 
@@ -68,7 +66,7 @@
 	</target>
 		 
 	<target name="dist" depends="compile"
-		description="generate the client distribution" >
+		description="Create a signed jar (-Duser=XXX -Dpass=XXX)" >
 		<mkdir dir="manifest"/>
 		<manifest file="manifest/CLIENT.MF">
 			<attribute name="Main-Class" 
@@ -89,7 +87,8 @@
 			storetype="PKCS12"/>
 	</target>
 
-	<target name="deploy" depends="dist" description="Publish on SourceForge">
+	<target name="deploy" depends="dist" 
+		description="Publish on SourceForge (-Duser=XXX -Dpass=XXX)">
 		<scp trust="yes" file="dist/Porphyry.jar" 
 		todir="${user}:${pass}@shell.sf.net:/home/groups/p/po/porphyry/htdocs"/>
 	</target>
