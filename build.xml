@@ -2,7 +2,7 @@
 	Ant file [http://ant.apache.org/] 
 	To compile and run Porphyry: ant
 	To deploy Porphyry: ant deploy -Duser=XXX -Dpass=XXX
-	To run unit tests: ant unitTest
+	To run unit tests: ant test
 -->
 <project name="Porphyry v5" default="run">
 
