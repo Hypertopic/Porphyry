@@ -47,10 +47,14 @@
 	</target>
 		
 	<target name="test" depends="compile-test" description="Start unit tests"> 
-		<junit printsummary="yes">
+		<junit>
 			<batchtest> 
 				<fileset dir="build" includes="**/*Test*.class"/> 
 			</batchtest> 
+		    <formatter type="plain" usefile="false" />
+			<classpath>
+				  <pathelement location="build" />
+			</classpath>
 		</junit> 
 	</target> 
 
