@@ -1,5 +1,6 @@
 element topic {
 	attribute name {text}?,
+	attribute href {xsd:anyURI}?,
 	element viewpoint {
 		attribute href {xsd:anyURI},
 		text
@@ -16,5 +17,4 @@ element topic {
 			text
 		}
 	)*
-	
 }
