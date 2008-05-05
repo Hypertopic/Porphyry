@@ -81,7 +81,7 @@
 			<include name="org/porphyry/view/**"/>
 		</jar>
 		<signjar jar="dist/Porphyry.jar"
-			keystore="~/${user}.p12" 
+			keystore="../${user}.p12" 
 			alias="My key" 
 			storepass="${pass}"
 			storetype="PKCS12"/>
