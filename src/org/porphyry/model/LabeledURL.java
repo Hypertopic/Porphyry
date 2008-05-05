@@ -71,4 +71,9 @@ public boolean equals(Object that) {
 	&& this.url.equals(((LabeledURL)that).url);
 }
 
+@Override
+public int hashCode() {
+	return this.url.hashCode();
+}
+
 }

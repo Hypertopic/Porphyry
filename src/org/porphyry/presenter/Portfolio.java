@@ -67,7 +67,7 @@ public double getRatio(Viewpoint.Topic t) {
 	return this.selection.getRatio(t);
 }
 
-public Set<URL> getSelectedItems() {
+public Set<LabeledURL> getSelectedItems() {
 	return this.selection.selectedItems.getAll();
 }
 

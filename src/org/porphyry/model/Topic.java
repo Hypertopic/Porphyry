@@ -36,9 +36,12 @@ private String name = "";
 
 private final Set<RelatedTopic> relatedTopics = new HashSet<RelatedTopic>();
 
-private final Set<URL> entities = new HashSet<URL>();//TODO optimize by using String instead?
+private final Set<LabeledURL> entities = new HashSet<LabeledURL>();
 
 private final XMLHandler xmlHandler = new XMLHandler() { /////////////
+	
+	private String entityUrl;
+
 	@Override 
 	public void startElement (
 		String u, String n, String element, Attributes attr
@@ -55,14 +58,36 @@ private final XMLHandler xmlHandler = new XMLHandler() { /////////////
 					attr.getValue("href")
 				);
 			} else if (element.equals("entity")) {
-				Topic.this.addEntity( 
-					attr.getValue("href")
-				);
+				this.entityUrl = attr.getValue("href");
 			}
 		} catch (MalformedURLException e) {
 			System.err.println(e);
 		}
 	}
+	@Override
+	public void characters(char[] ch, int start, int length) {
+		try {
+			if (this.entityUrl != null) {
+				boolean isNotLabeled = 
+					"".equals(new String(ch, start, length).trim());
+				Topic.this.addEntity(
+						this.entityUrl, 
+						(isNotLabeled) ? null : new String(ch, start, length)
+				);
+			}
+		} catch (MalformedURLException e) {
+			//Should never go there if XML is valid
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void endElement(String u, String n, String element) {
+		if (element.equals("actor")) {
+			this.entityUrl = null;
+		}
+	}
+	
 }; ////////////////////////////////////////////////////////////////////////////
 
 public class RelatedTopic {
@@ -193,11 +218,14 @@ public Collection<URL> getRelatedTopics(String relationType) {
 	return c;
 }
 
-public void addEntity(String href) 
+public void addEntity(String href, String label) 
 	throws MalformedURLException
 {
 	this.entities.add( 
-		this.getAbsoluteURL(href)
+		new LabeledURL(
+			this.getAbsoluteURL(href),
+			label
+		)
 	);
 }
 
@@ -229,8 +257,8 @@ public void removeEntitiesRemotely(Collection<URL> hrefs) //TODO verify syntax
 	this.httpGet(false);
 }
 
-public List<URL> getEntities() { 
-	return new ArrayList<URL>(this.entities);
+public List<LabeledURL> getEntities() { 
+	return new ArrayList<LabeledURL>(this.entities);
 }
 
 @Override
@@ -241,8 +269,10 @@ public String toXML() {
 			+ relatedTopic.getRelationType() + "\" href=\"" 
 			+ relatedTopic.getURL() + "\"/>\n";
 	}
-	for (URL entity : this.entities) {
-		xml += "<entity href=\"" + entity + "\"/>\n";
+	for (LabeledURL entity : this.entities) {
+		xml += "<entity href=\"" + entity.getURL() + "\">"
+			+ entity.getLabel()
+			+ "</entity>\n";
 	}
 	return xml + "</topic>\n";
 }

@@ -79,7 +79,7 @@ protected Portfolio() {
 public void handleURL(String url) {
 	try {
 		org.porphyry.model.HyperTopicResource.NodeType nodeType = 
-			org.porphyry.model.HyperTopicResource.getType(url);
+			org.porphyry.model.HyperTopicResource.getNodeType(url);
 		switch (nodeType) {
 			case VIEWPOINT:
 				Object[] v1 = {new LabeledURL(url, "")};
@@ -456,10 +456,10 @@ public ItemsPane() {
 
 public void update(Observable o1, Object level) {
 	if (level==null) {
-		Set<URL> selectedItems = 
+		Set<LabeledURL> selectedItems = 
 			Portfolio.this.presenter.getSelectedItems();
 		for (Component cachedEntity : this.getEntities()) {
-			URL url = ((Entity) cachedEntity).getURL();
+			LabeledURL url = ((Entity) cachedEntity).getURL();
 			cachedEntity.setVisible(
 				selectedItems.remove(url)
 			);
@@ -496,28 +496,30 @@ public Collection<Component> getEntities() {
 	return l;
 }
 
-public void addEntity(URL itemURL) throws Exception {
+public void addEntity(LabeledURL itemURL) throws Exception {
 	Entity item = new Entity(itemURL);
-	String type = item.getType();
-	int tab;
-	if ("fragment".equals(type)) {
-		tab = FRAGMENT_TAB;
-	} else if ("source".equals(type)) {
-		tab = SOURCE_TAB;
-	
-	} else {
-		int level = item.getLevel();
-		int missingTabs = level+2-this.getTabCount();
-		for (int i=0; i<missingTabs; i++) {
-			this.insertTab(
-				null, 
-				null, 
-				new EntityLevel(BABEL.getString("FOLDERS")), 
-				null,
-				SOURCE_TAB+1
-			);
-		}
-		tab = this.getTabCount()-level;
+	String urlString = itemURL.getURL().toString();
+	int tab = 0;
+	switch (org.porphyry.model.Entity.getDocumentType(urlString)) {
+		case FRAGMENT :
+			tab = FRAGMENT_TAB;
+			break;
+		case SOURCE :
+			tab = SOURCE_TAB;
+			break;
+		case FOLDER :
+			int level = org.porphyry.model.Entity.getLevel(urlString);
+			int missingTabs = level+2-this.getTabCount();
+			for (int i=0; i<missingTabs; i++) {
+				this.insertTab(
+					null, 
+					null, 
+					new EntityLevel(BABEL.getString("FOLDERS")), 
+					null,
+					SOURCE_TAB+1
+				);
+			}
+			tab = this.getTabCount()-level;
 	}
 	this.getEntityLevel(tab).add(item);
 }
@@ -564,17 +566,12 @@ public void add(Entity entity) {
 
 }//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< class EntityLevel
 
-class Entity extends JLabel {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-private URL url;
-private URL source;
+class Entity extends JLabel implements MouseListener {//>>>>>>>>>>>>>>>>>>>>>>>
+	
+private LabeledURL url;
 
 private java.util.regex.Pattern pattern = 
 	java.util.regex.Pattern.compile("^.*/entity/(.*)$"); //static?
-
-private int level;
-
-private String type;
 
 private final Border unactiveBorder = 
 	new EmptyBorder(2, 2, 2, 2); //static?
@@ -582,83 +579,75 @@ private final Border unactiveBorder =
 private final Border activeBorder = 
 	new LineBorder(PorphyryTheme.PRIMARY_COLOR2, 2); //static?
 
-public Entity(URL url) throws Exception {
+public Entity(LabeledURL labeledURL) throws Exception {
 	super(); 
-	this.url = url;
-	org.porphyry.model.Entity model = new org.porphyry.model.Entity(url);
-	model.httpGet(false);
-	java.util.regex.Matcher key = this.pattern.matcher(url.toString());
+	this.url = labeledURL;
+	java.util.regex.Matcher key = this.pattern.matcher(labeledURL.getURL().toString());
 	key.matches(); 
 	this.setToolTipText(key.group(1));
-	java.util.List<String> names = model.getValues("name");
-	if (!names.isEmpty()) {
-		this.setText(names.get(0));
+	String label = labeledURL.getLabel();
+	if (label==null || "".equals(label)) {
+		org.porphyry.model.Entity model = new org.porphyry.model.Entity(labeledURL.getURL());
+		model.httpGet(false);
+		URL thumbnail = model.getResource("thumbnail");
+		if (thumbnail!=null) {
+			this.setIcon(new ImageIcon(thumbnail));
+		} else {
+			java.util.List<String> names = model.getValues("name");
+			label = (names.isEmpty())
+				? key.group(1)
+				: names.get(0);
+		}
 	}
+	this.setText(label);
 	this.setBorder(this.unactiveBorder);
-	URL thumbnail = model.getResource("thumbnail");
-	if (thumbnail!=null) {
-		this.setIcon(new ImageIcon(thumbnail));
-	} else {
-		if (names.isEmpty()) {
-			this.setText(key.group(1));
-		}
-	}
-	this.source = model.getResource("highlight");
-	if (this.source==null) {
-		this.source = model.getResource("source");
-	}
-	if (this.source!=null) {
-		this.setCursor(
-			new Cursor(Cursor.HAND_CURSOR)
-		);
-	}
-	this.type = model.getFirstValue("type");
-	this.level = model.getLevel();
-	this.addMouseListener(
-		new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				Entity.this.showDetails();
-			}
-			@Override
-			public void mouseExited(MouseEvent e) {
-				Entity.this.hideDetails();
-			}
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				try {
-					URL url = Entity.this.source;
-					if (url!=null) {
-						Desktop.getDesktop()
-							.browse(url.toURI());
-					}
-				} catch (Exception ex) {
-					Portfolio.this.showException(ex);
-				}
-			}
-		}
+	this.setCursor(
+		new Cursor(Cursor.HAND_CURSOR)
 	);
+	this.setFont(
+		new Font(Font.MONOSPACED, Font.PLAIN, this.getFont().getSize())
+	);
+	this.addMouseListener(this);
 }
 
-public void showDetails() {
-	this.setBorder(this.activeBorder);
-}
-
-public void hideDetails() {
-	this.setBorder(this.unactiveBorder);
-}
-
-public URL getURL() {
+public LabeledURL getURL() {
 	return this.url;
 }
 
-public int getLevel() {
-	return this.level;
+@Override
+public void mouseEntered(MouseEvent e) {
+	this.setBorder(this.activeBorder);
 }
 
-public String getType() {
-	return this.type;
+@Override
+public void mouseExited(MouseEvent e) {
+	this.setBorder(this.unactiveBorder);
 }
+
+@Override
+public void mouseClicked(MouseEvent e) {
+	try {
+		org.porphyry.model.Entity model = 
+			new org.porphyry.model.Entity(this.url.getURL());
+		model.httpGet(false);
+		URL source = model.getResource("highlight");
+		if (source==null) {
+			source = model.getResource("source");
+		}			
+		if (source!=null) {
+			Desktop.getDesktop()
+				.browse(source.toURI());
+		}
+	} catch (Exception ex) {
+		Portfolio.this.showException(ex);
+	}
+}
+
+@Override
+public void mousePressed(MouseEvent e) {}
+
+@Override
+public void mouseReleased(MouseEvent e) {}
 
 }//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< class Entity
 
@@ -719,9 +708,9 @@ protected void done() {
 
 class ItemsLoader extends SwingWorker<Object,Object> {//>>>>>>>>>>>>>>>>>>>>>>>
 
-private final Set<URL> nonCachedEntities;
+private final Set<LabeledURL> nonCachedEntities;
 
-public ItemsLoader(Set<URL> nonCachedEntities) {
+public ItemsLoader(Set<LabeledURL> nonCachedEntities) {
 	super();
 	this.nonCachedEntities = nonCachedEntities;
 	Portfolio.this.showProgressMonitor(
@@ -734,7 +723,7 @@ public ItemsLoader(Set<URL> nonCachedEntities) {
 @Override
 public Object doInBackground() {
 	try {
-		for (URL nonCachedEntity : this.nonCachedEntities) {
+		for (LabeledURL nonCachedEntity : this.nonCachedEntities) {
 			Portfolio.this.setProgress(nonCachedEntity.toString());
 			Portfolio.this.itemsPane.addEntity(nonCachedEntity);
 		}

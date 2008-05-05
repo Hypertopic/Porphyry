@@ -61,7 +61,7 @@ public HyperTopicResource(URL url) {
 	}
 }
 
-public static NodeType getType(String url) {
+public static NodeType getNodeType(String url) {
 	NodeType t = NodeType.NONE;
 	if (url.contains("/viewpoint/")) {
 		if (url.contains("/topic/")) {
@@ -204,7 +204,7 @@ public void httpGet(boolean validating)
 		SchemaFactory schemaFactory = SchemaFactory.newInstance(
 			XMLConstants.W3C_XML_SCHEMA_NS_URI
 		);
-		Class thisClass = this.getClass();
+		Class<? extends HyperTopicResource> thisClass = this.getClass();
 		parserFactory.setSchema(
 			schemaFactory.newSchema(
 				thisClass.getResource(

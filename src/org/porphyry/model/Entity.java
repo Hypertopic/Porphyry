@@ -30,6 +30,10 @@ import org.xml.sax.*;
 
 public class Entity extends HyperTopicResource {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
+public enum DocumentType {
+	FOLDER, SOURCE, FRAGMENT
+}
+
 private final List<Attribute> attributes =
 	new ArrayList<Attribute>();
 
@@ -163,9 +167,15 @@ public String getFirstValue(String key) {
 		: a.getValue();
 }
 
-public int getLevel() {//TODO safer
-	return this.getURL().toString().split("/entity/")[1].split("/").length;
+public static int getLevel(String urlString) {//TODO safer
+	return urlString.split("/entity/")[1].split("/").length;
 
+}
+
+public static DocumentType getDocumentType(String urlString) {
+	return urlString.endsWith("/") ? DocumentType.FOLDER
+		: urlString.contains("+") ? DocumentType.FRAGMENT
+		: DocumentType.SOURCE;
 }
 
 public List<URL> getTopics() {
@@ -201,23 +211,6 @@ public void httpPostCreate()
         throws UnsupportedOperationException
 {
         throw new UnsupportedOperationException();
-}
-
-
-public static void main(String args[]) {
-	try {
-		System.out.println(
-			(new Entity("http://localhost/entity/Aaa/Bbb/Ccc")).getLevel()
-		);
-		System.out.println(
-			(new Entity("http://localhost/entity/Aaa/Bbb/")).getLevel()
-		);
-		System.out.println(
-			(new Entity("http://localhost/entity/Aaa/")).getLevel()
-		);
-	} catch (Exception e){
-		e.printStackTrace();
-	}
 }
 
 class Attribute {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>

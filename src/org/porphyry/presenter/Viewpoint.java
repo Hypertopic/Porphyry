@@ -200,7 +200,7 @@ public boolean includes() {
 	return this.includes; //boolean is safe
 }
 
-public Collection<URL> getItems() {
+public Collection<org.porphyry.model.LabeledURL> getItems() {
 	return this.model.getEntities();
 }
 

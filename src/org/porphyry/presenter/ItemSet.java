@@ -28,31 +28,34 @@ import java.util.*;
 import java.util.regex.*;
 import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
+import org.porphyry.model.LabeledURL;
 
 public class ItemSet implements Cloneable {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 public static final int SOURCE = -1;
 public static final int FRAGMENT = -2;
-public static final Comparator<URL> comparator = new Comparator<URL>() {
-	public int compare(URL one, URL other) {
-		return one.toString().compareTo(other.toString());	
+public static final Comparator<LabeledURL> comparator = new Comparator<LabeledURL>() {
+	public int compare(LabeledURL one, LabeledURL other) {
+		return one.getURL().toString().compareTo(other.getURL().toString());	
 	}
+	/*
 	@Override
 	public boolean equals(Object o) {
 		return false;
 	}
+	*/
 };
 
-private final Map<URL, WholeItem> wholeItems = new HashMap<URL, WholeItem>();
+private final Map<LabeledURL, WholeItem> wholeItems = new HashMap<LabeledURL, WholeItem>();
 
 private static final Pattern parentPattern = 
 	Pattern.compile("(.*/entity/.*)/(.+)"); //TODO use relative URL ".."?
 
 //TODO a new data structure to optimize getSize(level)?
 
-public Set<URL> getAll() {
-	Set<URL> c = new TreeSet<URL>(comparator);
-	for(Map.Entry<URL, WholeItem> entry : this.wholeItems.entrySet()) {
+public Set<LabeledURL> getAll() {
+	Set<LabeledURL> c = new TreeSet<LabeledURL>(comparator);
+	for(Map.Entry<LabeledURL, WholeItem> entry : this.wholeItems.entrySet()) {
 		c.add(entry.getKey());
 		WholeItem item = entry.getValue();
 		c.addAll(item.getAll());
@@ -60,19 +63,22 @@ public Set<URL> getAll() {
 	return c;
 }
 
-public void add(URL url) {
-	String urlString = url.toString();
-	if (urlString.endsWith("/")) {
-		this.addFolder(url);
-	} else if (urlString.contains("+")) {
-		this.addFragment(url);
-	} else {
-		this.addSource(url);
+public void add(LabeledURL url) {
+	String urlString = url.getURL().toString();
+	switch (org.porphyry.model.Entity.getDocumentType(urlString)) {
+		case FOLDER:
+			this.addFolder(url);
+			break;
+		case SOURCE:
+			this.addSource(url);
+			break;
+		case FRAGMENT:
+			this.addFragment(url);
 	}
 }
 
-public void addAll(Collection<URL> items) {
-	for (URL url : items) {
+public void addAll(Collection<LabeledURL> items) {
+	for (LabeledURL url : items) {
 		this.add(url);
 	}
 }
@@ -80,12 +86,15 @@ public void addAll(Collection<URL> items) {
 /**
 * @return folder level (0 for a folder with no superfolder).
 */
-protected int addFolder(URL url) {
+protected int addFolder(LabeledURL url) {
 	int level;
-	Matcher matcher = parentPattern.matcher(url.toString());
+	Matcher matcher = parentPattern.matcher(url.getURL().toString());
 	if (matcher.matches()) {
 		level = 1 + this.addFolder(
-			ItemSet.createSafeURL(matcher.group(1)+"/")
+			ItemSet.createSafeLabeledURL(
+				matcher.group(1)+"/", 
+				null
+			)
 		);
 	} else {
 		level = 0;
@@ -96,13 +105,16 @@ protected int addFolder(URL url) {
 	return level;
 }
 
-protected WholeItem addSource(URL url) {
+protected WholeItem addSource(LabeledURL url) {
 	WholeItem item = this.wholeItems.get(url);
 	if (item==null) {
-		Matcher matcher = parentPattern.matcher(url.toString());
+		Matcher matcher = parentPattern.matcher(url.getURL().toString());
 		if (matcher.matches()) { //Should always work
 			this.addFolder(
-				createSafeURL(matcher.group(1)+"/")
+				ItemSet.createSafeLabeledURL(
+					matcher.group(1)+"/", 
+					null
+				)
 			);
 		} 
 		item = new WholeItem(url, SOURCE);
@@ -111,17 +123,20 @@ protected WholeItem addSource(URL url) {
 	return item;
 }
 
-protected void addFragment(URL url) {
-	Matcher matcher = parentPattern.matcher(url.toString());
+protected void addFragment(LabeledURL url) {
+	Matcher matcher = parentPattern.matcher(url.getURL().toString());
 	if (matcher.matches()) {
 		this.addSource(
-			ItemSet.createSafeURL(matcher.group(1))
-		).add(matcher.group(2));
+			ItemSet.createSafeLabeledURL(
+					matcher.group(1), 
+					null
+			)
+		).add(matcher.group(2), url.getLabel());
 	}
 }
 
 public void addAll(ItemSet that) {
-	for (Map.Entry<URL, WholeItem> thatEntry : that.wholeItems.entrySet()) {
+	for (Map.Entry<LabeledURL, WholeItem> thatEntry : that.wholeItems.entrySet()) {
 		WholeItem thisItem = this.wholeItems.get(thatEntry.getKey());
 		if (thisItem==null) {
 			this.wholeItems.put(
@@ -135,10 +150,10 @@ public void addAll(ItemSet that) {
 }
 
 public void retainAll(ItemSet that) {
-	Iterator <Map.Entry<URL, WholeItem>> i = 
+	Iterator <Map.Entry<LabeledURL, WholeItem>> i = 
 		this.wholeItems.entrySet().iterator();
 	while (i.hasNext()) {
-		Map.Entry<URL, WholeItem> thisEntry = i.next();
+		Map.Entry<LabeledURL, WholeItem> thisEntry = i.next();
 		WholeItem thatItem = that.wholeItems.get(thisEntry.getKey());
 		if (thatItem==null) {
 			i.remove();
@@ -158,7 +173,7 @@ public void clear() {
 @Override
 public Object clone() {
 	ItemSet newSet = new ItemSet();
-	for (Map.Entry<URL, WholeItem> oldItem : this.wholeItems.entrySet()) {
+	for (Map.Entry<LabeledURL, WholeItem> oldItem : this.wholeItems.entrySet()) {
 		newSet.wholeItems.put(
 			oldItem.getKey(), 
 			(WholeItem) oldItem.getValue().clone()
@@ -198,14 +213,14 @@ public int size(int level) {
 	return count;
 }
 
-public static URL createSafeURL(String string) {
-	URL url = null;
+public static LabeledURL createSafeLabeledURL(String urlString, String label) {
+	LabeledURL labeledURL = null;
 	try {
-		url = new URL(string);
+		labeledURL = new LabeledURL(urlString, label);
 	} catch (MalformedURLException e) { //Should never go there
 		e.printStackTrace();
 	}
-	return url;
+	return labeledURL;
 }
 
 public boolean isEmpty() {
@@ -219,13 +234,13 @@ public String toString() {
 
 class WholeItem implements Cloneable {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-private final URL url;
+private final LabeledURL url;
 
 private final HashSet<Fragment> fragments = new HashSet<Fragment>();
 
 private int level;
 
-public WholeItem(URL url, int level) {
+public WholeItem(LabeledURL url, int level) {
 	this.url = url;
 	this.level = level;
 }
@@ -238,20 +253,21 @@ public int getLevel() {
 	return this.level;
 }
 
-public Set<URL> getAll() {
-	final Set<URL> c = new HashSet<URL>();
+public Set<LabeledURL> getAll() {
+	final Set<LabeledURL> c = new HashSet<LabeledURL>();
 		for (Fragment f : this.fragments) {
 			c.add(
-				ItemSet.createSafeURL(
-					this.url.toString()+"/"+f
+				ItemSet.createSafeLabeledURL( 
+					this.url.getURL().toString()+"/"+f,
+					f.getLabel()
 				)
 			);	
 		}
 	return c;
 }
 
-public void add(String coordinates) {
-	this.add(this.createFragment(coordinates));
+public void add(String coordinates, String label) {
+	this.add(this.createFragment(coordinates, label));
 }
 
 public void add(Fragment newFragment) {
@@ -277,7 +293,7 @@ public void retainAll(WholeItem that) {
 		for (Fragment thatFragment : that.fragments) {
 			if (thatFragment.intersects(thisFragment)) {
 				thisFragment = 
-					thatFragment.createUnion(thisFragment);
+					thisFragment.createUnion(thatFragment);
 				found = true;
 			}
 		}
@@ -294,13 +310,14 @@ public Object clone() {
 	return newItem;
 }
 
-public Fragment createFragment(String coordinatesString) {
+public Fragment createFragment(String coordinatesString, String label) {
 	String coords[] = coordinatesString.split("\\+");
 	switch (coords.length) {
 		case 2: 
 			return new TextFragment(
 				Integer.parseInt(coords[0]), 
-				Integer.parseInt(coords[1])
+				Integer.parseInt(coords[1]),
+				label
 			);
 		case 4: 
 			return new ImageFragment(
@@ -320,6 +337,12 @@ public int size() {
 
 abstract class Fragment implements Cloneable {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
+private String label;
+
+public Fragment(String label){
+	this.label = label;
+}
+
 /**
 * @return the fragment parameters as formatted in a URL 
 **/
@@ -336,6 +359,10 @@ abstract public boolean intersects(Fragment that);
 
 abstract public Fragment createUnion(Fragment that);
 
+public String getLabel() {
+	return this.label;
+}
+
 }//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Fragment
 
 class TextFragment extends Fragment {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -346,7 +373,8 @@ final int end;
 /**
 * @precondition begin LT end
 */
-public TextFragment(int begin, int end) {
+public TextFragment(int begin, int end, String label) {
+	super(label);
 	this.begin = begin;
 	this.end = end;
 }
@@ -364,9 +392,13 @@ public boolean intersects(Fragment that) {
 
 @Override
 public Fragment createUnion(Fragment that) {
+	String thisLabel = this.getLabel();
+	String thatLabel = that.getLabel();	
+	TextFragment thatTextFragment = (TextFragment) that;
 	return new TextFragment(
-		Math.min(this.begin, ((TextFragment) that).begin),
-		Math.max(this.end, ((TextFragment) that).end)
+		Math.min(this.begin, thatTextFragment.begin),
+		Math.max(this.end, thatTextFragment.end),
+		thisLabel + " / " + thatLabel
 	);
 }
 
@@ -384,7 +416,7 @@ public boolean equals(Object that) {
 
 @Override 
 public Object clone() {
-	return new TextFragment(this.begin, this.end);
+	return new TextFragment(this.begin, this.end, this.getLabel());
 }
 
 }//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< TextFragment
@@ -398,10 +430,12 @@ final Rectangle rectangle;
 * @precondition y1 LT y2
 */
 public ImageFragment(int x1, int y1, int x2, int y2) {
+	super("");
 	this.rectangle = new Rectangle(x1, y1, x2-x1, y2-y1);
 }
 
 public ImageFragment(Rectangle2D rectangle) {
+	super("");
 	this.rectangle = rectangle.getBounds();
 }
 
