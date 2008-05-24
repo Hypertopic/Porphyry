@@ -599,15 +599,12 @@ public Entity(LabeledURL labeledURL) throws Exception {
 				: names.get(0);
 		}
 	} else {
-		label = "<html>"+label+"</html>";
+		label = "<html><pre>"+label+"</pre></html>";
 	}
 	this.setText(label);
 	this.setBorder(this.unactiveBorder);
 	this.setCursor(
 		new Cursor(Cursor.HAND_CURSOR)
-	);
-	this.setFont(
-		new Font(Font.MONOSPACED, Font.PLAIN, this.getFont().getSize())
 	);
 	this.addMouseListener(this);
 }
