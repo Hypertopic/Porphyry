@@ -598,6 +598,8 @@ public Entity(LabeledURL labeledURL) throws Exception {
 				? key.group(1)
 				: names.get(0);
 		}
+	} else {
+		label = "<html>"+label+"</html>";
 	}
 	this.setText(label);
 	this.setBorder(this.unactiveBorder);
