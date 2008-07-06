@@ -9,7 +9,7 @@
 	</target>
 	
 	<target name="compile-common" depends="prepare">
-		<javac srcdir="src/org/porphyry/model" destdir="build" target="1.5" />
+		<javac srcdir="src/org/porphyry/model" destdir="build"/>
 		<java jar="trang.jar" fork="true">
 			<arg value="src/org/porphyry/model/Actor.rnc"/>
 			<arg value="build/org/porphyry/model/Actor.xsd"/>
@@ -37,15 +37,15 @@
 			<fileset dir="lib" includes="*.jar" />
 			<patternset includes="org/**" /> 
 		</unjar>
-		<javac srcdir="src/org/porphyry/presenter" destdir="build" target="1.5" />
-		<javac srcdir="src/org/porphyry/view" destdir="build" target="1.5" />
+		<javac srcdir="src/org/porphyry/presenter" destdir="build" />
+		<javac srcdir="src/org/porphyry/view" destdir="build" />
 		<copy todir="build/org/porphyry/view">
 			<fileset dir="src/org/porphyry/view" excludes="**/*.java"/> 
 		</copy>
 	</target>
 
 	<target name="compile-test" depends="compile-common" description="Compile unit tests sources">
-		<javac srcdir="src/org/porphyry/test" destdir="build" target="1.5"/>
+		<javac srcdir="src/org/porphyry/test" destdir="build" />
 	</target>
 		
 	<target name="test" depends="compile-test" description="Start unit tests"> 
@@ -53,7 +53,7 @@
 			<batchtest> 
 				<fileset dir="build" includes="**/*Test*.class"/> 
 			</batchtest> 
-		    <formatter type="plain" usefile="false" />
+			<formatter type="plain" usefile="false" />
 			<classpath>
 				  <pathelement location="build" />
 			</classpath>

@@ -30,9 +30,6 @@ import javax.swing.*;
 
 public class TopicsTransferHandler extends TransferHandler {//>>>>>>>>>>>>>>>>>
 
-private JComponent source; //TODO Java 6 API
-private JComponent destination = null; //TODO Java 6 API
-
 private static final TopicsTransferHandler singleton = 
 	new TopicsTransferHandler();
 
@@ -44,73 +41,65 @@ public static TopicsTransferHandler getSingleton() {
 	return singleton;
 }
 
-protected static Collection<org.porphyry.presenter.Viewpoint.Topic> 
-	componentToTopics(JComponent source) 
+protected static Collection<org.porphyry.presenter.Viewpoint.Topic> getSource(TransferSupport transfer) 
+	throws UnsupportedFlavorException, IOException
 {
-	Collection<org.porphyry.presenter.Viewpoint.Topic> c = null;
-	if (source instanceof Viewpoint.ViewpointPane.Topic) {
-		c = ((Viewpoint.ViewpointPane.Topic) source).getActiveTopics();	
-	}
-	return c;
+	return (Collection<org.porphyry.presenter.Viewpoint.Topic>)
+		transfer.getTransferable().getTransferData(TOPICS_FLAVOR);
 }
 
-protected static Collection<org.porphyry.presenter.Viewpoint.Topic> 
-	transferableToTopics(Transferable t) throws 
-	UnsupportedFlavorException, UnsupportedFlavorException, IOException
-{
-	return (Collection<org.porphyry.presenter.Viewpoint.Topic>) 
-		t.getTransferData(TOPICS_FLAVOR);
+protected static org.porphyry.presenter.Viewpoint.Topic getTarget(TransferSupport transfer) {
+	return ((Viewpoint.ViewpointPane.Topic) transfer.getComponent()).presenter;
 }
 
 @Override
 public int getSourceActions(JComponent source) {
-	this.source = source;//TODO Java 6 API
 	return COPY_OR_MOVE;
 }
 
 @Override
 protected Transferable createTransferable(JComponent source) {
-	return new TopicSelection(componentToTopics(source));
+	Collection<org.porphyry.presenter.Viewpoint.Topic> c = null;
+	if (source instanceof Viewpoint.ViewpointPane.Topic) {
+		c = ((Viewpoint.ViewpointPane.Topic) source).getActiveTopics();	
+	}	
+	return new TopicSelection(c);
 }
 
 @Override
-public boolean canImport(JComponent destination, DataFlavor[] flavors) {
-	return Arrays.asList(flavors).contains(TOPICS_FLAVOR)
-		&& destination!=this.source;//TODO Java 6 API
+public boolean canImport(TransferSupport transfer) {
+	try {			
+		return transfer.isDataFlavorSupported(TOPICS_FLAVOR)
+			&& !getSource(transfer).contains(getTarget(transfer)); //TODO must check that it does no cycle
+	} catch (Exception e) {
+		return false;
+	}
 }
 
 @Override
-public boolean importData(JComponent destination, Transferable data) {
+public boolean importData(TransferSupport transfer) {
 	boolean ok = true;
 	try {
-		if (this.canImport(destination, new DataFlavor[] {TOPICS_FLAVOR}) && destination instanceof Viewpoint.ViewpointPane.Topic) {
-			Collection<org.porphyry.presenter.Viewpoint.Topic> topics = transferableToTopics(data);
-			((Viewpoint.ViewpointPane.Topic) destination)
-				.presenter.linkTopics(topics, "includes");
-			this.destination = destination;
+		if (this.canImport(transfer)) {
+			Collection <org.porphyry.presenter.Viewpoint.Topic> source =
+				getSource(transfer);
+			org.porphyry.presenter.Viewpoint.Topic target =
+				getTarget(transfer);
+			target.linkTopics(source, "includes");
+			if (transfer.getDropAction()==MOVE){
+				for (org.porphyry.presenter.Viewpoint.Topic t: source){
+					Collection<org.porphyry.presenter.Viewpoint.Topic> toDel =
+						t.getTopics("includedIn");
+					toDel.remove(target);
+					t.unlinkTopics(toDel, "includedIn");
+				}
+			}
 		}
 	} catch (Exception e) {
 		System.err.println(e);
 		ok = false;
 	}
 	return ok;
-}
-
-@Override
-protected void exportDone(JComponent s, Transferable data, int action) {
-	try {
-		if (this.destination!=null && action==MOVE) {
-			Collection<org.porphyry.presenter.Viewpoint.Topic> topics =
-				transferableToTopics(data);
-			for (org.porphyry.presenter.Viewpoint.Topic t: topics){
-				Collection<org.porphyry.presenter.Viewpoint.Topic> toDel = t.getTopics("includedIn");
-				toDel.remove(((org.porphyry.view.Viewpoint.ViewpointPane.Topic)this.destination).presenter);
-				t.unlinkTopics(toDel, "includedIn");
-			}
-		}
-	} catch (Exception e) {
-		System.err.println(e);
-	}
 }
 
 public class TopicSelection implements Transferable {//>>>>>>>>>>>>>>>>>>>>>>>>

@@ -30,7 +30,6 @@ import java.net.*;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
-import org.jdesktop.swingworker.SwingWorker; //Java 6 emulation for Java 5
 import org.porphyry.model.LabeledURL;
 import org.porphyry.presenter.ItemSet;
 
