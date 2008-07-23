@@ -24,7 +24,7 @@ http://www.gnu.org/licenses/gpl.html
 package org.porphyry.presenter;
 
 import java.util.*;
-import java.net.URL;
+import java.net.*;
 import org.porphyry.model.LabeledURL;
 
 public class Portfolio extends Observable {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -128,6 +128,18 @@ public void createViewpoint(String name) throws Exception {
 	v.httpPostCreate();
 	this.addViewpoint(v.getURL());
 	this.notifyObservers();
+}
+
+public void createActor(String login, String fullName) throws Exception {
+	org.porphyry.model.Actor a = 
+		new org.porphyry.model.Actor(
+				this.service 
+				+ "actor/" 
+				+ URLEncoder.encode(login, "UTF-8") 
+				+ "/"
+		);
+	a.setCompleteName(fullName);
+	a.httpPut();
 }
 
 /**

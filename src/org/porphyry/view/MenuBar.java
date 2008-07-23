@@ -137,7 +137,19 @@ private final MenuItem actorUnsuscribe =
 
 private final MenuItem actorCreate = 
 	new MenuItem("ACTOR_CREATE") {
-		@Override void run() {}
+		@Override 
+		void run() {
+			MenuBar.this.createActor(
+					MenuBar.this.askForService(
+							this.getText()
+					),
+					this.getText()
+			);
+		}
+		@Override
+		boolean mustBeEnabled() {
+			return true;
+		}
 	};
 
 private final Menu actorMenu = 
@@ -505,6 +517,31 @@ public void createViewpoint(Object lastResult, String action) {
 		pressOK = this.ask(message, action);
 		if (pressOK) try {
 			this.presenter.createViewpoint(field.getText());
+		} catch (Exception e) {
+			problem = true;
+			this.frame.showException(e);
+		}
+	} while (pressOK && problem); 
+}
+
+public void createActor(Object lastResult, String action) {
+	if (lastResult==null)
+		throw new NullPointerException();
+	JTextField login = new JTextField();
+	JTextField fullName = new JTextField();
+	Object[] message = {
+		new JLabel(BABEL.getString("ACTOR_LOGIN")), 
+		login,
+		new JLabel(BABEL.getString("ACTOR_FULLNAME")), 
+		fullName
+	};
+	boolean pressOK;
+	boolean problem;
+	do {
+		problem = false;
+		pressOK = this.ask(message, action);
+		if (pressOK) try {
+			this.presenter.createActor(login.getText(), fullName.getText());
 		} catch (Exception e) {
 			problem = true;
 			this.frame.showException(e);
