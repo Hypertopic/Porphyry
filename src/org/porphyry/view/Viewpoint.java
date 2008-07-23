@@ -227,7 +227,8 @@ public Collection<Topic> getUpperTopics() throws Exception {
 	return c;
 }
 
-public class Topic extends JPanel implements FocusListener, MouseListener, MouseMotionListener {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+public class Topic extends JPanel implements FocusListener, MouseListener, 
+	MouseMotionListener, Comparable<Topic> {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 final org.porphyry.presenter.Viewpoint.Topic presenter; //unsafe
 
@@ -320,11 +321,16 @@ public void setY(int y) {
 }
 
 public Collection<Topic> getSpecificTopics() throws Exception {
-	Collection<Topic> topics = new ArrayList<Topic>();
+	Collection<Topic> topics = new TreeSet<Topic>();
 	for (org.porphyry.presenter.Viewpoint.Topic t : this.presenter.getTopics("includes")) {
 		topics.add(ViewpointPane.this.getTopic(t));
 	}
 	return topics;
+}
+
+@Override
+public int compareTo(Topic that) {
+	return this.presenter.compareTo(that.presenter);
 }
 
 public class TopicName extends JTextField {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>

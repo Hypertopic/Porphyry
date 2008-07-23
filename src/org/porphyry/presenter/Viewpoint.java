@@ -263,7 +263,7 @@ public void unlinkItems(Collection<URL> items)  throws Exception {
 	Viewpoint.this.update();
 }
 
-//Implement
+@Override
 public int compareTo(Topic that) {
 	int value = Viewpoint.collator.compare(
 		this.getName(),
