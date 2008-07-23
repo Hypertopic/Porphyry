@@ -595,7 +595,7 @@ public Entity(LabeledURL labeledURL) throws Exception {
 		} else {
 			java.util.List<String> names = model.getValues("name");
 			label = (names.isEmpty())
-				? key.group(1)
+				? URLDecoder.decode(key.group(1),"UTF-8")
 				: names.get(0);
 		}
 	} else {

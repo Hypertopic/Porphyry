@@ -70,18 +70,14 @@ public Entity(String url)
 	throws MalformedURLException, URISyntaxException
 {
 	super(
-		HyperTopicResource.encode(
 			new URL(url)
-		)
 	);
 }
 
 public Entity(URL url) 
 	throws MalformedURLException, URISyntaxException
 {
-	super(
-		HyperTopicResource.encode(url)
-	);
+	super(url);
 }
 
 @Override
