@@ -28,27 +28,18 @@ import java.awt.*;
 import java.awt.event.*;
 import java.beans.*;
 import javax.swing.*;
-import javax.swing.border.*;
 
-public class Viewpoint extends ExtendedFrame 
-	implements Observer, PropertyChangeListener {//>>>>>>>>>>>>>>>>>>>>>>>>
+public class Viewpoint extends ExtendedFrame implements 
+	Observer, PropertyChangeListener {//>>>>>>>>>>>>>>>>>>
 
 public static final int X_INTERVAL = 35;
 public static final int Y_INTERVAL = 35;
 public static final int X_ORIGIN = 5;
 public static final int Y_ORIGIN = 5;
-private static final Border UNACTIVE_BORDER = new EmptyBorder(2, 2, 2, 2); 
-private static final Border FOCUS_BORDER = 
-	new LineBorder(PorphyryTheme.PRIMARY_COLOR1, 2);
-private static final Border SELECT_BORDER = 
-	new LineBorder(PorphyryTheme.PRIMARY_COLOR2, 2);
-
 
 private final org.porphyry.presenter.Viewpoint presenter;
 
 private ViewpointPane viewpointPane;
-
-private boolean monoSelection = false;
 
 public Viewpoint(
 	org.porphyry.presenter.Viewpoint presenter,
@@ -121,6 +112,9 @@ public ViewpointPane() {
 	super(Y_INTERVAL);
 	this.setLayout(null);
 	this.setBackground(Color.WHITE); 
+	this.setDropTarget(
+			new FixedDropTarget()
+	);
 	this.reload();
 }
 
@@ -191,8 +185,7 @@ protected Collection<org.porphyry.presenter.Viewpoint.Topic> getActiveTopics() {
 		new ArrayList<org.porphyry.presenter.Viewpoint.Topic>();
 	for (Component t: this.getComponents()) {
 		//TODO could be not a topic!
-		Border b = ((Topic)t).getBorder();
-		if (b==SELECT_BORDER || b==FOCUS_BORDER) {
+		if (((Topic)t).isActive()) {
 			c.add(((Topic) t).presenter);
 		}
 	}
@@ -202,7 +195,7 @@ protected Collection<org.porphyry.presenter.Viewpoint.Topic> getActiveTopics() {
 protected void clearActiveTopics() {
 	for (Component c: this.getComponents()) {
 		//TODO could be not a topic!
-		((JComponent) c).setBorder(UNACTIVE_BORDER);
+		((Topic) c).setActive(false);
 	}
 }
 
@@ -227,7 +220,7 @@ public Collection<Topic> getUpperTopics() throws Exception {
 	return c;
 }
 
-public class Topic extends JPanel implements FocusListener, MouseListener, 
+public class Topic extends JPanel implements MouseListener, 
 	MouseMotionListener, Comparable<Topic> {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 final org.porphyry.presenter.Viewpoint.Topic presenter; //unsafe
@@ -237,18 +230,17 @@ private final JTextField textField = new TopicName();
 public Topic(org.porphyry.presenter.Viewpoint.Topic presenter) {
 	this.presenter = presenter;
 	this.textField.setText(this.presenter.getName());
+	this.add(
+		new JLabel("<html><body>&#x25cf;</body></html>") //&#x25b6;&#x25bc;
+	);
 	this.add(this.textField);
-	this.textField.setSize(this.getPreferredSize());
-	this.setBorder(UNACTIVE_BORDER);
-	this.setBackground(Color.WHITE);
 	this.setLayout(new FlowLayout(FlowLayout.LEFT));
-	this.setSize(600, Y_INTERVAL);
-
+	this.setSize(this.getPreferredSize());
+	this.setBackground(Color.WHITE);
 	this.setTransferHandler(TopicsTransferHandler.getSingleton());
 	this.addMouseListener(this);
 	this.addMouseMotionListener(this);
 	this.setFocusable(true);
-	this.addFocusListener(this);
 
 	ActionMap actions = this.getActionMap();
 	actions.put("TOPIC_CUT", TransferHandler.getCutAction());
@@ -271,22 +263,29 @@ public void mouseMoved(MouseEvent e) { }
 //MouseListener
 public void mouseEntered(MouseEvent e) { }
 public void mousePressed(MouseEvent e) {
-	Viewpoint.this.monoSelection = 
-		((e.getModifiers()&PorphyryTheme.SHORTCUT_KEY) == 0);
-        this.requestFocusInWindow();
+	if ((e.getModifiers()&PorphyryTheme.SHORTCUT_KEY) == 0) {
+		ViewpointPane.this.clearActiveTopics();
+		this.setActive(true);
+	} else {
+		this.setActive(!this.isActive());
+	}
 }
 public void mouseReleased(MouseEvent e) { }
 public void mouseClicked(MouseEvent e) { }
 public void mouseExited(MouseEvent e) { }
-//FocusListener
-public void focusGained(FocusEvent e) {
-	this.setBorder(FOCUS_BORDER);
-}
-public void focusLost(FocusEvent e) {
-	if (Viewpoint.this.monoSelection) {
-		ViewpointPane.this.clearActiveTopics();
-		Viewpoint.this.monoSelection = false;
+
+public void setActive(boolean active) {
+	if (active) {
+		this.textField.setBackground(PorphyryTheme.PRIMARY_COLOR2);
+		this.textField.setForeground(Color.WHITE);
+	} else {
+		this.textField.setBackground(Color.WHITE);
+		this.textField.setForeground(Color.BLACK);
 	}
+}
+
+public boolean isActive() {
+	return this.textField.getBackground() != Color.WHITE;
 }
 
 /**
@@ -334,6 +333,12 @@ public int compareTo(Topic that) {
 }
 
 public class TopicName extends JTextField {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+public TopicName() {
+	super();
+//	this.setSelectionColor(PorphyryTheme.PRIMARY_COLOR2);
+//	this.setSelectedTextColor(Color.WHITE);
+}
 
 @Override
 public Dimension getPreferredSize() {

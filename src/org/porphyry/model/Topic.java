@@ -48,7 +48,8 @@ private final XMLHandler xmlHandler = new XMLHandler() { /////////////
 	) throws SAXException {
 		try {
 			if (element.equals("topic")) {
-				Topic.this.name = attr.getValue("name");
+				String s = attr.getValue("name");
+				Topic.this.name = (s==null)?"":s;
 			} else if (element.equals("viewpoint")) {
 				Topic.this.viewpoint = 
 					Topic.this.getAbsoluteURL(attr.getValue("href"));
