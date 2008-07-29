@@ -584,7 +584,8 @@ public Entity(LabeledURL labeledURL) throws Exception {
 	this.url = labeledURL;
 	java.util.regex.Matcher key = this.pattern.matcher(labeledURL.getURL().toString());
 	key.matches(); 
-	this.setToolTipText(key.group(1));
+	String id = URLDecoder.decode(key.group(1),"UTF-8");
+	this.setToolTipText(id);
 	String label = labeledURL.getLabel();
 	if (label==null || "".equals(label)) {
 		org.porphyry.model.Entity model = new org.porphyry.model.Entity(labeledURL.getURL());
@@ -595,7 +596,7 @@ public Entity(LabeledURL labeledURL) throws Exception {
 		} else {
 			java.util.List<String> names = model.getValues("name");
 			label = (names.isEmpty())
-				? URLDecoder.decode(key.group(1),"UTF-8")
+				? id
 				: names.get(0);
 		}
 	} else {
