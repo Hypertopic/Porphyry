@@ -98,18 +98,18 @@ public class Actor extends HyperTopicResource {
 	}
 
 	public String getCompleteName() {
-		return this.completeName;
+		return decode(this.completeName);
 	}
 
 	public void setCompleteName(String completeName) {
-		this.completeName = completeName; 
+		this.completeName = encode(completeName); 
 	}
 
 	public void setCompleteNameRemotely(String completeName) 
 	throws java.io.IOException, HyperTopicException, SAXException, 
 	ParserConfigurationException
 	{
-		this.httpPostUpdate("<actor name=\""+completeName+"\"/>");
+		this.httpPostUpdate("<actor name=\""+encode(completeName)+"\"/>");
 		this.httpGet(false);
 	}
 

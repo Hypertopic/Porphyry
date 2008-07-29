@@ -81,18 +81,18 @@ public XMLHandler getXMLHandler() {
 }
 
 public String getName() {
-	return this.name;
+	return decode(this.name);
 }
 
 public void setName(String name) {
-	this.name = name; 
+	this.name = encode(name); 
 }
 
 public void setNameRemotely(String name) 
 	throws java.io.IOException, HyperTopicException, SAXException, 
 	ParserConfigurationException
 {
-	this.httpPostUpdate("<viewpoint name='"+name+"'/>");
+	this.httpPostUpdate("<viewpoint name='"+encode(name)+"'/>");
 	this.httpGet(false);
 }
 
