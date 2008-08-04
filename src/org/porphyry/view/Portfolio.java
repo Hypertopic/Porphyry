@@ -210,12 +210,14 @@ public void switchClosure() {
 
 public void open() {
 	this.graphPane.setVisible(true);
+	this.label.setText("<html><body>&#x25bc; " + this.presenter.getName() + "</body></html>");
 	this.label.setBackground(PorphyryTheme.PRIMARY_COLOR1);//TODO LnF
 	this.setBorder(new LineBorder(PorphyryTheme.PRIMARY_COLOR1, 2));//TODO LnF
 }
 
 public void close() {
 	this.graphPane.setVisible(false);
+	this.label.setText("<html><body>&#x25b6; " + this.presenter.getName() + "</body></html>");
 	this.label.setBackground(Color.GRAY);//TODO LnF
 	this.setBorder(new LineBorder(Color.GRAY, 2));//TODO LnF
 }
