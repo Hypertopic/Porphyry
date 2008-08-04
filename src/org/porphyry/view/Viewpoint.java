@@ -136,6 +136,7 @@ public Dimension getPreferredSize() {
 }
 
 protected void reload() {
+	System.out.println("DEBUG: reload");
 	Collection<org.porphyry.presenter.Viewpoint.Topic> topicsToLoad =
 		Viewpoint.this.presenter.getAllTopics();
 	for (Component cachedTopic : this.getComponents()) {
@@ -154,6 +155,7 @@ protected void reload() {
 
 @Override
 public void doLayout() {
+	System.out.println("DEBUG: doLayout");
 	try {
 		for (Component c : this.getComponents()) {
 			//TODO could be not a topic!
@@ -278,6 +280,7 @@ public void setActive(boolean active) {
 	if (active) {
 		this.textField.setBackground(PorphyryTheme.PRIMARY_COLOR2);
 		this.textField.setForeground(Color.WHITE);
+        this.requestFocusInWindow();
 	} else {
 		this.textField.setBackground(Color.WHITE);
 		this.textField.setForeground(Color.BLACK);
@@ -332,10 +335,11 @@ public int compareTo(Topic that) {
 	return this.presenter.compareTo(that.presenter);
 }
 
-public class TopicName extends JTextField {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+public class TopicName extends JTextField implements FocusListener {//>>>>>>>>>
 
 public TopicName() {
 	super();
+	this.addFocusListener(this);
 //	this.setSelectionColor(PorphyryTheme.PRIMARY_COLOR2);
 //	this.setSelectedTextColor(Color.WHITE);
 }
@@ -359,6 +363,15 @@ public void saveName() {
 		System.err.println(e);
 	}
 }
+
+@Override
+public void focusGained(FocusEvent e) {
+	ViewpointPane.this.clearActiveTopics();
+	
+}
+
+@Override
+public void focusLost(FocusEvent e) { }
 
 }//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< class TopicName
 
