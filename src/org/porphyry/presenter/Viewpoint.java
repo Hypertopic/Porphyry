@@ -225,21 +225,7 @@ public void rename(String name)  throws Exception {
 	Viewpoint.this.update();
 }
 
-public void linkTopics(Collection<Topic> topics, String relationType)  
-	throws Exception
-{
-	Collection<URL> urls = new ArrayList<URL>();
-	for(Topic t : topics) {
-		urls.add(t.getURL());
-	}
-	this.model.addRelatedTopicsRemotely(relationType, urls);
-	for (Topic related : topics) {
-		related.reload();
-	}
-	Viewpoint.this.update();
-}
-
-public void move(Collection<Topic> topics)
+public void link(Collection<Topic> topics, boolean isMove)
 	throws Exception
 {
 	Set<Topic> toReload = new HashSet<Topic>();
@@ -252,7 +238,9 @@ public void move(Collection<Topic> topics)
 			toUnlink.add(parent.getURL());
 			toReload.add(parent);
 		}
-		topic.model.removeRelatedTopicsRemotely("includedIn", toUnlink);
+		if (isMove) {
+			topic.model.removeRelatedTopicsRemotely("includedIn", toUnlink);
+		}
 	}
 	this.model.addRelatedTopicsRemotely("includes", toLink);
 	for (Topic t : toReload) {
