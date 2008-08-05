@@ -136,13 +136,13 @@ public Dimension getPreferredSize() {
 }
 
 protected void reload() {
-	System.out.println("DEBUG: reload");
 	Collection<org.porphyry.presenter.Viewpoint.Topic> topicsToLoad =
 		Viewpoint.this.presenter.getAllTopics();
 	for (Component cachedTopic : this.getComponents()) {
 		//TODO could be not a topic!
 		if (topicsToLoad.contains(((Topic) cachedTopic).presenter)) {
 			topicsToLoad.remove(((Topic) cachedTopic).presenter);
+			cachedTopic.setLocation(0, 0);
 		} else {
 			this.remove(cachedTopic);
 		}
@@ -150,12 +150,11 @@ protected void reload() {
 	for (org.porphyry.presenter.Viewpoint.Topic t : topicsToLoad) {
 		this.add(new Topic(t));
 	}
-	this.revalidate(); //TODO refactor
+	this.revalidate();
 }
 
 @Override
 public void doLayout() {
-	System.out.println("DEBUG: doLayout");
 	try {
 		for (Component c : this.getComponents()) {
 			//TODO could be not a topic!
@@ -258,7 +257,7 @@ public  Collection<org.porphyry.presenter.Viewpoint.Topic> getActiveTopics() {
 public void mouseDragged(MouseEvent e) {
 	JComponent source = (JComponent) e.getSource();
 	source.getTransferHandler().exportAsDrag(
-		 source, e, TransferHandler.COPY
+		 source, e, TransferHandler.MOVE
 	);
 }
 public void mouseMoved(MouseEvent e) { }
