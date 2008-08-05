@@ -158,7 +158,7 @@ public Topic(URL url) {
 }
 
 protected void reload() throws Exception {
-	this.model.httpGet(false);
+	this.model.httpGet(true);
 }
 
 public URL getURL() {
@@ -239,16 +239,24 @@ public void linkTopics(Collection<Topic> topics, String relationType)
 	Viewpoint.this.update();
 }
 
-public void unlinkTopics(Collection<Topic> topics, String relationType)  
+public void move(Collection<Topic> topics)
 	throws Exception
-{	
-	Collection<URL> urls = new ArrayList<URL>();
-	for(Topic t : topics) {
-		urls.add(t.getURL());
+{
+	Set<Topic> toReload = new HashSet<Topic>();
+	Collection<URL> toLink = new ArrayList<URL>();
+	for (Topic topic: topics) {
+		toLink.add(topic.getURL()); 
+		toReload.add(topic);
+		Collection<URL> toUnlink = new ArrayList<URL>();
+		for(Topic parent : topic.getTopics("includedIn")) {
+			toUnlink.add(parent.getURL());
+			toReload.add(parent);
+		}
+		topic.model.removeRelatedTopicsRemotely("includedIn", toUnlink);
 	}
-	this.model.removeRelatedTopicsRemotely(relationType, urls);
-	for (Topic related : topics) {
-		related.reload();
+	this.model.addRelatedTopicsRemotely("includes", toLink);
+	for (Topic t : toReload) {
+		t.reload();
 	}
 	Viewpoint.this.update();
 }

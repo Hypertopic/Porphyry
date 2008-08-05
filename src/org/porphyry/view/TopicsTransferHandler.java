@@ -85,14 +85,10 @@ public boolean importData(TransferSupport transfer) {
 				getSource(transfer);
 			org.porphyry.presenter.Viewpoint.Topic target =
 				getTarget(transfer);
-			target.linkTopics(source, "includes");
-			if (transfer.getDropAction()==MOVE){
-				for (org.porphyry.presenter.Viewpoint.Topic t: source){
-					Collection<org.porphyry.presenter.Viewpoint.Topic> toDel =
-						t.getTopics("includedIn");
-					toDel.remove(target);
-					t.unlinkTopics(toDel, "includedIn");
-				}
+			if (transfer.getDropAction()==MOVE) {
+				target.move(source);
+			} else {
+				target.linkTopics(source, "includes");
 			}
 		}
 	} catch (Exception e) {
