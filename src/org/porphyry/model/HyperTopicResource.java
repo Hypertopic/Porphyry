@@ -152,70 +152,70 @@ public void httpDelete()
 }
 
 public void httpPut()
-        throws IOException, HyperTopicException
+throws IOException, HyperTopicException
 {
 	String xml = this.toXML();
-        HttpURLConnection connection = this.getConnection("PUT", true);
-        OutputStreamWriter writer =
-                new OutputStreamWriter(connection.getOutputStream(), "UTF-8");
+	HttpURLConnection connection = this.getConnection("PUT", true);
+	OutputStreamWriter writer =
+		new OutputStreamWriter(connection.getOutputStream(), "UTF-8");
 	writer.write(xml);
-        writer.close();
+	writer.close();
 	System.out.println(xml);//DEBUG
 	this.checkError(connection);
 }
 
 public void httpPostUpdate(String xml) 
-        throws IOException, HyperTopicException
+throws IOException, HyperTopicException
 {
-        HttpURLConnection connection = this.getConnection("POST", true);
-        OutputStreamWriter writer =
-                new OutputStreamWriter(connection.getOutputStream(), "UTF-8");
+	HttpURLConnection connection = this.getConnection("POST", true);
+	OutputStreamWriter writer =
+		new OutputStreamWriter(connection.getOutputStream(), "UTF-8");
 	writer.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"+xml);
-        writer.close();
+	writer.close();
 	System.out.println(xml);//DEBUG
 	this.checkError(connection);
 }
 
 /**
-* precondition: this.url is the handler of the POST method
-* postcondition: this.url is the url of the resource
-*/
+ * precondition: this.url is the handler of the POST method
+ * postcondition: this.url is the url of the resource
+ */
 public void httpPostCreate() 
-        throws IOException, HyperTopicException
+throws IOException, HyperTopicException
 {
 	String xml = this.toXML();
-        HttpURLConnection connection = this.getConnection("POST", true);
-        OutputStreamWriter writer =
-                new OutputStreamWriter(connection.getOutputStream(), "UTF-8");
+	HttpURLConnection connection = this.getConnection("POST", true);
+	OutputStreamWriter writer =
+		new OutputStreamWriter(connection.getOutputStream(), "UTF-8");
 	writer.write(xml);
-        writer.close();
+	writer.close();
 	System.out.println(xml);//DEBUG
 	this.checkError(connection);
 	this.url = new URL(this.url, connection.getHeaderField("Location"));
 }
 
 public void httpGet(boolean validating) 
-	throws HyperTopicException, IOException, SAXException, 
-		ParserConfigurationException
+throws HyperTopicException, IOException, SAXException, 
+ParserConfigurationException
 {
 	this.clear();
-        SAXParserFactory parserFactory = SAXParserFactory.newInstance();
+	SAXParserFactory parserFactory = SAXParserFactory.newInstance();
 	if (validating) {
 		SchemaFactory schemaFactory = SchemaFactory.newInstance(
-			XMLConstants.W3C_XML_SCHEMA_NS_URI
+				XMLConstants.W3C_XML_SCHEMA_NS_URI
 		);
 		Class<? extends HyperTopicResource> thisClass = this.getClass();
 		parserFactory.setSchema(
-			schemaFactory.newSchema(
-				thisClass.getResource(
-					this.getClass().getSimpleName()+".xsd"
+				schemaFactory.newSchema(
+						thisClass.getResource(
+								this.getClass().getSimpleName()+".xsd"
+						)
 				)
-			)
 		);
 	}
-        SAXParser parser = parserFactory.newSAXParser();//TODO static?
-        HttpURLConnection connection = this.getConnection("GET", false);
-        parser.parse(connection.getInputStream(), this.getXMLHandler());
+	SAXParser parser = parserFactory.newSAXParser();//TODO static?
+	HttpURLConnection connection = this.getConnection("GET", false);
+	parser.parse(connection.getInputStream(), this.getXMLHandler());
 	this.checkError(connection);
 }
 
@@ -223,10 +223,10 @@ public abstract class XMLHandler extends DefaultHandler {
 
 @Override
 public void error(SAXParseException e)
-               throws SAXException
-       {
-               throw e;
-       }
+throws SAXException
+{
+	throw e;
+}
 
 }
 
