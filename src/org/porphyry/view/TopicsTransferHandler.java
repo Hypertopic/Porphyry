@@ -50,7 +50,10 @@ protected static Collection<org.porphyry.presenter.Viewpoint.Topic> getSource(Tr
 }
 
 protected static org.porphyry.presenter.Viewpoint.Topic getTarget(TransferSupport transfer) {
-	return ((Viewpoint.ViewpointPane.Topic) transfer.getComponent()).presenter;
+	Component c = transfer.getComponent();
+	return (c instanceof Viewpoint.ViewpointPane.Topic) 
+		? ((Viewpoint.ViewpointPane.Topic) c).presenter
+		: null;
 }
 
 @Override
@@ -75,7 +78,7 @@ public boolean canImport(TransferSupport transfer) {
 			&& target instanceof Highlightable
 			&& !getSource(transfer).contains(getTarget(transfer));//TODO must check that it does no cycle
 	} catch (Exception e) {
-		System.out.println(e);
+		System.err.println("canImport "+e);
 		return false;
 	}
 }
@@ -89,12 +92,20 @@ public boolean importData(TransferSupport transfer) {
 				getSource(transfer);
 			org.porphyry.presenter.Viewpoint.Topic target =
 				getTarget(transfer);
-			target.link(source, transfer.getDropAction()==MOVE);
+			if (transfer.getDropAction()==MOVE) {
+				for (org.porphyry.presenter.Viewpoint.Topic t : source) {
+					t.unlinkFromParents();
+				}
+			}
+			if (target!=null) {
+				target.link(source);
+			}
 		}
 	} catch (Exception e) {
-		System.err.println(e);
+		System.err.println("importData "+e);
 		ok = false;
 	}
+	System.out.println("DEBUG importData "+ok);
 	return ok;
 }
 

@@ -225,28 +225,33 @@ public void rename(String name)  throws Exception {
 	Viewpoint.this.update();
 }
 
-public void link(Collection<Topic> topics, boolean isMove)
+public void unlinkFromParents() 
 	throws Exception
 {
-	Set<Topic> toReload = new HashSet<Topic>();
-	Collection<URL> toLink = new ArrayList<URL>();
-	for (Topic topic: topics) {
-		toLink.add(topic.getURL()); 
-		toReload.add(topic);
-		Collection<URL> toUnlink = new ArrayList<URL>();
-		for(Topic parent : topic.getTopics("includedIn")) {
-			toUnlink.add(parent.getURL());
-			toReload.add(parent);
-		}
-		if (isMove) {
-			topic.model.removeRelatedTopicsRemotely("includedIn", toUnlink);
-		}
+	Collection<Topic> parents = this.getTopics("includedIn");
+	Collection<URL> urls = new ArrayList<URL>();
+	for (Topic t : parents) {
+		urls.add(t.getURL());
 	}
-	this.model.addRelatedTopicsRemotely("includes", toLink);
-	for (Topic t : toReload) {
+	this.model.removeRelatedTopicsRemotely("includedIn", urls);
+	for (Topic t : parents) {
 		t.reload();
 	}
 	Viewpoint.this.update();
+}
+
+public void link(Collection<Topic> topics)
+	throws Exception
+{
+	Collection<URL> urls = new ArrayList<URL>();
+	for (Topic t : topics) {
+		urls.add(t.getURL());
+	}
+	this.model.addRelatedTopicsRemotely("includes", urls);
+	for (Topic t : topics) {
+		t.reload();
+	}
+	Viewpoint.this.update();	
 }
 
 public void linkItems(Collection<URL> items)  throws Exception {

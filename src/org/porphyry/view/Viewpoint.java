@@ -25,7 +25,6 @@ package org.porphyry.view;
 
 import java.util.*;
 import java.awt.*;
-import java.awt.dnd.DropTarget;
 import java.awt.event.*;
 import java.beans.*;
 import javax.swing.*;
@@ -117,10 +116,9 @@ public ViewpointPane() {
 	this.setLayout(null);
 	this.setBackground(Color.WHITE); 
 	this.setTransferHandler(TopicsTransferHandler.getSingleton());
-	DropTarget dropTarget = new FixedDropTarget();
-	this.setDropTarget(dropTarget);
+//	this.setDropTarget(new FixedDropTarget());
 	try {
-		dropTarget.addDropTargetListener(
+		this.getDropTarget().addDropTargetListener(
 				new VisibleDropTargetListener()
 		);
 	} catch (TooManyListenersException e) {
