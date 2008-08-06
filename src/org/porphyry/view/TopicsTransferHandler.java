@@ -24,12 +24,13 @@ http://www.gnu.org/licenses/gpl.html
 package org.porphyry.view;
 
 import java.util.*;
+import java.awt.Component;
 import java.awt.datatransfer.*;
 import java.io.IOException;
 import javax.swing.*;
 
 public class TopicsTransferHandler extends TransferHandler {//>>>>>>>>>>>>>>>>>
-
+	
 private static final TopicsTransferHandler singleton = 
 	new TopicsTransferHandler();
 
@@ -68,10 +69,13 @@ protected Transferable createTransferable(JComponent source) {
 
 @Override
 public boolean canImport(TransferSupport transfer) {
-	try {			
+	try {
+		Component target = transfer.getComponent();
 		return transfer.isDataFlavorSupported(TOPICS_FLAVOR)
-			&& !getSource(transfer).contains(getTarget(transfer)); //TODO must check that it does no cycle
+			&& target instanceof Highlightable
+			&& !getSource(transfer).contains(getTarget(transfer));//TODO must check that it does no cycle
 	} catch (Exception e) {
+		System.out.println(e);
 		return false;
 	}
 }

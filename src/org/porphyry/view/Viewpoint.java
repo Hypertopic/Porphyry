@@ -25,9 +25,11 @@ package org.porphyry.view;
 
 import java.util.*;
 import java.awt.*;
+import java.awt.dnd.DropTarget;
 import java.awt.event.*;
 import java.beans.*;
 import javax.swing.*;
+import javax.swing.border.*;
 
 public class Viewpoint extends ExtendedFrame implements 
 	Observer, PropertyChangeListener {//>>>>>>>>>>>>>>>>>>
@@ -36,6 +38,8 @@ public static final int X_INTERVAL = 35;
 public static final int Y_INTERVAL = 35;
 public static final int X_ORIGIN = 5;
 public static final int Y_ORIGIN = 5;
+public static final Border DROP_LOCATION =
+	new LineBorder(PorphyryTheme.PRIMARY_COLOR1, 2);
 
 private final org.porphyry.presenter.Viewpoint presenter;
 
@@ -106,16 +110,38 @@ public void destroyTopics() {
 	}
 }
 
-class ViewpointPane extends ScrollablePanel {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+class ViewpointPane extends ScrollablePanel implements Highlightable {//>>>>>>>>
 
 public ViewpointPane() {
 	super(Y_INTERVAL);
 	this.setLayout(null);
 	this.setBackground(Color.WHITE); 
-	this.setDropTarget(
-			new FixedDropTarget()
-	);
+	this.setTransferHandler(TopicsTransferHandler.getSingleton());
+	DropTarget dropTarget = new FixedDropTarget();
+	this.setDropTarget(dropTarget);
+	try {
+		dropTarget.addDropTargetListener(
+				new VisibleDropTargetListener()
+		);
+	} catch (TooManyListenersException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
 	this.reload();
+}
+
+protected void setHighlight(JComponent dropLocation, boolean highlight) {
+	for (Component c : this.getComponents()) {
+		((JComponent) c).setBorder(null);
+	}
+	this.setBorder(null);
+	if (highlight) {
+		dropLocation.setBorder(DROP_LOCATION);
+	}
+}
+
+public void setHighlight(boolean highlight) {
+	this.setHighlight(this, highlight);
 }
 
 @Override
@@ -221,28 +247,37 @@ public Collection<Topic> getUpperTopics() throws Exception {
 	return c;
 }
 
-public class Topic extends JPanel implements MouseListener, 
-	MouseMotionListener, Comparable<Topic> {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+public class Topic extends JPanel implements 
+	MouseListener, MouseMotionListener, Comparable<Topic>, Highlightable 
+{//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 final org.porphyry.presenter.Viewpoint.Topic presenter; //unsafe
 
 private final JTextField textField = new TopicName();
+private final JLabel bullet = 
+	new JLabel("<html><body>&#x25cf;</body></html>"); //&#x25b6;&#x25bc;
 
 public Topic(org.porphyry.presenter.Viewpoint.Topic presenter) {
 	this.presenter = presenter;
 	this.textField.setText(this.presenter.getName());
-	this.add(
-		new JLabel("<html><body>&#x25cf;</body></html>") //&#x25b6;&#x25bc;
-	);
+	this.add(this.bullet);
 	this.add(this.textField);
 	this.setLayout(new FlowLayout(FlowLayout.LEFT));
 	this.setSize(this.getPreferredSize());
-	this.setBackground(Color.WHITE);
+	this.setOpaque(false);
 	this.setTransferHandler(TopicsTransferHandler.getSingleton());
+	try {
+		this.getDropTarget().addDropTargetListener(
+				new VisibleDropTargetListener()
+		);
+	} catch (TooManyListenersException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
 	this.addMouseListener(this);
 	this.addMouseMotionListener(this);
 	this.setFocusable(true);
-
+	
 	ActionMap actions = this.getActionMap();
 	actions.put("TOPIC_CUT", TransferHandler.getCutAction());
 	actions.put("TOPIC_COPY", TransferHandler.getCopyAction());
@@ -334,11 +369,17 @@ public int compareTo(Topic that) {
 	return this.presenter.compareTo(that.presenter);
 }
 
+@Override
+public void setHighlight(boolean highlight) {
+	ViewpointPane.this.setHighlight(this, highlight);	
+}
+
 public class TopicName extends JTextField implements FocusListener {//>>>>>>>>>
 
 public TopicName() {
 	super();
 	this.addFocusListener(this);
+	this.setTransferHandler(null);
 //	this.setSelectionColor(PorphyryTheme.PRIMARY_COLOR2);
 //	this.setSelectedTextColor(Color.WHITE);
 }
