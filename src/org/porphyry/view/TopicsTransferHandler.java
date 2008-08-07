@@ -30,7 +30,9 @@ import java.io.IOException;
 import javax.swing.*;
 
 public class TopicsTransferHandler extends TransferHandler {//>>>>>>>>>>>>>>>>>
-	
+
+private int action = TransferHandler.NONE;
+
 private static final TopicsTransferHandler singleton = 
 	new TopicsTransferHandler();
 
@@ -83,6 +85,14 @@ public boolean canImport(TransferSupport transfer) {
 	}
 }
 
+protected int getAction(TransferSupport transfer) {
+	int a = (transfer.isDrop())
+		? transfer.getDropAction()
+		: this.action;
+	System.out.println("DEBUG action "+a);
+	return a;
+}
+
 @Override
 public boolean importData(TransferSupport transfer) {
 	boolean ok = true;
@@ -92,7 +102,7 @@ public boolean importData(TransferSupport transfer) {
 				getSource(transfer);
 			org.porphyry.presenter.Viewpoint.Topic target =
 				getTarget(transfer);
-			if (transfer.getDropAction()==MOVE) {
+			if (this.getAction(transfer)==TransferHandler.MOVE) {
 				for (org.porphyry.presenter.Viewpoint.Topic t : source) {
 					t.unlinkFromParents();
 				}
@@ -102,10 +112,15 @@ public boolean importData(TransferSupport transfer) {
 			}
 		}
 	} catch (Exception e) {
-		System.err.println("importData "+e);
+		e.printStackTrace();
 		ok = false;
 	}
 	return ok;
+}
+
+@Override
+protected void exportDone(JComponent source, Transferable data, int action) {
+	this.action = action;
 }
 
 public class TopicSelection implements Transferable {//>>>>>>>>>>>>>>>>>>>>>>>>

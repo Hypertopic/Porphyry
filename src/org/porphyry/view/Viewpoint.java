@@ -25,6 +25,7 @@ package org.porphyry.view;
 
 import java.util.*;
 import java.awt.*;
+import java.awt.dnd.*;
 import java.awt.event.*;
 import java.beans.*;
 import javax.swing.*;
@@ -109,7 +110,9 @@ public void destroyTopics() {
 	}
 }
 
-class ViewpointPane extends ScrollablePanel implements Highlightable {//>>>>>>>>
+class ViewpointPane extends ScrollablePanel 
+	implements Highlightable, MouseListener 
+{//>>>>>>>>
 
 public ViewpointPane() {
 	super(Y_INTERVAL);
@@ -126,7 +129,29 @@ public ViewpointPane() {
 		e.printStackTrace();
 	}
 	this.reload();
+	this.setFocusable(true);
+	this.addMouseListener(this);
+	ActionMap actions = this.getActionMap();
+	actions.put("TOPIC_PASTE", TransferHandler.getPasteAction());
 }
+
+@Override
+public void mousePressed(MouseEvent e) {
+	this.requestFocusInWindow();
+	ViewpointPane.this.clearActiveTopics();
+}
+
+@Override
+public void mouseReleased(MouseEvent e) {}
+
+@Override
+public void mouseClicked(MouseEvent e) {}
+
+@Override
+public void mouseEntered(MouseEvent e) {}
+
+@Override
+public void mouseExited(MouseEvent e) {}
 
 protected void setHighlight(JComponent dropLocation, boolean highlight) {
 	for (Component c : this.getComponents()) {
@@ -245,8 +270,9 @@ public Collection<Topic> getUpperTopics() throws Exception {
 	return c;
 }
 
-public class Topic extends JPanel implements 
-	MouseListener, MouseMotionListener, Comparable<Topic>, Highlightable 
+public class Topic extends JPanel 
+	implements MouseListener, Comparable<Topic>, 
+	Highlightable, MouseMotionListener
 {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 final org.porphyry.presenter.Viewpoint.Topic presenter; //unsafe
@@ -254,6 +280,7 @@ final org.porphyry.presenter.Viewpoint.Topic presenter; //unsafe
 private final JTextField textField = new TopicName();
 private final JLabel bullet = 
 	new JLabel(PorphyryTheme.LEAF_SYMBOL);
+private int dragLength = 0;
 
 public Topic(org.porphyry.presenter.Viewpoint.Topic presenter) {
 	this.presenter = presenter;
@@ -286,17 +313,30 @@ public  Collection<org.porphyry.presenter.Viewpoint.Topic> getActiveTopics() {
 	return ViewpointPane.this.getActiveTopics();
 }
 
-//MouseMotionListener
+@Override
 public void mouseDragged(MouseEvent e) {
-	JComponent source = (JComponent) e.getSource();
-	source.getTransferHandler().exportAsDrag(
-		 source, e, TransferHandler.MOVE
-	);
+	if (this.dragLength>1) {
+		JComponent source = (JComponent) e.getSource();
+		source.getTransferHandler().exportAsDrag(
+			 source, e, TransferHandler.MOVE
+		);
+	}
+	this.dragLength++;
 }
-public void mouseMoved(MouseEvent e) { }
-//MouseListener
-public void mouseEntered(MouseEvent e) { }
+
+@Override
+public void mouseMoved(MouseEvent e) {}
+
+@Override
 public void mousePressed(MouseEvent e) {
+	this.dragLength = 0;
+}
+
+@Override
+public void mouseReleased(MouseEvent e) {}
+
+@Override
+public void mouseClicked(MouseEvent e) {
 	if ((e.getModifiers()&PorphyryTheme.SHORTCUT_KEY) == 0) {
 		ViewpointPane.this.clearActiveTopics();
 		this.setActive(true);
@@ -304,15 +344,18 @@ public void mousePressed(MouseEvent e) {
 		this.setActive(!this.isActive());
 	}
 }
-public void mouseReleased(MouseEvent e) { }
-public void mouseClicked(MouseEvent e) { }
-public void mouseExited(MouseEvent e) { }
+
+@Override
+public void mouseEntered(MouseEvent e) {}
+
+@Override
+public void mouseExited(MouseEvent e) {}
 
 public void setActive(boolean active) {
 	if (active) {
 		this.textField.setBackground(PorphyryTheme.PRIMARY_COLOR2);
 		this.textField.setForeground(Color.WHITE);
-        this.requestFocusInWindow();
+		this.requestFocusInWindow();
 	} else {
 		this.textField.setBackground(Color.WHITE);
 		this.textField.setForeground(Color.BLACK);
