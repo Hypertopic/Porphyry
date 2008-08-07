@@ -50,6 +50,12 @@ public static final Color TRANSLUCENT_PRIMARY_COLOR1 =
 public static final Color TRANSLUCENT_PRIMARY_COLOR2 =
 	new Color(204, 153, 51, 127);
 
+public static final String LEAF_SYMBOL = "\u25cf";
+
+public static final String OPEN_SYMBOL = "\u25bc";
+
+public static final String CLOSED_SYMBOL = "\u25ba";
+
 /*
 protected ColorUIResource getPrimary1() {
 	return PRIMARY_COLOR1;

@@ -253,7 +253,7 @@ final org.porphyry.presenter.Viewpoint.Topic presenter; //unsafe
 
 private final JTextField textField = new TopicName();
 private final JLabel bullet = 
-	new JLabel("<html><body>&#x25cf;</body></html>"); //&#x25b6;&#x25bc;
+	new JLabel(PorphyryTheme.LEAF_SYMBOL);
 
 public Topic(org.porphyry.presenter.Viewpoint.Topic presenter) {
 	this.presenter = presenter;
