@@ -105,7 +105,6 @@ public boolean importData(TransferSupport transfer) {
 		System.err.println("importData "+e);
 		ok = false;
 	}
-	System.out.println("DEBUG importData "+ok);
 	return ok;
 }
 

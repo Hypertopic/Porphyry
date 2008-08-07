@@ -43,6 +43,7 @@ public static final Border DROP_LOCATION =
 private final org.porphyry.presenter.Viewpoint presenter;
 
 private ViewpointPane viewpointPane;
+private JScrollPane scrollPane;
 
 public Viewpoint(
 	org.porphyry.presenter.Viewpoint presenter,
@@ -53,13 +54,12 @@ public Viewpoint(
 	this.setJMenuBar(new MenuBar(presenterPortfolio, this, viewPortfolio));
 	this.presenter = presenter;
 	this.viewpointPane = new ViewpointPane();
-	this.setContentPane(
-		new JScrollPane(
-			this.viewpointPane,
-			JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, 
-			JScrollPane.HORIZONTAL_SCROLLBAR_NEVER
-		)
+	this.scrollPane = new JScrollPane(
+		this.viewpointPane,
+		JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, 
+		JScrollPane.HORIZONTAL_SCROLLBAR_NEVER
 	);
+	this.setContentPane(this.scrollPane);
 	KeyboardFocusManager.getCurrentKeyboardFocusManager()
 		.addPropertyChangeListener("focusOwner", this);
 	this.setSize(800,600);
@@ -145,7 +145,7 @@ public void setHighlight(boolean highlight) {
 @Override
 public Dimension getPreferredSize() {
 	int maxX = 0;
-	int maxY = 0;
+	int maxY = Viewpoint.this.scrollPane.getViewport().getHeight();
 	for (Component c : this.getComponents()) {
 		maxX = Math.max(
 			maxX,

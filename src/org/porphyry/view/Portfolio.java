@@ -528,7 +528,16 @@ public void addEntity(LabeledURL itemURL) throws Exception {
 
 class EntityLevel extends JScrollPane {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-private final ScrollablePanel panel = new ScrollablePanel(105);
+private final ScrollablePanel panel = new ScrollablePanel(105) {
+	@Override
+	public Dimension getPreferredSize() {
+		Dimension adjustedSize = super.getPreferredSize();
+		return new Dimension(
+			adjustedSize.width, 
+			Math.max(adjustedSize.height, EntityLevel.this.getViewport().getHeight())
+		);
+	}
+};
 
 private final String type;
 
