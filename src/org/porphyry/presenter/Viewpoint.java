@@ -24,6 +24,8 @@ http://www.gnu.org/licenses/gpl.html
 package org.porphyry.presenter;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.text.Collator;
 import java.net.URL;
 
@@ -34,6 +36,8 @@ private final Map<URL,Topic> topics = new HashMap<URL,Topic>(); //cache
 private final ItemSet allItems = new ItemSet();
 private final Portfolio.Selection selection;
 private static final Collator collator = Collator.getInstance();
+private static final Pattern topicIdPattern = 
+	Pattern.compile(".*/topic/(.+)/"); //TODO use relative URL ".."?
 
 public Viewpoint(URL url, Portfolio.Selection selection) {
 	super();
@@ -43,6 +47,12 @@ public Viewpoint(URL url, Portfolio.Selection selection) {
 
 public String getName() {
 	return this.model.getName();
+}
+
+protected String getEncodedName() {
+	return org.porphyry.model.HyperTopicResource.encode(
+		this.getName()
+	);
 }
 
 public URL getURL() {
@@ -146,6 +156,19 @@ public void destroyTopics(Collection<Topic> topicsToDestroy) throws Exception {
 	this.update();
 }
 
+public String export() throws Exception {
+	final Set<Topic> visited = new HashSet<Topic>();
+	String s = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
+		+ "<!-- Created with Porphyry -->\n"
+		+ "<map>\n"
+		+ "<node TEXT=\"" + this.getEncodedName() + "\">\n";
+	for (Topic t : this.getUpperTopics()) {
+		s += t.export(visited); 
+	}
+	s += "</node>\n";
+	return s + "</map>\n";
+}
+
 public class Topic extends Observable implements Comparable<Topic> {//>>>>>>>>>
 //TODO remove from list when an error 404 is got?
 
@@ -155,6 +178,29 @@ private boolean includes;
 
 public Topic(URL url) {
 	this.model = new org.porphyry.model.Topic(url);
+}
+
+protected String getID() {
+	Matcher matcher = 
+		Viewpoint.topicIdPattern.matcher(this.getURL().toString());
+	matcher.matches();
+	return "topic_" + matcher.group(1);	
+}
+
+public String export(Set<Topic> visited) throws Exception {
+	String s;
+	if (visited.contains(this)) {
+		s= "<arrowlink DESTINATION=\"" + this.getID() + "\"/>";
+	} else {
+		visited.add(this);
+		s = "<node ID=\"" + this.getID() 
+			+ "\" TEXT=\"" + this.getEncodedName() + "\">\n";
+		for (Topic t : this.getTopics("includes")) {
+			s += t.export(visited);
+		}
+		s += "</node>\n";
+	}
+	return s;
 }
 
 protected void reload() throws Exception {
@@ -171,6 +217,12 @@ public URL getViewpointURL() {
 
 public String getName() {
 	return this.model.getName();
+}
+
+protected String getEncodedName() {
+	return org.porphyry.model.HyperTopicResource.encode(
+		this.getName()
+	);
 }
 
 public Collection<Topic> getTopics(String relationType) throws Exception {

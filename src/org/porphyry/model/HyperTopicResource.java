@@ -99,8 +99,8 @@ public static String encode(URL url)
 
 public static String encode(String xmlValue) {
 	return xmlValue
-		.replaceAll("\"", "&quot;")
 		.replaceAll("&", "&amp;")
+		.replaceAll("\"", "&quot;")
 		.replaceAll("<", "&lt;");
 }
 

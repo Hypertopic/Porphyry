@@ -28,13 +28,22 @@ import java.net.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.beans.*;
+import java.io.*;
+
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import org.porphyry.model.LabeledURL;
 
 public class MenuBar extends JMenuBar implements Observer {//>>>>>>>>>>>>>>>>>>
 
 private static final ResourceBundle BABEL = 
 	ResourceBundle.getBundle("org.porphyry.view.Language");
+
+private org.porphyry.presenter.Portfolio presenter;
+
+private final ExtendedFrame frame;
+
+private final JFileChooser mmFileChooser = new JFileChooser();
 
 class Menu extends JMenu {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
@@ -59,15 +68,15 @@ abstract class MenuItem extends JMenuItem {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 public MenuItem(String titleCode) {
 	super(BABEL.getString(titleCode));
 	this.addActionListener(
-		new ActionListener() {
-                        public void actionPerformed(ActionEvent e) {
-                                try {
-					MenuItem.this.run();
-                                } catch (NullPointerException ex) {
-                                        // Canceled : nothing to do...
-                                }
-                        }
-		}
+			new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					try {
+						MenuItem.this.run();
+					} catch (NullPointerException ex) {
+						// Canceled : nothing to do...
+					}
+				}
+			}
 	);
 }
 
@@ -120,10 +129,32 @@ public CloseViewpointMenuItem(final org.porphyry.presenter.Viewpoint presenter) 
 
 }//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< class CloseViewpointMenuItem
 
+class ExportViewpointMenuItem extends JMenuItem {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-private org.porphyry.presenter.Portfolio presenter;
+	public ExportViewpointMenuItem(final org.porphyry.presenter.Viewpoint presenter) {
+		super(presenter.getName());
+		this.addActionListener(
+			new ActionListener() { 
+				public void actionPerformed(ActionEvent e) { 
+					try {
+						int answer = MenuBar.this.mmFileChooser.showSaveDialog(
+							MenuBar.this.frame
+						);
+						if (answer==JFileChooser.APPROVE_OPTION) {
+							FileWriter f =
+								new FileWriter(MenuBar.this.mmFileChooser.getSelectedFile());
+							f.write(presenter.export());
+							f.close();
+						}
+					} catch (Exception ex) {
+						MenuBar.this.frame.showException(ex);
+					} 
+				}
+			}
+		);
+	}
 
-private final ExtendedFrame frame;
+}//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< class CloseViewpointMenuItem
 
 private final MenuItem actorSuscribe = 
 	new MenuItem("ACTOR_SUSCRIBE") {
@@ -173,6 +204,9 @@ private final MenuItem viewpointLoad =
 		}
 	};
 
+private final Menu viewpointExport = 
+	new Menu("VIEWPOINT_EXPORT");
+	
 private final Menu viewpointClose = 
 	new Menu("VIEWPOINT_CLOSE");
 
@@ -192,6 +226,23 @@ private final MenuItem viewpointCreate =
 		boolean mustBeEnabled() {
 			return true;
 		}
+	};
+
+private final MenuItem viewpointImport = 
+	new MenuItem("VIEWPOINT_IMPORT") {
+		@Override
+		void run() {
+			//TODO ask for file
+			//TODO ask for service
+			//TODO ask for actor
+			//TODO importViewpoint
+		}
+		/*
+		@Override
+		boolean mustBeEnabled() {
+			return true;
+		}
+		*/
 	};
 
 private final Menu viewpointEdit = 
@@ -365,6 +416,9 @@ public MenuBar(
 			this.viewpointEdit,
 			this.viewpointClose,
 			new JSeparator(),
+			this.viewpointImport,
+			this.viewpointExport,
+			new JSeparator(),
 			this.topicCreate.addAll(
 				this.topicCreateGeneric,
 				this.topicCreateSpecific,
@@ -389,6 +443,11 @@ public MenuBar(
 	);
 	this.load();
 	this.presenter.addObserver(this);
+	this.mmFileChooser.setFileFilter(
+			new FileNameExtensionFilter(
+			        "Freemind XML", "mm", "xml"
+			)
+	);
 }
 
 public void addAll(Menu... menus) {
@@ -407,6 +466,9 @@ protected void load() {
 	for (org.porphyry.presenter.Viewpoint v: this.presenter.getAllViewpoints()){
 		this.viewpointEdit.add(
 			new EditViewpointMenuItem(v)
+		);
+		this.viewpointExport.add(
+			new ExportViewpointMenuItem(v)
 		);
 		this.viewpointClose.add(
 			new CloseViewpointMenuItem(v)
