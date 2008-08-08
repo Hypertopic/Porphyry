@@ -141,10 +141,13 @@ class ExportViewpointMenuItem extends JMenuItem {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 							MenuBar.this.frame
 						);
 						if (answer==JFileChooser.APPROVE_OPTION) {
-							FileWriter f =
-								new FileWriter(MenuBar.this.mmFileChooser.getSelectedFile());
-							f.write(presenter.export());
-							f.close();
+							Writer w = new OutputStreamWriter(
+								new FileOutputStream(
+									MenuBar.this.mmFileChooser.getSelectedFile()
+								), "UTF-8"
+							);
+							w.write(presenter.export());
+							w.close();
 						}
 					} catch (Exception ex) {
 						MenuBar.this.frame.showException(ex);
