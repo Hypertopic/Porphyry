@@ -460,7 +460,7 @@ public void addAll(Menu... menus) {
 public void update(Observable o1, Object o2) {
 	this.viewpointEdit.removeAll();
 	this.viewpointClose.removeAll();
-	this.viewpointImport.removeAll();
+	this.viewpointExport.removeAll();
 	this.load();
 }
 
