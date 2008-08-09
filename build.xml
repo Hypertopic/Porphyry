@@ -9,7 +9,6 @@
 	</target>
 	
 	<target name="compile-common" depends="prepare">
-		<javac srcdir="src/org/porphyry/model" destdir="build"/>
 		<java jar="trang.jar" fork="true">
 			<arg value="src/org/porphyry/model/Actor.rnc"/>
 			<arg value="build/org/porphyry/model/Actor.xsd"/>
@@ -30,6 +29,7 @@
 			<arg value="src/org/porphyry/model/Topic.rnc"/>
 			<arg value="build/org/porphyry/model/Topic.xsd"/>
 		</java>		
+		<javac srcdir="src/org/porphyry/model" destdir="build"/>
 	</target>
 	
 	<target name="compile" depends="compile-common" description="Compile application sources">
@@ -39,8 +39,9 @@
 		</unjar>
 		<javac srcdir="src/org/porphyry/presenter" destdir="build" />
 		<javac srcdir="src/org/porphyry/view" destdir="build" />
-		<copy todir="build/org/porphyry/view">
-			<fileset dir="src/org/porphyry/view" excludes="**/*.java"/> 
+		<copy todir="build/org/porphyry">
+			<fileset dir="src/org/porphyry" includes="**/*.properties"/> 
+			<fileset dir="src/org/porphyry" includes="**/*.xsd"/> 
 		</copy>
 	</target>
 

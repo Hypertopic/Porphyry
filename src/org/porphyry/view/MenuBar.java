@@ -235,17 +235,17 @@ private final MenuItem viewpointImport =
 	new MenuItem("VIEWPOINT_IMPORT") {
 		@Override
 		void run() {
-			//TODO ask for file
-			//TODO ask for service
-			//TODO ask for actor
-			//TODO importViewpoint
+			MenuBar.this.importViewpoint(
+				MenuBar.this.askForActor(
+					MenuBar.this.askForService(this.getText()),
+					this.getText()
+				),
+				this.getText());
 		}
-		/*
 		@Override
 		boolean mustBeEnabled() {
 			return true;
 		}
-		*/
 	};
 
 private final Menu viewpointEdit = 
@@ -612,6 +612,31 @@ public void createActor(Object lastResult, String action) {
 			this.frame.showException(e);
 		}
 	} while (pressOK && problem); 
+}
+
+public void importViewpoint(Object lastResult, String action) {
+	if (lastResult==null)
+		throw new NullPointerException();
+	int answer = MenuBar.this.mmFileChooser.showOpenDialog(
+			MenuBar.this.frame
+	);
+	if (answer==JFileChooser.APPROVE_OPTION) {
+		org.porphyry.model.MindMap m = new org.porphyry.model.MindMap();
+		try {
+			URL viewpoint = m.importToServer(
+					this.mmFileChooser.getSelectedFile(), 
+					this.presenter.getService(), 
+					this.presenter.getActor()
+			);
+			this.portfolio.openViewpoints(
+					new Object[] {
+							new org.porphyry.model.LabeledURL(viewpoint, "")
+					}
+			);
+		} catch (Exception e) {
+			this.frame.showException(e);
+		}
+	}
 }
 
 protected boolean ask(Object[] message, String action) {
