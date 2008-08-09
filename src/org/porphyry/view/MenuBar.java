@@ -621,18 +621,20 @@ public void importViewpoint(Object lastResult, String action) {
 			MenuBar.this.frame
 	);
 	if (answer==JFileChooser.APPROVE_OPTION) {
-		org.porphyry.model.MindMap m = new org.porphyry.model.MindMap();
 		try {
-			URL viewpoint = m.importToServer(
-					this.mmFileChooser.getSelectedFile(), 
-					this.presenter.getService(), 
+			File file = this.mmFileChooser.getSelectedFile();
+			this.portfolio.importToServer(
+					file, 
+					this.presenter.getService(),
 					this.presenter.getActor()
 			);
+			/*TODO
 			this.portfolio.openViewpoints(
 					new Object[] {
 							new org.porphyry.model.LabeledURL(viewpoint, "")
 					}
 			);
+			*/
 		} catch (Exception e) {
 			this.frame.showException(e);
 		}

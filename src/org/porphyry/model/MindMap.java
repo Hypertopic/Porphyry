@@ -39,7 +39,9 @@ public class MindMap {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 /**
  * @return viewpoint URL
  */
-public URL importToServer(File file, String service, URL actor) throws Exception {
+public URL importToServer(InputStream inputStream, String service, URL actor)
+	throws Exception 
+{
 	SAXParserFactory parserFactory = SAXParserFactory.newInstance();
 	parserFactory.setSchema(
 			SchemaFactory.newInstance(
@@ -49,10 +51,7 @@ public URL importToServer(File file, String service, URL actor) throws Exception
 			)
 	);
 	FreemindHandler freemindHandler = new FreemindHandler(service, actor);
-	parserFactory.newSAXParser().parse(
-			new FileInputStream(file),
-			freemindHandler
-	);
+	parserFactory.newSAXParser().parse(inputStream, freemindHandler);
 	return freemindHandler.getViewpoint();
 }
 	

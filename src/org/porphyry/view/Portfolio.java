@@ -26,7 +26,10 @@ package org.porphyry.view;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
+import java.io.File;
+import java.io.FileInputStream;
 import java.net.*;
+
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
@@ -108,6 +111,11 @@ public void openViewpoints(Object[] labeledURLs) throws Exception {
 		this.presenter.openViewpoints(labeledURLs)
 	);
 	loader.execute();
+}
+
+public void importToServer(File file, String service, URL actor) {
+	Importer importer = new Importer(file, service, actor);
+	importer.execute();
 }
 
 class ViewpointsPane extends Box implements Observer {//>>>>>>>>>>>>>>>>>>>>>>>
@@ -752,6 +760,54 @@ protected void done() {
 }
 
 }//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< class ItemsLoader
+
+class Importer extends SwingWorker<URL,Object> {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+	
+private File file;
+private String service;
+private URL actor;
+
+public Importer(File file, String service, URL actor) {
+	this.file = file;
+	this.service = service;
+	this.actor = actor;
+}
+
+@Override
+public URL doInBackground() {
+	URL viewpoint = null;
+	try {
+		org.porphyry.model.MindMap m = new org.porphyry.model.MindMap();
+		viewpoint = m.importToServer(
+				new ProgressMonitorInputStream(
+						Portfolio.this,
+						BABEL.getString("IMPORTING_TOPICS"),
+						new FileInputStream(this.file)
+				), 
+				this.service, 
+				this.actor
+		);
+	} catch (Exception e) {
+		e.printStackTrace();
+	}
+	return viewpoint;
+}
+
+@Override
+protected void done() {
+	try {
+		ViewpointsLoader loader = new ViewpointsLoader(
+				Portfolio.this.presenter.openViewpoints(
+						new Object[] { new LabeledURL(this.get(), "") }
+				)
+		);
+		loader.execute();
+	} catch (Exception e) {
+		Portfolio.this.showException(e);
+	}
+}
+	
+}//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< class Importer
 
 public static void main(String args[]) {
 	final int PORT = 10101;
