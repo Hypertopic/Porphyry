@@ -447,9 +447,7 @@ public MenuBar(
 	this.load();
 	this.presenter.addObserver(this);
 	this.mmFileChooser.setFileFilter(
-			new FileNameExtensionFilter(
-			        "Freemind XML", "mm", "xml"
-			)
+			new FileNameExtensionFilter("Freemind XML", "mm")
 	);
 }
 
@@ -462,6 +460,7 @@ public void addAll(Menu... menus) {
 public void update(Observable o1, Object o2) {
 	this.viewpointEdit.removeAll();
 	this.viewpointClose.removeAll();
+	this.viewpointImport.removeAll();
 	this.load();
 }
 
@@ -628,13 +627,6 @@ public void importViewpoint(Object lastResult, String action) {
 					this.presenter.getService(),
 					this.presenter.getActor()
 			);
-			/*TODO
-			this.portfolio.openViewpoints(
-					new Object[] {
-							new org.porphyry.model.LabeledURL(viewpoint, "")
-					}
-			);
-			*/
 		} catch (Exception e) {
 			this.frame.showException(e);
 		}
