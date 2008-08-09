@@ -37,7 +37,7 @@ private final ItemSet allItems = new ItemSet();
 private final Portfolio.Selection selection;
 private static final Collator collator = Collator.getInstance();
 private static final Pattern topicIdPattern = 
-	Pattern.compile(".*/topic/(.+)/"); //TODO use relative URL ".."?
+	Pattern.compile(".*/topic/(.+)/");
 
 public Viewpoint(URL url, Portfolio.Selection selection) {
 	super();

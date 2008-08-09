@@ -25,7 +25,6 @@ package org.porphyry.view;
 
 import java.util.*;
 import java.awt.*;
-import java.awt.dnd.*;
 import java.awt.event.*;
 import java.beans.*;
 import javax.swing.*;
