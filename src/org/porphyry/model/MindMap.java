@@ -39,7 +39,7 @@ public class MindMap {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 /**
  * @return viewpoint URL
  */
-public URL importToServer(InputStream inputStream, String service, URL actor)
+public URL importToServer(InputStream inputStream, String service, URL actor, boolean withItems)
 	throws Exception 
 {
 	SAXParserFactory parserFactory = SAXParserFactory.newInstance();
@@ -50,7 +50,7 @@ public URL importToServer(InputStream inputStream, String service, URL actor)
 					MindMap.class.getResource("Freemind.xsd")
 			)
 	);
-	FreemindHandler freemindHandler = new FreemindHandler(service, actor);
+	FreemindHandler freemindHandler = new FreemindHandler(service, actor, withItems);
 	parserFactory.newSAXParser().parse(inputStream, freemindHandler);
 	return freemindHandler.getViewpoint();
 }
@@ -60,19 +60,21 @@ class FreemindHandler extends DefaultHandler {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 private String service;
 private URL actor;
 private URL viewpoint;
-private final Deque<URL> ancestors = new ArrayDeque<URL>();
+private boolean withItems;
+private final Deque<URL> ancestors = new ArrayDeque<URL>(); //stack for node tree exploration
 private final Map<String,URL> idTranslator = new HashMap<String,URL>(); 
 
-public FreemindHandler(String service, URL actor) {
+public FreemindHandler(String service, URL actor, boolean withItems) {
 	this.service = service;
 	this.actor = actor;
+	this.withItems = withItems;
 }
 
 public URL getViewpoint() {
 	return this.viewpoint;//unsafe
 }
 
-protected void createViewpoint(String name) throws Exception {
+protected URL createViewpoint(String name) throws Exception {
 	org.porphyry.model.Viewpoint v = new org.porphyry.model.Viewpoint(
 			this.service + "viewpoint/"
 	);
@@ -80,6 +82,7 @@ protected void createViewpoint(String name) throws Exception {
 	v.addActor(this.actor.toString());
 	v.httpPostCreate();
 	this.viewpoint = v.getURL();
+	return v.getURL();
 }
 
 protected URL createTopic(String name) throws Exception {
@@ -87,7 +90,7 @@ protected URL createTopic(String name) throws Exception {
 			this.viewpoint.toString()+"topic/"
 	);
 	t.setName(name);
-	if (!this.ancestors.isEmpty()) {
+	if (this.isParentATopic()) {
 		t.addRelatedTopic("includedIn", this.ancestors.getFirst().toString());
 	}
 	t.httpPostCreate();
@@ -101,6 +104,24 @@ protected void linkTopicToFather(URL url) throws Exception {
 	t.addRelatedTopicsRemotely("includedIn", parents);
 }
 
+protected void linkItemToFather(URL url) throws Exception {
+	org.porphyry.model.Topic father = new org.porphyry.model.Topic(
+			this.ancestors.getFirst()
+	);
+	Collection<URL> items = new ArrayList<URL>();
+	items.add(url);
+	father.addEntitiesRemotely(items);
+}
+
+protected boolean isParentATopic() {
+	return (
+			!this.ancestors.isEmpty() 
+			&& HyperTopicResource.getNodeType(
+					this.ancestors.getFirst().toString()
+			)==HyperTopicResource.NodeType.TOPIC
+	);
+}
+
 @Override
 public void startElement(String u, String n, String element, Attributes attr)
 	throws SAXException 
@@ -108,16 +129,24 @@ public void startElement(String u, String n, String element, Attributes attr)
 	try {
 		if ("node".equals(element)) {
 			String name = attr.getValue("TEXT");
+			String itemURL = attr.getValue("LINK");
+			URL url = null;
+			System.err.println("DEBUG itemURL="+itemURL+" ancestors="+this.ancestors);
 			if (this.viewpoint==null) { // is a viewpoint
-				this.createViewpoint(name);
+				url = this.createViewpoint(name);
+			} else if (itemURL!=null) { // is an item
+				url = new URL(itemURL);
+				if (this.withItems) {
+					this.linkItemToFather(url);
+				}
 			} else { // is a topic
-				URL topicURL = this.createTopic(name);
-				this.ancestors.addFirst(topicURL);
+				url = this.createTopic(name);
 				String topicID = attr.getValue("ID");
 				if (topicID!=null) {
-					this.idTranslator.put(topicID, topicURL);
+					this.idTranslator.put(topicID, url);
 				}
 			}
+			this.ancestors.addFirst(url);
 		} else if ("arrowlink".equals(element)) {
 			this.linkTopicToFather(
 					this.idTranslator.get(
@@ -126,14 +155,14 @@ public void startElement(String u, String n, String element, Attributes attr)
 			);
 		}
 	} catch (Exception e) {
-		System.err.println(e);
+		e.printStackTrace();
 	}
 }
 
 @Override
 public void endElement(String u, String n, String element) throws SAXException 
 {
-	if ("node".equals(element) && !this.ancestors.isEmpty()) {
+	if ("node".equals(element)) {
 		this.ancestors.removeFirst();
 	}
 }

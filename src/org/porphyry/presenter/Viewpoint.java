@@ -29,6 +29,8 @@ import java.util.regex.Pattern;
 import java.text.Collator;
 import java.net.URL;
 
+import org.porphyry.model.LabeledURL;
+
 public class Viewpoint extends Observable {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 private final org.porphyry.model.Viewpoint model;
@@ -194,9 +196,23 @@ public String export(Set<Topic> visited) throws Exception {
 	} else {
 		visited.add(this);
 		s = "<node ID=\"" + this.getID() 
-			+ "\" TEXT=\"" + this.getEncodedName() + "\">\n";
+			+ "\" TEXT=\"" + this.getEncodedName(); 
+		if (!this.getItems().isEmpty())	{
+			s += "\" FOLDED=\"true"; 
+		}
+		s += "\">\n";
 		for (Topic t : this.getTopics("includes")) {
 			s += t.export(visited);
+		}
+		for (LabeledURL item : this.getItems()) {
+			s += "<node LINK=\"" + item.getURL();
+			if (item.getLabel()!=null) {
+				s += "\" TEXT=\"" 
+					+ org.porphyry.model.HyperTopicResource.encode(
+							item.getLabel()
+					);
+			}
+			s += "\"/>\n";
 		}
 		s += "</node>\n";
 	}

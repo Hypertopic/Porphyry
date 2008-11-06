@@ -113,8 +113,8 @@ public void openViewpoints(Object[] labeledURLs) throws Exception {
 	loader.execute();
 }
 
-public void importToServer(File file, String service, URL actor) {
-	Importer importer = new Importer(file, service, actor);
+public void importToServer(File file, String service, URL actor, boolean withItems) {
+	Importer importer = new Importer(file, service, actor, withItems);
 	importer.execute();
 }
 
@@ -766,11 +766,13 @@ class Importer extends SwingWorker<URL,Object> {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 private File file;
 private String service;
 private URL actor;
+private boolean withItems;
 
-public Importer(File file, String service, URL actor) {
+public Importer(File file, String service, URL actor, boolean withItems) {
 	this.file = file;
 	this.service = service;
 	this.actor = actor;
+	this.withItems = withItems;
 }
 
 @Override
@@ -785,7 +787,8 @@ public URL doInBackground() {
 						new FileInputStream(this.file)
 				), 
 				this.service, 
-				this.actor
+				this.actor,
+				this.withItems
 		);
 	} catch (Exception e) {
 		e.printStackTrace();

@@ -135,7 +135,7 @@ public void createActor(String login, String fullName) throws Exception {
 		new org.porphyry.model.Actor(
 				this.service 
 				+ "actor/" 
-				+ URLEncoder.encode(login, "UTF-8") 
+				+ URLEncoder.encode(login, "UTF-8") //TODO use URI.otASCIIString instead
 				+ "/"
 		);
 	a.setCompleteName(fullName);

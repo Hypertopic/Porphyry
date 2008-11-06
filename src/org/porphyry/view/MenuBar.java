@@ -622,11 +622,18 @@ public void importViewpoint(Object lastResult, String action) {
 	if (answer==JFileChooser.APPROVE_OPTION) {
 		try {
 			File file = this.mmFileChooser.getSelectedFile();
-			this.portfolio.importToServer(
+			int mode = JOptionPane.showConfirmDialog(
+					MenuBar.this.frame, 
+					BABEL.getString("VIEWPOINT_IMPORT_WITH_ITEMS")
+			);
+			if (mode!=JOptionPane.CANCEL_OPTION) {
+				this.portfolio.importToServer(
 					file, 
 					this.presenter.getService(),
-					this.presenter.getActor()
-			);
+					this.presenter.getActor(),
+					mode==JOptionPane.YES_OPTION
+				);
+			}	
 		} catch (Exception e) {
 			this.frame.showException(e);
 		}
