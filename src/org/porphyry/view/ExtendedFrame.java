@@ -29,7 +29,7 @@ import javax.swing.*;
 public class ExtendedFrame extends JFrame {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 private ProgressMonitor progressMonitor;
-int progress = 0;
+int progress;
 
 protected static final ResourceBundle BABEL = 
 	ResourceBundle.getBundle("org.porphyry.view.Language");
@@ -58,6 +58,7 @@ public void showException(Exception e) {
 	
 public void showProgressMonitor(String title, int max) {
 	this.progressMonitor = new ProgressMonitor(this, title, "", 0, max);
+	this.progress = 0;
 }
 
 public void setProgress(String note) {
