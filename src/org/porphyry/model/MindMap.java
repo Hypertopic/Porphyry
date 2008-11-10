@@ -131,7 +131,6 @@ public void startElement(String u, String n, String element, Attributes attr)
 			String name = attr.getValue("TEXT");
 			String itemURL = attr.getValue("LINK");
 			URL url = null;
-			System.err.println("DEBUG itemURL="+itemURL+" ancestors="+this.ancestors);
 			if (this.viewpoint==null) { // is a viewpoint
 				url = this.createViewpoint(name);
 			} else if (itemURL!=null) { // is an item

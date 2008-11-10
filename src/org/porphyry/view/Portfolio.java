@@ -26,8 +26,7 @@ package org.porphyry.view;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
-import java.io.File;
-import java.io.FileInputStream;
+import java.io.*;
 import java.net.*;
 
 import javax.swing.*;
@@ -780,12 +779,14 @@ public URL doInBackground() {
 	URL viewpoint = null;
 	try {
 		org.porphyry.model.MindMap m = new org.porphyry.model.MindMap();
+		ProgressMonitorInputStream monitoredStream = new ProgressMonitorInputStream(
+				Portfolio.this,
+				BABEL.getString("IMPORTING_TOPICS"),
+				new FileInputStream(this.file)
+		);
+		monitoredStream.getProgressMonitor().setMillisToDecideToPopup(0);
 		viewpoint = m.importToServer(
-				new ProgressMonitorInputStream(
-						Portfolio.this,
-						BABEL.getString("IMPORTING_TOPICS"),
-						new FileInputStream(this.file)
-				), 
+				monitoredStream,
 				this.service, 
 				this.actor,
 				this.withItems
