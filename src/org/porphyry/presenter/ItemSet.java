@@ -298,7 +298,7 @@ public void retainAll(WholeItem that) {
 			}
 		}
 		if (found) {
-			this.fragments.add(thisFragment);
+			this.add(thisFragment);
 		}
 	}
 }
@@ -387,6 +387,9 @@ public boolean intersects(Fragment that) {
 		||
 		this.begin<=((TextFragment) that).end
 		&& ((TextFragment) that).end<=this.end
+		||
+		((TextFragment) that).begin<=this.begin
+		&& this.begin<=((TextFragment) that).end
 	);
 }
 
