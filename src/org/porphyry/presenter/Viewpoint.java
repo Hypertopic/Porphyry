@@ -114,10 +114,10 @@ protected void update() throws Exception {
 	this.allItems.clear();
 	for (Topic t : this.getUpperTopics()) { 
 		t.computeAllItems();
-                this.allItems.addAll(
-			t.getAllItems()
-                );
-        }
+		this.allItems.addAll(
+				t.getAllItems()
+		);
+	}
 	this.setChanged();
 	this.notifyObservers();
 	this.selection.updateSelectedItems();
