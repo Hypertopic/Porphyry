@@ -1,4 +1,5 @@
 element actor {
+	attribute href {xsd:anyURI}?,
 	attribute name {text}?,
 	element viewpoint {
 		attribute href {xsd:anyURI},

@@ -1,4 +1,5 @@
 element entity {
+	attribute href {xsd:anyURI}?,
 	(
 		element topic {
 			attribute href {xsd:anyURI},

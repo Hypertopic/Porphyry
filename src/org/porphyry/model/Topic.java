@@ -40,7 +40,8 @@ private final Set<LabeledURL> entities = new HashSet<LabeledURL>();
 
 private final XMLHandler xmlHandler = new XMLHandler() { /////////////
 	
-	private String entityUrl;
+	private String url;
+	private String label;
 
 	@Override 
 	public void startElement (
@@ -59,33 +60,31 @@ private final XMLHandler xmlHandler = new XMLHandler() { /////////////
 					attr.getValue("href")
 				);
 			} else if (element.equals("entity")) {
-				this.entityUrl = attr.getValue("href");
+				this.url = attr.getValue("href");
 			}
 		} catch (MalformedURLException e) {
 			System.err.println(e);
 		}
 	}
+
 	@Override
 	public void characters(char[] ch, int start, int length) {
-		try {
-			if (this.entityUrl != null) {
-				boolean isNotLabeled = 
-					"".equals(new String(ch, start, length).trim());
-				Topic.this.addEntity(
-						this.entityUrl, 
-						(isNotLabeled) ? null : new String(ch, start, length)
-				);
-			}
-		} catch (MalformedURLException e) {
-			//Should never go there if XML is valid
-			e.printStackTrace();
+		this.label = new String(ch, start, length).trim();
+		if ("".equals(this.label)) {
+			this.label = null;
 		}
 	}
 
 	@Override
 	public void endElement(String u, String n, String element) {
-		if (element.equals("actor")) {
-			this.entityUrl = null;
+		try {
+			if (element.equals("entity")) {
+				Topic.this.addEntity(this.url, this.label);
+			}
+			this.url = null;
+			this.label = null;
+		} catch (MalformedURLException e) {
+			System.err.println(e);
 		}
 	}
 	
@@ -271,11 +270,23 @@ public String toXML() {
 			+ relatedTopic.getURL() + "\"/>\n";
 	}
 	for (LabeledURL entity : this.entities) {
+		String label = entity.getLabel();
 		xml += "<entity href=\"" + entity.getURL() + "\">"
-			+ entity.getLabel()
+			+ ((label==null)?"":label)
 			+ "</entity>\n";
 	}
 	return xml + "</topic>\n";
+}
+
+public static void main(String args[]) {
+	try {
+		Topic t = new Topic("http://crata.porphyry.org/topic/5252/");
+		//Topic t = new Topic("http://localhost/viewpoint/1/topic/11/");
+		t.httpGet(true);
+		System.out.println(t.toXML());
+	} catch (Exception e) {
+		e.printStackTrace();
+	}
 }
 
 }

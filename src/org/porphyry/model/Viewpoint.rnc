@@ -1,4 +1,5 @@
 element viewpoint {
+	attribute href {xsd:anyURI}?,
 	attribute name {text}?,
 	(
 		element topic {

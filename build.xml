@@ -8,7 +8,7 @@
 		<mkdir dir="build"/>
 	</target>
 	
-	<target name="compile-common" depends="prepare">
+	<target name="convert-schemas" depends="prepare">
 		<java jar="trang.jar" fork="true">
 			<arg value="src/org/porphyry/model/Actor.rnc"/>
 			<arg value="build/org/porphyry/model/Actor.xsd"/>
@@ -29,6 +29,10 @@
 			<arg value="src/org/porphyry/model/Topic.rnc"/>
 			<arg value="build/org/porphyry/model/Topic.xsd"/>
 		</java>		
+
+	</target>
+
+	<target name="compile-common" depends="prepare">
 		<javac srcdir="src/org/porphyry/model" destdir="build"/>
 	</target>
 	
@@ -64,7 +68,7 @@
 	<target name="run" depends="compile" description="Start application">
 		<java classname="org.porphyry.view.Portfolio" 
 			classpath="build" fork="true">
-			<arg value="http://localhost/viewpoint/1/topic/1/"/>
+			<arg value="http://localhost/"/>
 			<jvmarg value="-Xdock:name=Porphyry"/>
 			<jvmarg value="-Xmx1g"/>
 			<sysproperty key="apple.laf.useScreenMenuBar" value="true"/>
@@ -96,6 +100,12 @@
 
 	<target name="deploy" depends="dist" 
 		description="Publish on SourceForge (-Duser=XXX -Dpass=XXX)">
+<!--
+		<sshexec username="${user},porphyry" password="{$pass}" 
+			host="shell.sourceforge.net" command="create" 
+			trust="yes"
+		/>
+-->
 		<scp trust="yes" file="dist/Porphyry.jar" 
 		todir="${user}:${pass}@shell.sf.net:/home/groups/p/po/porphyry/htdocs"/>
 	</target>
