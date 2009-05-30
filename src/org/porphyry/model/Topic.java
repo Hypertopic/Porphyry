@@ -9,7 +9,7 @@ SCIENTIFIC COMMITTEE
 OFFICIAL WEB SITE
 http://www.porphyry.org/
 
-Copyright (C) 2006-2007 Aurelien Benel.
+Copyright (C) 2006-2009 Aurelien Benel.
 
 LEGAL ISSUES
 This program is free software; you can redistribute it and/or modify it under
@@ -41,7 +41,7 @@ private final Set<LabeledURL> entities = new HashSet<LabeledURL>();
 private final XMLHandler xmlHandler = new XMLHandler() { /////////////
 	
 	private String url;
-	private String label;
+	private String label = "";
 
 	@Override 
 	public void startElement (
@@ -69,20 +69,21 @@ private final XMLHandler xmlHandler = new XMLHandler() { /////////////
 
 	@Override
 	public void characters(char[] ch, int start, int length) {
-		this.label = new String(ch, start, length).trim();
-		if ("".equals(this.label)) {
-			this.label = null;
-		}
+		this.label += new String(ch, start, length);
 	}
 
 	@Override
 	public void endElement(String u, String n, String element) {
 		try {
 			if (element.equals("entity")) {
+				this.label = this.label.trim();
+				if ("".equals(this.label)) {
+					this.label = null;
+				}
 				Topic.this.addEntity(this.url, this.label);
 			}
 			this.url = null;
-			this.label = null;
+			this.label = "";
 		} catch (MalformedURLException e) {
 			System.err.println(e);
 		}
@@ -280,8 +281,7 @@ public String toXML() {
 
 public static void main(String args[]) {
 	try {
-		Topic t = new Topic("http://crata.porphyry.org/topic/5252/");
-		//Topic t = new Topic("http://localhost/viewpoint/1/topic/11/");
+		Topic t = new Topic("http://localhost/viewpoint/1/topic/11/");
 		t.httpGet(true);
 		System.out.println(t.toXML());
 	} catch (Exception e) {
