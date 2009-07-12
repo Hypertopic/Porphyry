@@ -397,14 +397,11 @@ public boolean intersects(Fragment that) {
 public Fragment createUnion(Fragment that) {
 	String thisLabel = this.getLabel();
 	String thatLabel = that.getLabel();	
-	if (thisLabel.indexOf(thatLabel) < 0) {
-		thisLabel = thisLabel + "<br>" + thatLabel;
-	}
 	TextFragment thatTextFragment = (TextFragment) that;
 	return new TextFragment(
 		Math.min(this.begin, thatTextFragment.begin),
 		Math.max(this.end, thatTextFragment.end),
-		thisLabel
+		thisLabel + thatLabel
 	);
 }
 

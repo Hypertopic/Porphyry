@@ -76,8 +76,7 @@ private final XMLHandler xmlHandler = new XMLHandler() { /////////////
 	public void endElement(String u, String n, String element) {
 		try {
 			if (element.equals("entity")) {
-				this.label = this.label.trim();
-				if ("".equals(this.label)) {
+				if ("".equals(this.label.trim())) {
 					this.label = null;
 				}
 				Topic.this.addEntity(this.url, this.label);
