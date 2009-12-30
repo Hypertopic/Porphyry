@@ -43,6 +43,9 @@ private final Map<String,URL> resources =
 private final List<URL> topics =
 	new ArrayList<URL>();
 
+private final List<LabeledURL> entities =
+	new ArrayList<LabeledURL>();
+
 private final XMLHandler xmlHandler = new XMLHandler() {
 	@Override
 	public void startElement (
@@ -56,6 +59,11 @@ private final XMLHandler xmlHandler = new XMLHandler() {
 		} else if (element.equals("resource") ) {
 			Entity.this.addResource(
 				attr.getValue("name"),
+				attr.getValue("href")
+			);
+		} else if (element.equals("relatedEntity") ) {
+			Entity.this.addRelatedEntity(
+				attr.getValue("relationType"),
 				attr.getValue("href")
 			);
 		} else if (element.equals("topic") ) {
@@ -151,6 +159,48 @@ public URL getResource(String name) {
 	return this.resources.get(name);
 }
 
+public void addRelatedEntity(String relationType, String href) {
+	try {
+		this.entities.add(
+			new LabeledURL(
+				this.getAbsoluteURL(href),
+				relationType
+			)
+		);
+	} catch (MalformedURLException e) {
+		System.err.println(e);
+	}
+}
+
+public List<URL> getRelatedEntities(String relationType) {
+	List<URL> entities = new ArrayList<URL>();
+	for(LabeledURL entity : this.entities) {
+		if (entity.getLabel().equals(relationType)) {
+			entities.add(entity.getURL());
+		}
+	}
+	return entities;
+}
+
+//TODO addRelatedEntityRemotely
+//TODO removeRelatedEntity
+//TODO removeRelatedEntityRemotely
+
+// recursive (suppose no cycle), results from bottom to top
+protected List<URL> getAllEntities() 
+	throws HyperTopicException, java.io.IOException , URISyntaxException,
+	SAXException, ParserConfigurationException
+{
+	List<URL> result = new ArrayList<URL>();
+	for (URL url : this.getRelatedEntities("partOf")) {
+		Entity child = new Entity(url);
+		child.httpGet(true);
+		result.addAll(child.getAllEntities());
+	}
+	result.add(this.getURL());
+	return result;
+}
+
 public String getFirstValue(String key) {
 	int i=0;
 	Attribute a = null;
@@ -229,5 +279,20 @@ public String getValue() {
 }
 
 }//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< class Attribute
+
+public static void main(String args[]) {
+	try {
+		Entity root = new Entity(
+			new URL(args[0])
+		);
+		root.httpGet(true);
+		List<URL> all = root.getAllEntities();
+		for (URL item : all) {
+			System.out.println(item);
+		}
+	} catch (Exception e) {
+		System.err.println(e);
+	}
+}
 
 }//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< class Entity

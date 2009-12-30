@@ -17,6 +17,12 @@ element entity {
 			attribute name {text},
 			attribute href {xsd:anyURI}
 		}
+	|
+		element relatedEntity {
+			attribute relationType {text},
+			attribute href {xsd:anyURI},
+			text
+		}
 	)*
 }
 
