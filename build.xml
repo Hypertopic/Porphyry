@@ -36,7 +36,7 @@
 		<javac srcdir="src/org/porphyry/model" destdir="build"/>
 	</target>
 	
-	<target name="compile" depends="compile-common" description="Compile application sources">
+	<target name="compile" depends="compile-common,convert-schemas" description="Compile application sources">
 		<unjar dest="build">
 			<fileset dir="lib" includes="*.jar" />
 			<patternset includes="org/**" /> 
@@ -92,7 +92,7 @@
 			<include name="org/jdesktop/**"/>
 		</jar>
 		<signjar jar="dist/Porphyry.jar"
-			keystore="../${user}.p12" 
+			keystore="${user}.p12" 
 			alias="My key" 
 			storepass="${pass}"
 			storetype="PKCS12"/>

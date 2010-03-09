@@ -83,20 +83,6 @@ public static NodeType getNodeType(String url) {
 	return t;
 }
 
-public static String encode(URL url) 
-	throws URISyntaxException
-{
-	return (
-		new URI(
-			url.getProtocol(),
-			"//" + url.getHost() + (
-				(url.getPort()==-1) ? "" : ":" + url.getPort()
-			) + url.getFile(),
-			null
-		)
-	).toASCIIString();
-}
-
 public static String encode(String xmlValue) {
 	return xmlValue
 		.replaceAll("&", "&amp;")
