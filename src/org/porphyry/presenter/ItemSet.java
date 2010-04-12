@@ -383,13 +383,13 @@ public TextFragment(int begin, int end, String label) {
 public boolean intersects(Fragment that) {
 	return that instanceof TextFragment && (
 		this.begin<=((TextFragment) that).begin
-		&& ((TextFragment) that).begin<=this.end
+		&& ((TextFragment) that).begin<this.end
 		||
-		this.begin<=((TextFragment) that).end
+		this.begin<((TextFragment) that).end
 		&& ((TextFragment) that).end<=this.end
 		||
 		((TextFragment) that).begin<=this.begin
-		&& this.begin<=((TextFragment) that).end
+		&& this.begin<((TextFragment) that).end
 	);
 }
 
