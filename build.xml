@@ -32,35 +32,27 @@
 
 	</target>
 
-	<target name="compile-common" depends="prepare">
-		<javac srcdir="src/org/porphyry/model" destdir="build"/>
-	</target>
-	
-	<target name="compile" depends="compile-common,convert-schemas" description="Compile application sources">
+	<target name="compile" depends="prepare,convert-schemas" description="Compile application sources">
 		<unjar dest="build">
 			<fileset dir="lib" includes="*.jar" />
 			<patternset includes="org/**" /> 
 		</unjar>
-		<javac srcdir="src/org/porphyry/presenter" destdir="build" />
-		<javac srcdir="src/org/porphyry/view" destdir="build" />
-		<copy todir="build/org/porphyry">
+		<javac srcdir="src" destdir="build" classpath="junit.jar"/>
+		<copy todir="build">
 			<fileset dir="src/org/porphyry" includes="**/*.properties"/> 
 			<fileset dir="src/org/porphyry" includes="**/*.xsd"/> 
 		</copy>
 	</target>
 
-	<target name="compile-test" depends="compile-common" description="Compile unit tests sources">
-		<javac srcdir="src/org/porphyry/test" destdir="build" />
-	</target>
-		
-	<target name="test" depends="compile-test" description="Start unit tests"> 
+	<target name="test" depends="compile" description="Start unit tests"> 
 		<junit>
 			<batchtest> 
-				<fileset dir="build" includes="**/*Test*.class"/> 
+				<fileset dir="build" includes="**/*Test.class"/> 
 			</batchtest> 
 			<formatter type="plain" usefile="false" />
 			<classpath>
 				  <pathelement location="build" />
+				  <pathelement location="junit.jar" />
 			</classpath>
 		</junit> 
 	</target> 
@@ -107,7 +99,7 @@
 		/>
 -->
 		<scp trust="yes" file="dist/Porphyry.jar" 
-		todir="${user}:${pass}@shell.sf.net:/home/groups/p/po/porphyry/htdocs"/>
+		todir="${user}:${pass}@web.sourceforge.net:/home/groups/p/po/porphyry/htdocs"/>
 	</target>
 	
 	<target name="clean" description="Delete what ant has built"> 
