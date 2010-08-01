@@ -5,7 +5,7 @@
 <project name="Porphyry v5" default="run">
 
 	<target name="prepare">
-		<mkdir dir="build"/>
+		<mkdir dir="build/org/porphyry/model"/>
 	</target>
 	
 	<target name="convert-schemas" depends="prepare">
@@ -39,8 +39,8 @@
 		</unjar>
 		<javac srcdir="src" destdir="build" classpath="junit.jar"/>
 		<copy todir="build">
-			<fileset dir="src/org/porphyry" includes="**/*.properties"/> 
-			<fileset dir="src/org/porphyry" includes="**/*.xsd"/> 
+			<fileset dir="src" includes="**/*.properties"/> 
+			<fileset dir="src" includes="**/*.xsd"/> 
 		</copy>
 	</target>
 
@@ -77,12 +77,8 @@
 		<mkdir dir="dist"/>
 		<jar jarfile="dist/Porphyry.jar" 
 			basedir="build"
-			manifest="manifest/CLIENT.MF">
-			<include name="org/porphyry/model/**"/>
-			<include name="org/porphyry/presenter/**"/>
-			<include name="org/porphyry/view/**"/>
-			<include name="org/jdesktop/**"/>
-		</jar>
+			excludes="**/*Test.class"
+			manifest="manifest/CLIENT.MF"/>
 		<signjar jar="dist/Porphyry.jar"
 			keystore="${user}.p12" 
 			alias="My key" 
