@@ -18,25 +18,26 @@ http://www.gnu.org/licenses/gpl.html
 
 package org.hypertopic;
 
-import org.json.*;
+import org.json.JSONObject;
 import java.net.*;
 import java.util.*;
 import java.io.*;
+import javax.swing.SwingWorker;
 import javax.xml.ws.http.HTTPException;
 
 /**
  * Client library for a REST database a la CouchDB.
  * The emphasis is put on improving read performance (cached bulk GET).
+ * On _changes, the cache is cleared and the observers are notified.
  * Design pattern: Data Access Object. 
- * TODO cache update on _changes
  */
-public class RESTDatabase {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+public class RESTDatabase extends Observable {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 private String baseUrl;
 private Map<URL,JSONObject> cache = new HashMap<URL,JSONObject>();
 
 /**
- * @param baseURL The database URL (with an trailing slash).
+ * @param baseURL The database URL (with a trailing slash).
  */
 public RESTDatabase(String baseUrl) {
 	this.baseUrl = baseUrl;
@@ -47,7 +48,7 @@ public RESTDatabase(String baseUrl) {
  * It is updated with an _id 
  * (and a _rev if the server features conflict management).
  */
-public void post(JSONObject object) throws Exception {
+public JSONObject post(JSONObject object) throws Exception {
 	JSONObject body = new JSONObject(
 		send("POST", new URL(this.baseUrl), object)
 	);
@@ -55,10 +56,11 @@ public void post(JSONObject object) throws Exception {
 	if (body.has("rev")) {
 		object.put("_rev", body.getString("rev"));
 	}
+	return object;
 }
 
 /**
- * TODO ask for a key?
+ * TODO ask for a key? return a Map?
  * Notice: In-memory parser not suited to long payload.
  * @param query the path to get the view from the baseURL 
  * @return the object or the object list that was read on the server
@@ -160,6 +162,43 @@ protected void checkError(HttpURLConnection connection) throws Exception {
 	int code = connection.getResponseCode();
 	System.err.println(code); //DEBUG
 	if (code/100 != 2) throw new HTTPException(code);
+}
+
+public void startListening() {
+	SwingWorker w = new SwingWorker() {
+		protected Object doInBackground() {
+			RESTDatabase.this.listen();
+			return null;
+		}
+	};
+	w.execute();
+}
+
+protected void listen() {
+	try {
+		int last = this.get("_changes").getInt("last_seq");
+		URL service = new URL(
+			this.baseUrl + "_changes?feed=continuous&since=" + last
+		);
+		HttpURLConnection connection =  
+			(HttpURLConnection) service.openConnection();
+		connection.setRequestMethod("GET");
+		BufferedReader reader = new BufferedReader(
+			new InputStreamReader(
+				connection.getInputStream()
+			)
+		);
+		String line = reader.readLine();
+		while (line!=null) {
+			this.cache.clear();
+			this.setChanged();
+			this.notifyObservers();
+			line = reader.readLine();
+		}
+	} catch (Exception e) {
+		System.err.println("GET _changes " + e);
+	}
+	this.listen(); //Show must go on...
 }
 
 }//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< RESTDatabase

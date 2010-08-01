@@ -18,8 +18,9 @@ http://www.gnu.org/licenses/gpl.html
 
 package org.hypertopic;
 
-import org.json.*;
+import org.json.JSONObject;
 import org.junit.Test;
+import java.util.*;
 
 public class RESTDatabaseTest {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
@@ -50,6 +51,24 @@ private RESTDatabase db = new RESTDatabase("http://127.0.0.1:5984/test/");
 	JSONObject o = new JSONObject().put("name", "Bond");
 	this.db.post(o);
 	this.db.delete(o);
+}
+
+/**
+ * Tests update notification from server until enter is pressed
+ */
+public static void main(String[] args) {
+	RESTDatabase db = new RESTDatabase("http://127.0.0.1:5984/test/");
+	Observer observer = new Observer() {
+		public void update(Observable o, Object arg) {
+			System.out.println("Updated at " + new Date());
+		}
+	};
+	db.startListening();
+	db.addObserver(observer);
+	try {
+		System.in.read();
+	} catch (Exception e) {
+	}
 }
 
 }//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< RESTDatabaseTest
