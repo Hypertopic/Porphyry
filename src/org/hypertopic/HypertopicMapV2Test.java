@@ -21,6 +21,7 @@ package org.hypertopic;
 import org.json.*;
 import org.junit.*;
 import static org.junit.Assert.*;
+import java.util.ArrayList;
 
 public class HypertopicMapV2Test {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
@@ -31,16 +32,27 @@ private String corpusID;
 
 private String itemID;
 
-@Before public void createCorpus() throws Exception {
+private String viewpointID;
+
+private String topicID;
+
+private String childTopicID;
+
+private String otherTopicID;
+
+@Before public void setUp() throws Exception {
 	this.corpusID = this.map.createCorpus("my corpus", "me");
-}
-
-@Before public void createItem() throws Exception {
 	this.itemID = this.map.createItem("my item", this.corpusID);
-}
-
-@Before public void createViewpoint() throws Exception {
-	this.itemID = this.map.createViewpoint("my viewpoint", "me");
+	this.viewpointID = this.map.createViewpoint("my viewpoint", "me");
+	this.topicID = this.map.createTopicIn(
+		this.viewpointID, new ArrayList()
+	);
+	ArrayList<String> broader = new ArrayList<String>();
+	broader.add(this.topicID);
+	this.childTopicID = this.map.createTopicIn(this.viewpointID, broader);
+	this.otherTopicID = this.map.createTopicIn(
+		this.viewpointID, new ArrayList()
+	);
 }
 
 @Test public void register() throws Exception {
@@ -78,14 +90,60 @@ private String itemID;
 	this.map.undescribeItem(this.itemID, "foo", "bar");
 }
 
-//TODO suite
+@Test public void tagItem() throws Exception {
+	this.map.tagItem(this.itemID, this.viewpointID, this.topicID);
+}
+
+@Test public void untagItem() throws Exception {
+	this.map.tagItem(this.itemID, this.viewpointID, this.topicID);
+	this.map.untagItem(this.itemID, this.viewpointID, this.topicID);
+}
+
+@Test public void tagFragment() throws Exception {
+	this.map.tagFragment(
+		this.itemID, "1024-1096", "", this.viewpointID, this.topicID
+	);
+}
+
+@Test public void untagFragment() throws Exception {
+	this.map.tagFragment(
+		this.itemID, "1024-1096", "", this.viewpointID, this.topicID
+	);
+	this.map.untagFragment(
+		this.itemID, "1024-1096", this.viewpointID, this.topicID
+	);
+}
+
+@Test public void destroyViewpoint() throws Exception {
+	this.map.destroyViewpoint(this.viewpointID);
+}
+
+@Test public void renameTopic() throws Exception {
+	this.map.renameTopic(this.viewpointID, this.topicID, "a topic");
+}
+
+@Test public void destroyTopic() throws Exception {
+	this.map.destroyTopic(this.viewpointID, this.topicID);
+}
+
+@Test public void moveTopicsIn() throws Exception {
+	ArrayList<String> broader = new ArrayList<String>();
+	broader.add(this.childTopicID); 
+	this.map.moveTopicsIn(broader, this.viewpointID, this.otherTopicID);
+}
+
+@Test public void linkTopicsIn() throws Exception {
+	ArrayList<String> broader = new ArrayList<String>();
+	broader.add(this.childTopicID); 
+	this.map.linkTopicsIn(broader, this.viewpointID, this.otherTopicID);
+}
+
 /*
 @Test public void listCorpora() throws Exception {
-	JSONArray array = this.db.getCorpora("aurelien.benel@hypertopic.org")
+	JSONArray array = this.db.getCorpora("me") 
 		.getJSONArray("rows");
-	array.getJSONObject(0).getJSONObject("value").getString("actor");
-	array.getJSONObject(1).getJSONObject("value").getString("name");
-	this.corpus = array.getJSONObject(0).getString("key");
+	assertEquals("me", array.getJSONObject(0).getJSONObject("value").getString("actor"));
+	assertEquals("my corpus", array.getJSONObject(1).getJSONObject("value").getString("name"));
 }
 
 @Test public void loadCorpus() throws Exception {
@@ -98,5 +156,6 @@ private String itemID;
 	array.getJSONObject(1).getJSONObject("value").getJSONArray("resource");
 }
 */
+
 }//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< HypertopicMapV2Test
 

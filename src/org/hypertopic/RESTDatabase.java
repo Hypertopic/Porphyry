@@ -118,7 +118,7 @@ public void delete(JSONObject object) throws Exception {
 protected String send(String method, URL service, JSONObject object) 
 	throws Exception
 {
-	System.err.print(method + ' ' + service + ' ' + object + ' '); //DEBUG
+//	System.err.print(method + ' ' + service + ' ' + object + ' '); //DEBUG
 	HttpURLConnection connection =  
 		(HttpURLConnection) service.openConnection();
 	connection.setRequestMethod(method);
@@ -160,7 +160,7 @@ protected String readBody(HttpURLConnection connection) throws Exception {
 protected void checkError(HttpURLConnection connection) throws Exception {
 	connection.disconnect();
 	int code = connection.getResponseCode();
-	System.err.println(code); //DEBUG
+//	System.err.println(code); //DEBUG
 	if (code/100 != 2) throw new HTTPException(code);
 }
 

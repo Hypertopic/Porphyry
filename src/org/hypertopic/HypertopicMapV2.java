@@ -339,9 +339,6 @@ public void moveTopicsIn(
 	this.db.put(viewpoint);
 }
 
-/**
- * @param topicID can be empty (to unlik from parents)
- */
 public void linkTopicsIn(
 	Collection<String> topicsIDs, String viewpointID, String topicID
 ) 
