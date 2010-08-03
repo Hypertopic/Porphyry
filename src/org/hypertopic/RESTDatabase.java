@@ -122,6 +122,7 @@ protected String send(String method, URL service, JSONObject object)
 	HttpURLConnection connection =  
 		(HttpURLConnection) service.openConnection();
 	connection.setRequestMethod(method);
+	connection.setRequestProperty("Content-Type", "application/json");
 	if (object != null) this.writeBody(connection, object);
 	String result = this.readBody(connection);
 	this.checkError(connection);

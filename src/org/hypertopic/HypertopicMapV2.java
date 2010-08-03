@@ -25,15 +25,45 @@ import java.util.*;
  * v2 implementation of the Hypertopic client API
  * TODO extends HypertopicMap
  */
-public class HypertopicMapV2 {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+public class HypertopicMapV2 implements Observer {//>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 private RESTDatabase db;
+
+private Map<String,JSONObject> cache = new HashMap<String,JSONObject>();
 
 /**
  * @param baseURL The database URL (with a trailing slash).
  */
 public HypertopicMapV2(String baseUrl) {
 	this.db = new RESTDatabase(baseUrl);
+	this.db.addObserver(this);
+	this.db.startListening(); //TODO there?
+}
+
+public void update(Observable o, Object arg) {
+	this.cache.clear();
+}
+
+/**
+ * @return the index of the first occurrence of the specified value
+ * or -1 if the array does not contain the element.
+ */
+protected int indexOf(JSONArray array, String value) 
+	throws JSONException
+{
+	int i = 0;
+	boolean found = false;
+	while (i<array.length() && !found) {
+		found = array.getString(i).equals(value);
+		i++;
+	}
+	return (found)?i-1:-1;
+}
+
+protected boolean contains(JSONArray array, String value) 
+	throws JSONException
+{
+	return indexOf(array, value)>-1;
 }
 
 /**
@@ -43,18 +73,11 @@ protected void remove(JSONObject object, String key, String value)
 	throws JSONException
 {
 	JSONArray array = object.getJSONArray(key);
-	int i = 0;
-	boolean found = false;
-	while (i<array.length() && !found) {
-		found = value.equals(array.getString(i));
-		i++;
-	}
-	if (found) array.remove(i-1); 
+	int i = indexOf(array, value);
+	if (i>-1) array.remove(i); 
 	if (array.length()==0) {
 		object.remove(key);
-	} else {
-		object.put(key, array);
-	}
+	} 
 }
 
 public JSONObject get(String objectID) throws Exception {
@@ -131,7 +154,7 @@ public void destroyCorpus(String corpusID) throws Exception {
  * @param corpus e.g. "MISS"
  * @param item e.g. null, or "d0" to get only an item and its fragments
  */
-public JSONObject getItems(String corpus, String itemID) throws Exception {
+public JSONObject listItems(String corpus, String itemID) throws Exception {
 	return this.db.get(
 		"item/?corpus=" + corpus 
 		+ ((itemID != null) ? "&item=" + itemID : "")
@@ -236,7 +259,7 @@ public void untagFragment(
 /**
  * @param actor e.g. "cecile@hypertopic.org"
  */
-public JSONObject getViewpoints(String actor) throws Exception {
+public JSONObject listViewpoints(String actor) throws Exception {
 	return this.db.get("viewpoint/?actor=" + actor);
 }
 
@@ -260,18 +283,37 @@ public void destroyViewpoint(String viewpointID) throws Exception {
 //======================================================================= TOPIC
 
 /**
- * @param viewpoint e.g. "01"
+ * @param topicID null for the virtual root
+ * @return an object with broader, narrower and name 
  */
-public JSONObject getTopics(String viewpoint) throws Exception {
-	return this.db.get("topic/?viewpoint=" + viewpoint);
+public JSONObject getTopic(String viewpointID, String topicID) 
+	throws Exception 
+{
+	JSONObject topic = this.cache.get(topicID);
+	if (topic==null) {
+		JSONObject topics = this.db.get(viewpointID)
+			.getJSONObject("topics");
+		topic = (topicID!=null)
+			? topics.getJSONObject(topicID)
+			: new JSONObject();
+		Iterator<String> i = topics.keys();
+		while (i.hasNext()) {
+			String key = i.next();
+			if (!key.equals(topicID)) {
+				JSONArray broader = topics.getJSONObject(key)
+					.getJSONArray("broader");
+				if (
+					topicID==null && broader.length()==0
+				  	|| contains(broader, topicID)
+				) {
+					topic.append("narrower", key);
+				} 
+			}
+		}
+		this.cache.put(topicID, topic);
+	}
+	return topic;
 }
-
-/*
-getUpperTopics(viewpoint)
-getBroaderTopics(topic)
-getNarrowerTopics(topic)
-getNarrowerTopicsRecursively(topic) //used by getItemsRecusively and for acyclicity tests
-*/
 
 /**
  * @param topics can be empty
@@ -360,6 +402,5 @@ public void linkTopicsIn(
 public JSONObject getResources(String resource) throws Exception {
 	return this.db.get("resource/?resource=" + resource);
 }
-
 
 }//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< HypertopicMapV2

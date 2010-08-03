@@ -138,24 +138,30 @@ private String otherTopicID;
 	this.map.linkTopicsIn(broader, this.viewpointID, this.otherTopicID);
 }
 
-/*
-@Test public void listCorpora() throws Exception {
-	JSONArray array = this.db.getCorpora("me") 
-		.getJSONArray("rows");
-	assertEquals("me", array.getJSONObject(0).getJSONObject("value").getString("actor"));
-	assertEquals("my corpus", array.getJSONObject(1).getJSONObject("value").getString("name"));
+@Test public void getTopic() throws Exception {
+	assertTrue(
+		this.map.getTopic(this.viewpointID, null)
+		.getJSONArray("narrower").length()==2
+	);
+	assertEquals(
+		this.map.getTopic(this.viewpointID, this.topicID)
+		.getJSONArray("narrower").getString(0),
+		this.childTopicID
+	);
 }
 
-@Test public void loadCorpus() throws Exception {
-	JSONArray array = this.db.getItems(this.corpus)
-		.getJSONArray("rows");
-	JSONObject row0 = 
-		array.getJSONObject(0).getJSONObject("value");
-	row0.getJSONArray("topic");
-	row0.getJSONArray("text");
-	array.getJSONObject(1).getJSONObject("value").getJSONArray("resource");
+@Test public void listCorpora() throws Exception {
+	this.map.listCorpora("me").getJSONArray("rows");
 }
-*/
+
+@Test public void listItems() throws Exception {
+	this.map.listItems(this.corpusID, this.itemID);
+	this.map.listItems(this.corpusID, null);
+}
+
+@Test public void listViewpoints() throws Exception {
+	this.map.listViewpoints("me");
+}
 
 }//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< HypertopicMapV2Test
 
