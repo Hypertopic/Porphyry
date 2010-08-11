@@ -100,18 +100,22 @@ private String otherTopicID;
 }
 
 @Test public void tagFragment() throws Exception {
+	ArrayList<Integer> coordinates = new ArrayList<Integer>();
+	coordinates.add(new Integer(1024));
+	coordinates.add(new Integer(1096));
 	this.map.tagFragment(
-		this.itemID, "1024-1096", "", this.viewpointID, this.topicID
+		this.itemID, coordinates, "", this.viewpointID, this.topicID
 	);
 }
 
 @Test public void untagFragment() throws Exception {
-	this.map.tagFragment(
-		this.itemID, "1024-1096", "", this.viewpointID, this.topicID
+	ArrayList<Integer> coordinates = new ArrayList<Integer>();
+	coordinates.add(new Integer(1024));
+	coordinates.add(new Integer(1096));
+	String highlightID = this.map.tagFragment(
+		this.itemID, coordinates, "", this.viewpointID, this.topicID
 	);
-	this.map.untagFragment(
-		this.itemID, "1024-1096", this.viewpointID, this.topicID
-	);
+	this.map.untagFragment(this.itemID, highlightID);
 }
 
 @Test public void destroyViewpoint() throws Exception {
@@ -151,12 +155,15 @@ private String otherTopicID;
 }
 
 @Test public void listCorpora() throws Exception {
-	this.map.listCorpora("me").getJSONArray("rows");
+	this.map.listCorpora("me");
 }
 
-@Test public void listItems() throws Exception {
-	this.map.listItems(this.corpusID, this.itemID);
-	this.map.listItems(this.corpusID, null);
+@Test public void getCorpus() throws Exception {
+	this.map.getCorpus(this.corpusID);
+}
+
+@Test public void getItem() throws Exception {
+	this.map.getItem(this.corpusID, this.itemID);
 }
 
 @Test public void listViewpoints() throws Exception {

@@ -20,6 +20,7 @@ package org.hypertopic;
 
 import org.json.*;
 import java.util.*;
+import java.net.URLEncoder;
 
 /**
  * v2 implementation of the Hypertopic client API
@@ -29,26 +30,24 @@ public class HypertopicMapV2 implements Observer {//>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 private RESTDatabase db;
 
-private Map<String,JSONObject> cache = new HashMap<String,JSONObject>();
-
 /**
  * @param baseURL The database URL (with a trailing slash).
  */
 public HypertopicMapV2(String baseUrl) {
 	this.db = new RESTDatabase(baseUrl);
-	this.db.addObserver(this);
-	this.db.startListening(); //TODO there?
+//	this.db.addObserver(this);
+//	this.db.startListening();
 }
 
 public void update(Observable o, Object arg) {
-	this.cache.clear();
+//	this.cache.clear();
 }
 
 /**
  * @return the index of the first occurrence of the specified value
  * or -1 if the array does not contain the element.
  */
-protected int indexOf(JSONArray array, String value) 
+protected static int indexOf(JSONArray array, String value) 
 	throws JSONException
 {
 	int i = 0;
@@ -60,7 +59,7 @@ protected int indexOf(JSONArray array, String value)
 	return (found)?i-1:-1;
 }
 
-protected boolean contains(JSONArray array, String value) 
+protected static boolean contains(JSONArray array, String value) 
 	throws JSONException
 {
 	return indexOf(array, value)>-1;
@@ -69,7 +68,7 @@ protected boolean contains(JSONArray array, String value)
 /**
  * Inverse function of JSONObject.append
  */
-protected void remove(JSONObject object, String key, String value) 
+protected static void remove(JSONObject object, String key, String value) 
 	throws JSONException
 {
 	JSONArray array = object.getJSONArray(key);
@@ -86,35 +85,42 @@ public JSONObject get(String objectID) throws Exception {
 
 //========================================================= CORPUS OR VIEWPOINT
 
-public void register(String objectID, String actor) throws Exception {
+public void register(String objectID, String user) throws Exception {
 	this.db.put(
-		this.db.get(objectID).append("actors", actor)
+		this.db.get(objectID).append("users", user)
 	);
 }
 
-public void unregister(String objectID, String actor) throws Exception {
+public void unregister(String objectID, String user) throws Exception {
 	JSONObject object = this.db.get(objectID);
-	remove(object, "actors", actor);
+	remove(object, "users", user);
 	this.db.put(object);
 }
 
 //====================================================================== CORPUS
 
 /**
- * @param actor e.g. "cecile@hypertopic.org"
+ * @param user e.g. "cecile@hypertopic.org"
  */
-public JSONObject listCorpora(String actor) throws Exception {
-	return this.db.get("corpus/?actor=" + actor);
+public JSONArray listCorpora(String user) throws Exception {
+	return this.db.get("user/" + user)
+		.getJSONObject(user)
+		.optJSONArray("corpus");
+}
+
+public JSONObject getCorpus(String corpusID) throws Exception {
+	return this.db.get("corpus/" + corpusID)
+		.getJSONObject(corpusID);
 }
 
 /**
  * @return corpusID
  */
-public String createCorpus(String name, String actor) throws Exception {
+public String createCorpus(String name, String user) throws Exception {
 	return this.db.post(
 		new JSONObject()
 		.put("corpus_name", name)
-		.append("actors", actor)
+		.append("users", user)
 	).getString("_id");
 }
 
@@ -131,17 +137,8 @@ public void destroyCorpus(String corpusID) throws Exception {
 	this.db.delete(
 		this.db.get(corpusID)
 	);
-	Set<String> documents = new HashSet<String>();
-	JSONArray rows = this.db.get("item/?corpus=" + corpusID)
-		.getJSONArray("rows");
-	for (int i=0; i<rows.length(); i++) {
-		documents.add(
-			rows.getJSONObject(i).getJSONArray("key").getString(1)
-		);
-	}
-	for (String documentID : documents) {
+	for (String documentID : this.listItems(corpusID)) {
 		this.db.delete(
-			//TODO could be avoided if _rev was in "item/" result
 			this.db.get(documentID) 
 		);
 	}
@@ -150,18 +147,22 @@ public void destroyCorpus(String corpusID) throws Exception {
 
 //======================================================================== ITEM
 
-/**
- * @param corpus e.g. "MISS"
- * @param item e.g. null, or "d0" to get only an item and its fragments
- */
-public JSONObject listItems(String corpus, String itemID) throws Exception {
-	return this.db.get(
-		"item/?corpus=" + corpus 
-		+ ((itemID != null) ? "&item=" + itemID : "")
-	);
+public Collection<String> listItems(String corpusID) throws Exception {
+	ArrayList<String> items = new ArrayList<String>();
+	Iterator<String> i = this.getCorpus(corpusID).keys();
+	while (i.hasNext()) {
+		String key = i.next();
+		if (!"name".equals(key) && !"user".equals(key)) {
+			items.add(key);
+		}
+	}
+	return items;
 }
-// --> getItems(topic)
-// --> getItemsRecursively(topic)
+ 
+public JSONObject getItem(String corpusID, String itemID) throws Exception {
+	return this.getCorpus(corpusID)
+		.getJSONObject(itemID);
+}
 
 /**
  * @return itemID
@@ -205,7 +206,10 @@ public void tagItem(String itemID, String viewpointID, String topicID)
 		topics = new JSONObject();
 		item.put("topics", topics);
 	}
-	topics.append(viewpointID, topicID);
+	topics.append(
+		topicID, 
+		new JSONObject().put("viewpoint", viewpointID)
+	);
 	this.db.put(item);
 }
 
@@ -213,61 +217,69 @@ public void untagItem(String itemID, String viewpointID, String topicID)
 	throws Exception 
 {
 	JSONObject item = this.db.get(itemID);
-	JSONObject topics = item.getJSONObject("topics");
-	remove(topics, viewpointID, topicID);
+	remove(item, "topics", topicID);
 	this.db.put(item);
 }
 
-public void tagFragment(
-	String itemID, String coordinates, String text, 
+/**
+ * @param itemID Note: replaced by a corpusID in Cassandre.
+ * @return the ID of the highlight
+ */
+public String tagFragment(
+	String itemID, Collection<Integer> coordinates, String text, 
 	String viewpointID, String topicID
 ) throws Exception {
 	JSONObject item = this.db.get(itemID);
-	JSONObject fragments = item.optJSONObject("fragments");
-	if (fragments==null) {
-		fragments = new JSONObject();
-		item.put("fragments", fragments);
+	JSONObject highlights = item.optJSONObject("highlights");
+	if (highlights==null) {
+		highlights = new JSONObject();
+		item.put("highlights", highlights);
 	}
-	JSONObject f = fragments.optJSONObject(coordinates);
-	if (f==null) {
-		f = new JSONObject().put("text", text);
-		fragments.put(coordinates, f);
-	}
-	JSONObject topics = f.optJSONObject("topics");
-	if (topics==null) {
-		topics = new JSONObject();
-		f.put("topics", topics);
-	}
-	topics.append(viewpointID, topicID);
+	String id = UUID.randomUUID().toString();
+	highlights.put(
+		id,
+		new JSONObject()
+		.put("coordinates", coordinates)
+		.put("text", text)
+		.put("viewpoint", viewpointID)
+		.put("topic", topicID)
+	);
 	this.db.put(item);
+	return id;
 }
 
-
+/**
+ * @param itemID Note: replaced by a corpusID in Cassandre.
+ */
 public void untagFragment(
-	String itemID, String coordinates, String viewpointID, String topicID
+	String itemID, String highlightID
 ) throws Exception {
 	JSONObject item = this.db.get(itemID);
-	JSONObject topics = item.getJSONObject("fragments")
-		.getJSONObject(coordinates)
-		.getJSONObject("topics");
-	remove(topics, viewpointID, topicID);
+	remove(item, "highlights", highlightID);
 	this.db.put(item);
 }
 
 //=================================================================== VIEWPOINT
 
 /**
- * @param actor e.g. "cecile@hypertopic.org"
+ * @param user e.g. "cecile@hypertopic.org"
  */
-public JSONObject listViewpoints(String actor) throws Exception {
-	return this.db.get("viewpoint/?actor=" + actor);
+public JSONArray listViewpoints(String user) throws Exception {
+	return this.db.get("user/" + user)
+		.getJSONObject(user)
+		.optJSONArray("viewpoint");
 }
 
-public String createViewpoint(String name, String actor) throws Exception {
+public JSONObject getViewpoint(String viewpointID) throws Exception {
+	return this.db.get("viewpoint/" + viewpointID)
+		.getJSONObject(viewpointID);
+}
+
+public String createViewpoint(String name, String user) throws Exception {
 	return this.db.post(
 		new JSONObject()
 		.put("viewpoint_name", name)
-		.append("actors", actor)
+		.append("users", user)
 	).getString("_id");
 }
 
@@ -289,30 +301,8 @@ public void destroyViewpoint(String viewpointID) throws Exception {
 public JSONObject getTopic(String viewpointID, String topicID) 
 	throws Exception 
 {
-	JSONObject topic = this.cache.get(topicID);
-	if (topic==null) {
-		JSONObject topics = this.db.get(viewpointID)
-			.getJSONObject("topics");
-		topic = (topicID!=null)
-			? topics.getJSONObject(topicID)
-			: new JSONObject();
-		Iterator<String> i = topics.keys();
-		while (i.hasNext()) {
-			String key = i.next();
-			if (!key.equals(topicID)) {
-				JSONArray broader = topics.getJSONObject(key)
-					.getJSONArray("broader");
-				if (
-					topicID==null && broader.length()==0
-				  	|| contains(broader, topicID)
-				) {
-					topic.append("narrower", key);
-				} 
-			}
-		}
-		this.cache.put(topicID, topic);
-	}
-	return topic;
+	return this.getViewpoint(viewpointID)
+		.getJSONObject(topicID);
 }
 
 /**
@@ -400,7 +390,8 @@ public void linkTopicsIn(
  * @param resource e.g. "http://cassandre/text/d0"
  */
 public JSONObject getResources(String resource) throws Exception {
-	return this.db.get("resource/?resource=" + resource);
+	return this.db.get("resource/" + URLEncoder.encode(resource, "ASCII"))
+		.getJSONObject(resource);
 }
 
 }//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< HypertopicMapV2

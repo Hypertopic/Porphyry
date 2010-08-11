@@ -18,7 +18,7 @@ http://www.gnu.org/licenses/gpl.html
 
 package org.hypertopic;
 
-import org.json.JSONObject;
+import org.json.*;
 import java.net.*;
 import java.util.*;
 import java.io.*;
@@ -60,17 +60,60 @@ public JSONObject post(JSONObject object) throws Exception {
 }
 
 /**
- * TODO ask for a key? return a Map?
+ * @return the existing value, or a new empty one
+ */
+protected static JSONObject getOrCreate(JSONObject object, String key) {
+	JSONObject o = object.optJSONObject(key);
+	if (o == null) {
+		o = new JSONObject();
+		try {
+			object.put(key, o);
+		} catch (Exception e) {
+			e.printStackTrace(); // Should never go there
+		}
+	}
+	return o;
+}
+
+/**
  * Notice: In-memory parser not suited to long payload.
  * @param query the path to get the view from the baseURL 
- * @return the object or the object list that was read on the server
+ * @return if the queried object was like
+ * {rows:[ {key:[key0, key1], value:{attribute0:value0}},
+ * {key:[key0, key1], value:{attribute0:value1}}]}
+ * then the returned object is
+ * {key0:{key1:{attribute0:[value0, value1...]}}}
+ * otherwise the original object is returned.
  */
-public JSONObject get(String query) throws Exception {
+public synchronized JSONObject get(String query) throws Exception {
 	URL url = new URL(this.baseUrl + query);
 	JSONObject result = this.cache.get(url);
 	if (result == null) {
 		result = new JSONObject(send("GET", url, null));
-		this.cache.put(url, result);
+		if (result.has("rows")) {
+			JSONArray rows = result.getJSONArray("rows");
+			result = new JSONObject();
+			for (int i=0; i<rows.length(); i++) {
+				JSONObject r = rows.getJSONObject(i);
+				JSONArray keys = r.getJSONArray("key");
+				JSONObject current = result;
+				for (int k=0; k<keys.length(); k++) {
+					current = getOrCreate(
+						current, keys.getString(k)
+					);
+				} 
+				JSONObject value = r.getJSONObject("value");
+				Iterator<String> v = value.keys();
+				while (v.hasNext()) {
+					String attribute = v.next();
+					current.append(
+						attribute,
+						value.get(attribute)
+					);
+				}
+			} 
+			this.cache.put(url, result);
+		} 
 	}
 	return result;
 }
@@ -129,7 +172,9 @@ protected String send(String method, URL service, JSONObject object)
 	return result;
 }
 
-protected void writeBody(HttpURLConnection connection, JSONObject object) 
+protected static void writeBody(
+	HttpURLConnection connection, JSONObject object
+) 
 	throws Exception 
 {
 	connection.setDoOutput(true);
@@ -142,7 +187,9 @@ protected void writeBody(HttpURLConnection connection, JSONObject object)
 /**
  * @return response body
  */
-protected String readBody(HttpURLConnection connection) throws Exception {
+protected static String readBody(HttpURLConnection connection) 
+	throws Exception 
+{
 	BufferedReader reader = new BufferedReader(
 		new InputStreamReader(
 			connection.getInputStream()
@@ -158,7 +205,9 @@ protected String readBody(HttpURLConnection connection) throws Exception {
 }
 
 
-protected void checkError(HttpURLConnection connection) throws Exception {
+protected static void checkError(HttpURLConnection connection) 
+	throws Exception 
+{
 	connection.disconnect();
 	int code = connection.getResponseCode();
 //	System.err.println(code); //DEBUG
