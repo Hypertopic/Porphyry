@@ -44,42 +44,6 @@ public void update(Observable o, Object arg) {
 //	this.cache.clear();
 }
 
-/**
- * @return the index of the first occurrence of the specified value
- * or -1 if the array does not contain the element.
- */
-protected static int indexOf(JSONArray array, String value) 
-	throws JSONException
-{
-	int i = 0;
-	boolean found = false;
-	while (i<array.length() && !found) {
-		found = array.getString(i).equals(value);
-		i++;
-	}
-	return (found)?i-1:-1;
-}
-
-protected static boolean contains(JSONArray array, String value) 
-	throws JSONException
-{
-	return indexOf(array, value)>-1;
-}
-
-/**
- * Inverse function of JSONObject.append
- */
-protected static void remove(JSONObject object, String key, String value) 
-	throws JSONException
-{
-	JSONArray array = object.getJSONArray(key);
-	int i = indexOf(array, value);
-	if (i>-1) array.remove(i); 
-	if (array.length()==0) {
-		object.remove(key);
-	} 
-}
-
 public JSONObject get(String objectID) throws Exception {
 	return this.db.get(objectID);
 }
@@ -94,7 +58,7 @@ public void register(String objectID, String user) throws Exception {
 
 public void unregister(String objectID, String user) throws Exception {
 	JSONObject object = this.db.get(objectID);
-	remove(object, "users", user);
+	JSON.remove(object, "users", user);
 	this.db.put(object);
 }
 
@@ -194,7 +158,7 @@ public void undescribeItem(String itemID, String attribute, String value)
 	throws Exception
 {
 	JSONObject item = this.db.get(itemID);
-	remove(item, attribute, value);
+	JSON.remove(item, attribute, value);
 	this.db.put(item);
 }
 
@@ -202,11 +166,7 @@ public void tagItem(String itemID, String viewpointID, String topicID)
 	throws Exception 
 {
 	JSONObject item = this.db.get(itemID);
-	JSONObject topics = item.optJSONObject("topics");
-	if (topics==null) {
-		topics = new JSONObject();
-		item.put("topics", topics);
-	}
+	JSONObject topics = JSON.getOrCreate(item, "topics");
 	topics.append(
 		topicID, 
 		new JSONObject().put("viewpoint", viewpointID)
@@ -218,7 +178,7 @@ public void untagItem(String itemID, String viewpointID, String topicID)
 	throws Exception 
 {
 	JSONObject item = this.db.get(itemID);
-	remove(item, "topics", topicID);
+	JSON.remove(item, "topics", topicID);
 	this.db.put(item);
 }
 
@@ -231,11 +191,7 @@ public String tagFragment(
 	String viewpointID, String topicID
 ) throws Exception {
 	JSONObject item = this.db.get(itemID);
-	JSONObject highlights = item.optJSONObject("highlights");
-	if (highlights==null) {
-		highlights = new JSONObject();
-		item.put("highlights", highlights);
-	}
+	JSONObject highlights = JSON.getOrCreate(item, "highlights");
 	String id = UUID.randomUUID().toString();
 	highlights.put(
 		id,
@@ -256,7 +212,7 @@ public void untagFragment(
 	String itemID, String highlightID
 ) throws Exception {
 	JSONObject item = this.db.get(itemID);
-	remove(item, "highlights", highlightID);
+	JSON.remove(item, "highlights", highlightID);
 	this.db.put(item);
 }
 
@@ -315,11 +271,7 @@ public String createTopicIn(String viewpointID, Collection<String> topicsIDs)
 {
 	String topicID = UUID.randomUUID().toString();
 	JSONObject viewpoint = this.db.get(viewpointID);
-	JSONObject topics = viewpoint.optJSONObject("topics");
-	if (topics==null) {
-		topics = new JSONObject();
-		viewpoint.put("topics", topics);
-	}
+	JSONObject topics = JSON.getOrCreate(viewpoint, "topics");
 	topics.put(
 		topicID,
 		new JSONObject().put("broader", topicsIDs) 
@@ -346,7 +298,7 @@ public void destroyTopic(String viewpointID, String topicID)
 	topics.remove(topicID);
 	Iterator<String> t = topics.keys();
 	while (t.hasNext()) {
-		remove(topics.getJSONObject(t.next()), "broader", topicID);
+		JSON.remove(topics.getJSONObject(t.next()), "broader", topicID);
 	}
 	this.db.put(viewpoint);
 }

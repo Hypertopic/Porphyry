@@ -61,22 +61,6 @@ public JSONObject post(JSONObject object) throws Exception {
 }
 
 /**
- * @return the existing value, or a new empty one
- */
-protected static JSONObject getOrCreate(JSONObject object, String key) {
-	JSONObject o = object.optJSONObject(key);
-	if (o == null) {
-		o = new JSONObject();
-		try {
-			object.put(key, o);
-		} catch (Exception e) {
-			e.printStackTrace(); // Should never go there
-		}
-	}
-	return o;
-}
-
-/**
  * Notice: In-memory parser not suited to long payload.
  * @param query the path to get the view from the baseURL 
  * @return if the queried object was like
@@ -99,7 +83,7 @@ public synchronized JSONObject get(String query) throws Exception {
 				JSONArray keys = r.getJSONArray("key");
 				JSONObject current = result;
 				for (int k=0; k<keys.length(); k++) {
-					current = getOrCreate(
+					current = JSON.getOrCreate(
 						current, keys.getString(k)
 					);
 				} 
@@ -204,7 +188,6 @@ protected static String readBody(HttpURLConnection connection)
 	}
 	return result.toString();
 }
-
 
 protected static void checkError(HttpURLConnection connection) 
 	throws Exception 
