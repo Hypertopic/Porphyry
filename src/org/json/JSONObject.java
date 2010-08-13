@@ -1581,4 +1581,16 @@ public class JSONObject {
             throw new JSONException(exception);
         }
      }
+
+     @Override
+     public boolean equals(Object that) {
+        return that instanceof JSONObject
+            && this.map.equals(((JSONObject)that).map);
+     }
+
+     @Override
+     public int hashCode() {
+        return this.map.hashCode();
+     }
+
 }
