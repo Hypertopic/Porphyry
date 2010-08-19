@@ -168,9 +168,9 @@ public void register(User user) throws Exception {
 }
 
 public void unregister(User user) throws Exception {
-	HypertopicMap.this.db.put(
-		this.getRaw().remove("users", this.getID())
-	);
+	JSONObject registered = this.getRaw();
+	registered.getJSONArray("users").remove(user.getID());
+	HypertopicMap.this.db.put(registered);
 }
 
 }//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Registered
@@ -230,7 +230,7 @@ public Corpus(String id) {
 
 //TODO change return type?
 public JSONArray listUsers() throws Exception {
-	return this.getView().getJSONArray("user");
+	return this.getView().getJSONArrayOrCreate("user");
 }
 
 /**
@@ -321,9 +321,12 @@ public Map<String,JSONArray> getAttributes() throws Exception {
 	while (i.hasNext()) {
 		String key = i.next();
 		if (!isReserved(key)) {
-			result.put(key, item.getJSONArray(key));
+			JSONArray value = item.optJSONArray(key);
+			if (value!=null) {
+				result.put(key, value);
+			}
 		}
-	}
+	}	
 	return result;
 }
 
@@ -350,17 +353,17 @@ public void undescribe(String attribute, String value) throws Exception {
 	HypertopicMap.this.db.put(item);
 }
 
-public void tagItem(Viewpoint.Topic topic) throws Exception {
+public void tag(Viewpoint.Topic topic) throws Exception {
 	JSONObject item = this.getRaw();
 	JSONObject topics = item.getJSONObjectOrCreate("topics");
-	topics.append(
+	topics.put(
 		topic.getID(), 
 		new JSONObject().put("viewpoint", topic.getViewpointID())
 	);
 	HypertopicMap.this.db.put(item);
 }
 
-public void untagItem(Viewpoint.Topic topic) throws Exception {
+public void untag(Viewpoint.Topic topic) throws Exception {
 	JSONObject item = this.getRaw();
 	item.getJSONObject("topics").remove(topic.getID());
 	HypertopicMap.this.db.put(item);
@@ -421,18 +424,17 @@ public Viewpoint.Topic getTopic() throws Exception {
 	);
 }
 
-//TODO change return type?
-public JSONArray getText() throws Exception {
-	return this.getView().getJSONArray("text");
+public Collection<String> getText() throws Exception {
+	return this.getView().getJSONArray("text").toCollection();
 }
 
 public URL getThumbnail() throws Exception {
-	return new URL(this.getView().getJSONArray("thumbnail").getString(0));
+	return new URL(this.getView().getString("thumbnail"));
 }
 
 //TODO change return type?
 public JSONArray getCoordinates() throws Exception {
-	return this.getView().getJSONArray("coordinates").getJSONArray(0);
+	return this.getView().getJSONArray("coordinates");
 }
 
 protected JSONObject getView() throws Exception {
@@ -503,7 +505,7 @@ public Collection<Corpus.Item.Highlight> getHighlights() throws Exception {
 
 // Is there a need for a Collection<User>?
 public JSONArray listUsers() throws Exception {
-	return this.getView().getJSONArray("user");
+	return this.getView().getJSONArrayOrCreate("user");
 }
 
 //TODO importViewpoint(XML, viewpointID?)
@@ -633,7 +635,7 @@ public void destroy() throws Exception {
 	Iterator<String> t = topics.keys();
 	while (t.hasNext()) {
 		topics.getJSONObject(t.next())
-			.remove("broader", this.getID());
+			.getJSONArray("broader").remove(this.getID());
 	}
 	HypertopicMap.this.db.put(viewpoint);
 }
@@ -660,7 +662,7 @@ public void unlink() throws Exception {
 	JSONObject viewpoint = Viewpoint.this.getRaw();
 	viewpoint.getJSONObject("topics")
 		.getJSONObject(this.getID())
-		.remove("broader");
+		.put("broader", new JSONArray());
 	HypertopicMap.this.db.put(viewpoint);
 }
 

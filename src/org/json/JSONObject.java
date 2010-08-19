@@ -1615,18 +1615,26 @@ public class JSONObject {
 
      /**
       * @author Aurelien Benel
+      * @return the existing value, or a new empty one
+      */
+     public JSONArray getJSONArrayOrCreate(String key) throws JSONException {
+           JSONArray o = this.optJSONArray(key);
+           if (o == null) {
+                o = new JSONArray();
+                this.put(key, o);
+           }
+           return o;
+     }
+
+     /**
+      * @author Aurelien Benel
       */
      public Collection<JSONObject> getAllJSONObjects(String key) 
           throws JSONException
      {
-          Collection<JSONObject> result = new ArrayList<JSONObject>();
-          if (this.has(key)) {
-               JSONArray array = this.getJSONArray(key);
-               for (int i=0; i<array.length(); i++) {
-                    result.add(array.getJSONObject(i));
-               }
-          }
-          return result;
+          return (this.has(key))
+               ? (Collection<JSONObject>) this.getJSONArray(key).toCollection()
+               : new ArrayList<JSONObject>();
      }
 
      /**
@@ -1642,5 +1650,4 @@ public class JSONObject {
           }
           return this;
      }
-
 }

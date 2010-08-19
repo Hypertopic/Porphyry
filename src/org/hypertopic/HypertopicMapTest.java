@@ -23,6 +23,7 @@ import org.json.*;
 import org.junit.*;
 import static org.junit.Assert.*;
 import java.util.*;
+import java.net.URL;
 
 public class HypertopicMapTest {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
@@ -31,6 +32,7 @@ private HypertopicMap map =
 private HypertopicMap.User user;
 private HypertopicMap.Corpus corpus;
 private HypertopicMap.Corpus.Item item;
+private HypertopicMap.Corpus.Item.Highlight highlight;
 private HypertopicMap.Viewpoint viewpoint;
 private HypertopicMap.Viewpoint.Topic topic;
 private HypertopicMap.Viewpoint.Topic childTopic;
@@ -40,22 +42,26 @@ private HypertopicMap.Viewpoint.Topic otherTopic;
 	this.user = this.map.getUser("me");
 	this.corpus = this.user.createCorpus("my corpus");
 	this.item = this.corpus.createItem("my item");
+	this.item.describe("foo", "bar");
+	this.item.describe("resource", "http://acme.com/foo");
 	this.viewpoint = this.user.createViewpoint("my viewpoint");
 	this.topic = this.viewpoint.createTopic();
 	this.childTopic = this.viewpoint.createTopic(this.topic);
 	this.otherTopic = this.viewpoint.createTopic();
+	this.highlight = this.item.createHighlight( 
+		this.childTopic, "FOO", 1024, 1096
+	);
+	this.item.tag(this.childTopic);
 }
 
 @Test public void register() throws Exception {
 	this.corpus.register(this.map.getUser("him"));
-	JSONArray array = this.corpus.listUsers();
-	assertTrue(array.length()==2);
+	assertEquals(2, this.corpus.listUsers().length());
 }
 
 @Test public void unregister() throws Exception {
-	this.corpus.register(this.map.getUser("him"));
 	this.corpus.unregister(this.user);
-	assertTrue(this.corpus.listUsers().length()==1);
+	assertEquals(0, this.corpus.listUsers().length());
 }
 
 @Test public void renameCorpus() throws Exception {
@@ -71,39 +77,57 @@ private HypertopicMap.Viewpoint.Topic otherTopic;
 	this.item.destroy();
 }
 
-@Test public void describeItem() throws Exception {
-	this.item.describe("foo", "bar");
-}
-
-@Test public void undescribeItem() throws Exception {
-	this.item.describe("foo", "bar");
+@Test public void undescribe() throws Exception {
 	this.item.undescribe("foo", "bar");
+	//TODO assert?
 }
 
-@Test public void tagItem() throws Exception {
-	this.item.tagItem(this.topic);
+@Test public void getResource() throws Exception {
+	assertEquals(new URL("http://acme.com/foo"), this.item.getResource());
 }
 
-@Test public void untagItem() throws Exception {
-	this.item.tagItem(this.topic);
-	this.item.untagItem(this.topic);
-}
-
-@Test public void createHighlight() throws Exception {
-	this.item.createHighlight(this.topic, "FOO", 1024, 1096); 
+@Test public void untag() throws Exception {
+	this.item.untag(this.childTopic);
+	//TODO assert?
 }
 
 @Test public void destroyHighlight() throws Exception {
-	this.item.createHighlight(this.topic, "FOO", 1024, 1096)
-		.destroy(); 
+	this.highlight.destroy(); 
+}
+
+@Test public void getItemHighlights() throws Exception {
+	assertEquals(1, this.item.getHighlights().size());
+}
+
+@Test public void getViewpointHighlights() throws Exception {
+	assertEquals(1, this.viewpoint.getHighlights().size());
+}
+
+@Test public void getTopicHighlights() throws Exception {
+	assertEquals(1, this.topic.getHighlights().size());
+}
+
+@Test public void getHighlightText() throws Exception {
+	assertTrue(this.highlight.getText().contains("FOO"));
 }
 
 @Test public void destroyViewpoint() throws Exception {
 	this.viewpoint.destroy();
 }
 
+@Test public void getViewpointTopics() throws Exception {
+	assertEquals(3, this.viewpoint.getTopics().size());
+}
+
 @Test public void renameTopic() throws Exception {
 	this.topic.rename("a topic");
+	assertEquals("a topic", this.topic.getName());
+}
+
+@Test public void getAttributes() throws Exception {
+	JSONArray attributes = this.item.getAttributes().get("foo");
+	assertTrue(attributes.contains("bar"));
+	assertEquals(1, attributes.length());
 }
 
 @Test public void destroyTopic() throws Exception {
@@ -112,21 +136,34 @@ private HypertopicMap.Viewpoint.Topic otherTopic;
 
 @Test public void moveTopics() throws Exception {
 	this.otherTopic.moveTopics(this.childTopic); 
+	Collection<HypertopicMap.Viewpoint.Topic> broader = 
+		this.childTopic.getBroader();
+	assertTrue(broader.contains(this.otherTopic));
+	assertEquals(1, broader.size());
 }
 
 @Test public void linkTopics() throws Exception {
 	this.otherTopic.linkTopics(this.childTopic); 
+	Collection<HypertopicMap.Viewpoint.Topic> broader = 
+		this.childTopic.getBroader();
+	assertTrue(broader.contains(this.otherTopic));
+	assertEquals(2, broader.size());
+}
+
+@Test public void unlinkTopic() throws Exception {
+	this.childTopic.unlink();
+	assertEquals(0, this.childTopic.getBroader().size());
 }
 
 @Test public void getUpperTopics() throws Exception {
-	assertTrue(this.viewpoint.getUpperTopics().size()==2);
+	assertEquals(2, this.viewpoint.getUpperTopics().size());
 }
 
 @Test public void getNarrower() throws Exception {
 	Collection<HypertopicMap.Viewpoint.Topic> narrower = 
 		this.topic.getNarrower();
 	assertTrue(narrower.contains(this.childTopic));
-	assertTrue(narrower.size()==1);
+	assertEquals(1, narrower.size());
 }
 
 @Test public void listCorpora() throws Exception {
@@ -138,7 +175,15 @@ private HypertopicMap.Viewpoint.Topic otherTopic;
 }
 
 @Test public void getCorpusItems() throws Exception {
-	assertTrue(this.corpus.getItems().size()==1);
+	assertEquals(1, this.corpus.getItems().size());
+}
+
+@Test public void getViewpointItems() throws Exception {
+	assertEquals(1, this.viewpoint.getItems().size());
+}
+
+@Test public void getTopicItems() throws Exception {
+	assertEquals(1, this.topic.getItems().size());
 }
 
 @Test public void getItemName() throws Exception {

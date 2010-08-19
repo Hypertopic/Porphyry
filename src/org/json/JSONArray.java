@@ -937,4 +937,23 @@ public class JSONArray {
     public boolean contains(String value) throws JSONException {
         return this.indexOf(value)>-1;
     }
+
+    /**
+     * @author Aurelien Benel
+     */
+    public void remove(String value) throws JSONException {
+        int i = this.indexOf(value);
+        if (i>-1) this.remove(i); 
+    }
+
+    /**
+     * @author Aurelien Benel
+     */
+    public Collection toCollection() throws JSONException {
+        Collection result = new ArrayList();
+        for (int i=0; i<this.length(); i++) {
+	     result.add(this.get(i));
+        }
+        return result;	
+    }
 }
