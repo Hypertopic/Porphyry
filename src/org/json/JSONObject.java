@@ -34,6 +34,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeSet;
+import java.util.ArrayList;
 
 /**
  * A JSONObject is an unordered collection of name/value pairs. Its
@@ -1582,15 +1583,64 @@ public class JSONObject {
         }
      }
 
+     /**
+      * @author Aurelien Benel
+      */
      @Override
      public boolean equals(Object that) {
         return that instanceof JSONObject
             && this.map.equals(((JSONObject)that).map);
      }
 
+     /**
+      * @author Aurelien Benel
+      */
      @Override
      public int hashCode() {
         return this.map.hashCode();
+     }
+
+     /**
+      * @author Aurelien Benel
+      * @return the existing value, or a new empty one
+      */
+     public JSONObject getJSONObjectOrCreate(String key) throws JSONException {
+           JSONObject o = this.optJSONObject(key);
+           if (o == null) {
+                o = new JSONObject();
+                this.put(key, o);
+           }
+           return o;
+     }
+
+     /**
+      * @author Aurelien Benel
+      */
+     public Collection<JSONObject> getAllJSONObjects(String key) 
+          throws JSONException
+     {
+          Collection<JSONObject> result = new ArrayList<JSONObject>();
+          if (this.has(key)) {
+               JSONArray array = this.getJSONArray(key);
+               for (int i=0; i<array.length(); i++) {
+                    result.add(array.getJSONObject(i));
+               }
+          }
+          return result;
+     }
+
+     /**
+      * Inverse function of JSONObject.append
+      * @author Aurelien Benel
+      */
+     public JSONObject remove(String key, String value) throws JSONException {
+          JSONArray array = this.getJSONArray(key);
+          int i = array.indexOf(value);
+          if (i>-1) array.remove(i); 
+          if (array.length()==0) {
+               this.remove(key);
+          }
+          return this;
      }
 
 }

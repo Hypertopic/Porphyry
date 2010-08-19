@@ -34,8 +34,8 @@ import javax.xml.ws.http.HTTPException;
  */
 public class RESTDatabase extends Observable {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-private String baseUrl;
-private Map<URL,JSONObject> cache = new HashMap<URL,JSONObject>();
+private final String baseUrl;
+private final Map<URL,JSONObject> cache = new HashMap<URL,JSONObject>();
 
 /**
  * @param baseURL The database URL (with a trailing slash).
@@ -67,7 +67,7 @@ public JSONObject post(JSONObject object) throws Exception {
  * {rows:[ {key:[key0, key1], value:{attribute0:value0}},
  * {key:[key0, key1], value:{attribute0:value1}}]}
  * then the returned object is
- * {key0:{key1:{attribute0:[value0, value1...]}}}
+ * {key0:{key1:{attribute0:[value0, value1]}}}
  * otherwise the original object is returned.
  */
 public synchronized JSONObject get(String query) throws Exception {
@@ -83,8 +83,8 @@ public synchronized JSONObject get(String query) throws Exception {
 				JSONArray keys = r.getJSONArray("key");
 				JSONObject current = result;
 				for (int k=0; k<keys.length(); k++) {
-					current = JSON.getOrCreate(
-						current, keys.getString(k)
+					current = current.getJSONObjectOrCreate(
+						keys.getString(k)
 					);
 				} 
 				JSONObject value = r.getJSONObject("value");

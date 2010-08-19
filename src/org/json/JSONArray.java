@@ -915,4 +915,26 @@ public class JSONArray {
            throw new JSONException(e);
         }
     }
+
+    /**
+     * @author Aurelien Benel
+     * @return the index of the first occurrence of the specified value
+     * or -1 if the array does not contain the element.
+     */
+    public int indexOf(String value) throws JSONException {
+        int i = 0;
+        boolean found = false;
+        while (i<this.length() && !found) {
+            found = this.getString(i).equals(value);
+            i++;
+        }
+        return (found)?i-1:-1;
+    }
+
+    /**
+     * @author Aurelien Benel
+     */
+    public boolean contains(String value) throws JSONException {
+        return this.indexOf(value)>-1;
+    }
 }
