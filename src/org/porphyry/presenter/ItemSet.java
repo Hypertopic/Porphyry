@@ -401,7 +401,7 @@ public Fragment createUnion(Fragment that) {
 	return new TextFragment(
 		Math.min(this.begin, thatTextFragment.begin),
 		Math.max(this.end, thatTextFragment.end),
-		thisLabel + thatLabel
+		thisLabel + "<br>" + thatLabel
 	);
 }
 
