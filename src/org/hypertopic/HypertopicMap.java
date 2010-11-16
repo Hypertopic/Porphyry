@@ -8,7 +8,7 @@ Copyright (C) 2010 Aurelien Benel.
 
 LEGAL ISSUES
 This library is free software; you can redistribute it and/or modify it under
-the terms of the GNU Lesser General Public License as published by the Free 
+the terms of the GNU Lesser General Public License as published by the Free
 Software Foundation, either version 3 of the license, or (at your option) any
 later version.
 This library is distributed in the hope that it will be useful, but WITHOUT ANY
@@ -27,7 +27,7 @@ import java.net.*;
  * v2 implementation of the Hypertopic client API.
  * This is a 'lazy' object mapping: only IDs are stored,
  * other data are retrieved on demand.
- * To improve client cache efficiency, 
+ * To improve client cache efficiency,
  * topic views are based on viewpoint views;
  * and item views are based on corpus views.
  */
@@ -49,7 +49,7 @@ public void update(Observable o, Object arg) {
 	this.notifyObservers();
 }
 
-//TODO it is not clear if memory footprint would be reduced or increased by 
+//TODO it is not clear if memory footprint would be reduced or increased by
 //using a cache on getUSer, getViewpoint, getCorpus, getTopic, getItem
 //as that would mean less invocations but also less garbage collecting.
 public User getUser(String userID) {
@@ -94,9 +94,9 @@ protected Corpus.Item.Highlight getHighlight(JSONObject highlight)
 
 protected static boolean isReserved(String key) {
 	return "highlight".equals(key)
-		|| "name".equals(key) 
-		|| "resource".equals(key) 
-		|| "thumbnail".equals(key) 
+		|| "name".equals(key)
+		|| "resource".equals(key)
+		|| "thumbnail".equals(key)
 		|| "topic".equals(key)
 		|| "upper".equals(key)
 		|| "user".equals(key);
@@ -163,7 +163,7 @@ public Registered(String id) {
 
 public void register(User user) throws Exception {
 	HypertopicMap.this.db.put(
-		this.getRaw().append("users", this.getID())
+		this.getRaw().append("users", user.getID())
 	);
 }
 
@@ -259,7 +259,7 @@ public void rename(String name) throws Exception {
 	);
 }
 
-/** 
+/**
  * Destroy the nodes of the corpus and of all its documents.
  */
 public void destroy() throws Exception {
@@ -326,7 +326,7 @@ public Map<String,JSONArray> getAttributes() throws Exception {
 				result.put(key, value);
 			}
 		}
-	}	
+	}
 	return result;
 }
 
@@ -338,7 +338,7 @@ protected JSONObject getView() throws Exception {
 public void rename(String name) throws Exception {
 	JSONObject item = this.getRaw();
 	item.put("item_name", name);
-	HypertopicMap.this.db.put(item);	
+	HypertopicMap.this.db.put(item);
 }
 
 public void describe(String attribute, String value) throws Exception {
@@ -357,7 +357,7 @@ public void tag(Viewpoint.Topic topic) throws Exception {
 	JSONObject item = this.getRaw();
 	JSONObject topics = item.getJSONObjectOrCreate("topics");
 	topics.put(
-		topic.getID(), 
+		topic.getID(),
 		new JSONObject().put("viewpoint", topic.getViewpointID())
 	);
 	HypertopicMap.this.db.put(item);
@@ -495,7 +495,7 @@ public Collection<Corpus.Item> getItems() throws Exception {
 }
 
 public Collection<Corpus.Item.Highlight> getHighlights() throws Exception {
-	Collection<Corpus.Item.Highlight> result = 
+	Collection<Corpus.Item.Highlight> result =
 		new ArrayList<Corpus.Item.Highlight>();
 	for (Topic t : this.getTopics()) {
 		result.addAll(t.getHighlights());
@@ -514,7 +514,7 @@ public JSONArray listUsers() throws Exception {
 public void rename(String name) throws Exception {
 	JSONObject viewpoint = this.getRaw();
 	viewpoint.put("viewpoint_name", name);
-	HypertopicMap.this.db.put(viewpoint);	
+	HypertopicMap.this.db.put(viewpoint);
 }
 
 /**
@@ -529,7 +529,7 @@ public Topic createTopic(Topic... broaderTopics) throws Exception {
 	}
 	viewpoint.getJSONObjectOrCreate("topics").put(
 		topicID,
-		new JSONObject().put("broader", broader) 
+		new JSONObject().put("broader", broader)
 	);
 	HypertopicMap.this.db.put(viewpoint);
 	return this.getTopic(topicID);
@@ -585,7 +585,7 @@ public Collection<Corpus.Item> getItems() throws Exception {
 		result.addAll(
 			Viewpoint.this.getTopic(narrower)
 				.getItems()
-		); 
+		);
 	}
 	return result;
 }
@@ -595,7 +595,7 @@ public Collection<Corpus.Item> getItems() throws Exception {
  * Precondition: narrower topics graph must be acyclic.
  */
 public Collection<Corpus.Item.Highlight> getHighlights() throws Exception {
-	Collection<Corpus.Item.Highlight> result = 
+	Collection<Corpus.Item.Highlight> result =
 		new HashSet<Corpus.Item.Highlight>();
 	JSONObject topic = this.getView();
 	for (JSONObject highlight : topic.getAllJSONObjects("highlight")) {
@@ -607,13 +607,13 @@ public Collection<Corpus.Item.Highlight> getHighlights() throws Exception {
 		result.addAll(
 			Viewpoint.this.getTopic(narrower)
 				.getHighlights()
-		); 
+		);
 	}
 	return result;
 }
 
 /**
- * @return an object with broader, narrower and name 
+ * @return an object with broader, narrower and name
  */
 protected JSONObject getView() throws Exception {
 	return Viewpoint.this.getView()
@@ -650,7 +650,7 @@ public void moveTopics(Topic... narrowerTopics) throws Exception {
 	JSONObject viewpoint = Viewpoint.this.getRaw();
 	JSONObject topics = viewpoint.getJSONObject("topics");
 	for (Topic t : narrowerTopics) {
-		topics.getJSONObject(t.getID()).put("broader", broader); 
+		topics.getJSONObject(t.getID()).put("broader", broader);
 	}
 	HypertopicMap.this.db.put(viewpoint);
 }
