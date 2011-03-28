@@ -42,8 +42,8 @@ private HypertopicMap.Viewpoint.Topic otherTopic;
 	this.user = this.map.getUser("me");
 	this.corpus = this.user.createCorpus("my corpus");
 	this.item = this.corpus.createItem("my item");
+	this.item.setResource("http://acme.com/foo");
 	this.item.describe("foo", "bar");
-	this.item.describe("resource", "http://acme.com/foo");
 	this.viewpoint = this.user.createViewpoint("my viewpoint");
 	this.topic = this.viewpoint.createTopic();
 	this.childTopic = this.viewpoint.createTopic(this.topic);
@@ -56,12 +56,12 @@ private HypertopicMap.Viewpoint.Topic otherTopic;
 
 @Test public void register() throws Exception {
 	this.corpus.register(this.map.getUser("him"));
-	assertEquals(2, this.corpus.listUsers().length());
+	assertEquals(2, this.corpus.listUsers().size());
 }
 
 @Test public void unregister() throws Exception {
 	this.corpus.unregister(this.user);
-	assertEquals(0, this.corpus.listUsers().length());
+	assertEquals(0, this.corpus.listUsers().size());
 }
 
 @Test public void renameCorpus() throws Exception {
@@ -125,8 +125,8 @@ private HypertopicMap.Viewpoint.Topic otherTopic;
 }
 
 @Test public void getAttributes() throws Exception {
-	JSONArray attributes = this.item.getAttributes().get("foo");
-	assertTrue(attributes.contains("bar"));
+	JSONObject attributes = this.item.getAttributes();
+	assertEquals("bar", attributes.getString("foo"));
 	assertEquals(1, attributes.length());
 }
 

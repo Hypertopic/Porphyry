@@ -27,9 +27,9 @@ public class RESTDatabaseTest {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 private RESTDatabase db = new RESTDatabase("http://127.0.0.1:5984/test/");
 
-//TODO find an easy way to test this
+//TODO find an easy way to test the rougher case
 @Test public void readOnCouch() throws Exception {
-	this.db.get("_all_docs").length();
+	this.db.get("");
 }
 
 @Test public void createOnCouch() throws Exception {

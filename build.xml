@@ -32,7 +32,7 @@
 
 	</target>
 
-	<target name="compile" depends="prepare,convert-schemas" description="Compile application sources">
+	<target name="compile" depends="prepare" description="Compile application sources">
 		<unjar dest="build">
 			<fileset dir="lib" includes="*.jar" />
 			<patternset includes="org/**" /> 
@@ -57,7 +57,7 @@
 		</junit> 
 	</target> 
 
-	<target name="run" depends="compile" description="Start application">
+	<target name="run" depends="compile,convert-schemas" description="Start application">
 		<java classname="org.porphyry.view.Portfolio" 
 			classpath="build" fork="true">
 			<arg value="http://localhost/"/>
@@ -67,7 +67,7 @@
 		</java>
 	</target>
 		 
-	<target name="dist" depends="compile"
+	<target name="dist" depends="compile,convert-schemas"
 		description="Create a signed jar (-Duser=XXX -Dpass=XXX)" >
 		<mkdir dir="manifest"/>
 		<manifest file="manifest/CLIENT.MF">

@@ -1628,24 +1628,50 @@ public class JSONObject {
 
      /**
       * @author Aurelien Benel
+      * @return a collection even if there are 0 or 1 values.
       */
-     public Collection<JSONObject> getAllJSONObjects(String key) 
-          throws JSONException
-     {
-          return (this.has(key))
-               ? (Collection<JSONObject>) this.getJSONArray(key).toCollection()
-               : new ArrayList<JSONObject>();
+     public Collection getAll(String key) throws JSONException {
+          Collection result = new ArrayList();
+          Object value = this.opt(key);
+          if (value!=null) {
+               if (value instanceof JSONArray) {
+                    result = ((JSONArray) value).toCollection();
+               } else {
+                    result.add(value);
+               }
+          }
+          return result;
      }
 
      /**
-      * Inverse function of JSONObject.append
+      * @author Aurelien Benel
+      */
+     public Collection<JSONObject> getAllJSONObjects(String key) 
+          throws JSONException 
+     {
+          return (Collection<JSONObject>) this.getAll(key);
+     }
+
+    /**
+      * @author Aurelien Benel
+      */
+     public Collection<String> getAllStrings(String key) throws JSONException {
+          return (Collection<String>) this.getAll(key);
+     }
+
+     /**
+      * Inverse function of JSONObject.append.
       * @author Aurelien Benel
       */
      public JSONObject remove(String key, String value) throws JSONException {
-          JSONArray array = this.getJSONArray(key);
-          int i = array.indexOf(value);
-          if (i>-1) array.remove(i); 
-          if (array.length()==0) {
+          JSONArray array = this.optJSONArray(key);
+          if (array!=null) {
+               int i = array.indexOf(value);
+               if (i>-1) array.remove(i); 
+               if (array.length()==0) {
+                    this.remove(key);
+               }
+          } else if (value.equals(this.getString(key))) {
                this.remove(key);
           }
           return this;

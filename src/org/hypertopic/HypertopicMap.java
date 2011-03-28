@@ -134,7 +134,15 @@ public Named(String id) {
 protected abstract JSONObject getView() throws Exception;
 
 public String getName() throws Exception {
-	return this.getView().getJSONArray("name").getString(0);
+	return this.getView().getString("name");
+}
+
+@Override public String toString() {
+	try {
+		return this.getView().toString(2);
+	} catch (Exception e) {
+		return "ERROR at HypertopicMap.Located.toString()";
+	}
 }
 
 }//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Named
@@ -163,7 +171,7 @@ public Registered(String id) {
 
 public void register(User user) throws Exception {
 	HypertopicMap.this.db.put(
-		this.getRaw().append("users", this.getID())
+		this.getRaw().append("users", user.getID())
 	);
 }
 
@@ -172,6 +180,12 @@ public void unregister(User user) throws Exception {
 	registered.getJSONArray("users").remove(user.getID());
 	HypertopicMap.this.db.put(registered);
 }
+
+public Collection<String> listUsers() throws Exception {
+	return (Collection<String>) this.getView().getJSONArrayOrCreate("user")
+		.toCollection();
+}
+
 
 }//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Registered
 
@@ -226,11 +240,6 @@ public class Corpus extends Registered {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 public Corpus(String id) {
 	super(id);
-}
-
-//TODO change return type?
-public JSONArray listUsers() throws Exception {
-	return this.getView().getJSONArrayOrCreate("user");
 }
 
 /**
@@ -294,11 +303,11 @@ public String getCorpusID() {
 }
 
 public URL getResource() throws Exception {
-	return new URL(this.getView().getJSONArray("resource").getString(0));
+	return new URL(this.getView().getString("resource"));
 }
 
 public URL getThumbnail() throws Exception {
-	return new URL(this.getView().getJSONArray("thumbnail").getString(0));
+	return new URL(this.getView().getString("thumbnail"));
 }
 
 public Collection<Viewpoint.Topic> getTopics() throws Exception {
@@ -313,16 +322,15 @@ public Collection<Viewpoint.Topic> getTopics() throws Exception {
 	return result;
 }
 
-//TODO change return type?
-public Map<String,JSONArray> getAttributes() throws Exception {
-	Map<String,JSONArray> result = new HashMap<String,JSONArray>();
+public JSONObject getAttributes() throws Exception {
+	JSONObject result = new JSONObject();
 	JSONObject item = this.getView();
 	Iterator<String> i = item.keys();
 	while (i.hasNext()) {
 		String key = i.next();
 		if (!isReserved(key)) {
-			JSONArray value = item.optJSONArray(key);
-			if (value!=null) {
+			Object value = item.get(key);
+			if (!(value instanceof JSONObject)) {
 				result.put(key, value);
 			}
 		}
@@ -341,9 +349,15 @@ public void rename(String name) throws Exception {
 	HypertopicMap.this.db.put(item);	
 }
 
+public void setResource(String url) throws Exception {
+	JSONObject item = this.getRaw();
+	item.put("resource", url);
+	HypertopicMap.this.db.put(item);
+}
+
 public void describe(String attribute, String value) throws Exception {
 	JSONObject item = this.getRaw();
-	item.append(attribute, value);
+	item.accumulate(attribute, value);
 	HypertopicMap.this.db.put(item);
 }
 
@@ -390,10 +404,11 @@ public Highlight createHighlight(
 
 public Collection<Highlight> getHighlights() throws Exception{
 	Collection<Highlight> result = new ArrayList<Highlight>();
-	Iterator<String> i = this.getView().keys();
+	JSONObject view = this.getView();
+	Iterator<String> i = view.keys();
 	while (i.hasNext()) {
 		String key = i.next();
-		if (!isReserved(key)) {
+		if (!isReserved(key) && view.get(key) instanceof JSONObject) {
 			result.add(this.getHighlight(key));
 		}
 	}
@@ -425,7 +440,7 @@ public Viewpoint.Topic getTopic() throws Exception {
 }
 
 public Collection<String> getText() throws Exception {
-	return this.getView().getJSONArray("text").toCollection();
+	return this.getView().getAllStrings("text");
 }
 
 public URL getThumbnail() throws Exception {
@@ -496,20 +511,12 @@ public Collection<Corpus.Item> getItems() throws Exception {
 
 public Collection<Corpus.Item.Highlight> getHighlights() throws Exception {
 	Collection<Corpus.Item.Highlight> result = 
-		new ArrayList<Corpus.Item.Highlight>();
+		new HashSet<Corpus.Item.Highlight>();
 	for (Topic t : this.getTopics()) {
 		result.addAll(t.getHighlights());
 	}
 	return result;
 }
-
-// Is there a need for a Collection<User>?
-public JSONArray listUsers() throws Exception {
-	return this.getView().getJSONArrayOrCreate("user");
-}
-
-//TODO importViewpoint(XML, viewpointID?)
-//TODO XML exportViewpoint(viewpointID)
 
 public void rename(String name) throws Exception {
 	JSONObject viewpoint = this.getRaw();
