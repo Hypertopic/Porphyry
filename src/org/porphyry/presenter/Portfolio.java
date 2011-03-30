@@ -120,28 +120,6 @@ protected Viewpoint addViewpoint(URL url) throws Exception {
 	return v;
 }
 
-public void createViewpoint(String name) throws Exception {
-	org.porphyry.model.Viewpoint v = 
-		new org.porphyry.model.Viewpoint(this.service+"viewpoint/");
-	v.setName(name);
-	v.addActor(this.actor.toString());
-	v.httpPostCreate();
-	this.addViewpoint(v.getURL());
-	this.notifyObservers();
-}
-
-public void createActor(String login, String fullName) throws Exception {
-	org.porphyry.model.Actor a = 
-		new org.porphyry.model.Actor(
-				this.service 
-				+ "actor/" 
-				+ URLEncoder.encode(login, "UTF-8") //TODO use URI.otASCIIString instead
-				+ "/"
-		);
-	a.setCompleteName(fullName);
-	a.httpPut();
-}
-
 /**
 * @param viewpoints LabeledURL[]
 * After opening those viewpoints:

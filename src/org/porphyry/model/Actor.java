@@ -105,14 +105,6 @@ public class Actor extends HyperTopicResource {
 		this.completeName = encode(completeName); 
 	}
 
-	public void setCompleteNameRemotely(String completeName) 
-	throws java.io.IOException, HyperTopicException, SAXException, 
-	ParserConfigurationException
-	{
-		this.httpPostUpdate("<actor name=\""+encode(completeName)+"\"/>");
-		this.httpGet(false);
-	}
-
 	public void addViewpoint(String viewpointURL, String label) 
 	throws MalformedURLException
 	{
@@ -123,26 +115,10 @@ public class Actor extends HyperTopicResource {
 		);
 	}
 
-	public void addViewpointRemotely(URL url) 
-	throws java.io.IOException, HyperTopicException, SAXException, 
-	ParserConfigurationException
-	{
-		this.httpPostUpdate("<actor><viewpoint href=\""+url+"\" action=\"insert\"/></actor>");
-		this.httpGet(false);
-	}
-
 	public void removeViewpoint(String viewpointURL) 
 	throws MalformedURLException
 	{
 		this.viewpoints.remove(new LabeledURL(viewpointURL, ""));
-	}
-
-	public void removeViewpointRemotely(URL url) //TODO verify syntax
-	throws java.io.IOException, HyperTopicException, SAXException, 
-	ParserConfigurationException
-	{
-		this.httpPostUpdate("<actor><viewpoint href=\""+url+"\" action=\"delete\"/></actor>");
-		this.httpGet(false);
 	}
 
 	public Vector<LabeledURL> getViewpoints() {
@@ -157,13 +133,6 @@ public class Actor extends HyperTopicResource {
 			+ viewpoint.getLabel() + "</viewpoint>\n";
 		}
 		return xml + "</actor>\n";
-	}
-
-	@Override
-	public void httpPostCreate() 
-	throws UnsupportedOperationException
-	{
-		throw new UnsupportedOperationException();
 	}
 
 	public static void main(String args[]) {

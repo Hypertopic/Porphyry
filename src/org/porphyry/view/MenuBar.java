@@ -88,30 +88,6 @@ boolean mustBeEnabled() {
 
 }//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< class MenuItem
 
-class EditViewpointMenuItem extends JMenuItem {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-public EditViewpointMenuItem(final org.porphyry.presenter.Viewpoint presenter) {
-	super(presenter.getName());
-	this.addActionListener(
-		new ActionListener() { 
-			public void actionPerformed(ActionEvent e) { 
-				try { 
-					new Viewpoint(
-						presenter,
-						MenuBar.this.presenter,
-						MenuBar.this.portfolio
-					); 
-				} catch (Exception ex) { 
-					MenuBar.this.frame.showException(ex);
-				} 
-			}
-		}
-	);
-
-}
-
-}//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< class EditViewpointMenuItem
-
 class CloseViewpointMenuItem extends JMenuItem {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 public CloseViewpointMenuItem(final org.porphyry.presenter.Viewpoint presenter) {
@@ -169,23 +145,6 @@ private final MenuItem actorUnsuscribe =
 		@Override void run() {}
 	};
 
-private final MenuItem actorCreate = 
-	new MenuItem("ACTOR_CREATE") {
-		@Override 
-		void run() {
-			MenuBar.this.createActor(
-					MenuBar.this.askForService(
-							this.getText()
-					),
-					this.getText()
-			);
-		}
-		@Override
-		boolean mustBeEnabled() {
-			return true;
-		}
-	};
-
 private final Menu actorMenu = 
 	new Menu("ACTOR"); 
 
@@ -213,139 +172,8 @@ private final Menu viewpointExport =
 private final Menu viewpointClose = 
 	new Menu("VIEWPOINT_CLOSE");
 
-private final MenuItem viewpointCreate = 
-	new MenuItem("VIEWPOINT_CREATE") {
-		@Override
-		void run() {
-			MenuBar.this.createViewpoint( 
-				MenuBar.this.askForActor(
-					MenuBar.this.askForService(this.getText()),
-					this.getText()
-				),
-				this.getText()
-			);
-		}
-		@Override
-		boolean mustBeEnabled() {
-			return true;
-		}
-	};
-
-private final MenuItem viewpointImport = 
-	new MenuItem("VIEWPOINT_IMPORT") {
-		@Override
-		void run() {
-			MenuBar.this.importViewpoint(
-				MenuBar.this.askForActor(
-					MenuBar.this.askForService(this.getText()),
-					this.getText()
-				),
-				this.getText());
-		}
-		@Override
-		boolean mustBeEnabled() {
-			return true;
-		}
-	};
-
-private final Menu viewpointEdit = 
-	new Menu("VIEWPOINT_EDIT"); 
-
 private final Menu viewpointMenu = 
 	new Menu("VIEWPOINT"); 
-
-private final MenuItem topicCreateIsolated = 
-	new MenuItem("ISOLATED_TOPIC") {
-		@Override
-		void run() {
-			((Viewpoint) MenuBar.this.frame)
-				.createIsolatedTopic();
-		}
-		@Override
-		boolean mustBeEnabled() {
-			return MenuBar.this.frame instanceof Viewpoint;
-		}
-	};
-
-private final MenuItem topicCreateGeneric = 
-	new MenuItem("GENERIC_TOPIC") {
-		@Override
-		void run() {
-			((Viewpoint) MenuBar.this.frame)
-				.createTopic("includes");
-		}
-		@Override
-		boolean mustBeEnabled() {
-			return MenuBar.this.frame instanceof Viewpoint;
-		}
-	};
-
-private final MenuItem topicCreateSpecific = 
-	new MenuItem("SPECIFIC_TOPIC") {
-		@Override
-		void run() {
-			((Viewpoint) MenuBar.this.frame)
-				.createTopic("includedIn");
-		}
-		@Override
-		boolean mustBeEnabled() {
-			return MenuBar.this.frame instanceof Viewpoint;
-		}
-	};
-
-private final Menu topicCreate = 
-	new Menu("TOPIC_CREATE"); 
-
-private final MenuItem topicDestroy = 
-	new MenuItem("TOPIC_DESTROY") {
-		@Override
-		void run() {
-			((Viewpoint) MenuBar.this.frame).destroyTopics();
-		}
-		@Override
-		boolean mustBeEnabled() {
-			return MenuBar.this.frame instanceof Viewpoint;
-		}
-	};
-
-private final JMenuItem topicCut = 
-	new JMenuItem(TopicsTransferHandler.getCutAction());
-
-private final JMenuItem topicCopy = 
-	new JMenuItem(TopicsTransferHandler.getCopyAction());
-
-private final JMenuItem topicPaste = 
-	new JMenuItem(TopicsTransferHandler.getPasteAction());
-
-private final MenuItem itemInsert = 
-	new MenuItem("ITEM_INSERT") {
-		@Override
-		void run() {}
-	};
-
-private final MenuItem itemUnlink = 
-	new MenuItem("ITEM_UNLINK") {
-		@Override
-		void run() {}
-	};
-
-private final MenuItem itemCut = 
-	new MenuItem("ITEM_CUT") {
-		@Override
-		void run() {}
-	};
-
-private final MenuItem itemCopy= 
-	new MenuItem("ITEM_COPY") {
-		@Override
-		void run() {}
-	};
-
-private final MenuItem itemPaste = 
-	new MenuItem("ITEM_PASTE") {
-		@Override
-		void run() {}
-	};
 
 private final MenuItem corpusLoad = 
 	new MenuItem("CORPUS_LOAD") {
@@ -356,12 +184,6 @@ private final MenuItem corpusLoad =
 private final MenuItem corpusClose = 
 	new MenuItem("CORPUS_CLOSE") {
 		@Override
-		void run() {}
-	};
-
-private final MenuItem corpusCreate = 
-	new MenuItem("CORPUS_CREATE") {
-		@Override	
 		void run() {}
 	};
 
@@ -380,68 +202,18 @@ public MenuBar(
 	this.frame = frame;
 	this.portfolio = portfolio;
 	FocusActionListener focusActionListener = new FocusActionListener();
-	this.topicCut.setText(BABEL.getString("TOPIC_CUT"));
-	this.topicCopy.setText(BABEL.getString("TOPIC_COPY"));
-	this.topicPaste.setText(BABEL.getString("TOPIC_PASTE"));
-	this.topicCut.setAccelerator(
-		KeyStroke.getKeyStroke(
-			KeyEvent.VK_X, 
-			PorphyryTheme.SHORTCUT_KEY
-		)
-	);
-	this.topicCopy.setAccelerator(
-		KeyStroke.getKeyStroke(
-			KeyEvent.VK_C, 
-			PorphyryTheme.SHORTCUT_KEY
-		)
-	);
-	this.topicPaste.setAccelerator(
-		KeyStroke.getKeyStroke(
-			KeyEvent.VK_V, 
-			PorphyryTheme.SHORTCUT_KEY
-		)
-	);
-	this.topicCut.setActionCommand("TOPIC_CUT");
-	this.topicCopy.setActionCommand("TOPIC_COPY");
-	this.topicPaste.setActionCommand("TOPIC_PASTE");
-	this.topicCut.addActionListener(focusActionListener);
-	this.topicCopy.addActionListener(focusActionListener);
-	this.topicPaste.addActionListener(focusActionListener);
 	this.addAll(
-		this.actorMenu.addAll(
-			this.actorCreate,
-			this.actorSuscribe,
-			this.actorUnsuscribe
-		),
 		this.viewpointMenu.addAll(
-			this.viewpointCreate,
 			this.viewpointLoad,
-			this.viewpointEdit,
 			this.viewpointClose,
 			new JSeparator(),
-			this.viewpointImport,
 			this.viewpointExport,
-			new JSeparator(),
-			this.topicCreate.addAll(
-				this.topicCreateGeneric,
-				this.topicCreateSpecific,
-				this.topicCreateIsolated
-			),
-			this.topicCut, 
-			this.topicCopy,
-			this.topicPaste,
-			this.topicDestroy
+			new JSeparator()
 		),
 		this.corpusMenu.addAll(
-			this.corpusCreate,
 			this.corpusLoad,
 			this.corpusClose,
-			new JSeparator(), 
-			this.itemInsert, 
-			this.itemCut, 
-			this.itemCopy, 
-			this.itemPaste,
-			this.itemUnlink 
+			new JSeparator()
 		)
 	);
 	this.load();
@@ -458,7 +230,6 @@ public void addAll(Menu... menus) {
 }
 
 public void update(Observable o1, Object o2) {
-	this.viewpointEdit.removeAll();
 	this.viewpointClose.removeAll();
 	this.viewpointExport.removeAll();
 	this.load();
@@ -466,9 +237,6 @@ public void update(Observable o1, Object o2) {
 
 protected void load() {
 	for (org.porphyry.presenter.Viewpoint v: this.presenter.getAllViewpoints()){
-		this.viewpointEdit.add(
-			new EditViewpointMenuItem(v)
-		);
 		this.viewpointExport.add(
 			new ExportViewpointMenuItem(v)
 		);
@@ -566,80 +334,6 @@ public void askForViewpoints(Vector<LabeledURL> possibleViewpoints, String actio
 	} while (pressOK && problem); 
 }
 
-public void createViewpoint(Object lastResult, String action) {
-	if (lastResult==null)
-		throw new NullPointerException();
-	JTextField field = new JTextField();
-	Object[] message = {
-		new JLabel(BABEL.getString("VIEWPOINT_NAME")), 
-		field
-	};
-	boolean pressOK;
-	boolean problem;
-	do {
-		problem = false;
-		pressOK = this.ask(message, action);
-		if (pressOK) try {
-			this.presenter.createViewpoint(field.getText());
-		} catch (Exception e) {
-			problem = true;
-			this.frame.showException(e);
-		}
-	} while (pressOK && problem); 
-}
-
-public void createActor(Object lastResult, String action) {
-	if (lastResult==null)
-		throw new NullPointerException();
-	JTextField login = new JTextField();
-	JTextField fullName = new JTextField();
-	Object[] message = {
-		new JLabel(BABEL.getString("ACTOR_LOGIN")), 
-		login,
-		new JLabel(BABEL.getString("ACTOR_FULLNAME")), 
-		fullName
-	};
-	boolean pressOK;
-	boolean problem;
-	do {
-		problem = false;
-		pressOK = this.ask(message, action);
-		if (pressOK) try {
-			this.presenter.createActor(login.getText(), fullName.getText());
-		} catch (Exception e) {
-			problem = true;
-			this.frame.showException(e);
-		}
-	} while (pressOK && problem); 
-}
-
-public void importViewpoint(Object lastResult, String action) {
-	if (lastResult==null)
-		throw new NullPointerException();
-	int answer = MenuBar.this.mmFileChooser.showOpenDialog(
-			MenuBar.this.frame
-	);
-	if (answer==JFileChooser.APPROVE_OPTION) {
-		try {
-			File file = this.mmFileChooser.getSelectedFile();
-			int mode = JOptionPane.showConfirmDialog(
-					MenuBar.this.frame, 
-					BABEL.getString("VIEWPOINT_IMPORT_WITH_ITEMS")
-			);
-			if (mode!=JOptionPane.CANCEL_OPTION) {
-				this.portfolio.importToServer(
-					file, 
-					this.presenter.getService(),
-					this.presenter.getActor(),
-					mode==JOptionPane.YES_OPTION
-				);
-			}	
-		} catch (Exception e) {
-			this.frame.showException(e);
-		}
-	}
-}
-
 protected boolean ask(Object[] message, String action) {
 	return JOptionPane.OK_OPTION==JOptionPane.showOptionDialog(
 		this.frame,
@@ -652,7 +346,6 @@ protected boolean ask(Object[] message, String action) {
 		null
 	);
 }
-
 
 /**
 * Used to perform menu actions on the focus component.

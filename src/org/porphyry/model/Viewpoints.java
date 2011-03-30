@@ -112,41 +112,4 @@ public String toXML(){
 	return xml + "</viewpoints>\n";
 }
 
-@Override
-public void httpPut() 
-	throws UnsupportedOperationException
-{
-	throw new UnsupportedOperationException();
-}
-
-@Override
-public void httpPostCreate() 
-	throws UnsupportedOperationException
-{
-	throw new UnsupportedOperationException();
-}
-
-public void httpPostUpdate() 
-	throws UnsupportedOperationException
-{
-	throw new UnsupportedOperationException();
-}
-
-@Override
-public void httpDelete() 
-	throws UnsupportedOperationException
-{
-	throw new UnsupportedOperationException();
-}
-
-public static void main(String args[]) {
-	try {
-		Viewpoints a = new Viewpoints("http://localhost/viewpoint/");
-		a.httpGet(false);
-		System.out.println(a.getViewpoints());
-	} catch (Exception e) {
-		e.printStackTrace();
-	}
-}
-
 }

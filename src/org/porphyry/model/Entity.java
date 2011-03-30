@@ -110,28 +110,11 @@ public void addTopic(String href) {
 	}
 }
 
-public void addTopicRemotely(URL href) 
-	throws java.io.IOException, HyperTopicException, SAXException, 
-	ParserConfigurationException
-{
-	this.httpPostUpdate("<entity><topic href=\""+href+"\" action=\"insert\"/></entity>");
-	this.httpGet(false);
-}
-
 public void addAttribute(String name, String value) {//TODO handle url
 	this.attributes.add(new Attribute(name, value));
 }
 
-public void addAttributeRemotely(String name, String value)
-	throws java.io.IOException, HyperTopicException, SAXException, 
-	ParserConfigurationException
-{
-	this.httpPostUpdate("<entity><attribute name=\""+name+"\" value=\""+value+"\" action=\"insert\"/></entity>");
-	this.httpGet(false);
-}
-
 //TODO removeAttribute
-//TODO removeAttributeRemotely
 
 public void addResource(String name, String href) {
 	try {
@@ -144,16 +127,7 @@ public void addResource(String name, String href) {
 	}
 }
 
-public void addResourceRemotely(String name, URL href) 
-	throws java.io.IOException, HyperTopicException, SAXException, 
-	ParserConfigurationException
-{
-	this.httpPostUpdate("<entity><resource name=\""+name+"\" href=\""+href+"\" action=\"insert\"/></entity>");
-	this.httpGet(false);
-}
-
 //TODO removeResource
-//TODO removeResourceRemotely
 
 public URL getResource(String name) {
 	return this.resources.get(name);
@@ -182,9 +156,7 @@ public List<URL> getRelatedEntities(String relationType) {
 	return entities;
 }
 
-//TODO addRelatedEntityRemotely
 //TODO removeRelatedEntity
-//TODO removeRelatedEntityRemotely
 
 // recursive (suppose no cycle), results from bottom to top
 protected List<URL> getAllEntities() 
@@ -250,13 +222,6 @@ public String toXML() {
 			+ attribute.getValue() + "\"/>\n";
 	}
 	return xml + "</entity>\n";
-}
-
-@Override
-public void httpPostCreate()
-        throws UnsupportedOperationException
-{
-        throw new UnsupportedOperationException();
 }
 
 class Attribute {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>

@@ -123,41 +123,6 @@ protected void update() throws Exception {
 	this.selection.updateSelectedItems();
 }
 
-public void createTopic(Collection<Topic> topics, String relationType)  
-	throws Exception
-{
-	org.porphyry.model.Topic t = new org.porphyry.model.Topic(
-		this.getURL().toString()+"topic/"
-	);
-	for (Topic relative : topics) {
-		t.addRelatedTopic(relationType, relative.getURL().toString());
-	}
-	t.httpPostCreate();
-	this.addTopic(t.getURL());
-	for (Topic relative : topics) {
-		relative.reload();
-	}
-	this.update();
-}
-
-public void destroyTopics(Collection<Topic> topicsToDestroy) throws Exception {
-	Set<Topic> neighbors = new HashSet<Topic>();
-	for (Topic t : topicsToDestroy) {
-		neighbors.addAll(t.getTopics("includes"));
-		neighbors.addAll(t.getTopics("includedIn"));
-	}
-	for (Topic t : topicsToDestroy) {
-		t.model.httpDelete();
-		this.topics.remove(t.getURL());
-	}
-	for (Topic t : neighbors) {
-		if (!topicsToDestroy.contains(t)) {
-			t.reload();
-		}
-	}
-	this.update();
-}
-
 public String export() throws Exception {
 	final Set<Topic> visited = new HashSet<Topic>();
 	String s = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
@@ -286,50 +251,6 @@ public void computeAllItems() throws Exception {
 
 public ItemSet getAllItems() {
 	return (ItemSet) this.allItems.clone();
-}
-
-public void rename(String name)  throws Exception {
-	this.model.setNameRemotely(name);
-	Viewpoint.this.update();
-}
-
-public void unlinkFromParents() 
-	throws Exception
-{
-	Collection<Topic> parents = this.getTopics("includedIn");
-	Collection<URL> urls = new ArrayList<URL>();
-	for (Topic t : parents) {
-		urls.add(t.getURL());
-	}
-	this.model.removeRelatedTopicsRemotely("includedIn", urls);
-	for (Topic t : parents) {
-		t.reload();
-	}
-	Viewpoint.this.update();
-}
-
-public void link(Collection<Topic> topics)
-	throws Exception
-{
-	Collection<URL> urls = new ArrayList<URL>();
-	for (Topic t : topics) {
-		urls.add(t.getURL());
-	}
-	this.model.addRelatedTopicsRemotely("includes", urls);
-	for (Topic t : topics) {
-		t.reload();
-	}
-	Viewpoint.this.update();	
-}
-
-public void linkItems(Collection<URL> items)  throws Exception {
-	this.model.addEntitiesRemotely(items);
-	Viewpoint.this.update();
-}
-
-public void unlinkItems(Collection<URL> items)  throws Exception {
-	this.model.removeEntitiesRemotely(items);
-	Viewpoint.this.update();
 }
 
 @Override

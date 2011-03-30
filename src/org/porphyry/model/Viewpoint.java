@@ -88,14 +88,6 @@ public void setName(String name) {
 	this.name = encode(name); 
 }
 
-public void setNameRemotely(String name) 
-	throws java.io.IOException, HyperTopicException, SAXException, 
-	ParserConfigurationException
-{
-	this.httpPostUpdate("<viewpoint name='"+encode(name)+"'/>");
-	this.httpGet(false);
-}
-
 public void addTopic(String url) 
 	throws MalformedURLException
 {
@@ -106,14 +98,6 @@ public void addActor(String url)
 	throws MalformedURLException
 {
 	this.actors.add(this.getAbsoluteURL(url));
-}
-
-public void addActorRemotely(URL url) 
-	throws java.io.IOException, HyperTopicException, SAXException, 
-	ParserConfigurationException
-{
-	this.httpPostUpdate("<viewpoint><actor href=\""+url+"\" action=\"insert\"/></viewpoint>");
-	this.httpGet(false);
 }
 
 public void removeTopic(String url) 
@@ -128,14 +112,6 @@ public void removeActor(String url)
 	this.actors.remove(this.getAbsoluteURL(url));
 }
 
-public void removeActorRemotely(URL url) //TODO verify syntax
-	throws java.io.IOException, HyperTopicException, SAXException, 
-	ParserConfigurationException
-{
-	this.httpPostUpdate("<viewpoint><actor href=\""+url+"\" action=\"delete\"/></viewpoint>");
-	this.httpGet(false);
-}
-
 public List<URL> getUpperTopics() {
 	return new ArrayList<URL>(this.topics);
 }
@@ -148,18 +124,6 @@ public String toXML() {
 	}
 	xml += "</viewpoint>\n";
 	return xml;
-}
-
-public static void main(String args[]) {
-	try {
-		Viewpoint v = new Viewpoint( "http://localhost/viewpoint/");
-		v.httpPostCreate();
-		v.setName("Test");
-		v.httpPut();
-		v.httpDelete();
-	} catch (Exception e){
-		e.printStackTrace();
-	}
 }
 
 }

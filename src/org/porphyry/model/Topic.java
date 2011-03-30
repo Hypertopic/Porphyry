@@ -161,51 +161,16 @@ public void setName(String name) {
 	this.name = encode(name); 
 }
 
-public void setNameRemotely(String name) 
-	throws java.io.IOException, HyperTopicException, SAXException, 
-	ParserConfigurationException
-{
-	this.httpPostUpdate(
-		"<topic name=\""+encode(name)+"\"/>"
-	);
-	this.httpGet(false);
-}
-
 public void addRelatedTopic(String relationType, String href) 
 	throws MalformedURLException
 {
 	this.relatedTopics.add(new RelatedTopic(relationType, href));
 }
 
-public void addRelatedTopicsRemotely(String relationType, Collection<URL> hrefs) 
-	throws java.io.IOException, HyperTopicException, SAXException, 
-	ParserConfigurationException
-{
-	String xml = "<topic>";
-	for (URL href : hrefs) {
-		xml+="<relatedTopic relationType=\""+relationType+"\" href=\""+href+"\" action=\"insert\"/>";
-	}
-	this.httpPostUpdate(xml+"</topic>");
-	this.httpGet(false);
-}
-
 public void removeRelatedTopic(String relationType, String href) 
 	throws MalformedURLException
 {
 	this.relatedTopics.remove(new RelatedTopic(relationType, href));
-}
-
-public void removeRelatedTopicsRemotely(String relationType, Collection<URL> hrefs) //TODO verify syntax
-	throws java.io.IOException, HyperTopicException, SAXException, 
-	ParserConfigurationException
-{
-	String xml = "<topic>";
-	for (URL href : hrefs) {
-		xml+="<relatedTopic relationType=\""+relationType
-			+"\" href=\""+href+"\" action=\"delete\"/>";
-	}
-	this.httpPostUpdate(xml+"</topic>");
-	this.httpGet(false);
 }
 
 public Collection<URL> getRelatedTopics(String relationType) {
@@ -229,32 +194,8 @@ public void addEntity(String href, String label)
 	);
 }
 
-public void addEntitiesRemotely(Collection<URL> hrefs) 
-	throws java.io.IOException, HyperTopicException, SAXException, 
-	ParserConfigurationException
-{
-	String xml = "<topic>";
-	for (URL href : hrefs) {
-		xml += "<entity href=\""+href+"\" action=\"insert\"/>";
-	}
-	this.httpPostUpdate(xml+"</topic>");
-	this.httpGet(false);
-}
-
 public void removeEntity(URL href) {
 	this.entities.remove(href);
-}
-
-public void removeEntitiesRemotely(Collection<URL> hrefs) //TODO verify syntax
-	throws java.io.IOException, HyperTopicException, SAXException, 
-	ParserConfigurationException
-{
-	String xml = "<topic>";
-	for (URL href : hrefs) {
-		xml += "<entity href=\""+href+"\" action=\"delete\"/>";
-	}
-	this.httpPostUpdate(xml+"</topic>");
-	this.httpGet(false);
 }
 
 public List<LabeledURL> getEntities() { 
