@@ -153,6 +153,7 @@ protected String send(String method, URL service, JSONObject object)
 	connection.setRequestProperty("Content-Type", "application/json");
 	if (object != null) this.writeBody(connection, object);
 	String result = this.readBody(connection);
+//	System.err.println(result); //DEBUG
 	this.checkError(connection);
 	return result;
 }
@@ -233,6 +234,10 @@ protected void listen() {
 		System.err.println("GET _changes " + e);
 	}
 	this.listen(); //Show must go on...
+}
+
+@Override public String toString() {
+	return this.baseUrl;
 }
 
 }//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< RESTDatabase

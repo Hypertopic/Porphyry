@@ -167,11 +167,12 @@ private HypertopicMap.Viewpoint.Topic otherTopic;
 }
 
 @Test public void listCorpora() throws Exception {
-	assertTrue(this.user.listCorpora().length()>0);
+	assertTrue(this.user.listCorpora().size()>0);
+	assertEquals(0, this.map.getUser("nobody").listCorpora().size());
 }
 
 @Test public void listViewpoints() throws Exception {
-	assertTrue(this.user.listViewpoints().length()>0);
+	assertTrue(this.user.listViewpoints().size()>0);
 }
 
 @Test public void getCorpusItems() throws Exception {

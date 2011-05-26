@@ -114,6 +114,8 @@ public String getID() {
 	return this.id;
 }
 
+protected abstract JSONObject getView() throws Exception;
+
 @Override public boolean equals(Object that) {
 	return that instanceof Identified
 		&& this.id.equals(((Identified)that).id);
@@ -121,6 +123,14 @@ public String getID() {
 
 @Override public int hashCode() {
 	return this.id.hashCode();
+}
+
+@Override public String toString() {
+	try {
+		return this.getView().toString(2);
+	} catch (Exception e) {
+		return "ERROR at HypertopicMap.Named.toString()";
+	}
 }
 
 }//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Identified
@@ -131,18 +141,8 @@ public Named(String id) {
 	super(id);
 }
 
-protected abstract JSONObject getView() throws Exception;
-
 public String getName() throws Exception {
 	return this.getView().getString("name");
-}
-
-@Override public String toString() {
-	try {
-		return this.getView().toString(2);
-	} catch (Exception e) {
-		return "ERROR at HypertopicMap.Located.toString()";
-	}
 }
 
 }//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Named
@@ -186,7 +186,6 @@ public Collection<String> listUsers() throws Exception {
 		.toCollection();
 }
 
-
 }//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Registered
 
 public class User extends Identified {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -195,23 +194,33 @@ public User(String id) {
 	super(id);
 }
 
-protected JSONObject getView() throws Exception {
+@Override protected JSONObject getView() throws Exception {
 	return HypertopicMap.this.db.get("user/" + this.getID())
 		.getJSONObject(this.getID());
 }
 
 /**
- * @return a list of IDs and names pairs... fast!
+ * @return a collection of IDs and names pairs... fast!
+ * Can be empty.
  */
-public JSONArray listCorpora() throws Exception {
-	return this.getView().optJSONArray("corpus");
+public Collection<JSONObject> listCorpora() throws Exception {
+	try {
+		return this.getView().getAllJSONObjects("corpus");
+	} catch (JSONException e) {
+		return new ArrayList();
+	}
 }
 
 /**
- * @return a list of IDs and names pairs... fast!
+ * @return a collection of IDs and names pairs... fast!
+ * Can be empty.
  */
-public JSONArray listViewpoints() throws Exception {
-	return this.getView().optJSONArray("viewpoint");
+public Collection<JSONObject> listViewpoints() throws Exception {
+	try {
+		return this.getView().getAllJSONObjects("viewpoint");
+	} catch (JSONException e) {
+		return new ArrayList();
+	}
 }
 
 public Corpus createCorpus(String name) throws Exception {
@@ -247,19 +256,22 @@ public Corpus(String id) {
  */
 public Collection<Item> getItems() throws Exception {
 	Collection<Item> result = new ArrayList<Item>();
-	Iterator<String> i = this.getView().keys();
-	while (i.hasNext()) {
-		String key = i.next();
-		if (!isReserved(key)) {
-			result.add(this.getItem(key));
+	JSONObject view = this.getView();
+	if (view!=null) {
+		Iterator<String> i = view.keys();
+		while (i.hasNext()) {
+			String key = i.next();
+			if (!isReserved(key)) {
+				result.add(this.getItem(key));
+			}
 		}
 	}
 	return result;
 }
 
-protected JSONObject getView() throws Exception {
+@Override protected JSONObject getView() throws Exception {
 	return HypertopicMap.this.db.get("corpus/" + this.getID())
-		.getJSONObject(this.getID());
+		.optJSONObject(this.getID());
 }
 
 public void rename(String name) throws Exception {
@@ -298,8 +310,8 @@ public Item(String id) {
 	super(id);
 }
 
-public String getCorpusID() {
-	return Corpus.this.getID();
+public Corpus getCorpus() {
+	return Corpus.this;
 }
 
 public URL getResource() throws Exception {
@@ -338,7 +350,7 @@ public JSONObject getAttributes() throws Exception {
 	return result;
 }
 
-protected JSONObject getView() throws Exception {
+@Override protected JSONObject getView() throws Exception {
 	return Corpus.this.getView()
 		.getJSONObject(this.getID());
 }
@@ -372,7 +384,7 @@ public void tag(Viewpoint.Topic topic) throws Exception {
 	JSONObject topics = item.getJSONObjectOrCreate("topics");
 	topics.put(
 		topic.getID(),
-		new JSONObject().put("viewpoint", topic.getViewpointID())
+		new JSONObject().put("viewpoint", topic.getViewpoint().getID())
 	);
 	HypertopicMap.this.db.put(item);
 }
@@ -395,7 +407,7 @@ public Highlight createHighlight(
 		new JSONObject()
 			.put("coordinates", coordinates)
 			.put("text", text)
-			.put("viewpoint", topic.getViewpointID())
+			.put("viewpoint", topic.getViewpoint().getID())
 			.put("topic", topic.getID())
 	);
 	HypertopicMap.this.db.put(item);
@@ -425,12 +437,12 @@ public Highlight(String id) {
 	super(id);
 }
 
-public String getItemID() {
-	return Item.this.getID();
+public Item getItem() {
+	return Item.this;
 }
 
-public String getCorpusID() {
-	return Corpus.this.getID();
+public Corpus getCorpus() {
+	return Corpus.this;
 }
 
 public Viewpoint.Topic getTopic() throws Exception {
@@ -452,7 +464,7 @@ public JSONArray getCoordinates() throws Exception {
 	return this.getView().getJSONArray("coordinates");
 }
 
-protected JSONObject getView() throws Exception {
+@Override protected JSONObject getView() throws Exception {
 	return Item.this.getView().getJSONObject(this.getID());
 }
 
@@ -496,7 +508,7 @@ public Collection<Topic> getTopics() throws Exception {
 	return result;
 }
 
-protected JSONObject getView() throws Exception {
+@Override protected JSONObject getView() throws Exception {
 	return HypertopicMap.this.db.get("viewpoint/" + this.getID())
 		.getJSONObject(this.getID());
 }
@@ -556,8 +568,8 @@ public Topic(String id) {
 	super(id);
 }
 
-protected String getViewpointID() {
-	return Viewpoint.this.getID();
+protected Viewpoint getViewpoint() {
+	return Viewpoint.this;
 }
 
 public Collection<Topic> getNarrower() throws Exception {
@@ -581,20 +593,24 @@ public Collection<Topic> getBroader() throws Exception {
  * Precondition: narrower topics graph must be acyclic.
  */
 public Collection<Corpus.Item> getItems() throws Exception {
-	Collection<Corpus.Item> result = new HashSet<Corpus.Item>();
-	JSONObject topic = this.getView();
-	for (JSONObject item : topic.getAllJSONObjects("item")) {
-		result.add(
-			HypertopicMap.this.getItem(item)
-		);
+	try {
+		Collection<Corpus.Item> result = new HashSet<Corpus.Item>();
+		JSONObject topic = this.getView();
+		for (JSONObject item : topic.getAllJSONObjects("item")) {
+			result.add(
+				HypertopicMap.this.getItem(item)
+			);
+		}
+		for (JSONObject narrower: topic.getAllJSONObjects("narrower")) {
+			result.addAll(
+				Viewpoint.this.getTopic(narrower)
+					.getItems()
+			);
+		}
+		return result;
+	} catch (JSONException e) {
+		return new ArrayList();
 	}
-	for (JSONObject narrower : topic.getAllJSONObjects("narrower")) {
-		result.addAll(
-			Viewpoint.this.getTopic(narrower)
-				.getItems()
-		);
-	}
-	return result;
 }
 
 /**
@@ -602,27 +618,31 @@ public Collection<Corpus.Item> getItems() throws Exception {
  * Precondition: narrower topics graph must be acyclic.
  */
 public Collection<Corpus.Item.Highlight> getHighlights() throws Exception {
-	Collection<Corpus.Item.Highlight> result =
-		new HashSet<Corpus.Item.Highlight>();
-	JSONObject topic = this.getView();
-	for (JSONObject highlight : topic.getAllJSONObjects("highlight")) {
-		result.add(
-			HypertopicMap.this.getHighlight(highlight)
-		);
+	try {
+		Collection<Corpus.Item.Highlight> result =
+			new HashSet<Corpus.Item.Highlight>();
+		JSONObject topic = this.getView();
+		for (JSONObject highlight: topic.getAllJSONObjects("highlight")) {
+			result.add(
+				HypertopicMap.this.getHighlight(highlight)
+			);
+		}
+		for (JSONObject narrower: topic.getAllJSONObjects("narrower")) {
+			result.addAll(
+				Viewpoint.this.getTopic(narrower)
+					.getHighlights()
+			);
+		}
+		return result;
+	} catch (JSONException e) {
+		return new ArrayList();
 	}
-	for (JSONObject narrower : topic.getAllJSONObjects("narrower")) {
-		result.addAll(
-			Viewpoint.this.getTopic(narrower)
-				.getHighlights()
-		);
-	}
-	return result;
 }
 
 /**
  * @return an object with broader, narrower and name
  */
-protected JSONObject getView() throws Exception {
+@Override protected JSONObject getView() throws Exception {
 	return Viewpoint.this.getView()
 		.getJSONObject(this.getID());
 }
@@ -685,5 +705,9 @@ public void linkTopics(Topic... narrowerTopics) throws Exception {
 }//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Topic
 
 }//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Viewpoint
+
+@Override public String toString() {
+	return this.db.toString();
+}
 
 }//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< HypertopicMap
