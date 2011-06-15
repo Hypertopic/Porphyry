@@ -142,7 +142,7 @@ public Named(String id) {
 }
 
 public String getName() throws Exception {
-	return this.getView().getString("name");
+	return this.getView().optString("name");
 }
 
 }//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Named

@@ -10,10 +10,10 @@ private final JSONObject object = new JSONObject();
 
 @Before public void setUp() throws Exception {
 	// {"A":{}, "B":["one","two","three"]}
-	this.object.append("A", new JSONObject());
-	this.object.append("B", "one");
-	this.object.append("B", "two");
-	this.object.append("B", "three");
+	this.object.accumulate("A", new JSONObject());
+	this.object.accumulate("B", "one");
+	this.object.accumulate("B", "two");
+	this.object.accumulate("B", "three");
 }
 
 @Test public void getAllJSONObjects() throws Exception {

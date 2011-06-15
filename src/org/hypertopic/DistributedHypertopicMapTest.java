@@ -40,7 +40,6 @@ private HypertopicMap distributedMap = new DistributedHypertopicMap(
 @Test public void getCorpusItems() throws Exception {
 	Collection<HypertopicMap.Corpus.Item> items = 
 		this.distributedMap.getCorpus("MISS").getItems();
-	System.out.println(items); //DEBUG
 	assertFalse(items.isEmpty());
 }
 
@@ -55,6 +54,7 @@ private HypertopicMap distributedMap = new DistributedHypertopicMap(
 		.getViewpoint("446d798e240d4dee5a552b902ae56c8d")
 		.getTopic("70551d9a197a874cb76372c789be629e")
 		.getHighlights();
+	//System.out.println(h); //DEBUG
 	assertFalse(h.isEmpty());
 }
 

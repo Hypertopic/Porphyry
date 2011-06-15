@@ -91,7 +91,7 @@ public synchronized JSONObject get(String query) throws Exception {
 				Iterator<String> v = value.keys();
 				while (v.hasNext()) {
 					String attribute = v.next();
-					current.accumulate(
+					current.justAccumulate(
 						attribute,
 						value.get(attribute)
 					);
