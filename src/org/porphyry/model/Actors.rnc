@@ -1,8 +1,0 @@
-element actors {
-	attribute href {xsd:anyURI}?,
-	element actor {
-		attribute href {xsd:anyURI},
-		text
-	}*
-}
-

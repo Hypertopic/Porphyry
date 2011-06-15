@@ -2,37 +2,10 @@
 	Ant file [http://ant.apache.org/] 
 	List targets: ant -projecthelp
 -->
-<project name="Porphyry v5" default="run">
+<project name="Porphyry v6" default="test">
 
-	<target name="prepare">
-		<mkdir dir="build/org/porphyry/model"/>
-	</target>
-	
-	<target name="convert-schemas" depends="prepare">
-		<java jar="trang.jar" fork="true">
-			<arg value="src/org/porphyry/model/Actor.rnc"/>
-			<arg value="build/org/porphyry/model/Actor.xsd"/>
-		</java>
-		<java jar="trang.jar" fork="true">
-			<arg value="src/org/porphyry/model/Actors.rnc"/>
-			<arg value="build/org/porphyry/model/Actors.xsd"/>
-		</java>
-		<java jar="trang.jar" fork="true">
-			<arg value="src/org/porphyry/model/Entity.rnc"/>
-			<arg value="build/org/porphyry/model/Entity.xsd"/>
-		</java>
-		<java jar="trang.jar" fork="true">
-			<arg value="src/org/porphyry/model/Viewpoint.rnc"/>
-			<arg value="build/org/porphyry/model/Viewpoint.xsd"/>
-		</java>
-		<java jar="trang.jar" fork="true">
-			<arg value="src/org/porphyry/model/Topic.rnc"/>
-			<arg value="build/org/porphyry/model/Topic.xsd"/>
-		</java>		
-
-	</target>
-
-	<target name="compile" depends="prepare" description="Compile application sources">
+	<target name="compile" description="Compile application sources">
+		<mkdir dir="build" />
 		<unjar dest="build">
 			<fileset dir="lib" includes="*.jar" />
 			<patternset includes="org/**" /> 
@@ -40,7 +13,6 @@
 		<javac srcdir="src" destdir="build" classpath="junit.jar"/>
 		<copy todir="build">
 			<fileset dir="src" includes="**/*.properties"/> 
-			<fileset dir="src" includes="**/*.xsd"/> 
 		</copy>
 	</target>
 
@@ -57,8 +29,8 @@
 		</junit> 
 	</target> 
 
-	<target name="run" depends="compile,convert-schemas" description="Start application">
-		<java classname="org.porphyry.view.Portfolio" 
+	<target name="run" depends="compile" description="Start application">
+		<java classname="org.porphyry.controller.Start" 
 			classpath="build" fork="true">
 			<arg value="http://localhost/"/>
 			<jvmarg value="-Xdock:name=Porphyry"/>
@@ -67,12 +39,12 @@
 		</java>
 	</target>
 		 
-	<target name="dist" depends="compile,convert-schemas"
+	<target name="dist" depends="compile"
 		description="Create a signed jar (-Duser=XXX -Dpass=XXX)" >
 		<mkdir dir="manifest"/>
 		<manifest file="manifest/CLIENT.MF">
 			<attribute name="Main-Class" 
-				value="org.porphyry.view.Portfolio"/>
+				value="org.porphyry.controller.Start"/>
 		</manifest>
 		<mkdir dir="dist"/>
 		<jar jarfile="dist/Porphyry.jar" 
