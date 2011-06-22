@@ -83,6 +83,7 @@ public void openViewpoint(String viewpointID) {
 	this.cache = null;
 }
 
+//TODO should unselect topics in it
 public void closeViewpoint(String viewpointID) {
 	this.openedViewpoints.remove(
 		this.map.getViewpoint(viewpointID)
@@ -127,38 +128,48 @@ public ItemSet getSelectedItemSet() throws Exception {
 }
 
 
-public Set<Topic> getTopics(HypertopicMap.Viewpoint viewpoint) throws Exception
+public Set<Topic> getTopics() throws Exception
 { 
 	Set<Topic> result = new TreeSet();
 	ItemSet globalSet = this.getSelectedItemSet();
 	int globalItemsCount = globalSet.countItems();
 	int globalHighlightsCount = globalSet.countHighlights();
-	for (HypertopicMap.Viewpoint.Topic t : viewpoint.getTopics()) {
-		ItemSet localSet = new ItemSet(t);
-		localSet.retainAll(globalSet);
-		result.add(
-			new Topic(
-				t.getName(), 
-				localSet,
-				globalItemsCount,
-				globalHighlightsCount
-			)
-		);
+	for (HypertopicMap.Viewpoint v : this.openedViewpoints) {
+		for (HypertopicMap.Viewpoint.Topic t : v.getTopics()) {
+			ItemSet localSet = new ItemSet(t);
+			localSet.retainAll(globalSet);
+			result.add(
+				new Topic(
+					v.getID(),
+					t.getID(),
+					t.getName(),
+					localSet,
+					globalItemsCount,
+					globalHighlightsCount
+				)
+			);
+		}
 	}
 	return result;
 }
 
 class Topic {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
+private String viewpointID;
+private String topicID;
 private final String name;
 private final double ratio[] = {0, 0};
 
 public Topic(
+	String viewpointID,
+	String topicID,
 	String name,
 	ItemSet localSet,
 	int globalItemsCount, 
 	int globalHighlightsCount
 ) {
+	this.viewpointID = viewpointID;
+	this.topicID = topicID;
 	this.name = name;
 	this.ratio[0] = 
 		ratio(localSet.countItems(), globalItemsCount);
@@ -176,6 +187,18 @@ public double getRatio(int level) {
 
 public String getName() {
 	return this.name;
+}
+
+public String getViewpointID() {
+	return this.viewpointID;
+}
+
+public String getTopicID() {
+	return this.topicID;
+}
+
+@Override public String toString() {
+	return this.name + "(" + this.ratio[0] + "," + this.ratio[1] + ")";
 }
 
 }//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Topic

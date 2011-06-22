@@ -22,6 +22,7 @@ package org.porphyry.model;
 import org.hypertopic.*;
 import org.json.JSONArray;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.awt.Rectangle;
 
 /**
@@ -123,11 +124,21 @@ public Collection<Item.Highlight> getHighlights() {
 	return result;
 }
 
+@Override public String toString() {
+	String s = "";
+	for (Item i: this.items.values()) {
+		s += i;
+	}
+	return s;
+}
+
 class Item {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 private final String id;
 private final String name;
-private final Set<Highlight> highlights = new HashSet();
+private final Set<Highlight> highlights = Collections.newSetFromMap(
+	new ConcurrentHashMap()
+);
 
 public Item(String id, String name) {
 	this.id = id;
@@ -140,6 +151,10 @@ public Item(HypertopicMap.Corpus.Item item) throws Exception {
 
 public String getID() {
 	return this.id;
+}
+
+public String getName() {
+	return this.name;
 }
 
 public int size() {
@@ -193,6 +208,8 @@ public void join(Item that) {
 	}
 }
 
+// TODO check if the need for a concurrent hashset is not due to an overcomplex
+// algorithm.
 public void retainAll(Item that) {
 	Iterator<Highlight> h = this.highlights.iterator();
 	while (h.hasNext()) {
@@ -222,7 +239,11 @@ public Collection<Highlight> getHighlights() {
 }
 
 @Override public String toString() {
-	return this.name;
+	String s = "==" + this.name + "==\n";
+	for (Highlight h: this.getHighlights()) {
+		s += h + "\n";
+	}
+	return s;
 }
 
 /**

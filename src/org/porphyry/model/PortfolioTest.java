@@ -31,24 +31,51 @@ private Portfolio portfolio = new Portfolio(
 	"http://127.0.0.1/~benel/cassandre/"
 );
 
-@Test public void openCorpus() throws Exception {
+@Test public void getSelectedItems() throws Exception {
 	this.portfolio.openCorpus("MISS");
-	ItemSet s = this.portfolio.getSelectedItemSet();
-	assertTrue(s.countItems()>0);
-	assertEquals(0, s.countHighlights());
+	int total = this.portfolio.getSelectedItemSet().countItems();
+	assertTrue(total>0);
+	this.portfolio.openViewpoint("446d798e240d4dee5a552b902ae56c8d");
+	this.portfolio.toggleTopic(
+		"446d798e240d4dee5a552b902ae56c8d",
+		"70551d9a197a874cb76372c789be629e"
+	);
+	assertTrue(this.portfolio.getSelectedItemSet().countItems()<total);
 }
 
-@Test public void toggleTopic() throws Exception {
+@Test public void getSelectedHighlights() throws Exception {
 	this.portfolio.openCorpus("MISS");
+	assertEquals(0, this.portfolio.getSelectedItemSet().countHighlights());
 	this.portfolio.openViewpoint("446d798e240d4dee5a552b902ae56c8d");
-	int total = this.portfolio.getSelectedItemSet().countItems();
 	this.portfolio.toggleTopic(
 		"446d798e240d4dee5a552b902ae56c8d", 
 		"70551d9a197a874cb76372c789be629e"
 	);
-	ItemSet s = this.portfolio.getSelectedItemSet();
-	assertTrue(s.countItems()<total);
-	assertTrue(s.countHighlights()>0);
+	assertTrue(this.portfolio.getSelectedItemSet().countHighlights()>0);
+}
+
+@Test public void getTopicsRatios() throws Exception {
+	this.portfolio.openCorpus("MISS");
+	this.portfolio.openViewpoint("446d798e240d4dee5a552b902ae56c8d");
+	for (Portfolio.Topic t : this.portfolio.getTopics()) {
+		assertTrue(t.getRatio(0)<1);
+		assertTrue(t.getRatio(1)==0);
+	}
+	this.portfolio.toggleTopic(
+		"446d798e240d4dee5a552b902ae56c8d",
+		"70551d9a197a874cb76372c789be629e"
+	);
+	for (Portfolio.Topic t : this.portfolio.getTopics()) {
+		if (
+			"446d798e240d4dee5a552b902ae56c8d"
+				.equals(t.getViewpointID())
+			&& "70551d9a197a874cb76372c789be629e"
+				.equals(t.getTopicID())
+		) {
+			assertTrue(t.getRatio(0)==1);
+			assertTrue(t.getRatio(1)==1);
+		}
+	}
 }
 
 }//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< PortfolioTest
