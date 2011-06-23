@@ -83,11 +83,17 @@ public void openViewpoint(String viewpointID) {
 	this.cache = null;
 }
 
-//TODO should unselect topics in it
 public void closeViewpoint(String viewpointID) {
 	this.openedViewpoints.remove(
 		this.map.getViewpoint(viewpointID)
 	);
+	Iterator<HypertopicMap.Viewpoint.Topic> t = 
+		this.selectedTopics.iterator();
+	while (t.hasNext()) {
+		if (t.next().getViewpointID().equals(viewpointID)) {
+			t.remove();
+		}
+	}
 	this.cache = null;
 }
 
@@ -128,8 +134,7 @@ public ItemSet getSelectedItemSet() throws Exception {
 }
 
 
-public Set<Topic> getTopics() throws Exception
-{ 
+public Set<Topic> getTopics() throws Exception { 
 	Set<Topic> result = new TreeSet();
 	ItemSet globalSet = this.getSelectedItemSet();
 	int globalItemsCount = globalSet.countItems();
@@ -153,7 +158,7 @@ public Set<Topic> getTopics() throws Exception
 	return result;
 }
 
-class Topic {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+public class Topic {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 private String viewpointID;
 private String topicID;

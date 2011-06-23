@@ -127,7 +127,7 @@ public Topic(String id) {
 	Collection result = super.getHighlights();
 	for (HypertopicMap m : DistributedHypertopicMap.this.secondary) {
 		result.addAll(
-			m.getViewpoint(this.getViewpoint().getID())
+			m.getViewpoint(this.getViewpointID())
 				.getTopic(this.getID())
 				.getHighlights()
 		);

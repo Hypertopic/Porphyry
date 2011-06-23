@@ -19,8 +19,6 @@ http://www.gnu.org/licenses/gpl.html
 
 package org.porphyry.model;
 
-import java.util.*;
-import org.json.*;
 import org.junit.*;
 import static org.junit.Assert.*;
 
@@ -41,6 +39,8 @@ private Portfolio portfolio = new Portfolio(
 		"70551d9a197a874cb76372c789be629e"
 	);
 	assertTrue(this.portfolio.getSelectedItemSet().countItems()<total);
+	this.portfolio.closeViewpoint("446d798e240d4dee5a552b902ae56c8d");
+	assertEquals(total, this.portfolio.getSelectedItemSet().countItems());
 }
 
 @Test public void getSelectedHighlights() throws Exception {
@@ -52,6 +52,8 @@ private Portfolio portfolio = new Portfolio(
 		"70551d9a197a874cb76372c789be629e"
 	);
 	assertTrue(this.portfolio.getSelectedItemSet().countHighlights()>0);
+	this.portfolio.closeViewpoint("446d798e240d4dee5a552b902ae56c8d");
+	assertEquals(0, this.portfolio.getSelectedItemSet().countHighlights());
 }
 
 @Test public void getTopicsRatios() throws Exception {
@@ -76,6 +78,8 @@ private Portfolio portfolio = new Portfolio(
 			assertTrue(t.getRatio(1)==1);
 		}
 	}
+	this.portfolio.closeViewpoint("446d798e240d4dee5a552b902ae56c8d");
+	assertTrue(this.portfolio.getTopics().isEmpty());
 }
 
 }//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< PortfolioTest

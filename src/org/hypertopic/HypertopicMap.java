@@ -310,10 +310,6 @@ public Item(String id) {
 	super(id);
 }
 
-public Corpus getCorpus() {
-	return Corpus.this;
-}
-
 public URL getResource() throws Exception {
 	return new URL(this.getView().getString("resource"));
 }
@@ -384,7 +380,7 @@ public void tag(Viewpoint.Topic topic) throws Exception {
 	JSONObject topics = item.getJSONObjectOrCreate("topics");
 	topics.put(
 		topic.getID(),
-		new JSONObject().put("viewpoint", topic.getViewpoint().getID())
+		new JSONObject().put("viewpoint", topic.getViewpointID())
 	);
 	HypertopicMap.this.db.put(item);
 }
@@ -407,7 +403,7 @@ public Highlight createHighlight(
 		new JSONObject()
 			.put("coordinates", coordinates)
 			.put("text", text)
-			.put("viewpoint", topic.getViewpoint().getID())
+			.put("viewpoint", topic.getViewpointID())
 			.put("topic", topic.getID())
 	);
 	HypertopicMap.this.db.put(item);
@@ -568,8 +564,8 @@ public Topic(String id) {
 	super(id);
 }
 
-protected Viewpoint getViewpoint() {
-	return Viewpoint.this;
+public String getViewpointID() {
+	return Viewpoint.this.getID();
 }
 
 public Collection<Topic> getNarrower() throws Exception {
