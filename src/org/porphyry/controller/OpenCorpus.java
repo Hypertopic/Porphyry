@@ -44,6 +44,7 @@ public OpenCorpus(Portfolio portfolio, String corpus) {
 		for (Portfolio.Topic t : this.get()) {
 			System.out.println(t);
 		} 
+		this.portfolio.notifyObservers();
 	} catch (Exception e) {
 		e.printStackTrace();
 	}

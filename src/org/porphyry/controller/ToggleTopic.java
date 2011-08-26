@@ -46,6 +46,7 @@ public ToggleTopic(Portfolio portfolio, String viewpoint, String topic) {
 		for (Portfolio.Topic t : this.get()) {
 			System.out.println(t);
 		} 
+		this.portfolio.notifyObservers();
 	} catch (Exception e) {
 		e.printStackTrace();
 	}

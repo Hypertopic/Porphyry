@@ -10,18 +10,23 @@
 			<fileset dir="lib" includes="*.jar" />
 			<patternset includes="org/**" /> 
 		</unjar>
-		<javac srcdir="src" destdir="build" classpath="junit.jar"/>
+		<javac srcdir="src" destdir="build" classpath="junit.jar"
+			includeantruntime="false">
+			<!--
+			<compilerarg value="-Xlint"/> 
+			-->
+		</javac>
 		<copy todir="build">
 			<fileset dir="src" includes="**/*.properties"/> 
 		</copy>
 	</target>
 
-	<target name="test" depends="compile" description="Start unit tests"> 
+	<target name="test" depends="compile" description="Start unit tests">
 		<junit>
 			<batchtest> 
 				<fileset dir="build" includes="**/*Test.class"/> 
 			</batchtest> 
-			<formatter type="plain" usefile="false" />
+			<formatter type="brief" usefile="false" />
 			<classpath>
 				  <pathelement location="build" />
 				  <pathelement location="junit.jar" />
@@ -47,11 +52,11 @@
 				value="org.porphyry.controller.Start"/>
 		</manifest>
 		<mkdir dir="dist"/>
-		<jar jarfile="dist/Porphyry.jar" 
+		<jar jarfile="dist/v6.jar" 
 			basedir="build"
 			excludes="**/*Test.class"
 			manifest="manifest/CLIENT.MF"/>
-		<signjar jar="dist/Porphyry.jar"
+		<signjar jar="dist/v6.jar"
 			keystore="${user}.p12" 
 			alias="My key" 
 			storepass="${pass}"
@@ -60,13 +65,7 @@
 
 	<target name="deploy" depends="dist" 
 		description="Publish on SourceForge (-Duser=XXX -Dpass=XXX)">
-<!--
-		<sshexec username="${user},porphyry" password="{$pass}" 
-			host="shell.sourceforge.net" command="create" 
-			trust="yes"
-		/>
--->
-		<scp trust="yes" file="dist/Porphyry.jar" 
+		<scp file="dist/v6.jar" 
 		todir="${user}:${pass}@web.sourceforge.net:/home/groups/p/po/porphyry/htdocs"/>
 	</target>
 	

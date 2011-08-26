@@ -49,6 +49,12 @@ public void update(Observable o, Object arg) {
 	this.notifyObservers();
 }
 
+public Collection<String> getURLs() {
+	Collection<String> c = new ArrayList();
+	c.add(this.db.getURL());
+	return c;
+}
+
 //TODO it is not clear if memory footprint would be reduced or increased by
 //using a cache on getUSer, getViewpoint, getCorpus, getTopic, getItem
 //as that would mean less invocations but also less garbage collecting.

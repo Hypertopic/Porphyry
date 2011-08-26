@@ -39,6 +39,14 @@ public DistributedHypertopicMap(String primary, String... secondary) {
 	}
 }
 
+@Override public Collection<String> getURLs() {
+	Collection<String> c = super.getURLs();
+	for (HypertopicMap m : this.secondary) {
+		c.addAll(m.getURLs());
+	}
+	return c;
+}
+
 public void addSecondary(String service) {
 	this.secondary.add(new HypertopicMap(service));
 }

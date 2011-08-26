@@ -43,6 +43,7 @@ public CloseViewpoint(Portfolio portfolio, String viewpoint) {
 		for (Portfolio.Topic t : this.get()) {
 			System.out.println(t);
 		} 
+		this.portfolio.notifyObservers();
 	} catch (Exception e) {
 		e.printStackTrace();
 	}

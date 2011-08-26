@@ -44,6 +44,10 @@ public RESTDatabase(String baseUrl) {
 	this.baseUrl = baseUrl;
 }
 
+public String getURL() {
+	return this.baseUrl;
+}
+
 /**
  * @param object The object to create on the server.
  * It is updated with an _id 

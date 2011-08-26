@@ -47,13 +47,21 @@ public Portfolio(String primaryService, String... secondaryServices) {
 }
 
 public void update(Observable o, Object arg) {
+	this.invalidateCache();
+	this.notifyObservers();
+}
+
+protected void invalidateCache() {
 	this.setChanged();
 	this.cache = null;
-	this.notifyObservers();
 }
 
 //TODO addSecondary ?
 //TODO removeSecondary ?
+
+public Collection<String> getURLs() {
+	return this.map.getURLs();
+}
 
 public Collection<JSONObject> listCorpora(String userID) throws Exception {
 	return this.map.getUser(userID).listCorpora(); 
@@ -63,14 +71,14 @@ public void openCorpus(String corpusID) {
 	this.openedCorpora.add(
 		this.map.getCorpus(corpusID)
 	);
-	this.cache = null;
+	this.invalidateCache();
 }
 
 public void closeCorpus(String corpusID) {
 	this.openedCorpora.remove(
 		this.map.getCorpus(corpusID)
 	);
-	this.cache = null;
+	this.invalidateCache();
 }
 
 
@@ -80,7 +88,7 @@ public void openViewpoint(String viewpointID) {
 	this.openedViewpoints.add(
 		this.map.getViewpoint(viewpointID)
 	);
-	this.cache = null;
+	this.invalidateCache();
 }
 
 public void closeViewpoint(String viewpointID) {
@@ -94,7 +102,7 @@ public void closeViewpoint(String viewpointID) {
 			t.remove();
 		}
 	}
-	this.cache = null;
+	this.invalidateCache();
 }
 
 public void toggleTopic(String viewpointID, String topicID) {
@@ -105,7 +113,7 @@ public void toggleTopic(String viewpointID, String topicID) {
 	} else {
 		this.selectedTopics.add(topic);
 	}
-	this.cache = null;
+	this.invalidateCache();
 }
 
 public ItemSet getSelectedItemSet() throws Exception {

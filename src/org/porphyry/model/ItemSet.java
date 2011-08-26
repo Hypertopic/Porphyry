@@ -132,7 +132,7 @@ public Collection<Item.Highlight> getHighlights() {
 	return s;
 }
 
-class Item {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+public class Item {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 private final String id;
 private final String name;
@@ -249,7 +249,7 @@ public Collection<Highlight> getHighlights() {
 /**
  * Highlights stored in the server or computed from joins.
  */
-abstract class Highlight {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+public abstract class Highlight {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 public Item getItem() {
 	return Item.this;
