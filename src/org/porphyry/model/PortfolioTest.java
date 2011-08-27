@@ -59,7 +59,7 @@ private Portfolio portfolio = new Portfolio(
 @Test public void getTopicsRatios() throws Exception {
 	this.portfolio.openCorpus("MISS");
 	this.portfolio.openViewpoint("446d798e240d4dee5a552b902ae56c8d");
-	for (Portfolio.Topic t : this.portfolio.getTopics()) {
+	for (Portfolio.Viewpoint.Topic t : this.portfolio.getTopics()) {
 		assertTrue(t.getRatio(0)<1);
 		assertTrue(t.getRatio(1)==0);
 	}
@@ -67,12 +67,12 @@ private Portfolio portfolio = new Portfolio(
 		"446d798e240d4dee5a552b902ae56c8d",
 		"70551d9a197a874cb76372c789be629e"
 	);
-	for (Portfolio.Topic t : this.portfolio.getTopics()) {
+	for (Portfolio.Viewpoint.Topic t : this.portfolio.getTopics()) {
 		if (
 			"446d798e240d4dee5a552b902ae56c8d"
-				.equals(t.getViewpointID())
+				.equals(t.getViewpoint().getID())
 			&& "70551d9a197a874cb76372c789be629e"
-				.equals(t.getTopicID())
+				.equals(t.getID())
 		) {
 			assertTrue(t.getRatio(0)==1);
 			assertTrue(t.getRatio(1)==1);

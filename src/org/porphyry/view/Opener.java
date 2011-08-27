@@ -27,13 +27,13 @@ import java.util.Collection;
 import org.json.JSONObject;
 import org.porphyry.controller.OpenCorpus;
 
-public class Opener extends JDialog {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+public abstract class Opener extends JDialog {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-private Portfolio portfolio;
-private Box rightPanel = Box.createVerticalBox();
-private Box leftPanel = Box.createVerticalBox();
-private JSONList corporaView;
-private final String USER = "aurelien@hypertopic.org"; //TODO
+private final Portfolio portfolio;
+private final Box rightPanel = Box.createVerticalBox();
+private final Box leftPanel = Box.createVerticalBox();
+private final JSONList listView;
+final DefaultListModel listModel = new DefaultListModel();
 
 public Opener(Portfolio portfolio) {
 	super(portfolio, portfolio.localize("OPEN_CORPORA"));
@@ -46,29 +46,27 @@ public Opener(Portfolio portfolio) {
 		)
 	);
 	org.porphyry.model.Portfolio model = portfolio.getModel();
-	DefaultListModel corpora = new DefaultListModel();
 	try {
-		for (JSONObject o : model.listCorpora(USER)) {
-			corpora.addElement(o);
-		}
+		this.populateList(model);
 	} catch (Exception e) {
 		e.printStackTrace(); //TODO
 	}
-	this.corporaView = new JSONList(corpora);
-	this.display(this.corporaView, JSplitPane.RIGHT);
+	this.listView = new JSONList(listModel);
+	this.display(this.listView, JSplitPane.RIGHT);
 
 	this.display(new ActionButton("CANCEL", false), JSplitPane.RIGHT);
 	this.display(
 		new ActionButton("OPEN", true) {
 			@Override public void onClick() {
-				Object[] selection = Opener.this.corporaView
-					.getSelectedValues();
-				for (Object o : selection) {
-					new OpenCorpus(
-						Opener.this.portfolio
-							.getModel(), 
-						((JSONObject) o).optString("id")
-					).execute();
+				for (
+					Object o : 
+					Opener.this.listView.getSelectedValues()
+				) {
+					Opener.this.open(
+						((JSONObject) o)
+							.optString("id"),
+						Opener.this.portfolio.getModel()
+					);
 				}
 				super.onClick();
 			}
@@ -79,6 +77,11 @@ public Opener(Portfolio portfolio) {
 	this.setBounds(0, 0, 640, 480);
 	this.setVisible(true);
 }
+
+protected abstract void populateList(org.porphyry.model.Portfolio model) 
+	throws Exception;
+
+protected abstract void open(String id, org.porphyry.model.Portfolio model);
 
 protected void displayHeader(String key, String side) {
 	this.displayStrut(6, side);
@@ -167,3 +170,4 @@ public void onClick() {
 }//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< ActionButton
 
 }//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Opener
+

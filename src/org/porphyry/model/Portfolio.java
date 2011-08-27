@@ -81,8 +81,29 @@ public void closeCorpus(String corpusID) {
 	this.invalidateCache();
 }
 
-
-//TODO related viewpoints?
+//TODO cache?
+public Collection<JSONObject> listRelatedViewpoints() throws Exception {
+	Set<String> identifiers = new HashSet();
+	for (HypertopicMap.Corpus c : this.openedCorpora) {
+		for (HypertopicMap.Corpus.Item i : c.getItems()) {
+			for (HypertopicMap.Viewpoint.Topic t : i.getTopics()) {
+				identifiers.add(t.getViewpointID());	
+			}
+			for (
+				HypertopicMap.Corpus.Item.Highlight h : 
+				i.getHighlights()
+			) {
+				identifiers.add(h.getTopic().getViewpointID());	
+			}
+		}
+	}
+	Collection<JSONObject> result = new ArrayList();
+	for (String id : identifiers) {
+		//TODO request name
+		result.add(new JSONObject("{\"id\":\""+id+"\",\"name\":\""+id+"\"}"));
+	}
+	return result;
+}
 
 public void openViewpoint(String viewpointID) {
 	this.openedViewpoints.add(
@@ -141,47 +162,82 @@ public ItemSet getSelectedItemSet() throws Exception {
 	return this.cache;
 }
 
-
-public Set<Topic> getTopics() throws Exception { 
-	Set<Topic> result = new TreeSet();
-	ItemSet globalSet = this.getSelectedItemSet();
-	int globalItemsCount = globalSet.countItems();
-	int globalHighlightsCount = globalSet.countHighlights();
+public Collection<Viewpoint> getViewpoints() throws Exception {
+	Collection<Viewpoint> result = new ArrayList();
 	for (HypertopicMap.Viewpoint v : this.openedViewpoints) {
-		for (HypertopicMap.Viewpoint.Topic t : v.getTopics()) {
-			ItemSet localSet = new ItemSet(t);
-			localSet.retainAll(globalSet);
-			result.add(
-				new Topic(
-					v.getID(),
-					t.getID(),
-					t.getName(),
-					localSet,
-					globalItemsCount,
-					globalHighlightsCount
-				)
-			);
-		}
+		result.add(
+			new Viewpoint(v)
+		);
 	}
 	return result;
 }
 
-public class Topic {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+public Set<Viewpoint.Topic> getTopics() throws Exception { 
+	Set<Viewpoint.Topic> result = new TreeSet();
+	for (HypertopicMap.Viewpoint v : this.openedViewpoints) {
+		result.addAll(new Viewpoint(v).getTopics());
+	}
+	return result;
+}
 
-private String viewpointID;
+public String getUser() {
+	return  "nadia@hypertopic.org"; //TODO
+}
+
+public class Viewpoint {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+private final HypertopicMap.Viewpoint data;
+
+public Viewpoint(HypertopicMap.Viewpoint data) {
+	this.data = data; // TODO copy data instead?
+}
+
+public String getID() {
+	return this.data.getID();
+}
+
+public String getName() throws Exception {
+	return this.data.getName();
+}
+
+public Collection<String> listUsers() throws Exception {
+	return this.data.listUsers();
+}
+
+public Set<Topic> getTopics() throws Exception { 
+	Set<Topic> result = new TreeSet();
+	ItemSet globalSet = Portfolio.this.getSelectedItemSet();
+	int globalItemsCount = globalSet.countItems();
+	int globalHighlightsCount = globalSet.countHighlights(); //TODO cache?
+	for (HypertopicMap.Viewpoint.Topic t : this.data.getTopics()) {
+		ItemSet localSet = new ItemSet(t);
+		localSet.retainAll(globalSet);
+		result.add(
+			new Topic(
+				t.getID(),
+				t.getName(),
+				localSet,
+				globalItemsCount,
+				globalHighlightsCount
+			)
+		);
+	}
+	return result;
+}
+
+public class Topic implements Comparable<Topic> {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
 private String topicID;
 private final String name;
 private final double ratio[] = {0, 0};
 
 public Topic(
-	String viewpointID,
 	String topicID,
 	String name,
 	ItemSet localSet,
 	int globalItemsCount, 
 	int globalHighlightsCount
 ) {
-	this.viewpointID = viewpointID;
 	this.topicID = topicID;
 	this.name = name;
 	this.ratio[0] = 
@@ -202,12 +258,20 @@ public String getName() {
 	return this.name;
 }
 
-public String getViewpointID() {
-	return this.viewpointID;
+public String getID() {
+	return this.topicID;
 }
 
-public String getTopicID() {
-	return this.topicID;
+public Viewpoint getViewpoint() {
+	return Viewpoint.this;
+}
+
+public Portfolio getPortfolio() {
+	return Portfolio.this;
+}
+
+@Override public int compareTo(Topic that) {
+	return this.name.compareTo(that.name);
 }
 
 @Override public String toString() {
@@ -215,5 +279,7 @@ public String getTopicID() {
 }
 
 }//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Topic
+
+}//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Viewpoint
 
 }//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Portfolio

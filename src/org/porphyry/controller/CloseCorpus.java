@@ -23,7 +23,9 @@ import java.util.*;
 import javax.swing.*;
 import org.porphyry.model.*;
 
-public class CloseCorpus extends SwingWorker <Set<Portfolio.Topic>,Void> {//>>>>
+public class CloseCorpus 
+	extends SwingWorker <Set<Portfolio.Viewpoint.Topic>,Void> 
+{//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 private String corpus;
 private Portfolio portfolio;
@@ -33,7 +35,9 @@ public CloseCorpus(Portfolio portfolio, String corpus) {
 	this.portfolio = portfolio;
 }
 
-@Override protected Set<Portfolio.Topic> doInBackground() throws Exception {
+@Override protected Set<Portfolio.Viewpoint.Topic> doInBackground() 
+	throws Exception 
+{
 	this.portfolio.closeCorpus(this.corpus);
 	return this.portfolio.getTopics();
 }
@@ -41,7 +45,7 @@ public CloseCorpus(Portfolio portfolio, String corpus) {
 @Override public void done() {
 	try {
 		System.out.println(this.portfolio.getSelectedItemSet());
-		for (Portfolio.Topic t : this.get()) {
+		for (Portfolio.Viewpoint.Topic t : this.get()) {
 			System.out.println(t);
 		} 
 		this.portfolio.notifyObservers();

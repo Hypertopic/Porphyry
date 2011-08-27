@@ -20,14 +20,21 @@ http://www.gnu.org/licenses/gpl.html
 package org.porphyry.view;
 
 import java.util.*;
+import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import org.porphyry.model.ItemSet;
+import org.porphyry.model.*;
+import org.porphyry.controller.ToggleTopic;
+
+//TODO change name to simplify references to model.Portfolio
 
 public class Portfolio extends JFrame implements Observer {//>>>>>>>>>>>>>>>>>>>
 
 private org.porphyry.model.Portfolio model;
 private final JTabbedPane corporaPanel = new JTabbedPane(JTabbedPane.BOTTOM);
+private final Box viewpointsPanel = new Box(BoxLayout.Y_AXIS);
+private final JPanel itemsPanel = new ScrollablePanel();
+private final JPanel highlightsPanel = new ScrollablePanel();
 
 public Portfolio(org.porphyry.model.Portfolio model) {
 	super(localize("PORTFOLIO"));
@@ -36,15 +43,25 @@ public Portfolio(org.porphyry.model.Portfolio model) {
 		new Menu("PORTFOLIO").addAll(
 			new MenuItem("OPEN_CORPORA") {
 				void run() {
-					new Opener(Portfolio.this);
+					new CorporaOpener(Portfolio.this);
+				}
+			},
+			new MenuItem("OPEN_VIEWPOINTS") {
+				void run() {
+					new ViewpointsOpener(Portfolio.this);
 				}
 			}
+
 		)
-			
 	);
-	this.addTab("SOURCES");
-	this.addTab("HIGHLIGHTS");
-	this.add(this.corporaPanel);
+	JSplitPane main = new JSplitPane(
+		JSplitPane.HORIZONTAL_SPLIT,
+		this.viewpointsPanel,
+		this.corporaPanel
+	);
+	this.addTab(this.itemsPanel, "SOURCES");
+	this.addTab(this.highlightsPanel, "HIGHLIGHTS");
+	this.setContentPane(main);
 	model.addObserver(this);
 }
 
@@ -53,20 +70,27 @@ public Portfolio(org.porphyry.model.Portfolio model) {
 		ItemSet s = this.model.getSelectedItemSet();
 		this.setTabTitle(0, "SOURCES", s.countItems());
 		this.setTabTitle(1, "HIGHLIGHTS", s.countHighlights());
-		JPanel itemsPanel = 
-			(JPanel) this.corporaPanel.getComponentAt(0);
-		JPanel highlightsPanel = 
-			(JPanel) this.corporaPanel.getComponentAt(1);
 		//TODO updating and/or hiding instead of starting from scratch?
-		itemsPanel.removeAll();
-		highlightsPanel.removeAll();
+		this.itemsPanel.removeAll();
+		this.highlightsPanel.removeAll();
 		for (ItemSet.Item i : s.getItems()) {
-			itemsPanel.add(new JLabel(i.getName()));
+			this.itemsPanel.add(new JLabel(i.getName()));
 			for (ItemSet.Item.Highlight h : i.getHighlights()) {
 				//TODO handle PictureHighlight
-				highlightsPanel.add(new JLabel(h.toString()));
+				this.highlightsPanel.add(
+					new JLabel(h.toString())
+				);
 			}
 		}
+		this.viewpointsPanel.removeAll();
+		for (
+			org.porphyry.model.Portfolio.Viewpoint.Topic t :
+			this.model.getTopics()
+		) {
+			this.viewpointsPanel.add(new TopicLabel(t));
+		}
+		this.viewpointsPanel.validate();
+		this.viewpointsPanel.repaint();
 	} catch (Exception e) {
 		e.printStackTrace(); //TODO
 	}
@@ -79,8 +103,16 @@ protected void setTabTitle(int index, String key, int count) {
 	);
 }
 
-protected void addTab(String key) {
-	this.corporaPanel.add(this.localize(key) + " (0)", new JPanel());
+protected void addTab(JPanel panel, String key) {
+	panel.setLayout(new WrapLayout());
+	this.corporaPanel.add(
+		this.localize(key) + " (0)", 
+		new JScrollPane(
+			panel,
+			JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, 
+			JScrollPane.HORIZONTAL_SCROLLBAR_NEVER
+		)
+	);
 }
 
 protected void setMenus(Menu... menus) {
@@ -135,5 +167,47 @@ public MenuItem(String s) {
 abstract void run();
 
 }//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< MenuItem
+
+/**
+ * JPanel that can be resized in a vertical JScrollPane.
+ */
+class ScrollablePanel extends JPanel {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+@Override public Dimension getPreferredSize() {
+	Container parent = this.getParent();
+	return new Dimension(
+		parent.getWidth(), 
+		Math.max(
+			super.getPreferredSize().height,
+			parent.getHeight()
+		)
+	);
+}
+
+}//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< ScrollablePanel
+
+class TopicLabel extends JLabel {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+private org.porphyry.model.Portfolio.Viewpoint.Topic model;
+
+public TopicLabel(org.porphyry.model.Portfolio.Viewpoint.Topic model) {
+	super(model.toString());
+	this.model = model;
+	this.addMouseListener(
+		new MouseAdapter() {
+			@Override public void mouseClicked(MouseEvent e) {
+				org.porphyry.model.Portfolio.Viewpoint.Topic 
+					model = TopicLabel.this.model;
+				new ToggleTopic(
+					model.getPortfolio(), 
+					model.getViewpoint().getID(), 
+					model.getID()
+				).execute();
+			}
+		}
+	);
+}
+
+}//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< TopicLabel
 
 }//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Portfolio

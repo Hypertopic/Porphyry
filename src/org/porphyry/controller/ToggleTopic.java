@@ -23,7 +23,9 @@ import java.util.*;
 import javax.swing.*;
 import org.porphyry.model.*;
 
-public class ToggleTopic extends SwingWorker <Set<Portfolio.Topic>,Void> {//>>>>
+public class ToggleTopic
+	extends SwingWorker <Set<Portfolio.Viewpoint.Topic>,Void>
+{//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 private String viewpoint;
 private String topic;
@@ -35,7 +37,9 @@ public ToggleTopic(Portfolio portfolio, String viewpoint, String topic) {
 	this.portfolio = portfolio;
 }
 
-@Override protected Set<Portfolio.Topic> doInBackground() throws Exception {
+@Override protected Set<Portfolio.Viewpoint.Topic> doInBackground() 
+	throws Exception
+{
 	this.portfolio.toggleTopic(this.viewpoint, this.topic);
 	return this.portfolio.getTopics();
 }
@@ -43,7 +47,7 @@ public ToggleTopic(Portfolio portfolio, String viewpoint, String topic) {
 @Override public void done() {
 	try {
 		System.out.println(this.portfolio.getSelectedItemSet());
-		for (Portfolio.Topic t : this.get()) {
+		for (Portfolio.Viewpoint.Topic t : this.get()) {
 			System.out.println(t);
 		} 
 		this.portfolio.notifyObservers();

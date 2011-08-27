@@ -191,5 +191,13 @@ private HypertopicMap.Viewpoint.Topic otherTopic;
 	assertEquals("my item", this.item.getName());
 }
 
+@Test public void getItemTopics() throws Exception {
+	assertEquals(1, this.item.getTopics().size());
+}
+
+@Test public void getHighlightTopics() throws Exception {
+	assertEquals(this.childTopic, this.highlight.getTopic());
+}
+
 }//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< HypertopicMapTest
 

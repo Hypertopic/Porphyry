@@ -23,7 +23,9 @@ import java.util.*;
 import javax.swing.*;
 import org.porphyry.model.*;
 
-public class OpenViewpoint extends SwingWorker <Set<Portfolio.Topic>,Void> {//>>
+public class OpenViewpoint
+	extends SwingWorker <Set<Portfolio.Viewpoint.Topic>,Void>
+{//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 private String viewpoint;
 private Portfolio portfolio;
@@ -33,14 +35,16 @@ public OpenViewpoint(Portfolio portfolio, String viewpoint) {
 	this.portfolio = portfolio;
 }
 
-@Override protected Set<Portfolio.Topic> doInBackground() throws Exception {
+@Override protected Set<Portfolio.Viewpoint.Topic> doInBackground()
+	throws Exception
+{
 	this.portfolio.openViewpoint(this.viewpoint);
 	return this.portfolio.getTopics();
 }
 
 @Override public void done() {
 	try {
-		for (Portfolio.Topic t : this.get()) {
+		for (Portfolio.Viewpoint.Topic t : this.get()) {
 			System.out.println(t);
 		} 
 		this.portfolio.notifyObservers();

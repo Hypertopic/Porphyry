@@ -326,9 +326,7 @@ public URL getThumbnail() throws Exception {
 
 public Collection<Viewpoint.Topic> getTopics() throws Exception {
 	Collection<Viewpoint.Topic> result = new ArrayList<Viewpoint.Topic>();
-	JSONArray array = this.getView().getJSONArray("topic");
-	for (int i=0; i<array.length(); i++) {
-		JSONObject topic = array.getJSONObject(i);
+	for (JSONObject topic : this.getView().getAllJSONObjects("topic")) {
 		result.add(
 			HypertopicMap.this.getTopic(topic)
 		);
