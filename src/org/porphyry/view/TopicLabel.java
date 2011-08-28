@@ -19,27 +19,33 @@ http://www.gnu.org/licenses/gpl.html
 
 package org.porphyry.view;
 
-import org.json.JSONObject;
-import org.porphyry.controller.OpenCorpus;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import org.porphyry.controller.ToggleTopic;
 import org.porphyry.model.Portfolio;
 
-public class CorporaOpener extends Opener {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+class TopicLabel extends JLabel {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-public CorporaOpener(PortfolioFrame frame) {
-	super(frame);
+private Portfolio.Viewpoint.Topic model;
+
+public TopicLabel(Portfolio.Viewpoint.Topic model) {
+	super(model.toString());
+	this.model = model;
+	this.addMouseListener(
+		new MouseAdapter() {
+			@Override public void mouseClicked(MouseEvent e) {
+				Portfolio.Viewpoint.Topic 
+					model = TopicLabel.this.model;
+				new ToggleTopic(
+					model.getPortfolio(), 
+					model.getViewpoint().getID(), 
+					model.getID()
+				).execute();
+			}
+		}
+	);
 }
 
-@Override protected void open(String id, Portfolio model) {
-	new OpenCorpus(model, id).execute();
-}
-
-@Override protected void populateList(Portfolio model) 
-	throws Exception
-{
-	for (JSONObject o : model.listCorpora(model.getUser())) {
-		this.listModel.addElement(o);
-	}
-}
-
-}//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< CorporaOpener
+}//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< TopicLabel
 

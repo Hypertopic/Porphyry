@@ -21,21 +21,21 @@ package org.porphyry.view;
 
 import org.json.JSONObject;
 import org.porphyry.controller.OpenViewpoint;
+import org.porphyry.model.Portfolio;
 
 public class ViewpointsOpener extends Opener {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-public ViewpointsOpener(Portfolio model) {
-	super(model);
+public ViewpointsOpener(PortfolioFrame frame) {
+	super(frame);
 }
 
-@Override protected void open(String id, org.porphyry.model.Portfolio model) {
+@Override protected void open(String id, Portfolio model) {
 	new OpenViewpoint(model, id).execute();
 }
 
-@Override protected void populateList(org.porphyry.model.Portfolio model) 
+@Override protected void populateList(Portfolio model) 
 	throws Exception
 {
-	//TODO related viewpoints instead
 	for (JSONObject o : model.listRelatedViewpoints()) {
 		this.listModel.addElement(o);
 	}

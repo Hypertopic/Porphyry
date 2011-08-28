@@ -26,29 +26,29 @@ import javax.swing.*;
 import org.porphyry.model.*;
 import org.porphyry.controller.ToggleTopic;
 
-//TODO change name to simplify references to model.Portfolio
+public class PortfolioFrame extends JFrame implements Observer {//>>>>>>>>>>>>>>
 
-public class Portfolio extends JFrame implements Observer {//>>>>>>>>>>>>>>>>>>>
-
-private org.porphyry.model.Portfolio model;
+private Portfolio model;
 private final JTabbedPane corporaPanel = new JTabbedPane(JTabbedPane.BOTTOM);
 private final Box viewpointsPanel = new Box(BoxLayout.Y_AXIS);
 private final JPanel itemsPanel = new ScrollablePanel();
 private final JPanel highlightsPanel = new ScrollablePanel();
 
-public Portfolio(org.porphyry.model.Portfolio model) {
+public PortfolioFrame(Portfolio model) {
 	super(localize("PORTFOLIO"));
 	this.model = model;
 	this.setMenus(
 		new Menu("PORTFOLIO").addAll(
 			new MenuItem("OPEN_CORPORA") {
 				void run() {
-					new CorporaOpener(Portfolio.this);
+					new CorporaOpener(PortfolioFrame.this);
 				}
 			},
 			new MenuItem("OPEN_VIEWPOINTS") {
 				void run() {
-					new ViewpointsOpener(Portfolio.this);
+					new ViewpointsOpener(
+						PortfolioFrame.this
+					);
 				}
 			}
 
@@ -84,7 +84,7 @@ public Portfolio(org.porphyry.model.Portfolio model) {
 		}
 		this.viewpointsPanel.removeAll();
 		for (
-			org.porphyry.model.Portfolio.Viewpoint.Topic t :
+			Portfolio.Viewpoint.Topic t :
 			this.model.getTopics()
 		) {
 			this.viewpointsPanel.add(new TopicLabel(t));
@@ -128,7 +128,7 @@ protected static String localize(String code) {
 		.getString(code);
 }
 
-public org.porphyry.model.Portfolio getModel() {
+public Portfolio getModel() {
 	return this.model;
 }
 
@@ -186,28 +186,4 @@ class ScrollablePanel extends JPanel {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 }//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< ScrollablePanel
 
-class TopicLabel extends JLabel {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-private org.porphyry.model.Portfolio.Viewpoint.Topic model;
-
-public TopicLabel(org.porphyry.model.Portfolio.Viewpoint.Topic model) {
-	super(model.toString());
-	this.model = model;
-	this.addMouseListener(
-		new MouseAdapter() {
-			@Override public void mouseClicked(MouseEvent e) {
-				org.porphyry.model.Portfolio.Viewpoint.Topic 
-					model = TopicLabel.this.model;
-				new ToggleTopic(
-					model.getPortfolio(), 
-					model.getViewpoint().getID(), 
-					model.getID()
-				).execute();
-			}
-		}
-	);
-}
-
-}//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< TopicLabel
-
-}//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Portfolio
+}//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< PortfolioFrame

@@ -26,16 +26,17 @@ import java.awt.event.*;
 import java.util.Collection;
 import org.json.JSONObject;
 import org.porphyry.controller.OpenCorpus;
+import org.porphyry.model.Portfolio;
 
 public abstract class Opener extends JDialog {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-private final Portfolio portfolio;
+private final PortfolioFrame portfolio;
 private final Box rightPanel = Box.createVerticalBox();
 private final Box leftPanel = Box.createVerticalBox();
 private final JSONList listView;
 final DefaultListModel listModel = new DefaultListModel();
 
-public Opener(Portfolio portfolio) {
+public Opener(PortfolioFrame portfolio) {
 	super(portfolio, portfolio.localize("OPEN_CORPORA"));
 	this.portfolio = portfolio;
 	this.add(
@@ -45,7 +46,7 @@ public Opener(Portfolio portfolio) {
 			this.rightPanel
 		)
 	);
-	org.porphyry.model.Portfolio model = portfolio.getModel();
+	Portfolio model = portfolio.getModel();
 	try {
 		this.populateList(model);
 	} catch (Exception e) {
@@ -78,10 +79,10 @@ public Opener(Portfolio portfolio) {
 	this.setVisible(true);
 }
 
-protected abstract void populateList(org.porphyry.model.Portfolio model) 
+protected abstract void populateList(Portfolio model) 
 	throws Exception;
 
-protected abstract void open(String id, org.porphyry.model.Portfolio model);
+protected abstract void open(String id, Portfolio model);
 
 protected void displayHeader(String key, String side) {
 	this.displayStrut(6, side);

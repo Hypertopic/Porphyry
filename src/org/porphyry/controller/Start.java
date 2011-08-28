@@ -20,14 +20,16 @@ http://www.gnu.org/licenses/gpl.html
 package org.porphyry.controller;
 
 import javax.swing.*;
+import org.porphyry.model.Portfolio;
+import org.porphyry.view.PortfolioFrame;
 
 public class Start {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 public static void main(String[] args) throws Exception {
 	SwingUtilities.invokeAndWait(new Runnable() {
 		public void run() {
-			JFrame frame = new org.porphyry.view.Portfolio(
-				new org.porphyry.model.Portfolio(
+			JFrame frame = new PortfolioFrame(
+				new Portfolio(
 					//TODO
 					"http://127.0.0.1:5984/argos/_design/argos/_rewrite/",
 					"http://127.0.0.1/~benel/cassandre/"
