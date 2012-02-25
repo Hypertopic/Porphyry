@@ -26,8 +26,8 @@ Installation procedure
 
 * Type:
 
-    git clone git@github.com:Hypertopic/Porphyry.git
-    cd Porphyry
-    ant compile
+        git clone git@github.com:Hypertopic/Porphyry.git
+        cd Porphyry
+        ant compile
 
 * Type `ant -p` to list other available options.
