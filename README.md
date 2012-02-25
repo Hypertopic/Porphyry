@@ -1,15 +1,33 @@
-PORPHYRY - Digital space for confronting interpretations about documents
-========================================================================
+PORPHYRY – Corpus analyses confrontation
+========================================
 
 License: [GNU General Public License](http://www.gnu.org/licenses/gpl.html)
 
 Contact: <aurelien.benel@utt.fr>
 
-Home page: <http://porphyry.sf.net/>
+Home page: <https://github.com/Hypertopic/Porphyry>
 
-Installation
-------------
+Notice
+------
 
-Porphyry is automatically installed from [Cassandre](http://cassandre-qda.sf.net/) or [Steatite](http://steatite.sf.net/) Web user interface.
+It is possible to install Porphyry with [just a few clicks](http://porphyry.sourceforge.net/.jnlp?http://argos2.hypertopic.org/v1/).
 
-However, if you want to compile its code source yourself, type `ant -p` in the  shell to list available options.
+The following instructions are only for people willing to modify the software or to test the development versions.
+
+Installation requirements
+-------------------------
+
+* Git client
+* [Java Development Kit](http://www.oracle.com/technetwork/java/javase/downloads/) (JDK 6)
+* Ant
+
+Installation procedure
+----------------------
+
+* Type:
+
+    git clone git@github.com:Hypertopic/Porphyry.git
+    cd Porphyry
+    ant compile
+
+* Type `ant -p` to list other available options.
