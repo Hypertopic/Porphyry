@@ -258,6 +258,13 @@ public String getName() {
 	return this.name;
 }
 
+public boolean isSelected() {
+  return Portfolio.this.selectedTopics.contains(
+		Portfolio.this.map.getViewpoint(Viewpoint.this.getID())
+      .getTopic(this.topicID)
+  );
+}
+
 public String getID() {
 	return this.topicID;
 }
@@ -271,7 +278,11 @@ public Portfolio getPortfolio() {
 }
 
 @Override public int compareTo(Topic that) {
-	return this.name.compareTo(that.name);
+	return (this.name==null)
+    ? -1 
+    : (that.name==null)
+      ? 1 
+      : this.name.compareTo(that.name);
 }
 
 @Override public String toString() {

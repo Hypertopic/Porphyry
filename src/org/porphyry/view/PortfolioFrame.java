@@ -4,7 +4,7 @@ PORPHYRY - Digital space for confronting interpretations about documents
 OFFICIAL WEB SITE
 http://porphyry.sf.net/
 
-Copyright (C) 2011 Aurelien Benel.
+Copyright (C) 2011-2012 Aurelien Benel.
 
 LEGAL ISSUES
 This program is free software; you can redistribute it and/or modify it under 
@@ -23,6 +23,7 @@ import java.util.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.event.*;
 import org.porphyry.model.*;
 import org.porphyry.controller.ToggleTopic;
 
@@ -30,7 +31,7 @@ public class PortfolioFrame extends JFrame implements Observer {//>>>>>>>>>>>>>>
 
 private Portfolio model;
 private final JTabbedPane corporaPanel = new JTabbedPane(JTabbedPane.BOTTOM);
-private final Box viewpointsPanel = new Box(BoxLayout.Y_AXIS);
+private final JPanel viewpointsPanel = new JPanel(new WrapLayout());
 private final JPanel itemsPanel = new ScrollablePanel();
 private final JPanel highlightsPanel = new ScrollablePanel();
 
@@ -51,7 +52,6 @@ public PortfolioFrame(Portfolio model) {
 					);
 				}
 			}
-
 		)
 	);
 	JSplitPane main = new JSplitPane(
@@ -63,6 +63,18 @@ public PortfolioFrame(Portfolio model) {
 	this.addTab(this.highlightsPanel, "HIGHLIGHTS");
 	this.setContentPane(main);
 	model.addObserver(this);
+  this.corporaPanel.addChangeListener(
+    new ChangeListener() {
+      public void stateChanged(ChangeEvent e) {
+        // Call a controller instead?
+        try {
+          PortfolioFrame.this.updateViewpointsPanel();
+        } catch (Exception ex) {
+		      ex.printStackTrace(); //TODO
+        }
+      }
+    }
+  );
 }
 
 @Override public void update(Observable o, Object arg) {
@@ -78,22 +90,24 @@ public PortfolioFrame(Portfolio model) {
 			for (ItemSet.Item.Highlight h : i.getHighlights()) {
 				//TODO handle PictureHighlight
 				this.highlightsPanel.add(
-					new JLabel(h.toString())
+					new JLabel("<html><pre>" + h)
 				);
 			}
 		}
-		this.viewpointsPanel.removeAll();
-		for (
-			Portfolio.Viewpoint.Topic t :
-			this.model.getTopics()
-		) {
-			this.viewpointsPanel.add(new TopicLabel(t));
-		}
-		this.viewpointsPanel.validate();
-		this.viewpointsPanel.repaint();
+    this.updateViewpointsPanel();
 	} catch (Exception e) {
 		e.printStackTrace(); //TODO
 	}
+}
+
+protected void updateViewpointsPanel() throws Exception {
+  this.viewpointsPanel.removeAll();
+  int level = this.corporaPanel.getSelectedIndex();
+  for (Portfolio.Viewpoint.Topic t : this.model.getTopics()) {
+    this.viewpointsPanel.add(new TopicLabel(t, level));
+  }
+  this.viewpointsPanel.validate();
+  this.viewpointsPanel.repaint();
 }
 
 protected void setTabTitle(int index, String key, int count) {
