@@ -10,7 +10,7 @@ Home page: <https://github.com/Hypertopic/Porphyry>
 Notice
 ------
 
-It is possible to install Porphyry with [just a few clicks](http://porphyry.sourceforge.net/.jnlp?http://argos2.hypertopic.org/v1/).
+It is possible to install Porphyry with [just a few clicks](http://porphyry.sourceforge.net/v6.jnlp?http://argos2.hypertopic.org/v1/).
 
 The following instructions are only for people willing to modify the software or to test the development versions.
 
