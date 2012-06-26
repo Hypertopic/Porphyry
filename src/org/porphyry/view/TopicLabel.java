@@ -22,7 +22,7 @@ package org.porphyry.view;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import javax.swing.plaf.ColorUIResource;
+import javax.swing.border.*;
 import org.porphyry.controller.ToggleTopic;
 import org.porphyry.model.Portfolio;
 
@@ -31,9 +31,12 @@ class TopicLabel extends JLabel {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 private static final int MAX_FONT_SIZE = 30;
 private static final int MIN_FONT_SIZE = 10;
 private static final int NULL_FONT_SIZE = 5;
-private static final ColorUIResource PRIMARY_COLOR2 = 
-	new ColorUIResource(204, 153, 51);
+private static final Color PRIMARY_COLOR2 = new Color(204, 153, 51);
+private static final Color DARK_GRAY = new Color(110, 110, 110);
+private static final Color LIGHT_GRAY = new Color(200, 200, 200);
 private static final Cursor HAND_CURSOR = new Cursor(Cursor.HAND_CURSOR);	
+
+private final Border margins = new EmptyBorder(0, 3, 0, 3);
 
 private Portfolio.Viewpoint.Topic model;
 private final MouseListener clickListener = new MouseAdapter() {
@@ -51,6 +54,7 @@ public TopicLabel(Portfolio.Viewpoint.Topic model, int level) {
 	super(model.getName());
 	this.model = model;
   this.updateSizeAndBackground(level);
+	this.setBorder(this.margins);  
 }
 
 protected void updateSizeAndBackground(int level) {
@@ -64,6 +68,10 @@ protected void updateSizeAndBackground(int level) {
   if (ratio>0) {
     this.addMouseListener(this.clickListener);
     this.setCursor(HAND_CURSOR);
+    this.setForeground((ratio==1)?Color.BLACK:DARK_GRAY);
+  } else {
+    this.setToolTipText(this.model.getName());
+    this.setForeground(LIGHT_GRAY);
   }
   if (this.model.isSelected()) {
     this.setOpaque(true);
