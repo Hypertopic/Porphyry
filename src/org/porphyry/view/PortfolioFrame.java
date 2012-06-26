@@ -90,7 +90,7 @@ public PortfolioFrame(Portfolio model) {
 			for (ItemSet.Item.Highlight h : i.getHighlights()) {
 				//TODO handle PictureHighlight
 				this.highlightsPanel.add(
-					new JLabel("<html><pre>" + h)
+					new JLabel(h.toString())
 				);
 			}
 		}

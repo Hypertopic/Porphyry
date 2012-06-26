@@ -293,15 +293,13 @@ public TextHighlight(int begin, int end, Collection<String> texts) {
 }
 
 @Override public String toString() {
-	String result = null;
+	String result = "<html><pre>";
 	Iterator<String> i = this.texts.iterator();
-	if (i.hasNext()) {
-		result = i.next();
-		while (i.hasNext()) {
-			result += "<br>" + i.next();
-		}
-	}
-	return result;
+  while (i.hasNext()) {
+    result += "</pre><pre>" + i.next();
+  }
+  result += "</pre>";
+	return result.replace("\n"," ");
 }
 
 }//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< TextHighlight
