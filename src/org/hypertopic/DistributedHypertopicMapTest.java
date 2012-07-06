@@ -4,7 +4,7 @@ HYPERTOPIC - Infrastructure for community-driven knowledge organization systems
 OFFICIAL WEB SITE
 http://www.hypertopic.org/
 
-Copyright (C) 2011 Aurelien Benel.
+Copyright (C) 2011-2012 Aurelien Benel.
 
 LEGAL ISSUES
 This library is free software; you can redistribute it and/or modify it under
@@ -26,9 +26,9 @@ import static org.junit.Assert.*;
 
 public class DistributedHypertopicMapTest {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-private HypertopicMap distributedMap = new DistributedHypertopicMap(
-	"http://127.0.0.1:5984/argos/_design/argos/_rewrite/",
-	"http://127.0.0.1/~benel/cassandre/"
+private HypertopicMap distributedMap = new HypertopicMap(
+	"http://127.0.0.1/~benel/cassandre/",
+	"http://127.0.0.1:5984/argos/_design/argos/_rewrite/"
 );
 
 @Test public void listCorpora() throws Exception {
@@ -54,9 +54,17 @@ private HypertopicMap distributedMap = new DistributedHypertopicMap(
 		.getViewpoint("446d798e240d4dee5a552b902ae56c8d")
 		.getTopic("70551d9a197a874cb76372c789be629e")
 		.getHighlights();
-	//System.out.println(h); //DEBUG
 	assertFalse(h.isEmpty());
 }
+
+@Test public void getViewpointTopics() throws Exception {
+	Collection<HypertopicMap.Viewpoint.Topic> t = this.distributedMap
+		.getViewpoint("446d798e240d4dee5a552b902ae56c8d")
+		.getTopics();
+	assertFalse(t.isEmpty());
+}
+
+//TODO test getTopicItems on Steatite+Argos
 
 }//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< DistributedHypertopicMapTest
 

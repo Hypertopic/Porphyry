@@ -1695,4 +1695,48 @@ public class JSONObject {
         return this;
     }
 
+    /**
+     * Deep copy
+     * TODO more efficient?
+     * @author Aurelien Benel
+     */
+    public JSONObject(JSONObject that) throws JSONException {
+      this(that.toString());
+    }
+
+    /**
+     * Deep merge
+     * @author Aurelien Benel
+     */
+    public JSONObject putAll(JSONObject that) throws JSONException {
+      merge(this, that);
+      return this;
+    }
+
+    /**
+     * Recursive
+     * @author Aurelien Benel
+     */
+    protected void merge(Object x, Object y) throws JSONException {
+      if (x instanceof JSONString) {
+        ((JSONArray) y).put(x);
+      } else if (y instanceof JSONString) {
+        ((JSONArray) x).put(y);
+      } else if (x instanceof JSONArray) {
+        ((JSONArray) x).putAll((JSONArray) y);
+      } else {
+        Iterator i = ((JSONObject) y).map.entrySet().iterator();
+        while (i.hasNext()) {
+          Map.Entry<String, Object> e = (Map.Entry<String, Object>) i.next();
+          String key = (String) e.getKey();
+          Object value = ((JSONObject) x).map.get(key);
+          if (value==null) {
+            value = e.getValue();
+          } else {
+            merge(value, e.getValue());
+          }
+          ((JSONObject) x).put(key, value);
+        }
+      }
+    }
 }

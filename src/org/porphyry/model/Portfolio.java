@@ -4,7 +4,7 @@ PORPHYRY - Digital space for confronting interpretations about documents
 OFFICIAL WEB SITE
 http://porphyry.sf.net/
 
-Copyright (C) 2011 Aurelien Benel.
+Copyright (C) 2011-2012 Aurelien Benel.
 
 LEGAL ISSUES
 This program is free software; you can redistribute it and/or modify it under 
@@ -37,12 +37,13 @@ private final Collection<HypertopicMap.Corpus> openedCorpora =
 private final Collection<HypertopicMap.Viewpoint.Topic> selectedTopics =
 	new HashSet(); 
 private ItemSet cache;
+private String user;
 
 //TODO HypertopicMap.Corpus.Attribute.Value selectedValues
 
-public Portfolio(String primaryService, String... secondaryServices) {
-	this.map = 
-		new DistributedHypertopicMap(primaryService, secondaryServices);
+public Portfolio(String user, String... services) {
+	this.map = new HypertopicMap(services);
+	this.user = user;
 	this.map.addObserver(this);
 }
 
@@ -58,10 +59,7 @@ protected void invalidateCache() {
 
 //TODO addSecondary ?
 //TODO removeSecondary ?
-
-public Collection<String> getURLs() {
-	return this.map.getURLs();
-}
+//TODO getURLs ?
 
 public Collection<JSONObject> listCorpora(String userID) throws Exception {
 	return this.map.getUser(userID).listCorpora(); 
@@ -181,7 +179,11 @@ public Set<Viewpoint.Topic> getTopics() throws Exception {
 }
 
 public String getUser() {
-	return  "nadia@hypertopic.org"; //TODO
+	return this.user;
+}
+
+public void setUser(String user) {
+	this.user = user;
 }
 
 public class Viewpoint {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>

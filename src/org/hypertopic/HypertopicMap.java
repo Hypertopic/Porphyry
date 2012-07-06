@@ -33,13 +33,13 @@ import java.net.*;
  */
 public class HypertopicMap extends Observable implements Observer {//>>>>>>>>>>>
 
-private final RESTDatabase db;
+private final DistributedRESTDatabase db;
 
 /**
  * @param baseURL The database URL (with a trailing slash).
  */
-public HypertopicMap(String baseUrl) {
-	this.db = new RESTDatabase(baseUrl);
+public HypertopicMap(String... baseUrls) {
+	this.db = new DistributedRESTDatabase(baseUrls);
 	this.db.addObserver(this);
 	this.db.startListening();
 }
@@ -47,12 +47,6 @@ public HypertopicMap(String baseUrl) {
 public void update(Observable o, Object arg) {
 	this.setChanged();
 	this.notifyObservers();
-}
-
-public Collection<String> getURLs() {
-	Collection<String> c = new ArrayList();
-	c.add(this.db.getURL());
-	return c;
 }
 
 //TODO it is not clear if memory footprint would be reduced or increased by
@@ -74,7 +68,7 @@ public Corpus getCorpus(String corpusID) {
  * @param resource e.g. "http://cassandre/text/d0"
  */
 public Corpus.Item getItem(String resource) throws Exception {
-	JSONObject item = this.db.get(
+	JSONObject item = this.db.getAll(
 		"resource/" + URLEncoder.encode(resource, "ASCII")
 	).getJSONObject(resource).getJSONObject("item");
 	return this.getItem(item);
@@ -148,7 +142,11 @@ public Named(String id) {
 }
 
 public String getName() throws Exception {
-	return this.getView().optString("name");
+  try {
+    return this.getView().optString("name");
+  } catch (Exception e) {
+    return null;
+  }
 }
 
 }//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Named
@@ -201,7 +199,7 @@ public User(String id) {
 }
 
 @Override protected JSONObject getView() throws Exception {
-	return HypertopicMap.this.db.get("user/" + this.getID())
+	return HypertopicMap.this.db.getAll("user/" + this.getID())
 		.getJSONObject(this.getID());
 }
 
@@ -276,7 +274,7 @@ public Collection<Item> getItems() throws Exception {
 }
 
 @Override protected JSONObject getView() throws Exception {
-	return HypertopicMap.this.db.get("corpus/" + this.getID())
+	return HypertopicMap.this.db.getAll("corpus/" + this.getID())
 		.optJSONObject(this.getID());
 }
 
@@ -317,7 +315,11 @@ public Item(String id) {
 }
 
 public URL getResource() throws Exception {
-	return new URL(this.getView().getString("resource"));
+  try {
+    return new URL(this.getView().optString("resource"));
+  } catch (Exception e) {
+    return null;
+  }
 }
 
 public URL getThumbnail() throws Exception {
@@ -509,7 +511,7 @@ public Collection<Topic> getTopics() throws Exception {
 }
 
 @Override protected JSONObject getView() throws Exception {
-	return HypertopicMap.this.db.get("viewpoint/" + this.getID())
+	return HypertopicMap.this.db.getAll("viewpoint/" + this.getID())
 		.getJSONObject(this.getID());
 }
 

@@ -31,6 +31,7 @@ public static void main(String[] args) throws Exception {
 			JFrame frame = new PortfolioFrame(
 				new Portfolio(
 					//TODO
+					"nadia@hypertopic.org",
 					"http://127.0.0.1:5984/argos/_design/argos/_rewrite/",
 					"http://127.0.0.1/~benel/cassandre/"
 				)

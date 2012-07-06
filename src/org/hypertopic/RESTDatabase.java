@@ -4,7 +4,7 @@ HYPERTOPIC - Infrastructure for community-driven knowledge organization systems
 OFFICIAL WEB SITE
 http://www.hypertopic.org/
 
-Copyright (C) 2010 Aurelien Benel.
+Copyright (C) 2010-2012 Aurelien Benel.
 
 LEGAL ISSUES
 This library is free software; you can redistribute it and/or modify it under
@@ -65,46 +65,64 @@ public JSONObject post(JSONObject object) throws Exception {
 }
 
 /**
- * Notice: In-memory parser not suited to long payload.
- * @param query the path to get the view from the baseURL 
- * @return if the queried object was like
- * {rows:[ {key:[key0, key1], value:{attribute0:value0}},
- * {key:[key0, key1], value:{attribute0:value1}}]}
- * then the returned object is
- * {key0:{key1:{attribute0:[value0, value1]}}}
- * otherwise the original object is returned.
+ * @param query the path to get the view from the base URL(s)
+ * @return {key0:{key1:{attribute0:[value0, value1]}}}
+ * for {rows:[ 
+ *   {key:[key0, key1], value:{attribute0:value0}},
+ *   {key:[key0, key1], value:{attribute0:value1}}
+ * ]}
+ * Implementation note: Synchronized because it updates cache.
  */
-public synchronized JSONObject get(String query) throws Exception {
+public synchronized JSONObject getAll(String query) throws Exception {
 	URL url = new URL(this.baseUrl + query);
 	JSONObject result = this.cache.get(url);
 	if (result == null) {
-		result = new JSONObject(send("GET", url, null));
-		if (result.has("rows")) {
-			JSONArray rows = result.getJSONArray("rows");
-			result = new JSONObject();
-			for (int i=0; i<rows.length(); i++) {
-				JSONObject r = rows.getJSONObject(i);
-				JSONArray keys = r.getJSONArray("key");
-				JSONObject current = result;
-				for (int k=0; k<keys.length(); k++) {
-					current = current.getJSONObjectOrCreate(
-						keys.getString(k)
-					);
-				} 
-				JSONObject value = r.getJSONObject("value");
-				Iterator<String> v = value.keys();
-				while (v.hasNext()) {
-					String attribute = v.next();
-					current.justAccumulate(
-						attribute,
-						value.get(attribute)
-					);
-				}
-			} 
-			this.cache.put(url, result);
-		} 
+    result = index(new JSONObject(send("GET", url, null)));
+    this.cache.put(url, result);
 	}
-	return result;
+	return new JSONObject(result);
+}
+
+/**
+ * @return {key0:{key1:{attribute0:[value0, value1]}}}
+ * for {rows:[ 
+ *   {key:[key0, key1], value:{attribute0:value0}},
+ *   {key:[key0, key1], value:{attribute0:value1}}
+ * ]}
+ */
+protected static JSONObject index(JSONObject view) throws Exception {
+  JSONObject result = new JSONObject();
+  JSONArray rows = view.getJSONArray("rows");
+  for (int i=0; i<rows.length(); i++) {
+    JSONObject r = rows.getJSONObject(i);
+    JSONArray keys = r.getJSONArray("key");
+    JSONObject current = result;
+    for (int k=0; k<keys.length(); k++) {
+      current = current.getJSONObjectOrCreate(
+        keys.getString(k)
+      );
+    } 
+    JSONObject value = r.getJSONObject("value");
+    Iterator<String> v = value.keys();
+    while (v.hasNext()) {
+      String attribute = v.next();
+      current.justAccumulate(
+        attribute,
+        value.get(attribute)
+      );
+    }
+  }
+  return result;
+}
+
+/**
+ * @param id the path to get the view from the baseURL 
+ * @return the corresponding object
+ */
+public JSONObject get(String id) throws Exception {
+	return new JSONObject(
+    send("GET", new URL(this.baseUrl + id), null)
+  );
 }
 
 /**
@@ -203,6 +221,9 @@ protected static void checkError(HttpURLConnection connection)
 	if (code/100 != 2) throw new HTTPException(code);
 }
 
+/**
+ * On _changes, the cache is cleared and the observers are notified.
+ */
 public void startListening() {
 	SwingWorker w = new SwingWorker() {
 		protected Object doInBackground() {

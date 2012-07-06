@@ -952,8 +952,17 @@ public class JSONArray {
     public Collection toCollection() throws JSONException {
         Collection result = new ArrayList();
         for (int i=0; i<this.length(); i++) {
-	     result.add(this.get(i));
+            result.add(this.get(i));
         }
         return result;	
+    }
+
+    /**
+     * Shallow concat
+     * @author Aurelien Benel
+     */
+    public JSONArray putAll(JSONArray that) {
+      this.myArrayList.addAll(that.myArrayList);
+      return this;
     }
 }

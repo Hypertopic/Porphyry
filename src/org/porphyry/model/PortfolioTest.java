@@ -24,7 +24,10 @@ import static org.junit.Assert.*;
 
 public class PortfolioTest {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
+//TODO test what happens with 2 topics with the same name
+
 private Portfolio portfolio = new Portfolio(
+	"nadia@hypertopic.org",
 	"http://127.0.0.1:5984/argos/_design/argos/_rewrite/",
 	"http://127.0.0.1/~benel/cassandre/"
 );
