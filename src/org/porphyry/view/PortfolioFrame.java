@@ -62,6 +62,8 @@ public PortfolioFrame(Portfolio model) {
 	this.addTab(this.itemsPanel, "SOURCES");
 	this.addTab(this.highlightsPanel, "HIGHLIGHTS");
 	this.setContentPane(main);
+  this.itemsPanel.setBackground(Color.WHITE);
+  this.highlightsPanel.setBackground(Color.WHITE);
 	model.addObserver(this);
   this.corporaPanel.addChangeListener(
     new ChangeListener() {
@@ -79,25 +81,26 @@ public PortfolioFrame(Portfolio model) {
 
 @Override public void update(Observable o, Object arg) {
 	try {
-		ItemSet s = this.model.getSelectedItemSet();
-		this.setTabTitle(0, "SOURCES", s.countItems());
-		this.setTabTitle(1, "HIGHLIGHTS", s.countHighlights());
-		//TODO updating and/or hiding instead of starting from scratch?
-		this.itemsPanel.removeAll();
-		this.highlightsPanel.removeAll();
-		for (ItemSet.Item i : s.getItems()) {
-			this.itemsPanel.add(new JLabel(i.getName()));
-			for (ItemSet.Item.Highlight h : i.getHighlights()) {
-				//TODO handle PictureHighlight
-				this.highlightsPanel.add(
-					new JLabel(h.toString())
-				);
-			}
-		}
+    this.updateCorporaPanel();
     this.updateViewpointsPanel();
 	} catch (Exception e) {
 		e.printStackTrace(); //TODO
 	}
+}
+
+protected void updateCorporaPanel() throws Exception {
+  ItemSet s = this.model.getSelectedItemSet();
+  this.setTabTitle(0, "SOURCES", s.countItems());
+  this.setTabTitle(1, "HIGHLIGHTS", s.countHighlights());
+  //TODO updating and/or hiding instead of starting from scratch?
+  this.itemsPanel.removeAll();
+  this.highlightsPanel.removeAll();
+  for (ItemSet.Item i : s.getItems()) {
+    this.itemsPanel.add(new JLabel(i.getName()));
+    for (ItemSet.Item.Highlight h : i.getHighlights()) {
+      this.highlightsPanel.add(new HighlightLabel(h));
+    }
+  }
 }
 
 protected void updateViewpointsPanel() throws Exception {

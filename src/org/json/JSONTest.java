@@ -42,4 +42,12 @@ private final JSONObject object = new JSONObject();
 	assertFalse(this.object.getJSONArray("B").contains("two"));
 }
 
+@Test public void putAll() throws Exception {
+  this.object.getJSONObject("A").put("C", "four");
+  this.object.putAll(
+    new JSONObject("{\"A\":{\"C\":\"five\",\"D\":\"six\"}}")
+  );
+  //TODO assert anything?
+}
+
 }

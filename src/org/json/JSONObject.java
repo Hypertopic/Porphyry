@@ -1677,9 +1677,9 @@ public class JSONObject {
           return this;
      }
 
-    /*
+    /**
      * 'accumulate' as it is specified
-     * @Author Aurelien Benel
+     * @author Aurelien Benel
      */
     public JSONObject justAccumulate(String key, Object value)
             throws JSONException {
@@ -1717,26 +1717,36 @@ public class JSONObject {
      * Recursive
      * @author Aurelien Benel
      */
-    protected void merge(Object x, Object y) throws JSONException {
-      if (x instanceof JSONString) {
-        ((JSONArray) y).put(x);
-      } else if (y instanceof JSONString) {
-        ((JSONArray) x).put(y);
+    protected Object merge(Object x, Object y) throws JSONException {
+      Object result = null;
+      if (x instanceof String) {
+        if (y instanceof String) {
+          result = new JSONArray().put(x).put(y);
+        } else if (y instanceof JSONArray) { 
+          result = new JSONArray().put(x).putAll((JSONArray) y);
+        }
       } else if (x instanceof JSONArray) {
-        ((JSONArray) x).putAll((JSONArray) y);
-      } else {
+        if (y instanceof String) {
+          result = new JSONArray().putAll((JSONArray) x).put(y);
+        } else if (y instanceof JSONArray) { 
+          result = new JSONArray().putAll((JSONArray) x).putAll((JSONArray) y);
+        }
+      } else if (x instanceof JSONObject && y instanceof JSONObject) {
+        result = new JSONObject(x);
         Iterator i = ((JSONObject) y).map.entrySet().iterator();
         while (i.hasNext()) {
           Map.Entry<String, Object> e = (Map.Entry<String, Object>) i.next();
           String key = (String) e.getKey();
-          Object value = ((JSONObject) x).map.get(key);
-          if (value==null) {
-            value = e.getValue();
-          } else {
-            merge(value, e.getValue());
-          }
-          ((JSONObject) x).put(key, value);
+          Object oldValue = ((JSONObject) x).map.get(key);
+          Object value = (oldValue==null)
+            ? e.getValue()
+            : merge(oldValue, e.getValue());
+          result = ((JSONObject) x).put(key, value);
         }
       }
+      if (result==null) throw new JSONException(
+        "Cannot merge " + x + " with " + y
+      );
+      return result ;
     }
 }

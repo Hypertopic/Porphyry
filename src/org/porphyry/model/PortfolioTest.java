@@ -33,17 +33,20 @@ private Portfolio portfolio = new Portfolio(
 );
 
 @Test public void getSelectedItems() throws Exception {
-	this.portfolio.openCorpus("MISS");
-	int total = this.portfolio.getSelectedItemSet().countItems();
-	assertTrue(total>0);
-	this.portfolio.openViewpoint("446d798e240d4dee5a552b902ae56c8d");
-	this.portfolio.toggleTopic(
-		"446d798e240d4dee5a552b902ae56c8d",
-		"70551d9a197a874cb76372c789be629e"
-	);
-	assertTrue(this.portfolio.getSelectedItemSet().countItems()<total);
-	this.portfolio.closeViewpoint("446d798e240d4dee5a552b902ae56c8d");
-	assertEquals(total, this.portfolio.getSelectedItemSet().countItems());
+  this.portfolio.openCorpus("MISS");
+  int total = this.portfolio.getSelectedItemSet().countItems();
+  assertTrue(total>0);
+  this.portfolio.openViewpoint("446d798e240d4dee5a552b902ae56c8d");
+  this.portfolio.toggleTopic(
+    "446d798e240d4dee5a552b902ae56c8d",
+    "70551d9a197a874cb76372c789be629e"
+  );
+  ItemSet selection = this.portfolio.getSelectedItemSet();
+  assertTrue(selection.countItems()<total);
+  ItemSet.Item item = selection.getItems().iterator().next();
+  assertNotNull("No resource for " + item.getID(), item.getResource());
+  this.portfolio.closeViewpoint("446d798e240d4dee5a552b902ae56c8d");
+  assertEquals(total, this.portfolio.getSelectedItemSet().countItems());
 }
 
 @Test public void getSelectedHighlights() throws Exception {

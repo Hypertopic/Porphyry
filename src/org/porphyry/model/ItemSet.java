@@ -21,6 +21,7 @@ package org.porphyry.model;
 
 import org.hypertopic.*;
 import org.json.JSONArray;
+import java.net.URL;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.awt.Rectangle;
@@ -136,17 +137,20 @@ public class Item {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 private final String id;
 private final String name;
+private final URL resource;
+//TODO thumbnail
 private final Set<Highlight> highlights = Collections.newSetFromMap(
 	new ConcurrentHashMap()
 );
 
-public Item(String id, String name) {
+public Item(String id, String name, URL resource) {
 	this.id = id;
 	this.name = name;
+  this.resource = resource;
 }
 
 public Item(HypertopicMap.Corpus.Item item) throws Exception {
-	this(item.getID(), item.getName());
+	this(item.getID(), item.getName(), item.getResource());
 }
 
 public String getID() {
@@ -155,6 +159,10 @@ public String getID() {
 
 public String getName() {
 	return this.name;
+}
+
+public URL getResource() {
+	return this.resource;
 }
 
 public int size() {
@@ -255,6 +263,8 @@ public Item getItem() {
 	return Item.this;
 }
 
+abstract public URL getResource() throws Exception;
+
 abstract public boolean intersects(Highlight that);
 
 abstract public void join(Highlight that);
@@ -270,6 +280,15 @@ public TextHighlight(int begin, int end, Collection<String> texts) {
 	this.begin = begin;
 	this.end = end;
 	this.texts = texts;
+}
+
+/**
+* See RFC 5147.
+*/
+@Override public URL getResource() throws Exception {
+  return new URL(
+    Item.this.getResource().toString() + "#char=" + begin + "," + end
+  );
 }
 
 @Override public boolean intersects(Highlight highlight) {
@@ -314,6 +333,19 @@ public PictureHighlight(Rectangle rectangle) {
 
 public PictureHighlight(int x1, int y1, int x2, int y2) {
 	this.rectangle = new Rectangle(x1, y1, x2-x1, y2-y1);
+}
+
+/**
+* See W3C Media Fragments URI.
+*/
+@Override public URL getResource() throws Exception {
+  return new URL(
+    Item.this.getResource().toString() + "#xywh=" 
+      + this.rectangle.x + "," 
+      + this.rectangle.y + "," 
+      + this.rectangle.width + "," 
+      + this.rectangle.height
+  );
 }
 
 @Override public boolean intersects(Highlight that) {

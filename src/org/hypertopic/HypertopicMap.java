@@ -314,16 +314,24 @@ public Item(String id) {
 	super(id);
 }
 
-public URL getResource() throws Exception {
-  try {
-    return new URL(this.getView().optString("resource"));
-  } catch (Exception e) {
-    return null;
+/**
+ * Returns the first value of an attribute.
+ * Precondition: the key is mapped to a string or to an array of strings.
+ */
+public String getAttributeValue(String key) throws Exception {
+  Object result = this.getView().get(key);
+  if (result instanceof JSONArray) {
+    result = ((JSONArray) result).get(0);
   }
+  return (String) result;
+}
+
+public URL getResource() throws Exception {
+  return new URL(this.getAttributeValue("resource"));
 }
 
 public URL getThumbnail() throws Exception {
-	return new URL(this.getView().getString("thumbnail"));
+	return new URL(this.getAttributeValue("thumbnail"));
 }
 
 public Collection<Viewpoint.Topic> getTopics() throws Exception {
