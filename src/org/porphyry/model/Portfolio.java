@@ -47,7 +47,7 @@ public Portfolio(String user, String... services) {
 	this.map.addObserver(this);
 }
 
-public void update(Observable o, Object arg) {
+@Override public synchronized void update(Observable o, Object arg) {
 	this.invalidateCache();
 	this.notifyObservers();
 }
