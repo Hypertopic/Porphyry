@@ -32,7 +32,7 @@ import javax.xml.ws.http.HTTPException;
  * On _changes, the cache is cleared and the observers are notified.
  * Design pattern: Data Access Object. 
  */
-public class RESTDatabase extends Observable {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+public class RESTDatabase extends Observable {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 private final String baseUrl;
 private final Map<URL,JSONObject> cache = new HashMap<URL,JSONObject>();
@@ -173,6 +173,7 @@ protected String send(String method, URL service, JSONObject object)
 		(HttpURLConnection) service.openConnection();
 	connection.setRequestMethod(method);
 	connection.setRequestProperty("Content-Type", "application/json");
+	connection.setRequestProperty("Accept", "application/json");
 	if (object != null) this.writeBody(connection, object);
 	String result = this.readBody(connection);
 //	System.err.println(result); //DEBUG
@@ -225,40 +226,49 @@ protected static void checkError(HttpURLConnection connection)
  * On _changes, the cache is cleared and the observers are notified.
  */
 public void startListening() {
-	SwingWorker w = new SwingWorker() {
-		protected Object doInBackground() {
-			RESTDatabase.this.listen();
-			return null;
-		}
-	};
-	w.execute();
+  SwingWorker w = new SwingWorker() {
+    protected Object doInBackground() {
+      try {
+        for (;;) {
+          try {
+            RESTDatabase.this.listen();
+          } catch (Exception e) {
+            System.out.println("startListening " + RESTDatabase.this + ": " + e);
+            Thread.sleep(60000);
+          }
+        }
+      } catch (Exception e2) {
+        e2.printStackTrace();
+      }
+      return null;
+    }
+  };
+  w.execute();
 }
 
-protected void listen() {
-	try {
-		int last = this.get("_changes").getInt("last_seq");
-		URL service = new URL(
-			this.baseUrl + "_changes?feed=continuous&since=" + last
-		);
-		HttpURLConnection connection =  
-			(HttpURLConnection) service.openConnection();
-		connection.setRequestMethod("GET");
-		BufferedReader reader = new BufferedReader(
-			new InputStreamReader(
-				connection.getInputStream()
-			)
-		);
-		String line = reader.readLine();
-		while (line!=null) {
-			this.cache.clear();
-			this.setChanged();
-			this.notifyObservers();
-			line = reader.readLine();
-		}
-	} catch (Exception e) {
-		System.err.println("GET _changes " + e);
-	}
-	this.listen(); //Show must go on...
+protected void listen() throws Exception {
+  int last = this.get("").getInt("update_seq");
+  for (;;) {
+    URL service = new URL(
+      this.baseUrl + "_changes?feed=continuous&since=" + last
+    );
+    HttpURLConnection connection =  
+      (HttpURLConnection) service.openConnection();
+    connection.setRequestMethod("GET");
+    BufferedReader reader = new BufferedReader(
+      new InputStreamReader(
+        connection.getInputStream()
+      )
+    );
+    String line = reader.readLine();
+    while (line.startsWith("{\"seq\":")) {
+      this.cache.clear();
+      this.setChanged();
+      this.notifyObservers();
+      line = reader.readLine();
+    }
+    last = new JSONObject(line).getInt("last_seq");
+  }
 }
 
 @Override public String toString() {
