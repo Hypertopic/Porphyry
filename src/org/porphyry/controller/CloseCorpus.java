@@ -44,10 +44,10 @@ public CloseCorpus(Portfolio portfolio, String corpus) {
 
 @Override public void done() {
 	try {
-		System.out.println(this.portfolio.getSelectedItemSet());
-		for (Portfolio.Viewpoint.Topic t : this.get()) {
-			System.out.println(t);
-		} 
+		// System.out.println(this.portfolio.getSelectedItemSet());
+		// for (Portfolio.Viewpoint.Topic t : this.get()) {
+		//   System.out.println(t);
+		// } 
 		this.portfolio.notifyObservers();
 	} catch (Exception e) {
 		e.printStackTrace();

@@ -44,9 +44,9 @@ public OpenViewpoint(Portfolio portfolio, String viewpoint) {
 
 @Override public void done() {
 	try {
-		for (Portfolio.Viewpoint.Topic t : this.get()) {
-			System.out.println(t);
-		} 
+		// for (Portfolio.Viewpoint.Topic t : this.get()) {
+		//   System.out.println(t);
+		// } 
 		this.portfolio.notifyObservers();
 	} catch (Exception e) {
 		e.printStackTrace();
