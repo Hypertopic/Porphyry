@@ -215,13 +215,7 @@ public Set<Topic> getTopics() throws Exception {
 		ItemSet localSet = new ItemSet(t);
 		localSet.retainAll(globalSet);
 		result.add(
-			new Topic(
-				t.getID(),
-				t.getName(),
-				localSet,
-				globalItemsCount,
-				globalHighlightsCount
-			)
+			new Topic(t, localSet, globalItemsCount, globalHighlightsCount)
 		);
 	}
 	return result;
@@ -229,19 +223,16 @@ public Set<Topic> getTopics() throws Exception {
 
 public class Topic implements Comparable<Topic> {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-private String topicID;
-private final String name;
+private final HypertopicMap.Viewpoint.Topic data;
 private final double ratio[] = {0, 0};
 
 public Topic(
-	String topicID,
-	String name,
+  HypertopicMap.Viewpoint.Topic data,
 	ItemSet localSet,
 	int globalItemsCount, 
 	int globalHighlightsCount
 ) {
-	this.topicID = topicID;
-	this.name = name;
+	this.data = data;
 	this.ratio[0] = 
 		ratio(localSet.countItems(), globalItemsCount);
 	this.ratio[1] = 
@@ -257,18 +248,40 @@ public double getRatio(int level) {
 }
 
 public String getName() {
-	return this.name;
+  String result = null;
+  try {
+    result = this.data.getName();
+  } catch (Exception e) {
+    e.printStackTrace(); //TODO?
+  }
+	return result;
+}
+
+public Collection<String> getNarrower() throws Exception {
+  Collection<String> result = new ArrayList();
+  for (HypertopicMap.Viewpoint.Topic t : this.data.getNarrower()) {
+    result.add(t.getID());
+  }
+  return result;
+}
+
+public Collection<String> getBroader() throws Exception {
+  Collection<String> result = new ArrayList();
+  for (HypertopicMap.Viewpoint.Topic t : this.data.getBroader()) {
+    result.add(t.getID());
+  }
+  return result;
 }
 
 public boolean isSelected() {
   return Portfolio.this.selectedTopics.contains(
 		Portfolio.this.map.getViewpoint(Viewpoint.this.getID())
-      .getTopic(this.topicID)
+      .getTopic(this.data.getID())
   );
 }
 
 public String getID() {
-	return this.topicID;
+	return this.data.getID();
 }
 
 public Viewpoint getViewpoint() {
@@ -280,15 +293,17 @@ public Portfolio getPortfolio() {
 }
 
 @Override public int compareTo(Topic that) {
-	return (this.name==null)
+  String thisName = this.getName();
+  String thatName = that.getName();
+	return (thisName==null)
     ? -1 
-    : (that.name==null)
+    : (thatName==null)
       ? 1 
-      : this.name.compareTo(that.name);
+      : thisName.compareTo(thatName);
 }
 
 @Override public String toString() {
-	return this.name + "(" + this.ratio[0] + "," + this.ratio[1] + ")";
+	return this.getName() + "(" + this.ratio[0] + "," + this.ratio[1] + ")";
 }
 
 }//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Topic

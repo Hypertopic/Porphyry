@@ -31,6 +31,7 @@ class TopicLabel extends JLabel {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 private static final int MAX_FONT_SIZE = 30;
 private static final int MIN_FONT_SIZE = 10;
 private static final int NULL_FONT_SIZE = 5;
+private static final Color PRIMARY_COLOR1 = new Color(153, 51, 00);
 private static final Color PRIMARY_COLOR2 = new Color(204, 153, 51);
 private static final Color DARK_GRAY = new Color(110, 110, 110);
 private static final Color LIGHT_GRAY = new Color(200, 200, 200);
@@ -39,6 +40,7 @@ private static final Cursor HAND_CURSOR = new Cursor(Cursor.HAND_CURSOR);
 private final Border margins = new EmptyBorder(0, 3, 0, 3);
 
 private Portfolio.Viewpoint.Topic model;
+private int level;
 private final MouseListener clickListener = new MouseAdapter() {
   @Override public void mouseClicked(MouseEvent e) {
     Portfolio.Viewpoint.Topic model = TopicLabel.this.model;
@@ -49,16 +51,48 @@ private final MouseListener clickListener = new MouseAdapter() {
     ).execute();
   }
 };
+private final MouseListener overListener = new MouseAdapter() {
+  @Override public void mouseEntered(MouseEvent e) {
+    try {
+      TopicLabel.this.setForeground(PRIMARY_COLOR1);
+      TopicLabel t = TopicLabel.this;
+      ((PortfolioFrame.ViewpointPanel) t.getParent())
+        .showArrows(t, t.model.getBroader(), t.model.getNarrower());
+    } catch (Exception ex) {
+       ex.printStackTrace(); //TODO?
+    }
+  }
+  @Override public void mouseExited(MouseEvent e) {
+    TopicLabel.this.updateForeground();
+    ((PortfolioFrame.ViewpointPanel) TopicLabel.this.getParent()).hideArrows();
+  }
+};
 
 public TopicLabel(Portfolio.Viewpoint.Topic model, int level) {
 	super(model.getName());
 	this.model = model;
-  this.updateSizeAndBackground(level);
+  this.level = level;
+  this.updateForeground();
+  this.updateSizeAndBackground();
 	this.setBorder(this.margins);  
+  this.addMouseListener(this.overListener);
 }
 
-protected void updateSizeAndBackground(int level) {
-  double ratio = this.model.getRatio(level);
+public String getID() {
+  return this.model.getID();
+}
+
+protected void updateForeground() {
+  double ratio = this.model.getRatio(this.level);
+  this.setForeground(
+    (ratio==0)? LIGHT_GRAY
+      : (ratio==1)? Color.BLACK
+      : DARK_GRAY
+  );
+}
+
+protected void updateSizeAndBackground() {
+  double ratio = this.model.getRatio(this.level);
 	this.setFont(
 		new Font(null, Font.BOLD, 
       (ratio==0) ? NULL_FONT_SIZE
@@ -68,10 +102,8 @@ protected void updateSizeAndBackground(int level) {
   if (ratio>0) {
     this.addMouseListener(this.clickListener);
     this.setCursor(HAND_CURSOR);
-    this.setForeground((ratio==1)?Color.BLACK:DARK_GRAY);
   } else {
     this.setToolTipText(this.model.getName());
-    this.setForeground(LIGHT_GRAY);
   }
   if (this.model.isSelected()) {
     this.setOpaque(true);
@@ -80,6 +112,11 @@ protected void updateSizeAndBackground(int level) {
     this.setOpaque(false);
     this.setBackground(null);
   }
+}
+
+public Point getAnchor() {
+	Rectangle bounds = this.getBounds();
+	return new Point(bounds.x + bounds.width/2, bounds.y + bounds.height/2);
 }
 
 }//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< TopicLabel

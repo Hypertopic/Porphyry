@@ -31,9 +31,11 @@ public class PortfolioFrame extends JFrame implements Observer {//>>>>>>>>>>>>>>
 
 private Portfolio model;
 private final JTabbedPane corporaPanel = new JTabbedPane(JTabbedPane.BOTTOM);
-private final JPanel viewpointsPanel = new JPanel(new WrapLayout());
+private final ViewpointPanel viewpointsPanel = new ViewpointPanel();
 private final JPanel itemsPanel = new ScrollablePanel();
 private final JPanel highlightsPanel = new ScrollablePanel();
+private final int ARROWS_LAYER = 1;
+private final int TOPICS_LAYER = 0;
 
 public PortfolioFrame(Portfolio model) {
 	super(localize("PORTFOLIO"));
@@ -104,13 +106,7 @@ protected void updateCorporaPanel() throws Exception {
 }
 
 protected void updateViewpointsPanel() throws Exception {
-  this.viewpointsPanel.removeAll();
-  int level = this.corporaPanel.getSelectedIndex();
-  for (Portfolio.Viewpoint.Topic t : this.model.getTopics()) {
-    this.viewpointsPanel.add(new TopicLabel(t, level));
-  }
-  this.viewpointsPanel.validate();
-  this.viewpointsPanel.repaint();
+  this.viewpointsPanel.update(this.corporaPanel.getSelectedIndex());
 }
 
 protected void setTabTitle(int index, String key, int count) {
@@ -148,6 +144,54 @@ protected static String localize(String code) {
 public Portfolio getModel() {
 	return this.model;
 }
+
+class ViewpointPanel extends JLayeredPane {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+public ViewpointPanel() {
+  this.setLayout(new WrapLayout());
+}
+
+public void update(int level) throws Exception {
+  this.removeAll();
+  for (Portfolio.Viewpoint.Topic t : PortfolioFrame.this.model.getTopics()) {
+    this.add(new TopicLabel(t, level), new Integer(TOPICS_LAYER));
+  }
+  this.validate();
+  this.repaint();
+}
+
+protected void showArrow(TopicLabel from, TopicLabel to) {
+  this.add(
+    new Arrow(from.getAnchor(), to.getAnchor()),
+    new Integer(ARROWS_LAYER)
+  );
+}
+
+public void showArrows(
+  TopicLabel focus, 
+  Collection<String> broaderIDs,
+  Collection<String> narrowerIDs
+) {
+  for (Component t : this.getComponentsInLayer(TOPICS_LAYER)) {
+    String id = ((TopicLabel) t).getID();
+    if (narrowerIDs.contains(id)) {
+      this.showArrow(focus, (TopicLabel) t);
+    } else if (broaderIDs.contains(id)) {
+      this.showArrow((TopicLabel) t, focus);
+    }
+  }
+}
+
+public void hideArrows() {
+  Component[] arrows = this.getComponentsInLayer(ARROWS_LAYER);
+  for (int i = arrows.length-1; i>=0; i--) {
+    this.remove(arrows[i]);
+  }
+  this.validate();
+  this.repaint();
+}
+
+}//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< ViewpointPanel
 
 class Menu extends JMenu {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
