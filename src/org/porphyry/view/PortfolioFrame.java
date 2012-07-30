@@ -98,7 +98,7 @@ protected void updateCorporaPanel() throws Exception {
   this.itemsPanel.removeAll();
   this.highlightsPanel.removeAll();
   for (ItemSet.Item i : s.getItems()) {
-    this.itemsPanel.add(new JLabel(i.getName()));
+    this.itemsPanel.add(new ItemLabel(i));
     for (ItemSet.Item.Highlight h : i.getHighlights()) {
       this.highlightsPanel.add(new HighlightLabel(h));
     }
