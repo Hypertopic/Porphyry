@@ -228,17 +228,21 @@ protected static void checkError(HttpURLConnection connection)
 public void startListening() {
   SwingWorker w = new SwingWorker() {
     protected Object doInBackground() {
-      try {
-        for (;;) {
+      boolean retry = true;
+      while (retry) {
+        try {
+          RESTDatabase.this.listen();
+        } catch (JSONException e1) {
+          System.err.println("WARNING: " + RESTDatabase.this + " " + e1);
+          retry = false;
+        } catch (Exception e2) {
+          System.err.println("WARNING: " + RESTDatabase.this + " " + e2);
           try {
-            RESTDatabase.this.listen();
-          } catch (Exception e) {
-            System.out.println("startListening " + RESTDatabase.this + ": " + e);
             Thread.sleep(60000);
+          } catch (InterruptedException e3) {
+            System.err.println(e3); //Should not go there...
           }
         }
-      } catch (Exception e2) {
-        e2.printStackTrace();
       }
       return null;
     }
