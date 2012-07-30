@@ -48,6 +48,19 @@ public String getURL() {
 	return this.baseUrl;
 }
 
+public URL getURL(String path) throws Exception {
+  URL url = new URL(this.baseUrl + path);
+  return new URL(new URI(
+    url.getProtocol(), 
+    url.getUserInfo(),
+    url.getHost(),
+    url.getPort(),
+    url.getPath(),
+    url.getQuery(),
+    url.getRef()
+  ).toASCIIString());
+}
+
 /**
  * @param object The object to create on the server.
  * It is updated with an _id 
@@ -55,7 +68,7 @@ public String getURL() {
  */
 public JSONObject post(JSONObject object) throws Exception {
 	JSONObject body = new JSONObject(
-		send("POST", new URL(this.baseUrl), object)
+		send("POST", this.getURL(""), object)
 	);
 	object.put("_id", body.getString("id"));
 	if (body.has("rev")) {
@@ -74,7 +87,7 @@ public JSONObject post(JSONObject object) throws Exception {
  * Implementation note: Synchronized because it updates cache.
  */
 public synchronized JSONObject getAll(String query) throws Exception {
-	URL url = new URL(this.baseUrl + query);
+	URL url = this.getURL(query);
 	JSONObject result = this.cache.get(url);
 	if (result == null) {
     result = index(new JSONObject(send("GET", url, null)));
@@ -121,7 +134,7 @@ protected static JSONObject index(JSONObject view) throws Exception {
  */
 public JSONObject get(String id) throws Exception {
 	return new JSONObject(
-    send("GET", new URL(this.baseUrl + id), null)
+    send("GET", this.getURL(id), null)
   );
 }
 
@@ -134,7 +147,7 @@ public void put(JSONObject object) throws Exception {
 	JSONObject body = new JSONObject(
 		send(
 			"PUT", 
-			new URL(this.baseUrl + object.getString("_id")), 
+			this.getURL(object.getString("_id")), 
 			object
 		)
 	);
@@ -150,8 +163,8 @@ public void put(JSONObject object) throws Exception {
 public void delete(JSONObject object) throws Exception {
 	send(
 		"DELETE", 
-		new URL(
-			this.baseUrl + object.getString("_id") 
+		this.getURL(
+			object.getString("_id") 
 			+ (object.has("_rev")
 				? "?rev=" + object.getString("_rev")
 				: ""
