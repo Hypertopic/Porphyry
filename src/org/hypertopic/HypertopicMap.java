@@ -129,7 +129,7 @@ protected abstract JSONObject getView() throws Exception;
 	try {
 		return this.getView().toString(2);
 	} catch (Exception e) {
-		return "ERROR at HypertopicMap.Named.toString()";
+		return "toString " + e;
 	}
 }
 
