@@ -34,8 +34,6 @@ private final JTabbedPane corporaPanel = new JTabbedPane(JTabbedPane.BOTTOM);
 private final Box viewpointsPanel = new Box(BoxLayout.Y_AXIS);
 private final JPanel itemsPanel = new ScrollablePanel();
 private final JPanel highlightsPanel = new ScrollablePanel();
-private final int ARROWS_LAYER = 1;
-private final int TOPICS_LAYER = 0;
 
 public PortfolioFrame(Portfolio model) {
 	super(localize("PORTFOLIO"));
@@ -153,68 +151,6 @@ public Portfolio getModel() {
 	return this.model;
 }
 
-class ViewpointBox extends Box {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-private Portfolio.Viewpoint model;
-
-private JLayeredPane graph = new ViewpointGraph();
-
-public ViewpointBox(Portfolio.Viewpoint model) {
-	super(BoxLayout.Y_AXIS);
-  this.model = model;
-  this.add(this.graph);
-}
-
-public void update(int level) throws Exception {
-  //TODO updating instead of starting from scratch?  
-  this.graph.removeAll();
-  for (Portfolio.Viewpoint.Topic t : this.model.getTopics()) {
-    this.graph.add(new TopicLabel(t, level), new Integer(TOPICS_LAYER));
-  }
-  this.graph.validate();
-  this.graph.repaint();
-}
-
-class ViewpointGraph extends JLayeredPane {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-public ViewpointGraph() {
-  this.setLayout(new WrapLayout());
-}
-
-protected void showArrow(TopicLabel from, TopicLabel to) {
-  this.add(
-    new Arrow(from.getAnchor(), to.getAnchor()),
-    new Integer(ARROWS_LAYER)
-  );
-}
-
-public void showArrows(
-  TopicLabel focus, 
-  Collection<String> broaderIDs,
-  Collection<String> narrowerIDs
-) {
-  for (Component t : this.getComponentsInLayer(TOPICS_LAYER)) {
-    String id = ((TopicLabel) t).getID();
-    if (narrowerIDs.contains(id)) {
-      this.showArrow(focus, (TopicLabel) t);
-    } else if (broaderIDs.contains(id)) {
-      this.showArrow((TopicLabel) t, focus);
-    }
-  }
-}
-
-public void hideArrows() {
-  Component[] arrows = this.getComponentsInLayer(ARROWS_LAYER);
-  for (int i = arrows.length-1; i>=0; i--) {
-    this.remove(arrows[i]);
-  }
-  this.validate();
-  this.repaint();
-}
-
-}//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< ViewpointGraph
-
-}//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< ViewpointBox
 
 class Menu extends JMenu {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
