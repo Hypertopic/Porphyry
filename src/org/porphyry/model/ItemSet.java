@@ -138,19 +138,20 @@ public class Item {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 private final String id;
 private final String name;
 private final URL resource;
-//TODO thumbnail
+private final URL thumbnail;
 private final Set<Highlight> highlights = Collections.newSetFromMap(
 	new ConcurrentHashMap()
 );
 
-public Item(String id, String name, URL resource) {
+public Item(String id, String name, URL resource, URL thumbnail) {
 	this.id = id;
 	this.name = name;
   this.resource = resource;
+  this.thumbnail = thumbnail;
 }
 
 public Item(HypertopicMap.Corpus.Item item) throws Exception {
-	this(item.getID(), item.getName(), item.getResource());
+	this(item.getID(), item.getName(), item.getResource(), item.getThumbnail());
 }
 
 public String getID() {
@@ -163,6 +164,10 @@ public String getName() {
 
 public URL getResource() {
 	return this.resource;
+}
+
+public URL getThumbnail() {
+	return this.thumbnail;
 }
 
 public int size() {
@@ -347,6 +352,8 @@ public PictureHighlight(int x1, int y1, int x2, int y2) {
       + this.rectangle.height
   );
 }
+
+//TODO getThumbnail 
 
 @Override public boolean intersects(Highlight that) {
 	return that instanceof PictureHighlight 

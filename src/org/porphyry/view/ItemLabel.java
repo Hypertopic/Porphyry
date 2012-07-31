@@ -21,7 +21,8 @@ package org.porphyry.view;
 
 import java.awt.*;
 import java.awt.event.*;
-import javax.swing.JLabel;
+import java.net.URL;
+import javax.swing.*;
 import javax.swing.border.*;
 import org.porphyry.model.ItemSet;
 
@@ -35,8 +36,14 @@ private static final Border INACTIVE_BORDER = new EmptyBorder(2, 2, 2, 2);
 private ItemSet.Item model;
 
 public ItemLabel(ItemSet.Item model) {
-  super(model.getName());
   this.model = model;
+  URL thumbnail = model.getThumbnail();
+  if (thumbnail==null) {
+    this.setText(model.getName());
+  } else {
+    this.setIcon(new ImageIcon(thumbnail));
+    this.setToolTipText(model.getName());
+  }
   this.setBorder(INACTIVE_BORDER);
   this.setCursor(new Cursor(Cursor.HAND_CURSOR));	
   this.addMouseListener(

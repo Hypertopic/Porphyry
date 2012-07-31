@@ -315,11 +315,12 @@ public Item(String id) {
 }
 
 /**
- * Returns the first value of an attribute.
- * Precondition: the key is mapped to a string or to an array of strings.
+ * Returns the first value of an attribute
+ * if the key is mapped to a string or to an array of strings.
+ * Returns null otherwise.
  */
 public String getAttributeValue(String key) throws Exception {
-  Object result = this.getView().get(key);
+  Object result = this.getView().opt(key);
   if (result instanceof JSONArray) {
     result = ((JSONArray) result).get(0);
   }
@@ -331,7 +332,8 @@ public URL getResource() throws Exception {
 }
 
 public URL getThumbnail() throws Exception {
-	return new URL(this.getAttributeValue("thumbnail"));
+  String url = this.getAttributeValue("thumbnail");
+	return (url==null)? null : new URL(url);
 }
 
 public Collection<Viewpoint.Topic> getTopics() throws Exception {

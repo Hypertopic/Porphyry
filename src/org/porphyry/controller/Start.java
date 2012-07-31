@@ -33,7 +33,8 @@ public static void main(String[] args) throws Exception {
 					//TODO
 					"nadia@hypertopic.org",
 					"http://127.0.0.1:5984/argos/_design/argos/_rewrite/",
-					"http://127.0.0.1/~benel/cassandre/"
+					"http://127.0.0.1/~benel/steatite/"
+					//"http://127.0.0.1/~benel/cassandre/"
 				)
 			);
 			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
