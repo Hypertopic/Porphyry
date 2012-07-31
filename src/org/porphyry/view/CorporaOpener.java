@@ -26,7 +26,7 @@ import org.porphyry.model.Portfolio;
 public class CorporaOpener extends Opener {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 public CorporaOpener(PortfolioFrame frame) {
-	super(frame);
+	super(frame, "OPEN_CORPORA");
 }
 
 @Override protected void open(String id, Portfolio model) {

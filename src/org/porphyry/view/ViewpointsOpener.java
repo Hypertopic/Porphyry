@@ -26,7 +26,7 @@ import org.porphyry.model.Portfolio;
 public class ViewpointsOpener extends Opener {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 public ViewpointsOpener(PortfolioFrame frame) {
-	super(frame);
+	super(frame, "OPEN_VIEWPOINTS");
 }
 
 @Override protected void open(String id, Portfolio model) {

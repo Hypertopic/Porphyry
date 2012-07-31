@@ -36,8 +36,8 @@ private final Box leftPanel = Box.createVerticalBox();
 private final JSONList listView;
 final DefaultListModel listModel = new DefaultListModel();
 
-public Opener(PortfolioFrame portfolio) {
-	super(portfolio, portfolio.localize("OPEN_CORPORA"));
+public Opener(PortfolioFrame portfolio, String title) {
+	super(portfolio, portfolio.localize(title));
 	this.portfolio = portfolio;
 	this.add(
 		new JSplitPane(
