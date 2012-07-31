@@ -56,7 +56,7 @@ private final MouseListener overListener = new MouseAdapter() {
     try {
       TopicLabel.this.setForeground(PRIMARY_COLOR1);
       TopicLabel t = TopicLabel.this;
-      ((PortfolioFrame.ViewpointPanel) t.getParent())
+      ((PortfolioFrame.ViewpointBox.ViewpointGraph) t.getParent())
         .showArrows(t, t.model.getBroader(), t.model.getNarrower());
     } catch (Exception ex) {
        ex.printStackTrace(); //TODO?
@@ -64,7 +64,8 @@ private final MouseListener overListener = new MouseAdapter() {
   }
   @Override public void mouseExited(MouseEvent e) {
     TopicLabel.this.updateForeground();
-    ((PortfolioFrame.ViewpointPanel) TopicLabel.this.getParent()).hideArrows();
+    ((PortfolioFrame.ViewpointBox.ViewpointGraph) TopicLabel.this.getParent())
+      .hideArrows();
   }
 };
 

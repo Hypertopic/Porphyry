@@ -31,7 +31,7 @@ public class PortfolioFrame extends JFrame implements Observer {//>>>>>>>>>>>>>>
 
 private Portfolio model;
 private final JTabbedPane corporaPanel = new JTabbedPane(JTabbedPane.BOTTOM);
-private final ViewpointPanel viewpointsPanel = new ViewpointPanel();
+private final Box viewpointsPanel = new Box(BoxLayout.Y_AXIS);
 private final JPanel itemsPanel = new ScrollablePanel();
 private final JPanel highlightsPanel = new ScrollablePanel();
 private final int ARROWS_LAYER = 1;
@@ -106,8 +106,16 @@ protected void updateCorporaPanel() throws Exception {
 }
 
 protected void updateViewpointsPanel() throws Exception {
-  this.viewpointsPanel.update(this.corporaPanel.getSelectedIndex());
+  //TODO updating instead of starting from scratch?
+  int level = this.corporaPanel.getSelectedIndex();
+  this.viewpointsPanel.removeAll();
+  for (Portfolio.Viewpoint v : PortfolioFrame.this.model.getViewpoints()) {
+    ViewpointBox box = new ViewpointBox(v);
+    this.viewpointsPanel.add(box);
+    box.update(level);
+  }
 }
+
 
 protected void setTabTitle(int index, String key, int count) {
 	this.corporaPanel.setTitleAt(
@@ -145,19 +153,32 @@ public Portfolio getModel() {
 	return this.model;
 }
 
-class ViewpointPanel extends JLayeredPane {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+class ViewpointBox extends Box {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-public ViewpointPanel() {
-  this.setLayout(new WrapLayout());
+private Portfolio.Viewpoint model;
+
+private JLayeredPane graph = new ViewpointGraph();
+
+public ViewpointBox(Portfolio.Viewpoint model) {
+	super(BoxLayout.Y_AXIS);
+  this.model = model;
+  this.add(this.graph);
 }
 
 public void update(int level) throws Exception {
-  this.removeAll();
-  for (Portfolio.Viewpoint.Topic t : PortfolioFrame.this.model.getTopics()) {
-    this.add(new TopicLabel(t, level), new Integer(TOPICS_LAYER));
+  //TODO updating instead of starting from scratch?  
+  this.graph.removeAll();
+  for (Portfolio.Viewpoint.Topic t : this.model.getTopics()) {
+    this.graph.add(new TopicLabel(t, level), new Integer(TOPICS_LAYER));
   }
-  this.validate();
-  this.repaint();
+  this.graph.validate();
+  this.graph.repaint();
+}
+
+class ViewpointGraph extends JLayeredPane {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+public ViewpointGraph() {
+  this.setLayout(new WrapLayout());
 }
 
 protected void showArrow(TopicLabel from, TopicLabel to) {
@@ -191,7 +212,9 @@ public void hideArrows() {
   this.repaint();
 }
 
-}//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< ViewpointPanel
+}//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< ViewpointGraph
+
+}//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< ViewpointBox
 
 class Menu extends JMenu {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
