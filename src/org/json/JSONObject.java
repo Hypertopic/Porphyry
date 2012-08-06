@@ -1720,28 +1720,35 @@ public class JSONObject {
     protected Object merge(Object x, Object y) throws JSONException {
       Object result = null;
       if (x instanceof String) {
-        if (y instanceof String) {
-          result = new JSONArray().put(x).put(y);
-        } else if (y instanceof JSONArray) { 
+        if (y instanceof JSONArray) { 
           result = new JSONArray().put(x).putAll((JSONArray) y);
+        } else {
+          result = new JSONArray().put(x).put(y);
         }
       } else if (x instanceof JSONArray) {
-        if (y instanceof String) {
-          result = new JSONArray().putAll((JSONArray) x).put(y);
-        } else if (y instanceof JSONArray) { 
+        if (y instanceof JSONArray) { 
           result = new JSONArray().putAll((JSONArray) x).putAll((JSONArray) y);
+        } else {
+          result = new JSONArray().putAll((JSONArray) x).put(y);
         }
       } else if (x instanceof JSONObject && y instanceof JSONObject) {
-        result = new JSONObject(x);
-        Iterator i = ((JSONObject) y).map.entrySet().iterator();
-        while (i.hasNext()) {
-          Map.Entry<String, Object> e = (Map.Entry<String, Object>) i.next();
-          String key = (String) e.getKey();
-          Object oldValue = ((JSONObject) x).map.get(key);
-          Object value = (oldValue==null)
-            ? e.getValue()
-            : merge(oldValue, e.getValue());
-          result = ((JSONObject) x).put(key, value);
+        if (((JSONObject) x).hasSameStructureAs((JSONObject) y)
+          && !((JSONObject) x).containsObject()
+          && !((JSONObject) y).containsObject()
+        ) {
+          result = new JSONArray().put(x).put(y);
+        } else {
+          result = new JSONObject(x);
+          Iterator i = ((JSONObject) y).map.entrySet().iterator();
+          while (i.hasNext()) {
+            Map.Entry<String, Object> e = (Map.Entry<String, Object>) i.next();
+            String key = (String) e.getKey();
+            Object oldValue = ((JSONObject) x).map.get(key);
+            Object value = (oldValue==null)
+              ? e.getValue()
+              : merge(oldValue, e.getValue());
+            result = ((JSONObject) x).put(key, value);
+          }
         }
       }
       if (result==null) throw new JSONException(
@@ -1749,4 +1756,26 @@ public class JSONObject {
       );
       return result ;
     }
+
+    /**
+     * WARNING: We suppose here that the members of an array are of the same type.
+     * @author Aurelien Benel
+     */
+    public boolean containsObject() throws JSONException {
+      boolean result = false;
+      Iterator i = this.map.values().iterator();
+      while (!result && i.hasNext()) {
+        Object value = i.next();
+        result = value instanceof JSONObject 
+          || value instanceof JSONArray
+          && ((JSONArray) value).length()>0 
+          && ((JSONArray) value).get(0) instanceof JSONObject;
+      }
+      return result;
+    }
+
+    public boolean hasSameStructureAs(JSONObject that) {
+      return this.map.keySet().equals(that.map.keySet());
+    }
+
 }

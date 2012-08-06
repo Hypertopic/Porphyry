@@ -33,8 +33,8 @@ private HypertopicMap distributedMap = new HypertopicMap(
 
 @Test public void listCorpora() throws Exception {
 	Collection<JSONObject> c = this.distributedMap
-		.getUser("nadia@hypertopic.org").listCorpora();
-	assertEquals("MISS", c.iterator().next().getString("id"));
+		.getUser("cecile@hypertopic.org").listCorpora();
+	assertEquals(2, c.size());
 }
 
 @Test public void getCorpusItems() throws Exception {
