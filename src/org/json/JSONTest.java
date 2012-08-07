@@ -49,12 +49,19 @@ private final JSONObject object = new JSONObject();
  *   {key0:{type0:{attribute1:value2, attribute2:value3}}}
  *   {key0:{attribute0:value1, attribute3:value6}}
  *   {key0:{type0:{attribute1:value4, attribute2:value5}}}
+ *   {key0:{type1:{attribute1:value8, attribute2:value9}}}
+ *   {key0:{type1:[{attribute1:value10, attribute2:value11}],
+ *     {attribute1:value12, attribute2:value13}]}}
  * Output:
  *   {key0:{
  *     attribute0:[value0,value1], attribute3:value6, attribute4:value7
  *     type0:[
  *       {attribute1:value2, attribute2:value3},
  *       {attribute1:value4, attribute2:value5}
+ *     ], type1:[
+ *       {attribute1:value8, attribute2:value9},
+ *       {attribute1:value10, attribute2:value11},
+ *       {attribute1:value12, attribute2:value13}
  *     ]
  *   }}
  */ 
@@ -69,9 +76,15 @@ private final JSONObject object = new JSONObject();
     "{key0:{attribute0:value1, attribute3:value6}}"
   )).putAll(new JSONObject(
     "{key0:{type0:{attribute1:value4, attribute2:value5}}}"
+  )).putAll(new JSONObject(
+    "{key0:{type1:{attribute1:value8, attribute2:value9}}}"
+  )).putAll(new JSONObject(
+    "{key0:{type1:[{attribute1:value10, attribute2:value11},"
+    + "{attribute1:value12, attribute2:value13}]}}"
   ));
   assertEquals(JSONArray.class, o.getJSONObject("key0").get("attribute0").getClass());
   assertEquals(JSONArray.class, o.getJSONObject("key0").get("type0").getClass());
+  assertEquals(3, o.getJSONObject("key0").getJSONArray("type1").length());
 }
 
 }

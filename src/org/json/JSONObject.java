@@ -1731,23 +1731,27 @@ public class JSONObject {
         } else {
           result = new JSONArray().putAll((JSONArray) x).put(y);
         }
-      } else if (x instanceof JSONObject && y instanceof JSONObject) {
-        if (((JSONObject) x).hasSameStructureAs((JSONObject) y)
-          && !((JSONObject) x).containsObject()
-          && !((JSONObject) y).containsObject()
-        ) {
-          result = new JSONArray().put(x).put(y);
-        } else {
-          result = new JSONObject(x);
-          Iterator i = ((JSONObject) y).map.entrySet().iterator();
-          while (i.hasNext()) {
-            Map.Entry<String, Object> e = (Map.Entry<String, Object>) i.next();
-            String key = (String) e.getKey();
-            Object oldValue = ((JSONObject) x).map.get(key);
-            Object value = (oldValue==null)
-              ? e.getValue()
-              : merge(oldValue, e.getValue());
-            result = ((JSONObject) x).put(key, value);
+      } else if (x instanceof JSONObject) {
+        if (y instanceof JSONArray) {
+          result = new JSONArray().put(x).putAll((JSONArray) y);
+        } else if (y instanceof JSONObject) {
+          if (((JSONObject) x).hasSameStructureAs((JSONObject) y)
+            && !((JSONObject) x).containsObject()
+            && !((JSONObject) y).containsObject()
+          ) {
+            result = new JSONArray().put(x).put(y);
+          } else {
+            result = new JSONObject(x);
+            Iterator i = ((JSONObject) y).map.entrySet().iterator();
+            while (i.hasNext()) {
+              Map.Entry<String, Object> e = (Map.Entry<String, Object>) i.next();
+              String key = (String) e.getKey();
+              Object oldValue = ((JSONObject) x).map.get(key);
+              Object value = (oldValue==null)
+                ? e.getValue()
+                : merge(oldValue, e.getValue());
+              result = ((JSONObject) x).put(key, value);
+            }
           }
         }
       }

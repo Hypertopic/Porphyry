@@ -31,10 +31,21 @@ private HypertopicMap distributedMap = new HypertopicMap(
 	"http://127.0.0.1:5984/argos/_design/argos/_rewrite/"
 );
 
-@Test public void listCorpora() throws Exception {
+private HypertopicMap distributedMap2 = new HypertopicMap(
+	"http://127.0.0.1:5984/argos/_design/argos/_rewrite/",
+  "http://127.0.0.1/~benel/steatite/"
+);
+
+@Test public void listTextCorpora() throws Exception {
 	Collection<JSONObject> c = this.distributedMap
 		.getUser("cecile@hypertopic.org").listCorpora();
 	assertEquals(2, c.size());
+}
+
+@Test public void listPictureCorpora() throws Exception {
+	Collection<JSONObject> c2 = this.distributedMap2
+		.getUser("cecile@hypertopic.org").listCorpora();
+	assertTrue(c2.size()>0);
 }
 
 @Test public void getCorpusItems() throws Exception {
