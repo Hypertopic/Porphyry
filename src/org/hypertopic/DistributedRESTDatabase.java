@@ -21,6 +21,7 @@ package org.hypertopic;
 
 import org.json.JSONObject;
 import java.util.*;
+import java.io.FileNotFoundException;
 
 /**
  * Federation of REST databases:
@@ -47,9 +48,14 @@ public JSONObject post(JSONObject object) throws Exception {
 
 public synchronized JSONObject getAll(String query) throws Exception {
   Iterator<RESTDatabase> i = this.databases.iterator();
-  JSONObject result = i.next().getAll(query);
+  JSONObject result = new JSONObject();
   while (i.hasNext()) {
-    result.putAll(i.next().getAll(query));
+    RESTDatabase d = i.next();
+    try {
+      result.putAll(d.getAll(query));
+    } catch (FileNotFoundException e) {
+      System.err.println(e);
+    }
   }
   return result;
 }
