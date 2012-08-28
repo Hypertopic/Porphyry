@@ -21,7 +21,9 @@ package org.porphyry.view;
 
 import org.porphyry.model.*;
 import javax.swing.*;
-import java.awt.Component;
+import javax.swing.border.LineBorder;
+import java.awt.*;
+import java.awt.event.*;
 import java.util.Collection;
 
 public class ViewpointBox extends Box {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -29,13 +31,43 @@ public class ViewpointBox extends Box {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 private Portfolio.Viewpoint model;
 private final int ARROWS_LAYER = 1;
 private final int TOPICS_LAYER = 0;
+private static final Color PRIMARY_COLOR1 = new Color(153, 51, 00);
+private static final Color PRIMARY_COLOR2 = new Color(204, 153, 51);
+private static final Color DARK_GRAY = new Color(110, 110, 110);
+private static final Color LIGHT_GRAY = new Color(200, 200, 200);
+private static final Cursor HAND_CURSOR = new Cursor(Cursor.HAND_CURSOR);	
+public static final String OPEN_SYMBOL = "\u25bc";
+public static final String CLOSED_SYMBOL = "\u25ba";
+private final LineBorder ACTIVE_BORDER = new LineBorder(PRIMARY_COLOR1, 2);
+private final LineBorder INACTIVE_BORDER = new LineBorder(DARK_GRAY, 2);
 
 private JLayeredPane graph = new ViewpointGraph();
+private JLabel title = new JLabel();
 
-public ViewpointBox(Portfolio.Viewpoint model) {
+public ViewpointBox(Portfolio.Viewpoint model) throws Exception {
 	super(BoxLayout.Y_AXIS);
   this.model = model;
+  this.title.setForeground(Color.WHITE);
+	this.title.setOpaque(true);  
+  this.title.setCursor(new Cursor(Cursor.HAND_CURSOR));
+	this.title.setAlignmentX(Component.CENTER_ALIGNMENT);  
+  this.add(this.title);
   this.add(this.graph);
+  this.unmask();
+  this.title.setMaximumSize(
+		new Dimension(Integer.MAX_VALUE, this.title.getMaximumSize().height)
+	);
+	this.title.addMouseListener(
+		new MouseAdapter() {
+			@Override public void mouseClicked(MouseEvent e) {
+				if (e.getButton()==MouseEvent.BUTTON1) {
+          ViewpointBox.this.switchMask();
+ 				} else {
+					//TODO Viewpoint Popup
+				}
+			}
+		}
+	);
 }
 
 public void update(int level) throws Exception {
@@ -46,6 +78,32 @@ public void update(int level) throws Exception {
   }
   this.graph.validate();
   this.graph.repaint();
+}
+
+public void switchMask() {
+  try {
+    if (this.graph.isVisible()) {
+      this.mask();
+    } else {
+      this.unmask();
+    }
+  } catch (Exception e) {
+    e.printStackTrace(); //TODO?
+  }
+}
+
+public void unmask() throws Exception {
+	this.graph.setVisible(true);
+	this.title.setText(OPEN_SYMBOL + " " + this.model.getName());
+  this.title.setBackground(PRIMARY_COLOR1);
+  this.setBorder(ACTIVE_BORDER);
+}
+
+public void mask() throws Exception {
+	this.graph.setVisible(false);
+	this.title.setText(CLOSED_SYMBOL + " " + this.model.getName());
+	this.title.setBackground(DARK_GRAY);
+	this.setBorder(INACTIVE_BORDER);
 }
 
 class ViewpointGraph extends JLayeredPane {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
