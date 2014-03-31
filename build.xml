@@ -21,6 +21,17 @@
 		</copy>
 	</target>
 
+	<target name="test-argos" depends="compile" description="Test Argos service">
+		<junit>
+			<test name="org.hypertopic.HypertopicMapTest" />
+			<formatter type="brief" usefile="false" />
+			<classpath>
+				  <pathelement location="build" />
+				  <pathelement location="junit.jar" />
+			</classpath>
+		</junit>
+	</target>
+
 	<target name="test" depends="compile" description="Start unit tests">
 		<junit>
 			<batchtest> 
