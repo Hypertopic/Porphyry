@@ -21,7 +21,8 @@
 		</copy>
 	</target>
 
-	<target name="test-argos" depends="compile" description="Test Argos service">
+	<target name="test-argos" depends="compile" description="Test Argos service"
+		failureproperty="test.failed">
 		<junit>
 			<test name="org.hypertopic.HypertopicMapTest" />
 			<formatter type="brief" usefile="false" />
@@ -45,6 +46,8 @@
 		</junit> 
 	</target> 
 
+	<fail if="test.failed" />
+
 	<target name="run" depends="compile" description="Start application">
 		<java classname="org.porphyry.controller.Start" 
 			classpath="build" fork="true">
@@ -61,12 +64,21 @@
 		<manifest file="manifest/CLIENT.MF">
 			<attribute name="Main-Class" 
 				value="org.porphyry.controller.Start"/>
+			<attribute name="Permissions" value="sandbox"/>
+			<attribute name="Codebase" value="*"/>
 		</manifest>
+		<mkdir dir="build/JNLP-INF" />
+		<copy todir="build/JNLP-INF">
+			<fileset dir="." includes="APPLICATION.JNLP"/> 
+		</copy>
 		<mkdir dir="dist"/>
 		<jar jarfile="dist/v6.jar" 
 			basedir="build"
 			excludes="**/*Test.class"
 			manifest="manifest/CLIENT.MF"/>
+    <!--
+      tsaurl="http://timestamp.digicert.com"
+    -->
 		<signjar jar="dist/v6.jar"
 			keystore="${user}.p12" 
 			alias="My key" 
