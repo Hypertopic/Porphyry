@@ -21,9 +21,8 @@
 		</copy>
 	</target>
 
-	<target name="test-argos" depends="compile" description="Test Argos service"
-		failureproperty="test.failed">
-		<junit>
+	<target name="test-argos" depends="compile" description="Test Argos service">
+		<junit failureproperty="test.failed">
 			<test name="org.hypertopic.HypertopicMapTest" />
 			<formatter type="brief" usefile="false" />
 			<classpath>
@@ -31,6 +30,7 @@
 				  <pathelement location="junit.jar" />
 			</classpath>
 		</junit>
+		<fail if="test.failed" />
 	</target>
 
 	<target name="test" depends="compile" description="Start unit tests">
@@ -45,8 +45,6 @@
 			</classpath>
 		</junit> 
 	</target> 
-
-	<fail if="test.failed" />
 
 	<target name="run" depends="compile" description="Start application">
 		<java classname="org.porphyry.controller.Start" 
