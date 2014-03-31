@@ -63,12 +63,6 @@
 			storetype="PKCS12"/>
 	</target>
 
-	<target name="deploy" depends="dist" 
-		description="Publish on SourceForge (-Duser=XXX -Dpass=XXX)">
-		<scp file="dist/v6.jar" 
-		todir="${user}:${pass}@web.sourceforge.net:/home/groups/p/po/porphyry/htdocs"/>
-	</target>
-	
 	<target name="clean" description="Delete what ant has built"> 
 		<delete dir="build"/>
 		<delete dir="dist"/>
