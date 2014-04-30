@@ -99,7 +99,8 @@ protected static boolean isReserved(String key) {
 		|| "thumbnail".equals(key)
 		|| "topic".equals(key)
 		|| "upper".equals(key)
-		|| "user".equals(key);
+		|| "user".equals(key)
+		|| "_id".equals(key);
 }
 
 public abstract class Identified {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
