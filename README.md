@@ -1,4 +1,5 @@
-![Build Status](https://travis-ci.org/Ozymandiiaz/Porphyry.svg?branch=test-travis)
+[![Build Status](https://travis-ci.org/Ozymandiiaz/Porphyry.svg?branch=test-travis)](https://travis-ci.org/Ozymandiiaz/Porphyry)
+
 
 PORPHYRY – Corpus analyses confrontation
 ========================================
