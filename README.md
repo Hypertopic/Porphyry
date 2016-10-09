@@ -1,5 +1,6 @@
-(https://travis-ci.org/Ozymandiiaz/Porphyry.svg?branch=test-travis)
-PORPHYRY – Corpus analyses confrontation https://travis-ci.org/Ozymandiiaz/Porphyry.svg?branch=test-travis
+![Build Status](https://travis-ci.org/Ozymandiiaz/Porphyry.svg?branch=test-travis)
+
+PORPHYRY – Corpus analyses confrontation
 ========================================
 
 License: [GNU General Public License](http://www.gnu.org/licenses/gpl.html)
