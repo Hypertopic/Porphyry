@@ -1,2 +1,6 @@
+install : 
+- curl -O http://peak.telecommunity.com/dist/ez_setup.py
+- sudo python ez_setup.py -U setuptools
+- sudo easy_install -U couchapp
 language: java
 script: ant test
