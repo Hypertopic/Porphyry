@@ -12,8 +12,6 @@ install :
 - couchapp init
 - couchapp push http://127.0.0.1:5984/argos
 - curl http://127.0.0.1:5984/argos
-#Sript test
-- curl -O http://peak.telecommunity.com/dist/ez_setup.py
-- sudo python ez_setup.py -U setuptools
-- sudo easy_install -U couchapp
+- cd ..
+- ls
 script: ant test-argos
