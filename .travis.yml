@@ -3,4 +3,4 @@ install :
 - sudo python ez_setup.py -U setuptools
 - sudo easy_install -U couchapp
 language: java
-script: ant test
+script: ant test-argos
