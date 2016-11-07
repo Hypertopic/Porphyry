@@ -1,6 +1,10 @@
 services: couchdb
 language: java
 install : 
+#Installation Couchapp
+- curl -O http://peak.telecommunity.com/dist/ez_setup.py
+- sudo python ez_setup.py -U setuptools
+- sudo easy_install -U couchapp
 #Installation ARGOS
 - git clone https://github.com/Hypertopic/Argos.git
 - cd Argos
