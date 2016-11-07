@@ -28,7 +28,7 @@ import java.net.URL;
 public class HypertopicMapTest {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 private HypertopicMap map = 
-	new HypertopicMap("http://127.0.0.1:5984/test/_design/argos/_rewrite/");
+	new HypertopicMap("http://127.0.0.1:5984/argos/_design/argos/_rewrite/");
 private HypertopicMap.User user;
 private HypertopicMap.Corpus corpus;
 private HypertopicMap.Corpus.Item item;
