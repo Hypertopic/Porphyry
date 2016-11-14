@@ -5,13 +5,14 @@ language:
 cache:
   directories:
   - $HOME/.cache/pip/
+  - $HOME/.local/lib/python2.7/site-packages
 install : 
 #Installation Couchapp
-- pip install --user wheel
-- pip wheel -r requirements.txt
+#- pip install --user wheel
+#- pip wheel -r requirements.txt
   # Actually install our dependencies now, this will pull from the directory
   # that the first command placed the Wheels into.
-- pip install --user -r requirements.txt
+#- pip install --user -r requirements.txt
 - pip install --user couchapp  
 #Installation ARGOS
 - git clone https://github.com/Hypertopic/Argos.git
