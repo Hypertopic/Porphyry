@@ -23,6 +23,9 @@ install :
 - wget https://github.com/Hypertopic/Cassandre/archive/master.zip
 - unzip master.zip
 - couchapp push Cassandre-master http://localhost:5984/cassandre
+before_script : 
+- cd Cassandre-master/node
+- node app.js
 script: 
 - ant test-argos
 - ant test
