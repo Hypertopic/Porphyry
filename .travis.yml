@@ -7,7 +7,7 @@ cache:
   - $HOME/.cache/pip/
 install : 
 #Installation Couchapp
-- pip install wheel
+- pip install --user wheel
 - pip wheel -r requirements.txt
   # Actually install our dependencies now, this will pull from the directory
   # that the first command placed the Wheels into.
