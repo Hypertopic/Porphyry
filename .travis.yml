@@ -35,7 +35,7 @@ before_script :
 - npm install express
 - npm install express-http-proxy
 - npm install async
-- node app.js
+- node app.js &
 - cd ../..
 script: 
 - ant test-argos
