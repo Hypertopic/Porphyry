@@ -25,7 +25,7 @@ install :
 - curl -X PUT localhost:5984/cassandre
 - wget https://github.com/Ozymandiiaz/Cassandre/archive/travis-test.zip
 - unzip travis-test.zip
-- couchapp push Cassandre-master http://localhost:5984/cassandre
+- couchapp push  Cassandre-travis-test http://localhost:5984/cassandre
 before_script : 
 - cd Cassandre-master/node
 - nvm install 0.12
