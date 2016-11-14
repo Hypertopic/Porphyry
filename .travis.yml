@@ -27,6 +27,9 @@ before_script :
 - cd Cassandre-master/node
 - nvm install 0.12
 - node --version
+- npm install express
+- npm install express-http-proxy
+- npm install async
 - node app.js
 script: 
 - ant test-argos
