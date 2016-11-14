@@ -39,7 +39,7 @@ private HypertopicMap distributedMap2 = new HypertopicMap(
 @Test public void listTextCorpora() throws Exception {
 	Collection<JSONObject> c = this.distributedMap
 		.getUser("cecile@hypertopic.org").listCorpora();
-	assertEquals(2, c.size());
+	assertEquals(1, c.size());
 }
 
 @Test public void listPictureCorpora() throws Exception {
