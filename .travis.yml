@@ -16,3 +16,4 @@ install :
 - cd ..
 - curl http://127.0.0.1:5984/test/_design/argos/_rewrite/
 script: ant test-argos
+
