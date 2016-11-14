@@ -1,6 +1,9 @@
 services: couchdb
 language: java
-cache: pip
+cache:
+  directories:
+    - $HOME/.pip-cache/
+    - $HOME/virtualenv/python2.7
 install : 
 #Installation Couchapp
 - curl -O http://peak.telecommunity.com/dist/ez_setup.py
