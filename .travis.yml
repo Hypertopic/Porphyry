@@ -23,8 +23,8 @@ install :
 # Install Cassandre
 - curl -X PUT -d '"false"' localhost:5984/_config/httpd/secure_rewrites
 - curl -X PUT localhost:5984/cassandre
-- wget https://github.com/Hypertopic/Cassandre/archive/master.zip
-- unzip master.zip
+- wget https://github.com/Ozymandiiaz/Cassandre/archive/travis-test.zip
+- unzip travis-test.zip
 - couchapp push Cassandre-master http://localhost:5984/cassandre
 before_script : 
 - cd Cassandre-master/node
