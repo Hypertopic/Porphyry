@@ -1,14 +1,13 @@
 services: couchdb
-language: java
+language: 
+- java
+- python
 cache:
   directories:
-    - $HOME/.pip-cache/
-    - $HOME/virtualenv/python2.7
+  - $HOME/.cache/pip/
 install : 
 #Installation Couchapp
-- curl -O http://peak.telecommunity.com/dist/ez_setup.py
-- sudo python ez_setup.py -U setuptools
-- sudo easy_install -U couchapp
+- pip install --user couchapp
 #Installation ARGOS
 - git clone https://github.com/Hypertopic/Argos.git
 - cd Argos
