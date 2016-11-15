@@ -34,7 +34,7 @@
 	</target>
 
 	<target name="test" depends="compile" description="Start unit tests">
-		<junit>
+		<junit  haltonfailure="no" failureproperty="test.failed" >
 			<batchtest> 
 				<fileset dir="build" includes="**/*Test.class"/> 
 			</batchtest> 
@@ -43,7 +43,8 @@
 				  <pathelement location="build" />
 				  <pathelement location="junit.jar" />
 			</classpath>
-		</junit> 
+		</junit>
+		<fail message="Test failure detected, check test results." if="test.failed" />
 	</target> 
 
 	<target name="run" depends="compile" description="Start application">
