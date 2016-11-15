@@ -22,15 +22,15 @@
 	</target>
 
 	<target name="test-argos" depends="compile" description="Test Argos service">
-		<junit failureproperty="test.failed">
+		<junit  haltonfailure="no" failureproperty="test.failed" >
 			<test name="org.hypertopic.HypertopicMapTest" />
-			<formatter type="brief" usefile="false" />
+			<formatter type="plain" usefile="false" />
 			<classpath>
 				  <pathelement location="build" />
 				  <pathelement location="junit.jar" />
 			</classpath>
 		</junit>
-		<fail if="test.failed" />
+		<fail message="Test failure detected, check test results." if="test.failed" />
 	</target>
 
 	<target name="test" depends="compile" description="Start unit tests">
@@ -43,7 +43,7 @@
 				  <pathelement location="build" />
 				  <pathelement location="junit.jar" />
 			</classpath>
-		</junit>
+		</junit> 
 		<fail message="Test failure detected, check test results." if="test.failed" />
 	</target> 
 
@@ -51,9 +51,6 @@
 		<java classname="org.porphyry.controller.Start" 
 			classpath="build" fork="true">
 			<arg value="http://localhost/"/>
-			<jvmarg value="-Xdock:name=Porphyry"/>
-			<jvmarg value="-Xmx1g"/>
-			<sysproperty key="apple.laf.useScreenMenuBar" value="true"/>
 		</java>
 	</target>
 		 
