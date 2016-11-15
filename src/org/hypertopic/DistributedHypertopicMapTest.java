@@ -27,13 +27,13 @@ import static org.junit.Assert.*;
 public class DistributedHypertopicMapTest {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 private HypertopicMap distributedMap = new HypertopicMap(
-	//"http://127.0.0.1:8080/",
+	"http://127.0.0.1:8080/",
 	"http://127.0.0.1:5984/argos/_design/argos/_rewrite/"
 );
 
 private HypertopicMap distributedMap2 = new HypertopicMap(
-	"http://127.0.0.1:5984/argos/_design/argos/_rewrite/"
-	//,"http://127.0.0.1/~benel/steatite/"
+	"http://127.0.0.1:5984/argos/_design/argos/_rewrite/",
+	"http://127.0.0.1/~benel/steatite/"
 );
 
 @Test public void listTextCorpora() throws Exception {
