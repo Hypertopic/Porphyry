@@ -3,8 +3,7 @@ language:
 - java
 - python
 - node_js
-node_js:
-  - stable
+node_js: stable
 cache:
   directories:
   - $HOME/.cache/pip/
@@ -28,6 +27,8 @@ install :
 - couchapp push  Cassandre-travis-test http://localhost:5984/cassandre
 before_script : 
 - cd  Cassandre-travis-test/node
+- node --version
+- npm --version
 - npm install express
 - npm install express-http-proxy
 - npm install async
