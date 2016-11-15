@@ -4,7 +4,7 @@ language:
 - python
 - node_js
 node_js:
-  - "6"
+  - stable
 cache:
   directories:
   - $HOME/.cache/pip/
