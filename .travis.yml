@@ -1,10 +1,10 @@
 services: couchdb
 
 language: 
+- php
 - java
 - python
 - node_js
-- php
 
 php:
   - '5.4'
