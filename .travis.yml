@@ -62,9 +62,9 @@ install :
 
 # Install Steatite
 - cd $TRAVIS_BUILD_DIR/core
-- wget https://github.com/Ozymandiiaz/Steatite/archive/master.zip
-- unzip master.zip
-- mv  Steatite-master/ Steatite
+- wget https://github.com/Ozymandiiaz/Steatite/archive/travis.zip
+- unzip travis.zip
+- mv  Steatite-travis/ Steatite
 - cd Steatite
 - mkdir -m 755 picture thumbnail attribute
 - sqlite3 attribute/database <schema.sql
