@@ -47,6 +47,8 @@ install :
 - unzip travis-test.zip
 - couchapp push  Cassandre-travis-test http://localhost:5984/cassandre
 - cd  Cassandre-travis-test/node
+- nvm install 0.12
+- npm install npm@latest -g
 - node --version
 - npm --version
 - npm install express
