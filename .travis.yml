@@ -54,7 +54,7 @@ install :
 - npm install express
 - npm install express-http-proxy
 - npm install async
-- sudo npm install -g couchdb-dump
+- npm install -g couchdb-dump
 - node app.js &
 - cd ../..
 
