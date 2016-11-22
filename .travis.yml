@@ -99,3 +99,7 @@ before_script :
 script: 
 - ant test-argos
 - ant test
+
+after_script:
+  - sudo cat /var/log/apache2/error.log
+  
