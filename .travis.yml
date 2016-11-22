@@ -94,7 +94,7 @@ before_script :
 - cp php/phpinfo.php core
 - curl 127.0.0.1
 - curl 127.0.0.1/phpinfo.php
-- curl 127.0.0.1/Steatite
+- curl http://127.0.0.1/Steatite/
 
 script: 
 - ant test-argos
