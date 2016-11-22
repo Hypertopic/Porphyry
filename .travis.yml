@@ -62,6 +62,10 @@ before_script :
 - sudo sed -e "s?%TRAVIS_BUILD_DIR%?$(pwd)?g" --in-place /etc/apache2/sites-available/default
 - sudo service apache2 restart
 
+#test php
+- ls
+- curl 127.0.0.1/php/phpinfo.php
+
 script: 
 - ant test-argos
 - ant test
