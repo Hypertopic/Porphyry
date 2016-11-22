@@ -97,6 +97,10 @@ before_script :
 - curl 127.0.0.1/phpinfo.php
 - curl http://127.0.0.1/Steatite/
 
+# Import Couchdb database
+- cdbload -d test < $TRAVIS_BUILD_DIR/Couchdb/test.json
+
+
 script: 
 - ant test-argos
 - ant test
