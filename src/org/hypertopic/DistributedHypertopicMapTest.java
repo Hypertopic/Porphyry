@@ -33,7 +33,7 @@ private HypertopicMap distributedMap = new HypertopicMap(
 
 private HypertopicMap distributedMap2 = new HypertopicMap(
 	"http://127.0.0.1:5984/argos/_design/argos/_rewrite/",
-	"http://127.0.0.1/~benel/steatite/"
+	"http://127.0.0.1/Steatite/"
 );
 
 @Test public void listTextCorpora() throws Exception {
