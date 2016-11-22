@@ -56,7 +56,7 @@ private HypertopicMap distributedMap2 = new HypertopicMap(
 
 @Test public void listViewpoints() throws Exception {
 	Collection<JSONObject> c = this.distributedMap2
-		.getUser("nadia@hypertopic.org").listViewpoints();
+		.getUser("cecile@hypertopic.org").listViewpoints();
 	assertFalse(c.isEmpty());
 }
 
