@@ -50,12 +50,12 @@ private HypertopicMap distributedMap2 = new HypertopicMap(
 
 @Test public void getCorpusItems() throws Exception {
 	Collection<HypertopicMap.Corpus.Item> items = 
-		this.distributedMap.getCorpus("MISS").getItems();
+		this.distributedMap2.getCorpus("MISS").getItems();
 	assertFalse(items.isEmpty());
 }
 
 @Test public void listViewpoints() throws Exception {
-	Collection<JSONObject> c = this.distributedMap
+	Collection<JSONObject> c = this.distributedMap2
 		.getUser("nadia@hypertopic.org").listViewpoints();
 	assertFalse(c.isEmpty());
 }
