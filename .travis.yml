@@ -19,7 +19,7 @@ cache:
 sudo: required
 
 before_install:
-- sudo apt-get -qq update
+#- sudo apt-get -qq update
 # Package for Steatite
 - sudo apt-get install libimage-exiftool-perl
 - sudo apt-get install sqlite3
