@@ -28,9 +28,7 @@ public class PortfolioTest {//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 private Portfolio portfolio = new Portfolio(
 	"nadia@hypertopic.org",
-	"http://127.0.0.1:5984/argos/_design/argos/_rewrite/",
-	"http://127.0.0.1/~benel/cassandre/"
-);
+	"http://127.0.0.1:5984/argos/_design/argos/_rewrite/");
 
 @Test public void getSelectedItems() throws Exception {
   this.portfolio.openCorpus("MISS");
