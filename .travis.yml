@@ -60,10 +60,12 @@ before_script :
 - ls
 - sudo cp -f travis-build/travis-ci-apache /etc/apache2/sites-available/default
 - sudo sed -e "s?%TRAVIS_BUILD_DIR%?$(pwd)?g" --in-place /etc/apache2/sites-available/default
+- sudo cat /etc/apache2/sites-available/default
 - sudo service apache2 restart
 
 #test php
 - ls
+- curl 127.0.0.1
 - curl 127.0.0.1/php/phpinfo.php
 
 script: 
