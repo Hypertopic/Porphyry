@@ -20,10 +20,19 @@ cache:
 
 sudo: required
 
+before_install:
+- sudo apt-get -qq update
+# Package for Steatite
+- sudo apt-get install libimage-exiftool-perl
+- sudo apt-get install sqlite3
+
+
 install : 
-#Installation Couchapp
+
+# Install Couchapp
 - pip install --user couchapp  
-#Installation ARGOS
+
+# Install ARGOS
 - git clone https://github.com/Hypertopic/Argos.git
 - cd Argos
 - curl -X PUT http://127.0.0.1:5984/argos
@@ -32,6 +41,7 @@ install :
 - curl http://127.0.0.1:5984/argos
 - cd ..
 - curl http://127.0.0.1:5984/test/_design/argos/_rewrite/
+
 # Install Cassandre
 - curl -X PUT -d '"false"' localhost:5984/_config/httpd/secure_rewrites
 - curl -X PUT localhost:5984/cassandre
@@ -47,17 +57,30 @@ install :
 - node app.js &
 - cd ../..
 
+# Create DocumentRoot for Apache
+- mkdir $TRAVIS_BUILD_DIR/core
+
+# Install Steatite
+- cd $TRAVIS_BUILD_DIR/core
+- git clone git@github.com:Hypertopic/Steatite.git
+- cd Steatite
+- mkdir -m 755 picture thumbnail attribute
+- sqlite3 attribute/database <schema.sql
+- sudo chown -R www-data picture thumbnail attribute
+- cd $TRAVIS_BUILD_DIR
+
 before_script : 
 - sudo apt-get update
 - sudo apt-get install apache2 libapache2-mod-fastcgi
+
 # enable php-fpm
 - phpenv --version
 - sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf
 - sudo a2enmod rewrite actions fastcgi alias
 - echo "cgi.fix_pathinfo = 1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
 - ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm
+
 # configure apache virtual hosts
-- mkdir $TRAVIS_BUILD_DIR/core
 - ls
 - sudo cp -f travis-build/travis-ci-apache /etc/apache2/sites-available/default
 - sudo sed -e "s?%TRAVIS_BUILD_DIR%?$(pwd)?g" --in-place /etc/apache2/sites-available/default
@@ -69,6 +92,7 @@ before_script :
 - cp php/phpinfo.php core
 - curl 127.0.0.1
 - curl 127.0.0.1/phpinfo.php
+- curl 127.0.0.1/Steatite
 
 script: 
 - ant test-argos
