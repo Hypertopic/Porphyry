@@ -101,6 +101,7 @@ before_script :
 - curl -X PUT localhost:5984/test
 - wget https://raw.githubusercontent.com/Ozymandiiaz/couchdb-dump/master/couchdb-backup.sh
 - bash couchdb-backup.sh -r -H 127.0.0.1 -d test -f $TRAVIS_BUILD_DIR/Couchdb/testdb.json
+- bash couchdb-backup.sh -r -H 127.0.0.1 -d argos -f $TRAVIS_BUILD_DIR/Couchdb/argos.json
 #- cdbload -d test < $TRAVIS_BUILD_DIR/Couchdb/test.json
 
 
