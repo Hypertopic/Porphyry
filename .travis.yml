@@ -66,8 +66,9 @@ before_script :
 
 #test php
 - ls
+- cp php/phpinfo.php core
 - curl 127.0.0.1
-- curl 127.0.0.1/php/phpinfo.php
+- curl 127.0.0.1/phpinfo.php
 
 script: 
 - ant test-argos
