@@ -36,9 +36,9 @@ install :
 - curl -X PUT http://127.0.0.1:5984/argos
 - couchapp init
 - couchapp push http://127.0.0.1:5984/argos
-- curl -X POST http://127.0.0.1:5984/argos -d @pointview.json -H “Content-Type:application/json”
-- curl -X POST http://127.0.0.1:5984/argos -d @item.json -H “Content-Type:application/json”
-- curl -X POST http://127.0.0.1:5984/argos -d @text.json -H “Content-Type:application/json”
+- curl -X POST http://127.0.0.1:5984/argos -d @$TRAVIS_BUILD_DIR/Couchdb/pointview.json -H “Content-Type:application/json”
+- curl -X POST http://127.0.0.1:5984/argos -d @$TRAVIS_BUILD_DIR/Couchdb/item.json -H “Content-Type:application/json”
+- curl -X POST http://127.0.0.1:5984/argos -d @$TRAVIS_BUILD_DIR/Couchdb/text.json -H “Content-Type:application/json”
 
 
 #- curl http://127.0.0.1:5984/argos
