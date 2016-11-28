@@ -87,11 +87,11 @@ install :
 - sudo service apache2 restart
 
 #test php
-- ls
+#- ls
 - cp php/phpinfo.php core
-- curl 127.0.0.1
-- curl 127.0.0.1/phpinfo.php
-- curl http://127.0.0.1/Steatite/
+#- curl 127.0.0.1
+#- curl 127.0.0.1/phpinfo.php
+#- curl http://127.0.0.1/Steatite/
 
 # Import Couchdb database
 - curl -X PUT localhost:5984/test
