@@ -31,11 +31,11 @@ install :
 - pip install --user couchapp  
 
 # Install ARGOS
-#- git clone https://github.com/Hypertopic/Argos.git
-#- cd Argos
+- git clone https://github.com/Hypertopic/Argos.git
+- cd Argos
 - curl -X PUT http://127.0.0.1:5984/argos
-#- couchapp init
-#- couchapp push http://127.0.0.1:5984/argos
+- couchapp init
+- couchapp push http://127.0.0.1:5984/argos
 #- curl http://127.0.0.1:5984/argos
 #- cd ..
 #- curl http://127.0.0.1:5984/test/_design/argos/_rewrite/
@@ -98,7 +98,7 @@ install :
 - wget https://raw.githubusercontent.com/Ozymandiiaz/couchdb-dump/master/couchdb-backup.sh
 #- bash couchdb-backup.sh -r -H 127.0.0.1 -d test -f $TRAVIS_BUILD_DIR/Couchdb/testdb.json
 #- bash couchdb-backup.sh -r -H 127.0.0.1 -d argos -f $TRAVIS_BUILD_DIR/Couchdb/argos.json
-- bash couchdb-backup.sh -r -H 127.0.0.1 -d argos -f $TRAVIS_BUILD_DIR/Couchdb/argos2.json
+#- bash couchdb-backup.sh -r -H 127.0.0.1 -d argos -f $TRAVIS_BUILD_DIR/Couchdb/argos2.json
 
 #- cdbload -d test < $TRAVIS_BUILD_DIR/Couchdb/test.json
 
