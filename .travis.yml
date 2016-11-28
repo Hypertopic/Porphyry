@@ -23,7 +23,7 @@ before_install:
 # Package for Steatite
 - sudo apt-get install libimage-exiftool-perl
 - sudo apt-get install sqlite3
-
+- sudo apt-get install apache2 libapache2-mod-fastcgi
 
 install : 
 
@@ -71,10 +71,6 @@ install :
 - sqlite3 attribute/database <schema.sql
 - sudo chown -R www-data picture thumbnail attribute
 - cd $TRAVIS_BUILD_DIR
-
-before_script : 
-- sudo apt-get update
-- sudo apt-get install apache2 libapache2-mod-fastcgi
 
 # enable php-fpm
 - phpenv --version
