@@ -31,7 +31,7 @@ install :
 - pip install --user couchapp  
 
 # Install ARGOS
-- git clone https://github.com/Hypertopic/Argos.git
+- git clone https://github.com/Ozymandiiaz/Argos.git
 - cd Argos
 - curl -X PUT http://127.0.0.1:5984/argos
 - couchapp init
@@ -40,7 +40,7 @@ install :
 #- curl -X POST http://127.0.0.1:5984/argos -d pointview.json -H “Content-Type:application/json”
 #- curl -X POST http://127.0.0.1:5984/argos -d @pointview.json -H “Content-Type:application/json”
 #- curl -X POST http://127.0.0.1:5984/argos -d @$TRAVIS_BUILD_DIR/Couchdb/item.json -H “Content-Type:application/json”
-- couchapp pushdocs $TRAVIS_BUILD_DIR/Couchdb/docs/ http://127.0.0.1:5984/argos
+#- couchapp pushdocs $TRAVIS_BUILD_DIR/Couchdb/docs/ http://127.0.0.1:5984/argos
 #- couchapp pushdocs $TRAVIS_BUILD_DIR/Couchdb/item.json http://127.0.0.1:5984/argos
 #- couchapp pushdocs $TRAVIS_BUILD_DIR/Couchdb/text.json http://127.0.0.1:5984/argos
 - curl http://127.0.0.1:5984/argos/_design/argos/_rewrite/viewpoint/446d798e240d4dee5a552b902ae56c8d
