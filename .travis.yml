@@ -1,8 +1,8 @@
 services: couchdb
 
 language: 
-- node_js
 - php
+- node_js
 - java
 - python
 
