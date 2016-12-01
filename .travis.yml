@@ -82,7 +82,7 @@ install :
 - cd $TRAVIS_BUILD_DIR
 
 # enable php-fpm
-- phpenv --version
+#- phpenv --version
 - sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf
 - sudo a2enmod rewrite actions fastcgi alias
 - echo "cgi.fix_pathinfo = 1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
@@ -108,7 +108,7 @@ install :
 #- bash couchdb-backup.sh -r -H 127.0.0.1 -d test -f $TRAVIS_BUILD_DIR/Couchdb/testdb.json
 - bash couchdb-backup.sh -r -H 127.0.0.1 -d argos -f $TRAVIS_BUILD_DIR/Couchdb/argos.json
 #- bash couchdb-backup.sh -r -H 127.0.0.1 -d argos -f $TRAVIS_BUILD_DIR/Couchdb/argos2.json
-- curl http://127.0.0.1:5984/argos/_design/argos/_rewrite/viewpoint/446d798e240d4dee5a552b902ae56c8d
+#- curl http://127.0.0.1:5984/argos/_design/argos/_rewrite/viewpoint/446d798e240d4dee5a552b902ae56c8d
 
 
 #- cdbload -d test < $TRAVIS_BUILD_DIR/Couchdb/test.json
@@ -118,6 +118,6 @@ script:
 - ant test-argos
 - ant test
 
-after_script:
-  - sudo cat /var/log/apache2/error.log
+#after_script:
+#  - sudo cat /var/log/apache2/error.log
   
