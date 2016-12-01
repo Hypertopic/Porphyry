@@ -57,7 +57,7 @@ install :
 - couchapp push  Cassandre-travis-test http://localhost:5984/cassandre
 - cd  Cassandre-travis-test/node
 - nvm install 0.12
-- npm install 
+- npm install npm@latest -g
 - npm install express
 - npm install express-http-proxy
 - npm install async
