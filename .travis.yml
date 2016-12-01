@@ -15,6 +15,7 @@ node_js: stable
 cache:
   directories:
   - $HOME/.cache/pip/
+  - node_modules 
 
 sudo: required
 
