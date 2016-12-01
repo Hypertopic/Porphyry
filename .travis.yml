@@ -13,18 +13,20 @@ php:
 node_js: stable
 
 cache:
+  apt: true
   directories:
   - $HOME/.cache/pip/
   - node_modules 
+  
+addons:
+    apt:
+        packages:
+            - libimage-exiftool-perl
+            - sqlite3
+            - apache2
+            - libapache2-mod-fastcgi
 
 sudo: required
-
-before_install:
-#- sudo apt-get -qq update
-# Package for Steatite
-- sudo apt-get install libimage-exiftool-perl
-- sudo apt-get install sqlite3
-- sudo apt-get install apache2 libapache2-mod-fastcgi
 
 install : 
 
