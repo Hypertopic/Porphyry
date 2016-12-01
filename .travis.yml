@@ -17,7 +17,8 @@ cache:
   directories:
   - $HOME/.cache/pip/
   - $HOME/.npm
-  - node_modules 
+  - node_modules
+  - ~/.local
   
 addons:
     apt:
