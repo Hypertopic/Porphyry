@@ -29,6 +29,9 @@ addons:
 
 sudo: required
 
+before_install :
+- pip install --user codecov
+
 
 install : 
 
@@ -92,4 +95,4 @@ script:
 - ant test
 
 after_success:
-  - bash <(curl -s https://codecov.io/bash)
+  - codecov
