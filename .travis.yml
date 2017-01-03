@@ -91,8 +91,12 @@ install :
 - bash couchdb-backup.sh -r -H 127.0.0.1 -d argos -f $TRAVIS_BUILD_DIR/Couchdb/argos.json
 
 script: 
-- ant test-argos
-- ant test
+#- ant test-argos
+#- ant test
+  # run my python tests
+  - coverage run ant test
+  # upload my python reports
+  - bash <(curl -s https://codecov.io/bash) -cF java
 
-after_success:
-  - codecov
+#after_success:
+ # - codecov
