@@ -90,6 +90,7 @@ public synchronized JSONObject getAll(String query) throws Exception {
 	URL url = this.getURL(query);
 	JSONObject result = this.cache.get(url);
 	if (result == null) {
+    System.out.println("URL: "+ url);
     result = index(new JSONObject(send("GET", url, null)));
     this.cache.put(url, result);
 	}
