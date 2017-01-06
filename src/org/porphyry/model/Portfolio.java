@@ -29,7 +29,7 @@ import java.util.*;
  */
 public class Portfolio extends Observable implements Observer {//>>>>>>>>>>>>>>>
 
-private final HypertopicMap map;
+private HypertopicMap map;
 private final Collection<HypertopicMap.Viewpoint> openedViewpoints = 
 	new HashSet();
 private final Collection<HypertopicMap.Corpus> openedCorpora = 
@@ -97,8 +97,8 @@ public Collection<JSONObject> listRelatedViewpoints() throws Exception {
 	}
 	Collection<JSONObject> result = new ArrayList();
 	for (String id : identifiers) {
-		//TODO request name
-		result.add(new JSONObject("{\"id\":\""+id+"\",\"name\":\""+id+"\"}"));
+		String name = this.map.getViewpoint(id).getName();
+		result.add(new JSONObject("{\"id\":\""+id+"\",\"name\":\""+name+"\"}"));
 	}
 	return result;
 }
@@ -181,6 +181,8 @@ public Set<Viewpoint.Topic> getTopics() throws Exception {
 public String getUser() {
 	return this.user;
 }
+
+
 
 public void setUser(String user) {
 	this.user = user;
