@@ -38,7 +38,7 @@ install :
 # enable php-fpm
 #- phpenv --version
 #- curl -L http://git.io/phpenv-installer \ | bash
-- wget -qO- https://raw.githubusercontent.com/CHH/phpenv/master/bin/phpenv-install.sh | sh
+- sudo wget -qO- https://raw.githubusercontent.com/CHH/phpenv/master/bin/phpenv-install.sh | sh
 - echo 'export PATH="$HOME/.phpenv/bin:$HOME/.phpenv/shims:$PATH"' >> ~/.bash_profile
 - echo 'eval "$(phpenv init -)"' >> ~/.bash_profile
  - source ~/.bash_profile
