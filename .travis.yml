@@ -72,6 +72,7 @@ install :
 
 # enable php-fpm
 #- phpenv --version
+- curl -L http://git.io/phpenv-installer \ | bash
 - sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf
 - sudo a2enmod rewrite actions fastcgi alias
 - echo "cgi.fix_pathinfo = 1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
