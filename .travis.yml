@@ -38,10 +38,9 @@ install :
 # enable php-fpm
 #- phpenv --version
 #- curl -L http://git.io/phpenv-installer \ | bash
-- sudo wget -qO- https://raw.githubusercontent.com/CHH/phpenv/master/bin/phpenv-install.sh | sh
-- echo 'export PATH="$HOME/.phpenv/bin:$HOME/.phpenv/shims:$PATH"' >> ~/.bash_profile
-- echo 'eval "$(phpenv init -)"' >> ~/.bash_profile
- - source ~/.bash_profile
+ - git clone https://github.com/CHH/phpenv.git
+- cd phpenv/bin
+- ./phpenv-install.sh
 - sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf
 - sudo a2enmod rewrite actions fastcgi alias
 - echo "cgi.fix_pathinfo = 1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
