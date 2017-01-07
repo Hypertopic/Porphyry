@@ -1,9 +1,9 @@
 services: couchdb
 
 language: 
-- php
-- node_js
 - java
+- node_js
+- php
 - python
 
 php:
@@ -70,20 +70,7 @@ install :
 - sudo chown -R www-data picture thumbnail attribute
 - cd $TRAVIS_BUILD_DIR
 
-# enable php-fpm
-#- phpenv --version
-- sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf
-- sudo a2enmod rewrite actions fastcgi alias
-- echo "cgi.fix_pathinfo = 1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-- ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm
 
-# configure apache virtual hosts
-- ls
-- sudo cp -f travis-build/travis-ci-apache /etc/apache2/sites-available/default
-- sudo sed -e "s?%TRAVIS_BUILD_DIR%?$(pwd)?g" --in-place /etc/apache2/sites-available/default
-- sudo cat /etc/apache2/sites-available/default
-- sudo service apache2 restart
-- cp php/phpinfo.php core
 
 # Import Couchdb database
 - curl -X PUT localhost:5984/test
@@ -99,4 +86,4 @@ script:
   #- bash <(curl -s https://codecov.io/bash) -cF java
 
 after_success:
- # - codecov
+ - bash <(curl -s https://codecov.io/bash)
