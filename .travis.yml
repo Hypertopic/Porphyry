@@ -93,3 +93,6 @@ install :
 script: 
 - ant test-argos
 - ant test
+
+notifications:
+  slack: if10:tJx8eoKBzSa1fNXVcWifEQzR
