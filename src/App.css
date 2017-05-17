@@ -1,0 +1,75 @@
+.App {
+  display: flex;
+  flex-direction: column;
+}
+
+.App h1 {
+  background-color: rgb(153, 40,0);
+  color: ivory;
+  background-image: url(porphyry.gif);
+  background-repeat: no-repeat;
+  background-position: right; 
+}
+
+.Status {
+  background-color: rgb(60, 50, 50);
+  color: ivory;
+  padding: 2px;
+}
+
+.App-content {
+  display: flex;
+  min-height: 100vh;  
+  flex-direction: row;
+}
+
+.Viewpoints {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  margin: 1px;
+}
+
+.Corpora {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 2;
+  background-color: dimgrey;
+  color: rgb(240,240,240);
+  padding: 4px;
+  margin: 2px;
+}
+
+.Corpora div {
+  background-color: ghostwhite;
+}
+
+.Viewpoint {
+  display: flex;
+  flex-direction: column;
+  background-color: rgb(153, 40,0);
+  color: ivory;
+  padding: 4px;
+  margin: 1px;
+}
+
+.Viewpoint div {
+  padding: 20px;
+  background-color: whitesmoke;
+  color: black;
+}
+
+.Topic {
+  text-align: left;
+}
+
+.Items {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.Item {
+  margin: 5px;
+  color: black;
+}

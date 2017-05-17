@@ -1,0 +1,20 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+  text-align: center;
+}
+
+h1 {
+  text-transform: uppercase;
+  padding: 10px;
+  margin: 0px;
+}
+
+h3 {
+  margin: 2px;
+}
+
+ul {
+  padding-left: 20px;
+}

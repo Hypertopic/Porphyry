@@ -1,0 +1,7 @@
+{
+  "user": "aaf",
+  "services": [
+    "http://argos2.hypertopic.org",
+    "http://steatite.hypertopic.org"
+  ]
+}
