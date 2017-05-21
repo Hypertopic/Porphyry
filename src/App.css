@@ -23,15 +23,13 @@
   flex-direction: row;
 }
 
-.Viewpoints {
-  display: flex;
+.Description {
   flex-direction: column;
   flex-grow: 1;
   margin: 1px;
 }
 
-.Corpora {
-  display: flex;
+.Subject {
   flex-direction: column;
   flex-grow: 2;
   background-color: dimgrey;
@@ -40,12 +38,11 @@
   margin: 2px;
 }
 
-.Corpora div {
+.Subject div {
   background-color: ghostwhite;
 }
 
-.Viewpoint {
-  display: flex;
+.DescriptionModality {
   flex-direction: column;
   background-color: rgb(153, 40,0);
   color: ivory;
@@ -53,10 +50,15 @@
   margin: 1px;
 }
 
-.Viewpoint div {
-  padding: 20px;
+.Topics, .Attributes {
   background-color: whitesmoke;
   color: black;
+}
+
+.Topics {
+  padding: 20px;
+  flex-direction: column;
+  justify-content: flex-start;
 }
 
 .Topic {
@@ -72,4 +74,41 @@
 .Item {
   margin: 5px;
   color: black;
+}
+
+.Attributes {
+  display: table;
+  width: 100%;
+}
+
+.Attribute {
+  display: table-row;
+}
+
+.Key {
+  display: table-cell;
+  padding: 5px;
+  text-align: right;
+  font-weight: normal;
+}
+
+.Value {
+  display: table-cell;
+  padding: 5px;
+  text-align: left;
+  font-weight: bold;
+}
+
+.TopicPath {
+  display: flex;
+  flex-direction: row;
+}
+
+.TopicPath > .Topic:not(:last-of-type):after {
+  content: '>';
+  padding: 5px;
+}
+
+.TopicPath > .Topic:last-of-type {
+  font-weight: bold;
 }

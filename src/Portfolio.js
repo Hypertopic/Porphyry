@@ -7,7 +7,7 @@ import Corpora from './Corpora';
 
 import './App.css';
 
-class App extends Component {
+class Portfolio extends Component {
   constructor() {
     super();
     this.state = {
@@ -22,9 +22,9 @@ class App extends Component {
     return (
       <div className="App">
         <h1>{conf.user}</h1>
-        <div className="Status">Tous</div>
+        <div className="Status">Tous les items</div>
         <div className="App-content">
-          <div className="Viewpoints">
+          <div className="Description">
             {viewpoints}
           </div>
           {corpora}
@@ -58,4 +58,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default Portfolio;

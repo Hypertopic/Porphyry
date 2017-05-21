@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import by from 'sort-by';
 import Hypertopic from 'hypertopic';
 import conf from './config.json';
@@ -14,7 +15,7 @@ class Corpora extends Component {
   render() {
     let items = this._getItems();
     return(
-      <div className="Corpora">
+      <div className="Subject">
         <h3>{this.props.ids.join(' + ')} ({this.state.items.length})</h3>
         <div className="Items">
           {items}
@@ -41,7 +42,7 @@ class Corpora extends Component {
   _getItems() {
     return this.state.items.map(item => 
         <Item key={item.id} name={item.name[0]} thumbnail={item.thumbnail[0]} 
-          resource={item.resource[0]} />
+          id={item.corpus+'/'+item.id} />
     ); 
   }
 
@@ -70,11 +71,12 @@ class Corpora extends Component {
 }
 
 function Item(props) {
+  let uri = '/item/' + props.id;
   return (
     <div className="Item">
-      <a href={props.resource}>
+      <Link to={uri}>
         <img src={props.thumbnail} alt={props.name} />
-      </a>
+      </Link>
       <div>{props.name}</div>
     </div>
   );

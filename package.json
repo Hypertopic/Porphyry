@@ -5,8 +5,10 @@
   "dependencies": {
     "async": "^2.4.0",
     "hypertopic": "^1.0.0",
+    "json-groupby": "^1.0.2",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
+    "react-router-dom": "^4.1.1",
     "sort-by": "^1.2.0"
   },
   "devDependencies": {
