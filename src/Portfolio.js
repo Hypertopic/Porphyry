@@ -12,7 +12,8 @@ class Portfolio extends Component {
     super();
     this.state = {
       viewpoint: [],
-      corpus: []
+      corpus: [],
+      items: []
     }
   }
 
@@ -35,12 +36,43 @@ class Portfolio extends Component {
 
   componentDidMount() {
     this._fetchBookmarks();
+    this._timer = setInterval(
+      () => this._fetchItems(),
+      2000
+    );
+  }
+
+  componentWillUnmount() {
+    clearInterval(this._timer);
   }
 
   _fetchBookmarks() {
     const hypertopic = new Hypertopic(conf.services);
     hypertopic.getView(`/user/${conf.user}`, (data) => {
       this.setState(data[conf.user]);
+    });
+  }
+
+  _fetchItems() {
+    let hypertopic = new Hypertopic(conf.services);
+    let uris = this.state.corpus.map(c => '/corpus/' + c.id);
+    hypertopic.getView(uris, (data) => {
+      let items = [];
+      for (let corpus in data) {
+        for (let itemId in data[corpus]) {
+          if (!['id','name','user'].includes(itemId)) {
+            let item = data[corpus][itemId];
+            if (!item.name || !item.name.length || !item.thumbnail || !item.thumbnail.length) {
+              console.log(itemId, "has no name or thumbnail!", item);
+            } else {
+              item.id = itemId;
+              item.corpus = corpus;
+              items.push(item);
+            }
+          }
+        }
+      }
+      this.setState({items:items.sort(by('name'))});
     });
   }
 
@@ -53,7 +85,7 @@ class Portfolio extends Component {
   _getCorpora() {
     let ids = this.state.corpus.map(c => c.id);
     return (
-      <Corpora ids={ids} />
+      <Corpora ids={ids} items={this.state.items} />
     );
   }
 }
