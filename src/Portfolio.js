@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import by from 'sort-by';
+import queryString from 'query-string';
 import Hypertopic from 'hypertopic';
 import conf from './config.json';
 import Viewpoint from './Viewpoint';
@@ -18,12 +19,14 @@ class Portfolio extends Component {
   }
 
   render() {
-    const viewpoints = this._getViewpoints();
-    const corpora = this._getCorpora();
+    let selection = this._getSelection();
+    let viewpoints = this._getViewpoints(selection);
+    let corpora = this._getCorpora();
+    let status = this._getStatus(selection);
     return (
       <div className="App">
         <h1>{conf.user}</h1>
-        <div className="Status">Tous les items</div>
+        <div className="Status">{status}</div>
         <div className="App-content">
           <div className="Description">
             {viewpoints}
@@ -47,6 +50,23 @@ class Portfolio extends Component {
 
   componentWillUnmount() {
     clearInterval(this._timer);
+  }
+
+  _getStatus(selection) {
+    let topics = selection.map(t => {
+      for (let v of this.state.viewpoints) {
+        if (v[t]) return v[t].name;
+      }
+      return 'Thème inconnu';
+    });
+    return topics.join(' + ') || 'Tous les items';
+  }
+
+  _getSelection() {
+    let selection = queryString.parse(this.props.location.search).t;
+    return (selection instanceof Array)? selection
+      : (selection)? [selection]
+      : [];
   }
 
   _fetchBookmarks() {
@@ -96,9 +116,9 @@ class Portfolio extends Component {
       });
    }
 
-  _getViewpoints() {
+  _getViewpoints(selection) {
     return this.state.viewpoints.sort(by('name')).map(v =>
-      <Viewpoint key={v.id} viewpoint={v} />
+      <Viewpoint key={v.id} viewpoint={v} selection={selection} />
     );
   }
 
