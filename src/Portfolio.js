@@ -11,8 +11,8 @@ class Portfolio extends Component {
   constructor() {
     super();
     this.state = {
-      viewpoint: [],
-      corpus: [],
+      viewpoints: [],
+      corpora: [],
       items: []
     }
   }
@@ -37,7 +37,10 @@ class Portfolio extends Component {
   componentDidMount() {
     this._fetchBookmarks();
     this._timer = setInterval(
-      () => this._fetchItems(),
+      () => {
+        this._fetchItems();
+        this._fetchViewpoints();
+      },
       2000
     );
   }
@@ -49,13 +52,17 @@ class Portfolio extends Component {
   _fetchBookmarks() {
     const hypertopic = new Hypertopic(conf.services);
     hypertopic.getView(`/user/${conf.user}`, (data) => {
-      this.setState(data[conf.user]);
+      let user = data[conf.user];
+      this.setState({
+        viewpoints: user.viewpoint,
+        corpora: user.corpus
+      });
     });
   }
 
   _fetchItems() {
     let hypertopic = new Hypertopic(conf.services);
-    let uris = this.state.corpus.map(c => '/corpus/' + c.id);
+    let uris = this.state.corpora.map(c => '/corpus/' + c.id);
     hypertopic.getView(uris, (data) => {
       let items = [];
       for (let corpus in data) {
@@ -76,14 +83,27 @@ class Portfolio extends Component {
     });
   }
 
+   _fetchViewpoints() {
+      let hypertopic = new Hypertopic(conf.services);
+      let uris = this.state.viewpoints.map(v => '/viewpoint/' + v.id);
+      hypertopic.getView(uris, (data) => {
+        let viewpoints = [];
+        for (let [id, v] of Object.entries(data)) {
+          v.id = id;
+          viewpoints.push(v);
+        }
+        this.setState({viewpoints});
+      });
+   }
+
   _getViewpoints() {
-    return this.state.viewpoint.sort(by('name')).map(v => 
-      <Viewpoint key={v.id} id={v.id} name={v.name} />
+    return this.state.viewpoints.sort(by('name')).map(v =>
+      <Viewpoint key={v.id} viewpoint={v} />
     );
   }
 
   _getCorpora() {
-    let ids = this.state.corpus.map(c => c.id);
+    let ids = this.state.corpora.map(c => c.id);
     return (
       <Corpora ids={ids} items={this.state.items} />
     );
