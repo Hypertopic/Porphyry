@@ -8,9 +8,7 @@ class Viewpoint extends Component {
   constructor(props) {
     super();
     this.state = {
-      name: props.name,
-      upper: [],
-      topics: []
+      name: props.name
     };
   }
 
@@ -33,8 +31,8 @@ class Viewpoint extends Component {
   }
 
   _getTopics() {
-    return this.state.upper.map((t) =>
-      <Topic key={t.id} id={t.id} name={t.name} topics={this.state.topics}/>
+    return (this.state.upper||[]).sort(by('name')).map((t) =>
+      <Topic key={t.id} id={t.id} name={t.name} topics={this.state}/>
     );
   }
 
@@ -42,11 +40,7 @@ class Viewpoint extends Component {
     const hypertopic = new Hypertopic(conf.services);
     const id = this.props.id;
     hypertopic.getView(`/viewpoint/${id}`, (data) => {
-      let topics = data[id];
-      let upper = topics.upper;
-      delete topics.upper;
-      upper.sort(by('name'));
-      this.setState({topics, upper});
+      this.setState(data[id]);
     });
  }
 }
