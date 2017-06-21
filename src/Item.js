@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import Hypertopic from 'hypertopic';
 import groupBy from 'json-groupby';
 import conf from './config.json';
@@ -161,8 +162,9 @@ class TopicPath extends Component {
   _getTopics() {
     return this.state.path.map( t => {
       let name = (t.name)? t.name : 'Sans nom';
+      let uri = '../../?t=' + t.id;
       return (
-        <div key={t.id} className="Topic">{name}</div>
+        <Link key={t.id} className="Topic" to={uri}>{name}</Link>
       );
     });
   }
