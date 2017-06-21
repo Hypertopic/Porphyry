@@ -68,6 +68,10 @@
   text-align: left;
 }
 
+.Topic span {
+  color: lightgrey;
+}
+
 .Selected {
   background-color: rgb(204, 153, 51);
   font-weight: bold;

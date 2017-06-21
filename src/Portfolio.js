@@ -20,8 +20,10 @@ class Portfolio extends Component {
 
   render() {
     let selection = this._getSelection();
-    let viewpoints = this._getViewpoints(selection);
-    let corpora = this._getCorpora(selection);
+    let selectedItems = this._getSelectedItems(selection);
+    let topicsItems = this._getTopicsItems(selectedItems);
+    let viewpoints = this._getViewpoints(selection, topicsItems);
+    let corpora = this._getCorpora(selectedItems);
     let status = this._getStatus(selection);
     return (
       <div className="App">
@@ -97,6 +99,16 @@ class Portfolio extends Component {
     return this.state.items.filter(e => this._isSelected(e, selection));
   }
 
+  _getTopicsItems(selectedItems) {
+    let map = new Map();
+    for (let e of selectedItems) {
+      for (let t of this._getRecursiveItemTopics(e)) {
+        push(map, t, e.id);
+      }
+    }
+    return map;
+  }
+
   _fetchBookmarks() {
     const hypertopic = new Hypertopic(conf.services);
     hypertopic.getView(`/user/${conf.user}`, (data) => {
@@ -144,14 +156,14 @@ class Portfolio extends Component {
       });
    }
 
-  _getViewpoints(selection) {
+  _getViewpoints(selection, topicsItems) {
     return this.state.viewpoints.sort(by('name')).map(v =>
-      <Viewpoint key={v.id} viewpoint={v} selection={selection} />
+      <Viewpoint key={v.id} viewpoint={v} selection={selection}
+        topicsItems={topicsItems} />
     );
   }
 
-  _getCorpora(selection) {
-    let selectedItems = this._getSelectedItems(selection);
+  _getCorpora(selectedItems) {
     let ids = this.state.corpora.map(c => c.id);
     return (
       <Corpora ids={ids} from={this.state.items.length} items={selectedItems} />
@@ -163,6 +175,15 @@ function includes(array1, array2) {
   let set1 = new Set(array1);
   return array2.map(e => set1.has(e))
     .reduce((c1,c2) => c1 && c2, true);
+}
+
+function push(map, topicId, itemId) {
+  let old = map.get(topicId);
+  if (old) {
+    map.set(topicId, old.add(itemId));
+  } else {
+    map.set(topicId, new Set([itemId]));
+  }
 }
 
 export default Portfolio;
