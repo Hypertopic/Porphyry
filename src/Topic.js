@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import by from 'sort-by';
+import queryString from 'query-string';
 
 class Topic extends Component {
   render() {
@@ -7,9 +9,15 @@ class Topic extends Component {
     let isSelected = this.props.selection.includes(this.props.id)? 'Selected' : '';
     let items = this.props.topicsItems.get(this.props.id);
     let count = (items)? `(${items.size})` : '';
+    let uri = '?' + queryString.stringify({
+      t: toggle(this.props.selection, this.props.id)
+    });
     return (
       <li className="Topic">
-        <div className={isSelected}>{this.props.name} <span>{count}</span></div>
+        <div className={isSelected}>
+          <Link to={uri}> {this.props.name} </Link>
+          <span> {count}</span>
+        </div>
         <ul>
         {subtopics}
         </ul>
@@ -24,6 +32,14 @@ class Topic extends Component {
         selection={this.props.selection} topicsItems={this.props.topicsItems} />
     );
   }
+}
+
+function toggle(array, item) {
+  let s = new Set(array);
+  if (!s.delete(item)) {
+    s.add(item);
+  }
+  return [...s];
 }
 
 export default Topic;
