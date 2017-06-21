@@ -15,7 +15,8 @@ class Portfolio extends Component {
       viewpoints: [],
       corpora: [],
       items: []
-    }
+    };
+    this.user = conf.user || location.hostname.split('.', 1)[0];
   }
 
   render() {
@@ -27,7 +28,7 @@ class Portfolio extends Component {
     let status = this._getStatus(selection);
     return (
       <div className="App">
-        <h1>{conf.user}</h1>
+        <h1>{this.user}</h1>
         <div className="Status">{status}</div>
         <div className="App-content">
           <div className="Description">
@@ -111,8 +112,8 @@ class Portfolio extends Component {
 
   _fetchBookmarks() {
     const hypertopic = new Hypertopic(conf.services);
-    hypertopic.getView(`/user/${conf.user}`, (data) => {
-      let user = data[conf.user];
+    hypertopic.getView(`/user/${this.user}`, (data) => {
+      let user = data[this.user];
       this.setState({
         viewpoints: user.viewpoint,
         corpora: user.corpus
