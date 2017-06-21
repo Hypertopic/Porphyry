@@ -21,7 +21,7 @@ class Portfolio extends Component {
   render() {
     let selection = this._getSelection();
     let viewpoints = this._getViewpoints(selection);
-    let corpora = this._getCorpora();
+    let corpora = this._getCorpora(selection);
     let status = this._getStatus(selection);
     return (
       <div className="App">
@@ -52,12 +52,17 @@ class Portfolio extends Component {
     clearInterval(this._timer);
   }
 
+  _getTopic(id) {
+    for (let v of this.state.viewpoints) {
+      if (v[id]) return v[id];
+    }
+    return null;
+  }
+
   _getStatus(selection) {
     let topics = selection.map(t => {
-      for (let v of this.state.viewpoints) {
-        if (v[t]) return v[t].name;
-      }
-      return 'Thème inconnu';
+      let topic = this._getTopic(t);
+      return (topic)? topic.name : 'Thème inconnu';
     });
     return topics.join(' + ') || 'Tous les items';
   }
@@ -67,6 +72,29 @@ class Portfolio extends Component {
     return (selection instanceof Array)? selection
       : (selection)? [selection]
       : [];
+  }
+
+  _getTopicPath(topicId) {
+    let topic = this._getTopic(topicId);
+    let path = (topic && topic.broader)? this._getTopicPath(topic.broader[0].id) : [];
+    path.push(topicId);
+    return path;
+  }
+
+  _getItemTopicsPaths(item) {
+    return (item.topic||[]).map(t => this._getTopicPath(t.id));
+  }
+
+  _getRecursiveItemTopics(item) {
+    return Array.prototype.concat(...this._getItemTopicsPaths(item));
+  }
+
+  _isSelected(item, selection) {
+    return includes(this._getRecursiveItemTopics(item), selection);
+  }
+
+  _getSelectedItems(selection) {
+    return this.state.items.filter(e => this._isSelected(e, selection));
   }
 
   _fetchBookmarks() {
@@ -122,12 +150,19 @@ class Portfolio extends Component {
     );
   }
 
-  _getCorpora() {
+  _getCorpora(selection) {
+    let selectedItems = this._getSelectedItems(selection);
     let ids = this.state.corpora.map(c => c.id);
     return (
-      <Corpora ids={ids} items={this.state.items} />
+      <Corpora ids={ids} from={this.state.items.length} items={selectedItems} />
     );
   }
+}
+
+function includes(array1, array2) {
+  let set1 = new Set(array1);
+  return array2.map(e => set1.has(e))
+    .reduce((c1,c2) => c1 && c2, true);
 }
 
 export default Portfolio;
