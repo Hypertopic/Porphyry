@@ -32,13 +32,16 @@
 .Subject {
   flex-direction: column;
   flex-grow: 2;
+}
+
+.Subject > div {
   background-color: dimgrey;
   color: rgb(240,240,240);
   padding: 4px;
   margin: 2px;
 }
 
-.Subject div {
+.Subject > div > div {
   background-color: ghostwhite;
 }
 

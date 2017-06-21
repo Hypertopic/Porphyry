@@ -7,9 +7,11 @@ class Corpora extends Component {
     let items = this._getItems();
     return(
       <div className="Subject">
-        <h3>{this.props.ids.join(' + ')} ({this.props.items.length}/{this.props.from})</h3>
-        <div className="Items">
-          {items}
+        <div>
+          <h3>{this.props.ids.join(' + ')} ({this.props.items.length}/{this.props.from})</h3>
+          <div className="Items">
+            {items}
+          </div>
         </div>
       </div>
     );
