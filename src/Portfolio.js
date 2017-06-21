@@ -17,15 +17,16 @@ class Portfolio extends Component {
       items: []
     };
     this.user = conf.user || location.hostname.split('.', 1)[0];
+    this._updateSelection();
+    this.selectedItems = [];
+    this.topicsItems = new Map();
   }
 
   render() {
-    let selection = this._getSelection();
-    let selectedItems = this._getSelectedItems(selection);
-    let topicsItems = this._getTopicsItems(selectedItems);
-    let viewpoints = this._getViewpoints(selection, topicsItems);
-    let corpora = this._getCorpora(selectedItems);
-    let status = this._getStatus(selection);
+    console.log('RENDER');
+    let viewpoints = this._getViewpoints();
+    let corpora = this._getCorpora();
+    let status = this._getStatus();
     return (
       <div className="App">
         <h1>{this.user}</h1>
@@ -44,11 +45,23 @@ class Portfolio extends Component {
     this._fetchBookmarks();
     this._timer = setInterval(
       () => {
+        console.log('FETCH');
         this._fetchItems();
         this._fetchViewpoints();
+        this._updateSelectedItems();
+        this._updateTopicsItems();
       },
       2000
     );
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props !== prevProps) {
+      console.log('UPDATE');
+      this._updateSelection();
+      this._updateSelectedItems();
+      this._updateTopicsItems();
+    }
   }
 
   componentWillUnmount() {
@@ -62,17 +75,17 @@ class Portfolio extends Component {
     return null;
   }
 
-  _getStatus(selection) {
-    let topics = selection.map(t => {
+  _getStatus() {
+    let topics = this.selection.map(t => {
       let topic = this._getTopic(t);
       return (topic)? topic.name : 'Thème inconnu';
     });
     return topics.join(' + ') || 'Tous les items';
   }
 
-  _getSelection() {
-    let selection = queryString.parse(this.props.location.search).t;
-    return (selection instanceof Array)? selection
+  _updateSelection() {
+    let selection = queryString.parse(location.search).t;
+    this.selection = (selection instanceof Array)? selection
       : (selection)? [selection]
       : [];
   }
@@ -92,22 +105,21 @@ class Portfolio extends Component {
     return Array.prototype.concat(...this._getItemTopicsPaths(item));
   }
 
-  _isSelected(item, selection) {
-    return includes(this._getRecursiveItemTopics(item), selection);
+  _isSelected(item) {
+    return includes(this._getRecursiveItemTopics(item), this.selection);
   }
 
-  _getSelectedItems(selection) {
-    return this.state.items.filter(e => this._isSelected(e, selection));
+  _updateSelectedItems() {
+    this.selectedItems = this.state.items.filter(e => this._isSelected(e, this.selection));
   }
 
-  _getTopicsItems(selectedItems) {
-    let map = new Map();
-    for (let e of selectedItems) {
+  _updateTopicsItems() {
+    this.topicsItems = new Map();
+    for (let e of this.selectedItems) {
       for (let t of this._getRecursiveItemTopics(e)) {
-        push(map, t, e.id);
+        push(this.topicsItems, t, e.id);
       }
     }
-    return map;
   }
 
   _fetchBookmarks() {
@@ -157,17 +169,17 @@ class Portfolio extends Component {
       });
    }
 
-  _getViewpoints(selection, topicsItems) {
+  _getViewpoints() {
     return this.state.viewpoints.sort(by('name')).map(v =>
-      <Viewpoint key={v.id} viewpoint={v} selection={selection}
-        topicsItems={topicsItems} />
+      <Viewpoint key={v.id} viewpoint={v} selection={this.selection}
+        topicsItems={this.topicsItems} />
     );
   }
 
-  _getCorpora(selectedItems) {
+  _getCorpora() {
     let ids = this.state.corpora.map(c => c.id);
     return (
-      <Corpora ids={ids} from={this.state.items.length} items={selectedItems} />
+      <Corpora ids={ids} from={this.state.items.length} items={this.selectedItems} />
     );
   }
 }
