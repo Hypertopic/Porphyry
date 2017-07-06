@@ -74,7 +74,7 @@ class Item extends Component {
     let uri = this.props.match.url;
     let params = this.props.match.params;
     let hypertopic = new Hypertopic(conf.services);
-    hypertopic.getView(uri, (data) => {
+    hypertopic.getView(uri).then((data) => {
       let item = data[params.corpus][params.item];
       item.topic = (item.topic) ? groupBy(item.topic, ['viewpoint']) : [];
       this.setState(item);
@@ -114,7 +114,7 @@ class Viewpoint extends Component {
   _fetchViewpoint() {
     const hypertopic = new Hypertopic(conf.services);
     let uri = '/viewpoint/' + this.props.id;
-    hypertopic.getView(uri, (data) => {
+    hypertopic.getView(uri).then((data) => {
       let viewpoint = data[this.props.id];
       let name = viewpoint.name;
       let topics = viewpoint;

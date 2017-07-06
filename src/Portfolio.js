@@ -14,16 +14,15 @@ class Portfolio extends Component {
     this.state = {
       viewpoints: [],
       corpora: [],
-      items: []
+      items: [],
+      selectedItems: [],
+      topicsItems: new Map()
     };
     this.user = conf.user || location.hostname.split('.', 1)[0];
     this._updateSelection();
-    this.selectedItems = [];
-    this.topicsItems = new Map();
   }
 
   render() {
-    console.log('RENDER');
     let viewpoints = this._getViewpoints();
     let corpora = this._getCorpora();
     let status = this._getStatus();
@@ -42,25 +41,19 @@ class Portfolio extends Component {
   }
 
   componentDidMount() {
-    this._fetchBookmarks();
+    this._fetchAll();
     this._timer = setInterval(
       () => {
-        console.log('FETCH');
-        this._fetchItems();
-        this._fetchViewpoints();
-        this._updateSelectedItems();
-        this._updateTopicsItems();
+        this._fetchAll();
       },
-      2000
+      10000
     );
   }
 
   componentDidUpdate(prevProps) {
     if (this.props !== prevProps) {
-      console.log('UPDATE');
       this._updateSelection();
       this._updateSelectedItems();
-      this._updateTopicsItems();
     }
   }
 
@@ -110,76 +103,76 @@ class Portfolio extends Component {
   }
 
   _updateSelectedItems() {
-    this.selectedItems = this.state.items.filter(e => this._isSelected(e, this.selection));
-  }
-
-  _updateTopicsItems() {
-    this.topicsItems = new Map();
-    for (let e of this.selectedItems) {
+    let selectedItems = this.state.items
+      .filter(e => this._isSelected(e, this.selection));
+    let topicsItems = new Map();
+    for (let e of selectedItems) {
       for (let t of this._getRecursiveItemTopics(e)) {
-        push(this.topicsItems, t, e.id);
+        push(topicsItems, t, e.id);
       }
     }
+    this.setState({selectedItems, topicsItems});
   }
 
-  _fetchBookmarks() {
+  _fetchAll() {
     const hypertopic = new Hypertopic(conf.services);
-    hypertopic.getView(`/user/${this.user}`, (data) => {
-      let user = data[this.user];
-      this.setState({
-        viewpoints: user.viewpoint,
-        corpora: user.corpus
-      });
-    });
-  }
-
-  _fetchItems() {
-    let hypertopic = new Hypertopic(conf.services);
-    let uris = this.state.corpora.map(c => '/corpus/' + c.id);
-    hypertopic.getView(uris, (data) => {
-      let items = [];
-      for (let corpus in data) {
-        for (let itemId in data[corpus]) {
-          if (!['id','name','user'].includes(itemId)) {
-            let item = data[corpus][itemId];
-            if (!item.name || !item.name.length || !item.thumbnail || !item.thumbnail.length) {
-              console.log(itemId, "has no name or thumbnail!", item);
-            } else {
-              item.id = itemId;
-              item.corpus = corpus;
-              items.push(item);
+    return hypertopic.getView(`/user/${this.user}`)
+      .then(data => {
+        let user = data[this.user];
+        if (!this.state.viewpoints.length && !this.state.corpora.length) { //TODO compare old and new
+          this.setState({viewpoints:user.viewpoint, corpora:user.corpus});
+        }
+        return user;
+      })
+      .then(x =>
+        x.viewpoint.map(y => `/viewpoint/${y.id}`)
+          .concat(x.corpus.map(y => `/corpus/${y.id}`))
+      )
+      .then(hypertopic.getView)
+      .then(data => {
+        let viewpoints = [];
+        for (let v of this.state.viewpoints) {
+          let viewpoint = data[v.id];
+          viewpoint.id = v.id;
+          viewpoints.push(viewpoint);
+        }
+        this.setState({viewpoints});
+        return data;
+      })
+      .then(data => {
+        let items = [];
+        for (let corpus of this.state.corpora) {
+          for (let itemId in data[corpus.id]) {
+            if (!['id','name','user'].includes(itemId)) {
+              let item = data[corpus.id][itemId];
+              if (!item.name || !item.name.length || !item.thumbnail || !item.thumbnail.length) {
+                console.log(itemId, "has no name or thumbnail!", item);
+              } else {
+                item.id = itemId;
+                item.corpus = corpus.id;
+                items.push(item);
+              }
             }
           }
         }
-      }
-      this.setState({items:items.sort(by('name'))});
-    });
-  }
-
-   _fetchViewpoints() {
-      let hypertopic = new Hypertopic(conf.services);
-      let uris = this.state.viewpoints.map(v => '/viewpoint/' + v.id);
-      hypertopic.getView(uris, (data) => {
-        let viewpoints = [];
-        for (let [id, v] of Object.entries(data)) {
-          v.id = id;
-          viewpoints.push(v);
-        }
-        this.setState({viewpoints});
+        this.setState({items:items.sort(by('name'))});
+      })
+      .then(x => {
+        this._updateSelectedItems();
       });
-   }
+  }
 
   _getViewpoints() {
     return this.state.viewpoints.sort(by('name')).map(v =>
       <Viewpoint key={v.id} viewpoint={v} selection={this.selection}
-        topicsItems={this.topicsItems} />
+        topicsItems={this.state.topicsItems} />
     );
   }
 
   _getCorpora() {
     let ids = this.state.corpora.map(c => c.id);
     return (
-      <Corpora ids={ids} from={this.state.items.length} items={this.selectedItems} />
+      <Corpora ids={ids} from={this.state.items.length} items={this.state.selectedItems} />
     );
   }
 }
