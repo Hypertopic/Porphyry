@@ -66,6 +66,27 @@
 
 .Topic {
   text-align: left;
+  list-style-type: none;
+}
+
+.Bullet {
+  color: darkgrey;
+}
+
+.Closed > .Bullet:before {
+  content: '▶';
+}
+
+.Closed > ul {
+  display: none;
+}
+
+.Opened > .Bullet:before {
+  content: '▼';
+}
+
+.Topic:not(.Opened):not(.Closed) > .Bullet:before {
+  content: '◼';
 }
 
 .Topic span {
