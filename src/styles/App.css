@@ -6,9 +6,9 @@
 .App h1 {
   background-color: rgb(153, 51,0);
   color: ivory;
-  background-image: url(porphyry.gif);
+  background-image: url('../images/porphyry.gif');
   background-repeat: no-repeat;
-  background-position: right; 
+  background-position: right;
 }
 
 .Status {
@@ -19,7 +19,7 @@
 
 .App-content {
   display: flex;
-  min-height: 100vh;  
+  min-height: 100vh;
   flex-direction: row;
 }
 

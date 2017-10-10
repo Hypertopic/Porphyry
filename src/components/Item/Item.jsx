@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Hypertopic from 'hypertopic';
 import groupBy from 'json-groupby';
-import conf from './config.json';
+import conf from '../../config/config.json';
 
-import './App.css';
+import '../../styles/App.css';
 
 class Item extends Component {
   constructor() {
