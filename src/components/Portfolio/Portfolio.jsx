@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import by from 'sort-by';
 import queryString from 'query-string';
 import Hypertopic from 'hypertopic';
-import conf from './config.json';
-import Viewpoint from './Viewpoint';
-import Corpora from './Corpora';
+import conf from '../../config/config.json';
+import Viewpoint from '../Viewpoint/Viewpoint.jsx';
+import Corpora from '../Corpora/Corpora.jsx';
 
-import './App.css';
+import '../../styles/App.css';
 
 class Portfolio extends Component {
   constructor() {
