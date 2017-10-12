@@ -30,3 +30,8 @@ Build for production
 --------------------
 
     npm run build
+
+Run tests
+---------
+
+    npm run test
