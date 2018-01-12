@@ -125,3 +125,7 @@
 .TopicPath > .Topic:last-of-type {
   font-weight: bold;
 }
+
+.Outliner {
+  text-align: left;
+}
