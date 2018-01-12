@@ -9,11 +9,12 @@ class Viewpoint extends Component {
     let outliner = this._getOutliner();
     return (
       <div className="DescriptionModality">
-        <h3>{this.props.viewpoint.name}</h3>
-
-        <button>
-          <Link to={outliner}>Editer</Link>
-        </button>
+        <h3>
+          {this.props.viewpoint.name}
+          <a className='outliner' href={outliner}>
+            <img src='https://static.xx.fbcdn.net/rsrc.php/v3/y9/r/tlXhSXComXE.png'/>
+          </a>
+        </h3>
         <div className="Topics">
           <ul>
             {topics}

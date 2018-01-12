@@ -7,8 +7,23 @@ var equal = require('deep-equal');
 
 import '../../styles/App.css';
 
+//gérer entrer DONE
+//gérer _delete
+//gérer premier topic
+//feuille de style
+
+
 const _log = (x) => console.log(JSON.stringify(x, null, 2));
 const _error = (x) => console.error(x.message);
+
+function makeID() {
+  var id = '';
+  for (var i = 0; i<6;i++) {
+    id += Math.random().toString(15).substring(10);
+  }
+  id = id.slice(0,32);
+  return id;
+}
 
 class Outliner extends React.Component {
   constructor() {
@@ -18,10 +33,15 @@ class Outliner extends React.Component {
 
   render() {
     return (
-      <div className="Outliner" >
-      <h1> {this.state.title} </h1>
+    <div>
+      <div className='App'>
+        <h1>{this.state.title}</h1>
+        <div className='Status'>Modification du point de vue</div>
+      </div>
+      <div className="Outliner">
       <Tree data={this.state} childs={this.state.upper} father={[]} uri={this.props.match.params.id} fetch={this._fetchData}/>
       </div>
+    </div>
     );
   }
 
@@ -30,18 +50,16 @@ class Outliner extends React.Component {
     this._timer = setInterval(
       () => {
         if (this.state.fathers.upper !== this.state.upper) {
-          console.log('DEQFNZOGFNZOGN');
           this.setState({upper: this.state.fathers.upper})
         };
         db.get({_id: this.props.match.params.id})
           .then(x => {
             if (this.state.topics === undefined || !equal(x.topics, this.state.topics)) {
-              console.log('ON UPDATE');
               this._fetchData()
             }
           });
       },
-      5000
+      1000
     );
   }
 
@@ -73,6 +91,7 @@ class Outliner extends React.Component {
             ...Object.values(e)[0]
           ])
         );
+        console.log('On modifie les pères');
         return listFatherGroup;
       })
     .then(x => this.setState({
@@ -88,6 +107,7 @@ class Tree extends React.Component {
       super(props);
       this.state = {
         add: "",
+        addSub: [""],
         childs: []
       };
     }
@@ -105,12 +125,30 @@ class Tree extends React.Component {
         .catch(_error);
     }
 
+    handleKeyPress(event) {
+      if(event.key == 'Enter'){
+        this._addChild(this);
+      }
+    }
+
+    handleKeyPressSub(index, event) {
+      if(event.key == 'Enter'){
+        this._addSub(index);
+      }
+    }
+
     addTopic(event) {
       this.setState({add : event.target.value});
     }
 
+    addS(index, event) {
+      var addSub = this.state.addSub.slice();
+      addSub[index] = event.target.value;
+      this.setState({addSub: addSub});
+    }
+
     _deleteChild(index) {
-      if (this.props.data.fathers[this.props.childs[index]] != undefined) {
+      if (this.props.data.fathers[this.props.childs[index]] !== undefined) {
         console.log('PAS VIDE');
         this.props.data.fathers[this.props.childs[index]].map(e =>
           console.log(this.props.data.topics[e])
@@ -122,74 +160,100 @@ class Tree extends React.Component {
           return data
         })
         .then(db.post)
+        .then(() => {
+          this.state.childs = this.state.childs.slice(0,0);
+        })
         .catch(_error);
+        this.state.childs = this.state.childs.slice(0,0);
     }
 
     _addChild() {
 
-        if (this.state.add != "") {
-        function makeID() {
-          var id = '';
-          for (var i = 0; i<5;i++) {
-            id += Math.random().toString(15).substring(10);
-          }
-          return id;
-        }
-        var id = makeID()
+      var id = makeID();
+      if (this.state.add !== "") {
         var newTopic = {
           name : this.state.add,
           broader : this.props.father
         };
-        console.log(id : newTopic);
+        console.log(newTopic);
         db.get({_id: this.props.uri})
           .then(data => {
             Object.assign(data.topics, {[id] : newTopic});
             return data
           })
           .then(db.post)
+          .then(() =>
+            this.setState({add : ''}))
           .catch(_error);
-        this.updateOutliner();
-        }
+      }
     }
 
-    updateOutliner() {
-      console.log('on clear');
-      this.setState({add : ''});
+    _addSub(i) {
+
+      var id = makeID();
+       if (this.state.addSub[i] !== "") {
+        var newTopic = {
+          name : this.state.addSub[i],
+          broader : [this.props.childs[i]]
+        };
+        console.log(newTopic);
+        db.get({_id: this.props.uri})
+          .then(data => {
+            console.log(data);
+            console.log({[id] : newTopic});
+            Object.assign(data.topics, {[id] : newTopic});
+            return data
+          })
+          .then(db.post)
+          .then(() =>
+            this.state.addSub[i] = '')
+          .catch(_error);
+      }
     }
 
     render() {
-        if (Array.isArray(this.props.childs)) {
-          const childs = this.props.childs.map((e, idx) =>
-            (typeof this.props.data.fathers[e] === "object") ?
-            (this.state.childs.push(this.props.data.topics[e].name),
-            <li key={e} className = 'outliner'>
-              <a className='remove' onClick={(e) => this._deleteChild(idx)}>x   </a>
-              <input type="text" value={this.state.childs[idx]} onChange={this.handleChange.bind(this, idx)}/>
-              <ul className='outliner'>
-                {this._getChilds(e)}
-              </ul>
-            </li>)
-            : (this.state.childs.push(this.props.data.topics[e].name),
-            <li key={e} className = 'outliner'>
-              <a className='remove' onClick={(e) => this._deleteChild(idx)}>x   </a>
-              <input type="text" value={this.state.childs[idx]} onChange={this.handleChange.bind(this, idx)}/>
-            </li>));
-              return (
-              <ul>
-                <li className='add'>
-                  <a className='add' onClick={(e) => this._addChild(this)}>+   </a>
-                  <input type="text" value={this.state.add} onChange={this.addTopic.bind(this)}/>
-                </li>
-                {childs}
-              </ul>);
-              } else {
-                return <li> NOTHING </li>
-              }
-            }
+      if (Array.isArray(this.props.childs)) {
+        this.state.childs = this.state.childs.slice(0,0);
+        var childs = this.props.childs.map((e, idx) =>
+          (typeof this.props.data.fathers[e] === "object") ?
+          (this.state.childs.push(this.props.data.topics[e].name),
+          <li key={e} className='outliner'>
+            <a className='remove' onClick={(e) => this._deleteChild(this, idx)}>x   </a>
+            <input type="text" value={this.state.childs[idx]} onChange={this.handleChange.bind(this, idx)}/>
+            <ul className='outliner'>
+              {this._getChilds(e)}
+            </ul>
+          </li>)
+          : (this.state.childs.push(this.props.data.topics[e].name),
+          <li key={e} className='outliner'>
+            <a className='remove' onClick={(e) => this._deleteChild(idx)}>x&nbsp;</a>
+            <input type="text" value={this.state.childs[idx]} onChange={this.handleChange.bind(this, idx)}/>
+            <ul className='outliner'>
+              <li key={idx} className='add'>
+                <a className='add' onClick={(e) => this._addSub(idx)}>+&nbsp;</a>
+                <input type="text" value={this.state.addSub[idx]} onChange={this.addS.bind(this, idx)} onKeyPress={this.handleKeyPressSub.bind(this, idx)}/>
+              </li>
+            </ul>
+          </li>));
+          return (
+          <ul>
+            <li className='add'>
+              <a className='add' onClick={(e) => this._addChild(this)}>+&nbsp;</a>
+              <input type="text" value={this.state.add} onChange={this.addTopic.bind(this)} onKeyPress={this.handleKeyPress.bind(this)}/>
+            </li>
+            {childs}
+          </ul>);
+    } else {
+      return <li className='add'>
+        <a className='add' onClick={(e) => this._addChild(this)}>+&nbsp;</a>
+        <input type="text" value={this.state.add} onChange={this.addTopic.bind(this)} onKeyPress={this.handleKeyPress.bind(this)}/>
+      </li>
+    }
+  }
 
-            _getChilds(e) {
-              return (<Tree childs={this.props.data.fathers[e]} father={[e]} data={this.props.data} uri={this.props.uri}/>);
-            }
-          }
+  _getChilds(e) {
+    return (<Tree childs={this.props.data.fathers[e]} father={[e]} data={this.props.data} uri={this.props.uri}/>);
+  }
+}
 
-          export default Outliner;
+export default Outliner;
