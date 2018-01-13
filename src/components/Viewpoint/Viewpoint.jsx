@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import by from 'sort-by';
 import Topic from '../Topic/Topic.jsx';
-import { Link } from 'react-router-dom';
 
 class Viewpoint extends Component {
   render() {
