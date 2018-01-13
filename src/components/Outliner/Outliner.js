@@ -7,12 +7,6 @@ var equal = require('deep-equal');
 
 import '../../styles/App.css';
 
-//gérer entrer DONE
-//gérer _delete DONE
-//gérer premier topic
-//feuille de style DONE
-
-
 const _log = (x) => console.log(JSON.stringify(x, null, 2));
 const _error = (x) => console.error(x.message);
 
@@ -26,18 +20,18 @@ function makeID() {
 }
 
 class Outliner extends React.Component {
+
   constructor() {
     super();
-    this.state = {
-      stop : true
-    };
+    this.state = {stop : true, nextTitle : ''};
   }
 
   render() {
+    var title = this._getTitle();
     return (
     <div>
       <div className='App'>
-        <h1>{this.state.title}</h1>
+        <h1>{title} </h1>
         <div className='Status'>Modification du point de vue</div>
       </div>
       <div className="Outliner">
@@ -45,6 +39,35 @@ class Outliner extends React.Component {
       </div>
     </div>
     );
+  }
+
+  _getTitle() {
+    if (this.state.title !== undefined) {
+      return this.state.title;
+    } else {
+      return (
+        <div>
+          <a className='add' onClick={(e) => this._newVP(this)}>+&nbsp;</a>
+          <input type="text" value={this.state.nextTitle} onChange={this.addTitle.bind(this)} onKeyPress={this.handleKeyPress.bind(this)}/>
+        </div>);
+    }
+  }
+
+  _newVP() {
+    db.post({_id:this.props.match.params.id, viewpoint_name: this.state.nextTitle, topics:{}})
+      .then(_log)
+      .then(this.setState({title : this.state.nextTitle}))
+      .catch(_error);
+  }
+
+  handleKeyPress(event){
+    if(event.key === 'Enter'){
+      this._newVP(this);
+    }
+  }
+
+  addTitle(event){
+    this.setState({nextTitle : event.target.value})
   }
 
   componentDidMount() {
@@ -70,11 +93,9 @@ class Outliner extends React.Component {
   }
 
   _fetchData() {
-
     var listFatherGroup = {};
     return db.get({_id: this.props.match.params.id})
       .then(x => {
-          console.log('DEBUT DU FETCH');
           this.setState({stop : true});
           this.setState({topics: x.topics});
           this.setState({title: x.viewpoint_name});
@@ -95,16 +116,10 @@ class Outliner extends React.Component {
             ...Object.values(e)[0]
           ])
         );
-        console.log('On modifie les pères');
-        console.log(listFatherGroup);
         return listFatherGroup;
       })
-    .then(x => this.setState({
-      fathers: x,
-      stop : false
-    }));
+    .then(x => this.setState({fathers: x, stop : false}));
   }
-
 }
 
 class Tree extends React.Component {
@@ -119,39 +134,46 @@ class Tree extends React.Component {
       };
     }
 
-    handleChange(index, event) {
-      this.setState({edit : true});
-      var childs = this.state.childs.slice();
-      childs[index] = event.target.value;
-      this.setState({childs : childs});
-    }
-
-    handleKeyPress(event) {
-      if(event.key == 'Enter'){
-        this._addChild(this);
+    handleChange(type, index, event) {
+      switch (type) {
+        case 'edit':
+          this.setState({edit : true});
+          var childs = this.state.childs.slice();
+          childs[index] = event.target.value;
+          this.setState({childs : childs});
+          break;
+        case 'add':
+          this.setState({add : event.target.value});
+          break;
+        case 'sub':
+          var addSub = this.state.addSub.slice();
+          addSub[index] = event.target.value;
+          this.setState({addSub: addSub});
+          break;
+        default:
+          console.log(type);
       }
     }
 
-    handleKeyPressSub(index, event) {
-      if(event.key == 'Enter'){
-        this._addSub(index);
+    handleKeyPress(type, index, event) {
+      if(event.key === 'Enter'){
+        switch (type) {
+          case 'child':
+            this._push(this.state.add,this.props.father);
+            break;
+          case 'sub':
+            this._push(this.state.addSub[index],[this.props.childs[index]])
+            break;
+          case 'edit':
+            this._editTopic(index);
+            break;
+          case 'first':
+            this._push(this.state.add,[]);
+            break;
+          default:
+            console.log(type);
+        }
       }
-    }
-
-    handleKeyPressEdit(index, event) {
-      if(event.key == 'Enter'){
-        this._editTopic(index);
-      }
-    }
-
-    addTopic(event) {
-      this.setState({add : event.target.value});
-    }
-
-    addS(index, event) {
-      var addSub = this.state.addSub.slice();
-      addSub[index] = event.target.value;
-      this.setState({addSub: addSub});
     }
 
     _editTopic(index) {
@@ -164,6 +186,14 @@ class Tree extends React.Component {
         .catch(_error);
     }
 
+    _deleteChild(index) {
+      let listDelete = [];
+      listDelete = this.collectChilds(this.props.childs[index],listDelete);
+      this.deleteTop(listDelete);
+      let childs = this.state.childs.slice(0,0);
+      this.setState({childs : childs});
+    }
+
     deleteTop(list){
       db.get({_id: this.props.uri})
         .then(data => {
@@ -173,75 +203,33 @@ class Tree extends React.Component {
         })
         .then(db.post)
         .then(() => {
-          console.log('FIN DU DELETE');
           let childs = this.state.childs.slice(0,0);
           this.setState({childs : childs})
         })
         .catch(_error);
       }
 
-      collectChilds(e,list) {
-        console.log(list);
-        if (this.props.data.fathers[e] !== undefined) {
-          this.props.data.fathers[e].map(c => {
-            console.log(c);
-            list = this.collectChilds(c,list);
-          });
-        }
-        list.push(e);
-        console.log(list);
-        return list;
+    collectChilds(e,list) {
+      if (this.props.data.fathers[e] !== undefined) {
+        this.props.data.fathers[e].map(c => {
+          list = this.collectChilds(c,list);
+        });
       }
-
-      _deleteChild(index) {
-      let listDelete = [];
-      listDelete = this.collectChilds(this.props.childs[index],listDelete);
-      console.log(listDelete);
-      this.deleteTop(listDelete);
-      let childs = this.state.childs.slice(0,0);
-      this.setState({childs : childs});
+      list.push(e);
+      return list;
     }
 
-    _addChild() {
-
+    _push(name,broader) {
       var id = makeID();
-      if (this.state.add !== "") {
-        var newTopic = {
-          name : this.state.add,
-          broader : this.props.father
-        };
-        console.log(newTopic);
+      if (name !== ""){
+        var newTopic = {name : name, broader : broader};
         db.get({_id: this.props.uri})
           .then(data => {
             Object.assign(data.topics, {[id] : newTopic});
             return data
           })
           .then(db.post)
-          .then(() =>
-            this.setState({add : ''}))
-          .catch(_error);
-      }
-    }
-
-    _addSub(i) {
-
-      var id = makeID();
-       if (this.state.addSub[i] !== "") {
-        var newTopic = {
-          name : this.state.addSub[i],
-          broader : [this.props.childs[i]]
-        };
-        console.log(newTopic);
-        db.get({_id: this.props.uri})
-          .then(data => {
-            console.log(data);
-            console.log({[id] : newTopic});
-            Object.assign(data.topics, {[id] : newTopic});
-            return data
-          })
-          .then(db.post)
-          .then(() =>
-            this.state.addSub[i] = '')
+          .then(() => this.setState({add : ''}))
           .catch(_error);
       }
     }
@@ -268,7 +256,7 @@ class Tree extends React.Component {
             <a className='remove' onClick={(e) => this._editTopic(idx)}>
               <img src='https://static.xx.fbcdn.net/rsrc.php/v3/y9/r/tlXhSXComXE.png'/>&nbsp;
             </a>
-            <input type="text" value={this.display(idx)} onChange={this.handleChange.bind(this, idx)} onKeyPress={this.handleKeyPressEdit.bind(this, idx)}/>
+            <input type="text" value={this.display(idx)} onChange={this.handleChange.bind(this, 'edit', idx)} onKeyPress={this.handleKeyPress.bind(this, 'edit', idx)}/>
             <ul className='outliner'>
               {this._getChilds(e)}
             </ul>
@@ -281,33 +269,35 @@ class Tree extends React.Component {
             <a className='remove' onClick={(e) => this._editTopic(idx)}>
               <img src='https://static.xx.fbcdn.net/rsrc.php/v3/y9/r/tlXhSXComXE.png'/>&nbsp;
             </a>
-            <input type="text" value={this.display(idx)} onChange={this.handleChange.bind(this, idx)} onKeyPress={this.handleKeyPressEdit.bind(this, idx)}/>
+            <input type="text" value={this.display(idx)} onChange={this.handleChange.bind(this, 'edit', idx)} onKeyPress={this.handleKeyPress.bind(this,'edit',idx)}/>
             <ul className='outliner'>
               <li key={idx} className='add'>
-                <a className='add' onClick={(e) => this._addSub(idx)}>+&nbsp;</a>
-                <input type="text" value={this.state.addSub[idx]} onChange={this.addS.bind(this, idx)} onKeyPress={this.handleKeyPressSub.bind(this, idx)}/>
+                <a className='add' onClick={(e) => this._push(this.state.addSub[idx],[this.props.childs[idx]])}>+&nbsp;</a>
+                <input type="text" value={this.state.addSub[idx]} onChange={this.handleChange.bind(this, 'sub', idx)} onKeyPress={this.handleKeyPress.bind(this, 'sub',idx)}/>
               </li>
             </ul>
           </li>));
-          return (
-          <ul>
-            <li className='add'>
-              <a className='add' onClick={(e) => this._addChild(this)}>+&nbsp;</a>
-              <input type="text" value={this.state.add} onChange={this.addTopic.bind(this)} onKeyPress={this.handleKeyPress.bind(this)}/>
-            </li>
-            {childs}
-          </ul>);
+      return (
+      <ul>
+        <li className='add'>
+          <a className='add' onClick={(e) => this._push(this.state.add,this.props.father)}>+&nbsp;</a>
+          <input type="text" value={this.state.add} onChange={this.handleChange.bind(this, 'add', 0)} onKeyPress={this.handleKeyPress.bind(this,'child',0)}/>
+        </li>
+        {childs}
+      </ul>);
     } else {
-      return <li className='add'>
-        <a className='add' onClick={(e) => this._addChild(this)}>+&nbsp;</a>
-        <input type="text" value={this.state.add} onChange={this.addTopic.bind(this)} onKeyPress={this.handleKeyPress.bind(this)}/>
-      </li>
+      return(
+      <li className='add'>
+        <a className='add' onClick={(e) => this._push(this.state.add,[])}>+&nbsp;</a>
+        <input type="text" value={this.state.add} onChange={this.handleChange.bind(this, 'add', 0)} onKeyPress={this.handleKeyPress.bind(this,'first',0)}/>
+      </li>);
     }
   }
 
   _getChilds(e) {
     return (<Tree childs={this.props.data.fathers[e]} father={[e]} data={this.props.data} uri={this.props.uri} stop={this.state.stop}/>);
   }
+
 }
 
 export default Outliner;
