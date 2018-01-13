@@ -8,9 +8,9 @@ var equal = require('deep-equal');
 import '../../styles/App.css';
 
 //gérer entrer DONE
-//gérer _delete
+//gérer _delete DONE
 //gérer premier topic
-//feuille de style
+//feuille de style DONE
 
 
 const _log = (x) => console.log(JSON.stringify(x, null, 2));
@@ -28,7 +28,9 @@ function makeID() {
 class Outliner extends React.Component {
   constructor() {
     super();
-    this.state = {};
+    this.state = {
+      stop : true
+    };
   }
 
   render() {
@@ -39,7 +41,7 @@ class Outliner extends React.Component {
         <div className='Status'>Modification du point de vue</div>
       </div>
       <div className="Outliner">
-      <Tree data={this.state} childs={this.state.upper} father={[]} uri={this.props.match.params.id} fetch={this._fetchData}/>
+      <Tree data={this.state} childs={this.state.upper} father={[]} uri={this.props.match.params.id} stop={this.state.stop}/>
       </div>
     </div>
     );
@@ -72,6 +74,8 @@ class Outliner extends React.Component {
     var listFatherGroup = {};
     return db.get({_id: this.props.match.params.id})
       .then(x => {
+          console.log('DEBUT DU FETCH');
+          this.setState({stop : true});
           this.setState({topics: x.topics});
           this.setState({title: x.viewpoint_name});
           return x.topics
@@ -92,10 +96,12 @@ class Outliner extends React.Component {
           ])
         );
         console.log('On modifie les pères');
+        console.log(listFatherGroup);
         return listFatherGroup;
       })
     .then(x => this.setState({
-      fathers: x
+      fathers: x,
+      stop : false
     }));
   }
 
@@ -108,21 +114,16 @@ class Tree extends React.Component {
       this.state = {
         add: "",
         addSub: [""],
-        childs: []
+        childs: [],
+        edit: false
       };
     }
 
     handleChange(index, event) {
+      this.setState({edit : true});
       var childs = this.state.childs.slice();
       childs[index] = event.target.value;
-      this.setState({childs: childs});
-      db.get({_id: this.props.uri})
-        .then(data => {
-          Object.assign(data.topics[this.props.childs[index]], {name: childs[index]});
-          return data
-        })
-        .then(db.post)
-        .catch(_error);
+      this.setState({childs : childs});
     }
 
     handleKeyPress(event) {
@@ -137,6 +138,12 @@ class Tree extends React.Component {
       }
     }
 
+    handleKeyPressEdit(index, event) {
+      if(event.key == 'Enter'){
+        this._editTopic(index);
+      }
+    }
+
     addTopic(event) {
       this.setState({add : event.target.value});
     }
@@ -147,24 +154,52 @@ class Tree extends React.Component {
       this.setState({addSub: addSub});
     }
 
-    _deleteChild(index) {
-      if (this.props.data.fathers[this.props.childs[index]] !== undefined) {
-        console.log('PAS VIDE');
-        this.props.data.fathers[this.props.childs[index]].map(e =>
-          console.log(this.props.data.topics[e])
-        )
-      }
+    _editTopic(index) {
       db.get({_id: this.props.uri})
         .then(data => {
-          delete data.topics[this.props.childs[index]];
+          Object.assign(data.topics[this.props.childs[index]], {name: this.state.copy[index]});
+          return data
+        })
+        .then(db.post)
+        .catch(_error);
+    }
+
+    deleteTop(list){
+      db.get({_id: this.props.uri})
+        .then(data => {
+          list.forEach(e =>
+          delete data.topics[e]);
           return data
         })
         .then(db.post)
         .then(() => {
-          this.state.childs = this.state.childs.slice(0,0);
+          console.log('FIN DU DELETE');
+          let childs = this.state.childs.slice(0,0);
+          this.setState({childs : childs})
         })
         .catch(_error);
-        this.state.childs = this.state.childs.slice(0,0);
+      }
+
+      collectChilds(e,list) {
+        console.log(list);
+        if (this.props.data.fathers[e] !== undefined) {
+          this.props.data.fathers[e].map(c => {
+            console.log(c);
+            list = this.collectChilds(c,list);
+          });
+        }
+        list.push(e);
+        console.log(list);
+        return list;
+      }
+
+      _deleteChild(index) {
+      let listDelete = [];
+      listDelete = this.collectChilds(this.props.childs[index],listDelete);
+      console.log(listDelete);
+      this.deleteTop(listDelete);
+      let childs = this.state.childs.slice(0,0);
+      this.setState({childs : childs});
     }
 
     _addChild() {
@@ -211,23 +246,42 @@ class Tree extends React.Component {
       }
     }
 
+    display(idx) {
+      if (!this.state.edit) {
+        return this.state.childs[idx]
+      } else {
+        return this.state.copy[idx]
+      }
+    }
+
     render() {
-      if (Array.isArray(this.props.childs)) {
+      if (Array.isArray(this.props.childs) && !this.props.stop) {
+        this.state.copy = this.state.childs.slice();
         this.state.childs = this.state.childs.slice(0,0);
         var childs = this.props.childs.map((e, idx) =>
           (typeof this.props.data.fathers[e] === "object") ?
           (this.state.childs.push(this.props.data.topics[e].name),
           <li key={e} className='outliner'>
-            <a className='remove' onClick={(e) => this._deleteChild(this, idx)}>x   </a>
-            <input type="text" value={this.state.childs[idx]} onChange={this.handleChange.bind(this, idx)}/>
+            <a className='remove' onClick={(e) => this._deleteChild(idx)}>
+              <img src='https://www.jobillico.com/images/ico-delete.png'/>&nbsp;
+            </a>
+            <a className='remove' onClick={(e) => this._editTopic(idx)}>
+              <img src='https://static.xx.fbcdn.net/rsrc.php/v3/y9/r/tlXhSXComXE.png'/>&nbsp;
+            </a>
+            <input type="text" value={this.display(idx)} onChange={this.handleChange.bind(this, idx)} onKeyPress={this.handleKeyPressEdit.bind(this, idx)}/>
             <ul className='outliner'>
               {this._getChilds(e)}
             </ul>
           </li>)
           : (this.state.childs.push(this.props.data.topics[e].name),
           <li key={e} className='outliner'>
-            <a className='remove' onClick={(e) => this._deleteChild(idx)}>x&nbsp;</a>
-            <input type="text" value={this.state.childs[idx]} onChange={this.handleChange.bind(this, idx)}/>
+            <a className='remove' onClick={(e) => this._deleteChild(idx)}>
+              <img src='https://www.jobillico.com/images/ico-delete.png'/>&nbsp;
+            </a>
+            <a className='remove' onClick={(e) => this._editTopic(idx)}>
+              <img src='https://static.xx.fbcdn.net/rsrc.php/v3/y9/r/tlXhSXComXE.png'/>&nbsp;
+            </a>
+            <input type="text" value={this.display(idx)} onChange={this.handleChange.bind(this, idx)} onKeyPress={this.handleKeyPressEdit.bind(this, idx)}/>
             <ul className='outliner'>
               <li key={idx} className='add'>
                 <a className='add' onClick={(e) => this._addSub(idx)}>+&nbsp;</a>
@@ -252,7 +306,7 @@ class Tree extends React.Component {
   }
 
   _getChilds(e) {
-    return (<Tree childs={this.props.data.fathers[e]} father={[e]} data={this.props.data} uri={this.props.uri}/>);
+    return (<Tree childs={this.props.data.fathers[e]} father={[e]} data={this.props.data} uri={this.props.uri} stop={this.state.stop}/>);
   }
 }
 
