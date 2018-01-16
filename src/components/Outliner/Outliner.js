@@ -169,6 +169,7 @@ class Tree extends React.Component {
             break;
           case 'first':
             this._push(this.state.add,[]);
+            this.setState({childs: [this.state.add]});
             break;
           default:
             console.log(type);
@@ -253,9 +254,6 @@ class Tree extends React.Component {
             <a className='remove' onClick={(e) => this._deleteChild(idx)}>
               <img src='https://www.jobillico.com/images/ico-delete.png'/>&nbsp;
             </a>
-            <a className='remove' onClick={(e) => this._editTopic(idx)}>
-              <img src='https://static.xx.fbcdn.net/rsrc.php/v3/y9/r/tlXhSXComXE.png'/>&nbsp;
-            </a>
             <input type="text" value={this.display(idx)} onChange={this.handleChange.bind(this, 'edit', idx)} onKeyPress={this.handleKeyPress.bind(this, 'edit', idx)}/>
             <ul className='outliner'>
               {this._getChilds(e)}
@@ -266,13 +264,9 @@ class Tree extends React.Component {
             <a className='remove' onClick={(e) => this._deleteChild(idx)}>
               <img src='https://www.jobillico.com/images/ico-delete.png'/>&nbsp;
             </a>
-            <a className='remove' onClick={(e) => this._editTopic(idx)}>
-              <img src='https://static.xx.fbcdn.net/rsrc.php/v3/y9/r/tlXhSXComXE.png'/>&nbsp;
-            </a>
             <input type="text" value={this.display(idx)} onChange={this.handleChange.bind(this, 'edit', idx)} onKeyPress={this.handleKeyPress.bind(this,'edit',idx)}/>
             <ul className='outliner'>
               <li key={idx} className='add'>
-                <a className='add' onClick={(e) => this._push(this.state.addSub[idx],[this.props.childs[idx]])}>+&nbsp;</a>
                 <input type="text" value={this.state.addSub[idx]} onChange={this.handleChange.bind(this, 'sub', idx)} onKeyPress={this.handleKeyPress.bind(this, 'sub',idx)}/>
               </li>
             </ul>
@@ -280,7 +274,6 @@ class Tree extends React.Component {
       return (
       <ul>
         <li className='add'>
-          <a className='add' onClick={(e) => this._push(this.state.add,this.props.father)}>+&nbsp;</a>
           <input type="text" value={this.state.add} onChange={this.handleChange.bind(this, 'add', 0)} onKeyPress={this.handleKeyPress.bind(this,'child',0)}/>
         </li>
         {childs}
