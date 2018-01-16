@@ -1,0 +1,63 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+  text-align: center;
+}
+
+h1 {
+  text-transform: uppercase;
+  padding: 10px;
+  margin: 0px;
+}
+
+h3 {
+  margin: 2px;
+}
+
+ul {
+  padding-left: 20px;
+}
+
+img {
+  object-fit: scale-down;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+}
+
+a:hover {
+  color: dimgrey;
+}
+
+input[type=text] {
+    border: none;
+    font-size: 16px;
+    background-color: whitesmoke;
+}
+
+input[type=text]:focus {
+    background-color: lightblue;
+    font-size: 16px;
+}
+
+li.outliner {
+  list-style: none
+}
+
+li.add {
+  list-style: none;
+}
+
+a.remove {
+  cursor: pointer;
+}
+
+a.outliner {
+  cursor: pointer;
+  float: right;
+}
