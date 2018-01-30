@@ -54,12 +54,6 @@ li.add {
 }
 
 a.remove {
-  color: red;
-  cursor: pointer;
-}
-
-a.add {
-  color: green;
   cursor: pointer;
 }
 
