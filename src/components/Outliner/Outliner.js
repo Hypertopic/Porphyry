@@ -252,7 +252,7 @@ class Tree extends React.Component {
           (this.state.childs.push(this.props.data.topics[e].name),
           <li key={e} className='outliner'>
             <a className='remove' onClick={(e) => this._deleteChild(idx)}>
-              <img src='https://www.jobillico.com/images/ico-delete.png'/>&nbsp;
+              🗑&nbsp;
             </a>
             <input type="text" value={this.display(idx)} onChange={this.handleChange.bind(this, 'edit', idx)} onKeyPress={this.handleKeyPress.bind(this, 'edit', idx)}/>
             <ul className='outliner'>
@@ -262,7 +262,7 @@ class Tree extends React.Component {
           : (this.state.childs.push(this.props.data.topics[e].name),
           <li key={e} className='outliner'>
             <a className='remove' onClick={(e) => this._deleteChild(idx)}>
-              <img src='https://www.jobillico.com/images/ico-delete.png'/>&nbsp;
+              🗑&nbsp;
             </a>
             <input type="text" value={this.display(idx)} onChange={this.handleChange.bind(this, 'edit', idx)} onKeyPress={this.handleKeyPress.bind(this,'edit',idx)}/>
             <ul className='outliner'>
