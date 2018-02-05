@@ -5,6 +5,7 @@ import conf from '../../config/config.json';
 import Tree from 'react-ui-tree-porphyry';
 import equal from 'deep-equal';
 import Header from '../Header/Header.jsx';
+import Authenticated from '../Authenticated/Authenticated.jsx';
 
 import '../../styles/App.css';
 
@@ -36,9 +37,12 @@ class Outliner extends React.Component {
     return (
       <div className="App container-fluid">
         <Header />
-        <div className="Status row h5"><Link to="/" className="badge badge-pill badge-light TopicTag">
-          <span className="badge badge-pill badge-dark oi oi-chevron-left"> </span> Retour à l'accueil
-        </Link></div>
+        <div className="Status row h5">
+          <Authenticated/>
+          <Link to="/" className="badge badge-pill badge-light TopicTag">
+            <span className="badge badge-pill badge-dark oi oi-chevron-left"> </span> Retour à l'accueil
+          </Link>
+        </div>
         <div className="container-fluid">
           <div className="App-content row">
             <div className="col-md-4 p-4">

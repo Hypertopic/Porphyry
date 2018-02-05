@@ -27,6 +27,27 @@ h1 a, h1 a:hover {
   padding: 4px;
 }
 
+.Authenticated {
+  position: absolute;
+  right: 0;
+}
+
+.Authenticated a {
+  color: lightgrey;
+  padding: 0 8px;
+}
+
+.Authenticated input:not([type='submit']) {
+  background: dimgrey;
+  color: white;
+  border: 0;
+  margin: 1px;
+}
+
+.Authenticated input::placeholder {
+  color: lightgrey;
+}
+
 .App-content {
   min-height: 100vh;
 }

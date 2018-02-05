@@ -8,6 +8,7 @@ import Viewpoint from '../Viewpoint/Viewpoint.jsx';
 import Corpora from '../Corpora/Corpora.jsx';
 import Header from '../Header/Header.jsx';
 import ViewpointCreator from '../Viewpoint/ViewpointCreator.jsx';
+import Authenticated from '../Authenticated/Authenticated.jsx';
 
 import '../../styles/App.css';
 
@@ -32,7 +33,10 @@ class Portfolio extends Component {
     return (
       <div className="App container-fluid">
         <Header />
-        <div className="Status row h5 text-center">{status}</div>
+        <div className="Status row h5 text-center">
+          <Authenticated/>
+          {status}
+        </div>
         <div className="container-fluid">
           <div className="App-content row">
             <div className="col-md-4 p-4">
