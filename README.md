@@ -31,7 +31,16 @@ Build for production
 
     npm run build
 
+Tests requirements
+------------------
+
+    gem install cucumber capybara selenium-webdriver chromedriver-helper
+
+If it fails on macOS because of `libffi`, it can be fixed by brewing and linking an up-to-date version of the library (at your own risk).
+
 Run tests
 ---------
+
+Once application is launched in development mode:
 
     npm run test
