@@ -34,7 +34,7 @@ Build for production
 Tests requirements
 ------------------
 
-    gem install cucumber capybara selenium-webdriver chromedriver-helper
+    gem install cucumber rspec capybara selenium-webdriver chromedriver-helper
 
 If it fails on macOS because of `libffi`, it can be fixed by brewing and linking an up-to-date version of the library (at your own risk).
 
