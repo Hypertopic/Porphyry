@@ -51,3 +51,24 @@ Alors("un des corpus affichés est {string}") do |corpus|
   expect(page).to have_content corpus
 end
 
+
+
+########
+#  For every topic, get the number of selected items assigned to it (see #37)
+#  get_number_selected_items_assigned_to_topic.feature
+########
+Soit("la page d'accueil chargée") do
+  visit "/"
+end
+
+Soit("le thème {string} présent sur la page") do |theTheme|
+  expect(page).to have_content(theTheme)
+end
+
+Quand("un utilisateur clique sur le topic {string}") do |topic|
+  click_on(topic)
+end
+
+Alors("Il doit y avoir au moins {int} items inscrits à côté de {string}") do |nbItems, topic|
+  expect(page).to have_content(topic+" ("+nbItems.to_s+")")
+end
