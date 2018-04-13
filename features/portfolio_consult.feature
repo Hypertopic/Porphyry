@@ -11,7 +11,7 @@ Soit le corpus "Vitraux - Recensement" rattaché au portfolio "vitraux"
 Scénario: Consulter le portfolio spécifié dans la configuration
 
 Soit "vitraux" le portfolio spécifié dans la configuration
-Quand un visiteur ouvre la page d'accueil du site 
+# Quand un visiteur ouvre la page d'accueil du site 
 Alors le titre affiché est "VITRAUX"
 Et un des points de vue affichés est "Histoire de l'art"
 Et un des points de vue affichés est "Histoire des religions"
