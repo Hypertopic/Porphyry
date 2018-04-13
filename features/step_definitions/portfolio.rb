@@ -45,9 +45,9 @@ end
 
 # Events 
 
-# Quand("un visiteur ouvre la page d'accueil du site") do
-#   visit "/"
-# end
+Quand("un visiteur ouvre la page d'accueil du site") do
+  visit "/"
+end
 
 Quand("un visiteur ouvre la page d‘accueil d‘un site dont l‘adresse commence par {string}") do |portfolio|
   visit "/"
