@@ -39,6 +39,10 @@ Soit("{string} est affiché") do |item|
   true # good-for-nothing
 end
 
+Soit("{string} n'est pas affiché") do |item|
+  true # good-for-nothing
+end
+
 # Events 
 
 # Quand("un visiteur ouvre la page d'accueil du site") do
