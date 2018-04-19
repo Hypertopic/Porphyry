@@ -12,24 +12,34 @@ Soit("le point de vue {string} rattaché au portfolio {string}") do |viewpoint, 
   # On the remote servers
 end
 
+Soit("le regroupement de thèmes {string} rattaché au point de vue {string}") do |topic, viewpoint|
+end
+
+Soit("le thème {string} rattaché au regroupement de thèmes {string}") do |topic1, topic2|
+end
+
+Soit("l‘item {string} lié au thème {string}") do |item, topic|
+  # On the remote servers
+end
+
 Soit("le corpus {string} rattaché au portfolio {string}") do |viewpoint, portfolio|
   # On the remote servers
 end
 
 Soit("{string} le portfolio spécifié dans la configuration") do |portfolio|
   case portfolio
-  when "vitraux" 
+  when "vitraux"
     true #current configuration
-  when "indéfini" 
+  when "indéfini"
     pending "alternate configuration"
   else
     false
   end
 end
 
-# Events 
+# Events
 
-Quand("un visiteur ouvre la page d'accueil du site") do
+Quand("un visiteur ouvre la page d‘accueil du site") do
   visit "/"
 end
 
@@ -51,3 +61,14 @@ Alors("un des corpus affichés est {string}") do |corpus|
   expect(page).to have_content corpus
 end
 
+Alors("l‘item {string} est visible sur la page") do |item|
+  expect(page).to have_content(item)
+end
+
+Alors("le thème {string} est visible sur la page") do |topic|
+  expect(page).to have_content(topic)
+end
+
+Alors("le thème {string} est sélectionné") do |topic|
+  expect(page).to have_selector('.Selected')
+end
