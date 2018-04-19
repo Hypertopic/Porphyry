@@ -15,6 +15,8 @@ def getUUID(itemName)
       uuid = "7123a482ef397d4cb464ea3ec37655e0"
     when "1868"
       uuid = "29e7a2c6a601c040985ade144901cb1f"
+    when "Figuration du donateur"
+      uuid = "fe94b684b6a42c4889c1e0d7458b9526"
   end
   return uuid
 end
