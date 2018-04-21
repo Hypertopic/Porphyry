@@ -6,6 +6,19 @@ Capybara.default_driver = :selenium_chrome_headless
 Capybara.app_host = "http://localhost:3000"
 Capybara.default_max_wait_time = 10
 
+def getUUID(itemName)
+  uuid = nil
+  case itemName
+    when "Ateliers du Carmel du Mans"
+      uuid = "0edea8e39068ed49a8f555a660d7cc68"
+    when "David Tremlett"
+      uuid = "7123a482ef397d4cb464ea3ec37655e0"
+    when "1868"
+      uuid = "29e7a2c6a601c040985ade144901cb1f"
+  end
+  return uuid
+end
+
 # Conditions
 
 Soit("le point de vue {string} rattaché au portfolio {string}") do |viewpoint, portfolio|
@@ -21,6 +34,14 @@ Soit("la rubrique {string} contenue dans la rubrique {string}") do |topic1, topi
 end
 
 Soit("{int} items décrits par {string} et {string}") do |itemsNb, topic1, topic2|
+  # On the remote servers
+end
+
+Soit("la rubrique {string} rattachée au point de vue {string}") do |topic, viewpoint|
+  # On the remote servers
+end
+
+Soit("l'item {string} rattaché à la rubrique {string}") do |item, topic|
   # On the remote servers
 end
 
@@ -44,6 +65,26 @@ Soit("{string} une des rubriques développées") do |topic|
 end
 
 # Events 
+Soit("les rubriques {string} sont sélectionnées") do |topics|
+  first = true
+  uri = "/?"
+  topics.split("|").each do |topic|
+    uuid = getUUID(topic)
+    if (first)
+      uri += "t=" + uuid
+      first = false
+    else
+      uri += "&t=" + uuid
+    end
+  end
+  visit uri
+end
+
+Soit("la liste des rubriques sélectionnées est vide") do
+  visit "/"
+end
+
+# Events
 
 Quand("un visiteur ouvre la page d'accueil du site") do
   visit "/"
@@ -75,3 +116,23 @@ Alors("il doit y avoir au moins {int} items sélectionnés décrits par {string}
   expect(find_link(topic).sibling('span').text.scan(/\d+/)[0].to_i).to be >= itemsNb 
 end
 
+Alors("les rubriques {string} sont surlignées") do |topics|
+  uri = URI.parse(current_url).to_s
+  topics.split("|").each do |topic|
+    uuid = getUUID(topic)
+    if (uuid == nil)
+      pending "undefined UUID"
+    elsif (!uri.include? getUUID(topic))
+      false
+    end
+  end
+  true
+end
+
+Alors ("l'item {string} est affiché") do |item|
+  expect(page).to have_content item
+end
+
+Alors ("l'item {string} n'est pas affiché") do |item|
+  expect(page).not_to have_content item
+end
