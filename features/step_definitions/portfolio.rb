@@ -1,4 +1,4 @@
-require 'capybara/cucumber'
+﻿require 'capybara/cucumber'
 require 'selenium/webdriver'
 
 Capybara.run_server = false
@@ -49,5 +49,50 @@ end
 
 Alors("un des corpus affichés est {string}") do |corpus|
   expect(page).to have_content corpus
+end
+
+# For every topic, get the number of selected items assigned to it (see #37)
+# get_number_selected_items_assigned_to_topic.feature
+
+Soit("un visiteur ouvre la page d'accueil") do
+  visit "/"
+end
+
+# Events
+
+Quand("un visiteur {string}") do |useraction|
+  case useraction
+  when "ne sélectionne aucun thème"
+    if page.current_url != Capybara.app_host
+      visit "/"
+      print page.current_url;
+    end
+  when "sélectionne un thème"
+    visit "/?t=d8d2654decd91140bfd93a952817d852"
+    print page.current_url;
+  when "sélectionne plusieurs thèmes"
+    visit "/?t=d8d2654decd91140bfd93a952817d852&t=9699bc2f8010944aa0574deabe8edb6d"
+    print page.current_url;
+  else
+    false
+  end
+end
+
+
+# Outcomes
+
+Alors("chaque thème dans tous les points de vue affiche {string}") do |content|
+  case content
+  when "le nombre d'items qu'il contient"
+    expect(page).to have_content("Artiste")
+    expect(page).to have_content("(119)")
+  when "le nombre d'items qu'il contient et qui a une relation avec le thème sélectionné"
+    expect(page).to have_content("Albrecht Dürer (d'après)")
+    expect(page).to have_content("(11)")
+  when "le nombre d'items qu'il contient et qui a une relation avec les thèmes sélectionnés"
+    expect(page).to have_content("Albrecht Dürer (d'après)")
+    expect(page).to have_content("1er quart XVIe")
+    expect(page).to have_content("(1)")
+  end
 end
 
