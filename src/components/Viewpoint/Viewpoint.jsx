@@ -5,9 +5,15 @@ import Topic from '../Topic/Topic.jsx';
 class Viewpoint extends Component {
   render() {
     let topics = this._getTopics();
+    let outliner = this._getOutliner();
     return (
       <div className="DescriptionModality">
-        <h3>{this.props.viewpoint.name}</h3>
+        <h3>
+          {this.props.viewpoint.name}
+          <a className='outliner' href={outliner}>
+            <img src='https://static.xx.fbcdn.net/rsrc.php/v3/y9/r/tlXhSXComXE.png'/>
+          </a>
+        </h3>
         <div className="Topics">
           <ul>
             {topics}
@@ -22,6 +28,11 @@ class Viewpoint extends Component {
       <Topic key={t.id} id={t.id} name={t.name} topics={this.props.viewpoint}
         selection={this.props.selection} topicsItems={this.props.topicsItems} />
     );
+  }
+
+  _getOutliner() {
+    let uri = '/viewpoint/' + this.props.viewpoint.id;
+    return uri;
   }
 }
 
