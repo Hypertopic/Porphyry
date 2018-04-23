@@ -75,7 +75,8 @@
 .Selected {
   background-color: rgb(204, 153, 51);
   font-weight: bold;
-  padding: 5px;
+  padding: 1px;
+  border-radius: 3px;
 }
 
 .Items {

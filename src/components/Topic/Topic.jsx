@@ -14,10 +14,8 @@ class Topic extends Component {
     });
     return (
       <li className="Topic">
-        <div className={isSelected}>
-          <Link to={uri}> {this.props.name} </Link>
-          <span> {count}</span>
-        </div>
+        <Link to={uri} className={isSelected}> {this.props.name} </Link>
+        <span> {count}</span>
         <ul>
         {subtopics}
         </ul>
