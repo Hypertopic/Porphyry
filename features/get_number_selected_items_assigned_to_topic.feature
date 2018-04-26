@@ -8,6 +8,7 @@ Contexte:
 
 Scénario: Récupérer le nombre d'items sélectionnés assignés à un topic
 
-    Soit le topic "Ateliers du Carmel du Mans" présent sur la page
-    Quand un utilisateur clique sur le topic "Ateliers du Carmel du Mans"
+    Soit le topic "Artiste" présent sur la page
+    Quand un utilisateur développe le topic "Artiste" et clique sur le topic "Ateliers du Carmel du Mans"
     Alors Il doit y avoir au moins 21 items inscrits à côté de "Ateliers du Carmel du Mans"
+    

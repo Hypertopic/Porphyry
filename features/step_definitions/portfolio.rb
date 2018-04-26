@@ -65,8 +65,11 @@ Soit("le topic {string} présent sur la page") do |topic|
   expect(page).to have_content(topic)
 end
 
-Quand("un utilisateur clique sur le topic {string}") do |topic|
-  click_on(topic)
+Quand("un utilisateur développe le topic {string} et clique sur le topic {string}") do |parentTopic, childTopic|
+  page.all(:css, '.Bullet').each do |el|
+    el.click
+  end
+  click_on(childTopic) 
 end
 
 Alors("Il doit y avoir au moins {int} items inscrits à côté de {string}") do |nbItems, topic|
