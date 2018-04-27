@@ -33,3 +33,31 @@ a {
 a:hover {
   color: dimgrey;
 }
+
+input[type=text] {
+    border: none;
+    font-size: 16px;
+    background-color: whitesmoke;
+}
+
+input[type=text]:focus {
+    background-color: lightblue;
+    font-size: 16px;
+}
+
+li.outliner {
+  list-style: none
+}
+
+li.add {
+  list-style: none;
+}
+
+a.remove {
+  cursor: pointer;
+}
+
+a.outliner {
+  cursor: pointer;
+  float: right;
+}
