@@ -1,0 +1,21 @@
+#language: fr
+
+Fonctionnalité: Move as an upper topic
+
+Contexte:
+  Soit il y un Topic comme "Degustation" dans l'ensemble de Topic
+  Soit le Topic "Degustation" a un sous-thème comme "Charc'UTT" et un autre comme "Club bières"
+
+Scénario: Move as a subtopic of a topic existed
+  Soit l'utilisateur a choisi le Topic "Charc'UTT"
+  Quand il clique le bouton "Classifier comme un thème"
+  Alors le Topic "Charc'UTT" est enlevé depluis l'ensemble de sous-thèmes du Topic "Degustation" dans la base de données
+  Et un Topic comme "Charc'UTT" est ajouté dans l'ensemble de Topic dans la base de données
+  Et un message disant que cette modification est bien fait s'affiche
+
+Scénario: Move as a subtopic of a topic unexisted
+  Soit l'utilisateur a choisi le Topic "Charc'UTT"
+  Quand il clique le bouton "Classifier comme un sous-thème"
+  Et il tape "Taste"
+  Et il clique sur le bouton "Enregistrer"
+  Et un message disant que cette modification n'est pas fait car le Topic "Taste" n'existe pas encore

@@ -1,0 +1,22 @@
+#language: fr
+
+Fonctionnalité: Create a child to a topic (Créer un sous-thème (child) sur un thème (topic))
+
+Contexte:
+  Soit il y un Topic comme "Degustation" dans l'ensemble de Topic
+  Soit il y 1 sous-catégorie du Topic "Degustation" comme "Charc'UTT" dans la bdd
+
+Scénario: Create an unexisted subtopic
+  Soit l'utilisateur a choisi le Topic "Degustation" à ajouter une sous-catégorie
+  Quand il clique le bouton "Ajouter une sous-catégorie"
+  Et il tape "Club bières"
+  Et il clique sur le bouton "Enregistrer"
+  Alors le sous-catégorie "Club bières" est ajouté au Topic "Degustation" dans la base de données
+  Et un message disant que l'ajout est bien fait s'affiche
+
+Scénario: Create an existed subtopic
+  Soit l'utilisateur a choisi le Topic "Degustation" à ajouter une sous-catégorie
+  Quand il clique le bouton "Ajouter une sous-catégorie"
+  Et il tape "Charc'UTT"
+  Et il clique sur le bouton "Enregistrer"
+  Alors un message disant que l'ajout n'est pas fait car redondance s'affiche
