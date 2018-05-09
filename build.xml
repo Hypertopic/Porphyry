@@ -73,13 +73,20 @@
 		<manifest file="manifest/CLIENT.MF">
 			<attribute name="Main-Class" 
 				value="org.porphyry.view.Portfolio"/>
+			<attribute name="Permissions" value="all-permissions"/>
+			<attribute name="Codebase" value="*"/>
 		</manifest>
+		<mkdir dir="build/JNLP-INF" />
+		<copy todir="build/JNLP-INF">
+			<fileset dir="." includes="APPLICATION.JNLP"/>
+		</copy>
 		<mkdir dir="dist"/>
-		<jar jarfile="dist/Porphyry.jar" 
+		<jar jarfile="dist/porphyry.6.jar"
 			basedir="build"
 			excludes="**/*Test.class"
 			manifest="manifest/CLIENT.MF"/>
-		<signjar jar="dist/Porphyry.jar"
+		<signjar jar="dist/porphyry.6.jar"
+			tsaurl="http://timestamp.digicert.com"
 			keystore="../../../../.techcico.p12"
 			alias="Tech-CICO"
 			storepass="${pass}"
