@@ -68,7 +68,7 @@
 	</target>
 		 
 	<target name="dist" depends="compile,convert-schemas"
-		description="Create a signed jar (-Duser=XXX -Dpass=XXX)" >
+		description="Create a signed jar (-Dpass=XXX)" >
 		<mkdir dir="manifest"/>
 		<manifest file="manifest/CLIENT.MF">
 			<attribute name="Main-Class" 
@@ -80,8 +80,8 @@
 			excludes="**/*Test.class"
 			manifest="manifest/CLIENT.MF"/>
 		<signjar jar="dist/Porphyry.jar"
-			keystore="${user}.p12" 
-			alias="My key" 
+			keystore="../../../../.techcico.p12"
+			alias="Tech-CICO"
 			storepass="${pass}"
 			storetype="PKCS12"/>
 	</target>
