@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "bootstrap": "^4.1.1",
     "hypertopic": "^3.1.2",
     "json-groupby": "^1.0.2",
     "query-string": "^4.3.4",
