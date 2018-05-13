@@ -20,11 +20,11 @@ class Item extends Component {
     return (
       <div className="App">
         <h1>{this.state.name}</h1>
-        <div className="Status">Item</div>
+        <div className="Status h5 text-center">Item</div>
         <div className="App-content">
           <div className="Description">
             <div className="DescriptionModality">
-              <h3>Attributs du document</h3>
+              <h3 className="h4">Attributs du document</h3>
               <div className="Attributes">
                 {attributes}
               </div>
@@ -92,7 +92,7 @@ class Viewpoint extends Component {
     let paths = this._getPaths();
     return (
       <div className="DescriptionModality">
-        <h3>{this.state.name}</h3>
+        <h3 className="h4">{this.state.name}</h3>
         <div className="Topics">
           {paths}
         </div>

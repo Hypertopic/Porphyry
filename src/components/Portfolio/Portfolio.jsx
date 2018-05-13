@@ -29,7 +29,7 @@ class Portfolio extends Component {
     return (
       <div className="App">
         <h1>{this.user}</h1>
-        <div className="Status">{status}</div>
+        <div className="Status h5 text-center">{status}</div>
         <div className="App-content">
           <div className="Description">
             {viewpoints}
