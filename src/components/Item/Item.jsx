@@ -19,21 +19,25 @@ class Item extends Component {
     let viewpoints = this._getViewpoints();
     return (
       <div className="App">
-        <h1>{this.state.name}</h1>
-        <div className="Status h5 text-center">Item</div>
-        <div className="App-content">
-          <div className="Description">
-            <div className="DescriptionModality">
-              <h3 className="h4">Attributs du document</h3>
-              <div className="Attributes">
-                {attributes}
+        <header>
+          <h1>{this.state.name}</h1>
+          <div className="Status h5 text-center">Item</div>
+        </header>
+        <div className="container-fluid">
+          <div className="App-content row">
+            <div className="Description col-md-4">
+              <div className="DescriptionModality">
+                <h3 className="h4">Attributs du document</h3>
+                <div className="Attributes">
+                  {attributes}
+                </div>
               </div>
+              {viewpoints}
             </div>
-            {viewpoints}
-          </div>
-          <div className="Subject">
-            <div>
-              <img src={this.state.resource} alt="resource" />
+            <div className="Subject col-md-8">
+              <div>
+                <img src={this.state.resource} alt="resource" />
+              </div>
             </div>
           </div>
         </div>

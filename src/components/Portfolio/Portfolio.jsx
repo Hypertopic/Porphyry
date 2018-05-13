@@ -28,13 +28,17 @@ class Portfolio extends Component {
     let status = this._getStatus();
     return (
       <div className="App">
-        <h1>{this.user}</h1>
-        <div className="Status h5 text-center">{status}</div>
-        <div className="App-content">
-          <div className="Description">
-            {viewpoints}
+        <header>
+          <h1>{this.user}</h1>
+          <div className="Status h5 text-center">{status}</div>
+        </header>
+        <div className="container-fluid">
+          <div className="App-content row">
+            <div className="Description col-md-4">
+              {viewpoints}
+            </div>
+            {corpora}
           </div>
-          {corpora}
         </div>
       </div>
     );
