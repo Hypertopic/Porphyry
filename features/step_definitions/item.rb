@@ -28,7 +28,8 @@ end
 
 Quand("un visiteur accède à la page d'accueil et clique sur le vitrail {string}") do |item|
   visit "/"
-  find(:xpath, '//*[@id="root"]/div/div[2]/div[2]/div/div/div[162]/a/img').clickend
+  find(:xpath, '//*[@id="root"]/div/div[2]/div[2]/div/div/div[162]/a/img').click
+end
 
 Alors("un titre s affiche avec le nom du vitrail ici {string}") do |attribut|
   expect(page).to have_content(attribut)
