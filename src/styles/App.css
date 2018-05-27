@@ -51,8 +51,13 @@
   background-color: #8b0000;
 }
 
-.Subject > div > div {
-  background-color: ghostwhite;
+.fullImage {
+  text-align: center;
+  margin: .5rem 0;
+}
+
+.fullImage a {
+  color: dimgrey;
 }
 
 .DescriptionModality {

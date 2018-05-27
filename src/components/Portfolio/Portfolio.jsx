@@ -36,7 +36,7 @@ class Portfolio extends Component {
             <div className="col-md-4 p-4">
               <div className="Description">
                 <h2 className="h4 font-weight-bold text-center">Points de vue</h2>
-                <div className="m-3">
+                <div className="p-3">
                   {viewpoints}
                 </div>
               </div>

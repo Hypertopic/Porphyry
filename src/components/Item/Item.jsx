@@ -27,7 +27,7 @@ class Item extends Component {
             <div className="col-md-4 p-4">
               <div className="Description">
                 <h2 className="h4 font-weight-bold text-center">Description</h2>
-                <div className="m-3">
+                <div className="p-3">
                   <h3 className="h4">Attributs du document</h3>
                   <hr/>
                   <div className="Attributes">
@@ -40,8 +40,13 @@ class Item extends Component {
             <div className="col-md-8 p-4">
               <div className="Subject">
                 <h2 className="h4 font-weight-bold text-center">{this.state.name}</h2>
-                <div className="m-3">
-                  <img src={this.state.resource} alt="resource" />
+                <div className="p-3">
+                  <img src={this.state.resource} alt="resource"/>
+                  <p className="fullImage">
+                    <a target="_blank" href={this.state.resource}>
+                      Voir l'image en taille réelle.
+                    </a>
+                  </p>
                 </div>
               </div>
             </div>

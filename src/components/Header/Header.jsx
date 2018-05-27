@@ -12,7 +12,7 @@ class Header extends Component {
       <header className="row align-items-center">
         <div className="col-lg-2 col-md-3 d-none d-md-block logo"></div>
         <div className="col-lg-2 col-md-3 col-sm-4">
-          <input className="form-control" type="text" placeholder="Search.."/>
+          <input className="form-control" type="text" placeholder="Rechercher..."/>
         </div>
         <h1 className="text-center col-lg-8 col-md-6 col-sm-8">{this.user}</h1>
       </header>
