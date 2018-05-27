@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import Hypertopic from 'hypertopic';
 import groupBy from 'json-groupby';
 import conf from '../../config/config.json';
+import Header from '../Header/Header.jsx';
 
 import '../../styles/App.css';
 
@@ -19,10 +20,8 @@ class Item extends Component {
     let viewpoints = this._getViewpoints();
     return (
       <div className="App">
-        <header>
-          <h1>{this.state.name}</h1>
-          <div className="Status h5 text-center">Item</div>
-        </header>
+        <Header />
+        <div className="Status h5 text-center">Item</div>
         <div className="container-fluid">
           <div className="App-content row">
             <div className="Description col-md-4">

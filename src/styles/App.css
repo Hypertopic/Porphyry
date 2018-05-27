@@ -1,10 +1,14 @@
-.App h1 {
+.App header {
   background-color: rgb(153, 51,0);
   color: ivory;
+  margin-bottom: 0;
+}
+
+.App header .logo {
   background-image: url('../images/porphyry.gif');
   background-repeat: no-repeat;
-  background-position: right;
-  margin-bottom: 0;
+  background-position: center;
+  min-height: 55px;
 }
 
 .Status {

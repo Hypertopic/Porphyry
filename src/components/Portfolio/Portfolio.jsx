@@ -5,6 +5,7 @@ import Hypertopic from 'hypertopic';
 import conf from '../../config/config.json';
 import Viewpoint from '../Viewpoint/Viewpoint.jsx';
 import Corpora from '../Corpora/Corpora.jsx';
+import Header from '../Header/Header.jsx';
 
 import '../../styles/App.css';
 
@@ -28,10 +29,8 @@ class Portfolio extends Component {
     let status = this._getStatus();
     return (
       <div className="App">
-        <header>
-          <h1>{this.user}</h1>
-          <div className="Status h5 text-center">{status}</div>
-        </header>
+        <Header />
+        <div className="Status h5 text-center">{status}</div>
         <div className="container-fluid">
           <div className="App-content row">
             <div className="Description col-md-4">
