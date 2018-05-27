@@ -34,6 +34,7 @@ class Portfolio extends Component {
         <div className="container-fluid">
           <div className="App-content row">
             <div className="Description col-md-4">
+              <h2 className="h4 font-weight-bold text-center">Points de vue</h2>
               {viewpoints}
             </div>
             {corpora}

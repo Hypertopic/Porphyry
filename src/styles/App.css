@@ -21,11 +21,16 @@
   min-height: 100vh;
 }
 
-.Subject > div {
+.Subject h2 {
   background-color: dimgrey;
-  color: rgb(240,240,240);
+  color: ivory;
   padding: 4px;
-  margin: 2px;
+}
+
+.Description h2 {
+  background-color: rgb(153, 51, 0);
+  color: ivory;
+  padding: 4px;
 }
 
 .Subject > div > div {

@@ -25,15 +25,15 @@ class Item extends Component {
         <div className="container-fluid">
           <div className="App-content row">
             <div className="Description col-md-4">
-              <div className="DescriptionModality">
-                <h3 className="h4">Attributs du document</h3>
-                <div className="Attributes">
-                  {attributes}
-                </div>
+              <h2 className="h4 font-weight-bold text-center">Description</h2>
+              <h3 className="h4">Attributs du document</h3>
+              <div className="Attributes">
+                {attributes}
               </div>
               {viewpoints}
             </div>
             <div className="Subject col-md-8">
+              <h2 className="h4 font-weight-bold text-center">{this.state.name}</h2>
               <div>
                 <img src={this.state.resource} alt="resource" />
               </div>
@@ -94,7 +94,7 @@ class Viewpoint extends Component {
   render() {
     let paths = this._getPaths();
     return (
-      <div className="DescriptionModality">
+      <div>
         <h3 className="h4">{this.state.name}</h3>
         <div className="Topics">
           {paths}

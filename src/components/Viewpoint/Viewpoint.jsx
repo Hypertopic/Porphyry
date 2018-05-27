@@ -6,7 +6,7 @@ class Viewpoint extends Component {
   render() {
     let topics = this._getTopics();
     return (
-      <div className="DescriptionModality">
+      <div>
         <h3 className="h4">{this.props.viewpoint.name}</h3>
         <div className="Topics">
           <ul>
