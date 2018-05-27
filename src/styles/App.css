@@ -1,5 +1,9 @@
+#root {
+  background: #e6ecf0;
+}
+
 .App header {
-  background-color: rgb(153, 51,0);
+  background-color: #8b0000;
   color: ivory;
   margin-bottom: 0;
 }
@@ -14,23 +18,30 @@
 .Status {
   background-color: rgb(60, 50, 50);
   color: ivory;
-  padding: 2px;
+  display: block;
+  padding: 4px;
 }
 
 .App-content {
   min-height: 100vh;
 }
 
+.Subject, .Description {
+  background: #fff;
+}
+
+.Subject h2, .Description h2 {
+  color: ivory;
+  margin: 0;
+  padding: .5rem;
+}
+
 .Subject h2 {
   background-color: dimgrey;
-  color: ivory;
-  padding: 4px;
 }
 
 .Description h2 {
-  background-color: rgb(153, 51, 0);
-  color: ivory;
-  padding: 4px;
+  background-color: #8b0000;
 }
 
 .Subject > div > div {
@@ -39,15 +50,10 @@
 
 .DescriptionModality {
   flex-direction: column;
-  background-color: rgb(153, 51,0);
+  background-color: #8b0000;
   color: ivory;
   padding: 4px;
   margin: 1px;
-}
-
-.Topics, .Attributes {
-  background-color: whitesmoke;
-  color: black;
 }
 
 .Topics {

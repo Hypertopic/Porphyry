@@ -19,23 +19,30 @@ class Item extends Component {
     let attributes = this._getAttributes();
     let viewpoints = this._getViewpoints();
     return (
-      <div className="App">
+      <div className="App container-fluid">
         <Header />
-        <div className="Status h5 text-center">Item</div>
+        <div className="Status row h5">Item</div>
         <div className="container-fluid">
           <div className="App-content row">
-            <div className="Description col-md-4">
-              <h2 className="h4 font-weight-bold text-center">Description</h2>
-              <h3 className="h4">Attributs du document</h3>
-              <div className="Attributes">
-                {attributes}
+            <div className="col-md-4 p-4">
+              <div className="Description">
+                <h2 className="h4 font-weight-bold text-center">Description</h2>
+                <div className="m-3">
+                  <h3 className="h4">Attributs du document</h3>
+                  <hr/>
+                  <div className="Attributes">
+                    {attributes}
+                  </div>
+                  {viewpoints}
+                </div>
               </div>
-              {viewpoints}
             </div>
-            <div className="Subject col-md-8">
-              <h2 className="h4 font-weight-bold text-center">{this.state.name}</h2>
-              <div>
-                <img src={this.state.resource} alt="resource" />
+            <div className="col-md-8 p-4">
+              <div className="Subject">
+                <h2 className="h4 font-weight-bold text-center">{this.state.name}</h2>
+                <div className="m-3">
+                  <img src={this.state.resource} alt="resource" />
+                </div>
               </div>
             </div>
           </div>
@@ -57,7 +64,10 @@ class Item extends Component {
 
   _getViewpoints() {
     return Object.entries(this.state.topic).map(v =>
-      <Viewpoint key={v[0]} id={v[0]} topics={v[1]} />
+      <div>
+        <hr/>
+        <Viewpoint key={v[0]} id={v[0]} topics={v[1]} />
+      </div>
     );
   }
 
@@ -96,6 +106,7 @@ class Viewpoint extends Component {
     return (
       <div>
         <h3 className="h4">{this.state.name}</h3>
+        <hr/>
         <div className="Topics">
           {paths}
         </div>

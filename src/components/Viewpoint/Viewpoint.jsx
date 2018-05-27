@@ -8,6 +8,7 @@ class Viewpoint extends Component {
     return (
       <div>
         <h3 className="h4">{this.props.viewpoint.name}</h3>
+        <hr/>
         <div className="Topics">
           <ul>
             {topics}

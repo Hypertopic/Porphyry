@@ -28,14 +28,18 @@ class Portfolio extends Component {
     let corpora = this._getCorpora();
     let status = this._getStatus();
     return (
-      <div className="App">
+      <div className="App container-fluid">
         <Header />
-        <div className="Status h5 text-center">{status}</div>
+        <div className="Status row h5 text-center">{status}</div>
         <div className="container-fluid">
           <div className="App-content row">
-            <div className="Description col-md-4">
-              <h2 className="h4 font-weight-bold text-center">Points de vue</h2>
-              {viewpoints}
+            <div className="col-md-4 p-4">
+              <div className="Description">
+                <h2 className="h4 font-weight-bold text-center">Points de vue</h2>
+                <div className="m-3">
+                  {viewpoints}
+                </div>
+              </div>
             </div>
             {corpora}
           </div>
@@ -167,9 +171,12 @@ class Portfolio extends Component {
   }
 
   _getViewpoints() {
-    return this.state.viewpoints.sort(by('name')).map(v =>
-      <Viewpoint key={v.id} viewpoint={v} selection={this.selection}
-        topicsItems={this.state.topicsItems} />
+    return this.state.viewpoints.sort(by('name')).map((v, i) =>
+      <div>
+        {i > 0 && <hr/>}
+        <Viewpoint key={v.id} viewpoint={v} selection={this.selection}
+          topicsItems={this.state.topicsItems} />
+      </div>
     );
   }
 
