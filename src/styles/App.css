@@ -79,6 +79,10 @@
   list-style-type: none;
 }
 
+.Topic a {
+  color: black;
+}
+
 .Bullet {
   color: darkgrey;
 }
