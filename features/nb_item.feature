@@ -8,23 +8,23 @@ Contexte:
 
 Scénario: Sélectionner le topic "Hugot"
  Quand un utilisateur visite la page d'accueil
-
- Alors le viewpoint "Histoire de l'art" rattaché au portfolio "VITRAUX"
- Et le viewpoint "Histoire des religions" rattaché au portfolio "VITRAUX"
- Et le topic "Artiste" attribué au viewpoint "Histoire de l'art"
- Et le topic "Hugot" attribué au topic "Artiste"
- Et le topic "Datation" attribué au viewpoint "Histoire de l'art"
- Et le topic "XIXe s." attribué au topic "Datation"
- Et le topic "XVIe s." attribué au topic "Datation"
- Et le topic "1883" attribué au topic "XIXe s."
- Et le topic "début XVIe" attribué au topic "XVIe s."
- Et le topic "Technique du verre" attribué au viewpoint "Histoire de l'art"
- Et le topic "Grisaille" attribué au topic "Technique du verre"
- Et le topic "Jaune d'argent" attribué au topic "Technique du verre"
- Et le topic "Récits" attribué au viewpoint "Histoire des religions"
- Et le topic "Évangile" attribué au topic "Récits"
- Et le topic "selon Matthieu" attribué au topic "Évangile"
- Et le topic "Origines de Jésus (arbre de Jessé)" attribué au topic "selon Matthieu"
+ Alors le portfolio "VITRAUX" est présent
+ Et le viewpoint "Histoire de l'art" est présent
+ Et le viewpoint "Histoire des religions" est présent
+ Et le topic "Artiste" est présent
+ Et le topic "Hugot" est présent
+ Et le topic "Datation" est présent
+ Et le topic "XIXe s." est présent
+ Et le topic "XVIe s." est présent
+ Et le topic "1883" est présent
+ Et le topic "début XVIe" est présent
+ Et le topic "Technique du verre" est présent
+ Et le topic "Grisaille" est présent
+ Et le topic "Jaune d'argent" est présent
+ Et le topic "Récits" est présent
+ Et le topic "Évangile" est présent
+ Et le topic "selon Matthieu" est présent
+ Et le topic "Origines de Jésus (arbre de Jessé)" est présent
 
  Quand un utilisateur clique sur le topic "Hugot"
  Alors le nombre d'item 1 est affiché à côté du topic "Artiste"

@@ -13,29 +13,29 @@ Soit("la page d'accueil chargée") do
 
 end
 
-
 # Events
 
 
 Quand("un utilisateur visite la page d'accueil") do
   visit "/"
+
 end
 
 # Outcomes
-Alors("le viewpoint {string} rattaché au portfolio {string}") do |viewpoint, portfolio|
-  expect(page).to have_content(viewpoint)
+
+Alors("le portfolio {string} est présent") do |portfolio|
   expect(page).to have_content(portfolio)
 end
 
-Alors("le topic {string} attribué au viewpoint {string}") do |viewpoint, topic|
+Alors("le viewpoint {string} est présent") do |viewpoint|
   expect(page).to have_content(viewpoint)
+end
+
+Alors("le topic {string} est présent") do |topic|
   expect(page).to have_content(topic)
 end
 
-Alors("le topic {string} attribué au topic {string}") do |topic1, topic2|
-  expect(page).to have_content(topic1)
-  expect(page).to have_content(topic2)
-end
+
 # Events
 Quand("un utilisateur clique sur le topic {string}") do |topic|
   click_on(topic)
