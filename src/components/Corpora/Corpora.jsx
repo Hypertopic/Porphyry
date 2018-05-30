@@ -33,7 +33,7 @@ function Item(props) {
       <Link to={uri}>
         <img src={props.thumbnail} alt={props.name} />
       </Link>
-      <div>{props.name}</div>
+      <div className="text-center">{props.name}</div>
     </div>
   );
 }
