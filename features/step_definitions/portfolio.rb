@@ -18,16 +18,16 @@ end
 
 Soit("{string} le portfolio spécifié dans la configuration") do |portfolio|
   case portfolio
-  when "vitraux" 
+  when "vitraux"
     true #current configuration
-  when "indéfini" 
+  when "indéfini"
     pending "alternate configuration"
   else
     false
   end
 end
 
-# Events 
+# Events
 
 Quand("un visiteur ouvre la page d'accueil du site") do
   visit "/"
@@ -51,3 +51,27 @@ Alors("un des corpus affichés est {string}") do |corpus|
   expect(page).to have_content corpus
 end
 
+###
+# Consult items that match selected topics #54
+# consult_topic_selected.feature
+###
+
+Quand("un visiteur sélectionne le thème {string}") do |theme|
+    click_on(theme)
+end
+
+Alors("la liste des items en liens avec le thème est affichée") do
+    expect(page).to have_selector(".Item",count: 66)
+end
+
+Soit("la page d'accueil chargée") do
+  visit "/"
+end
+
+Soit ("le thème {string} présent sur la page") do |theme|
+  expect(page).to have_content theme
+end
+
+Alors("le thème sélectionné est mis en subrillance") do
+    expect(page).to have_selector(".Selected",count: 1)
+end
