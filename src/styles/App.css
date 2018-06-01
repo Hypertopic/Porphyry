@@ -147,3 +147,46 @@
 .TopicPath > .Topic:last-of-type {
   font-weight: bold;
 }
+
+.TopicAdding {
+  padding-top: 5px;
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  width: 100%;
+}
+
+.TopicValidateButton {
+  font-size: 12px;
+  text-align: center;
+  margin-left: 5px;
+  width: 25px;
+  height: 20px;
+  background-color: rgb(153, 51, 0);
+  color: ivory;
+}
+
+.TopicValidateButton:disabled,
+.TopicValidateButton[disabled] {
+  background-color: #cccccc;
+}
+.TopicCancelButton {
+  font-size: 14px;
+  text-align: center;
+  margin-left: 5px;
+  padding-bottom: 5px;
+  width: 25px;
+  height: 20px;
+  background-color: rgb(153, 51, 0);
+  color: ivory;
+}
+
+.SuggestionItem {
+  font-size: 14px;
+  text-align: left;
+  font-weight: normal;
+}
+
+.react-autosuggest__input {
+  width: 17vw;
+}

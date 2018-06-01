@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Hypertopic from 'hypertopic';
 import groupBy from 'json-groupby';
-import conf from '../../config/config.json';
+import Autosuggest from 'react-autosuggest';
 
+import conf from '../../config/config.json';
 import '../../styles/App.css';
 
 class Item extends Component {
@@ -11,7 +12,8 @@ class Item extends Component {
     super();
     this.state = {
       topic: []
-    }
+    };
+    this._assignTopic = this._assignTopic.bind(this);
   }
 
   render() {
@@ -53,9 +55,14 @@ class Item extends Component {
   }
 
   _getViewpoints() {
-    return Object.entries(this.state.topic).map(v =>
-      <Viewpoint key={v[0]} id={v[0]} topics={v[1]} />
-    );
+    return Object.entries(this.state.topic).map(v => (
+      <Viewpoint
+        key={v[0]}
+        id={v[0]}
+        topics={v[1]}
+        assignTopic={this._assignTopic}
+      />
+    ));
   }
 
   componentDidMount() {
@@ -80,21 +87,198 @@ class Item extends Component {
       this.setState(item);
     });
   }
+
+  _assignTopic(topicToAssign, viewpointId) {
+    let hypertopic = new Hypertopic(conf.services);
+    const ressourceId = this.state.resource[0].substr(
+      this.state.resource[0].lastIndexOf('/') + 1
+    );
+
+    return hypertopic
+      .get({ _id: ressourceId })
+      .then(data => {
+        data.topics[topicToAssign.id] = { viewpoint: viewpointId };
+        return data;
+      })
+      .then(data => {
+        hypertopic.post(data);
+        let newState = this.state;
+        newState.topic[viewpointId].push({
+          viewpoint: viewpointId,
+          id: topicToAssign.id
+        });
+        this.setState(newState);
+      })
+      .catch(error => console.log(`error : ${error}`));
+  }
 }
 
 class Viewpoint extends Component {
   constructor(props) {
     super();
-    this.state = {};
+    this.state = {
+      topicInputvalue: '',
+      suggestions: [],
+      canValidateTopic: false,
+      currentSelection: '',
+      currentPreSelection: ''
+    };
+    this.renderSuggestion = this.renderSuggestion.bind(this);
   }
 
+  getSuggestionValue = suggestion => suggestion.name;
+
+  renderSuggestion = suggestion => {
+    return (
+      <a className="SuggestionItem" id={suggestion.id}>
+        {suggestion.name}
+      </a>
+    );
+  };
+
+  getSuggestions = value => {
+    const inputValue = value.trim().toLowerCase();
+    const inputLength = inputValue.length;
+    const ressourceId = window.location.href.substr(
+      window.location.href.lastIndexOf('/') + 1
+    );
+
+    let filteredTopics = [];
+    if (inputLength !== 0) {
+      for (let id in this.state.topics) {
+        const topic = this.state.topics[id];
+        let alreadyAssigned = false;
+        if (topic.item) {
+          topic.item.forEach(item => {
+            if (item.id === ressourceId) {
+              alreadyAssigned = true;
+            }
+          });
+        }
+
+        if (
+          !alreadyAssigned &&
+          topic.name &&
+          topic.name[0] &&
+          topic.name[0].toLowerCase().slice(0, inputLength) === inputValue
+        ) {
+          let fullName =
+            topic.name[0].slice(0, inputLength).toUpperCase() +
+            topic.name[0].slice(inputLength);
+          let currentTopic = topic;
+          while (currentTopic.broader) {
+            currentTopic = this.state.topics[currentTopic.broader[0].id];
+            fullName = `${currentTopic.name} > ${fullName}`;
+          }
+          filteredTopics.push({
+            name: fullName,
+            id: id
+          });
+        }
+      }
+    }
+    return filteredTopics;
+  };
+
+  onTopicInputChange = (event, { newValue }) => {
+    this.setState({
+      topicInputvalue: newValue
+    });
+    this.setState({
+      canValidateTopic: false
+    });
+  };
+
+  onSuggestionsFetchRequested = ({ value }) => {
+    this.setState({
+      suggestions: this.getSuggestions(value)
+    });
+  };
+
+  onSuggestionsClearRequested = () => {
+    this.setState({
+      suggestions: []
+    });
+  };
+
+  onSuggestionSelected = (event, { suggestion }) => {
+    this.setState({ canValidateTopic: true, currentSelection: suggestion });
+  };
+
+  onSuggestionHighlighted = ({ suggestion }) => {
+    console.log(suggestion);
+    if (suggestion && suggestion.id) {
+      this.setState({ currentPreSelection: suggestion.id });
+    } else {
+      this.setState({ currentPreSelection: '' });
+    }
+  };
+
+  clearInput = () => {
+    this.setState({
+      topicInputvalue: '',
+      canValidateTopic: false,
+      currentSelection: '',
+      currentPreSelection: '',
+      suggestions: []
+    });
+  };
+
+  updatingTopicList = (topicToAssign, viewpointId) => {
+    this.props
+      .assignTopic(topicToAssign, viewpointId)
+      .then(this.clearInput)
+      .catch(error => console.log(`error : ${error}`));
+  };
+
   render() {
-    let paths = this._getPaths();
+    const paths = this._getPaths();
+    const { topicInputvalue, suggestions } = this.state;
+    const inputProps = {
+      placeholder: 'Ajouter un topic...',
+      value: topicInputvalue,
+      onChange: this.onTopicInputChange
+    };
+    console.log('this.state', this.state);
     return (
       <div className="DescriptionModality">
         <h3>{this.state.name}</h3>
         <div className="Topics">
           {paths}
+          <div className="TopicAdding">
+            <Autosuggest
+              className="TopicSuggest"
+              suggestions={suggestions}
+              onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+              onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+              onSuggestionHighlighted={this.onSuggestionHighlighted}
+              onSuggestionSelected={this.onSuggestionSelected}
+              getSuggestionValue={this.getSuggestionValue}
+              renderSuggestion={this.renderSuggestion}
+              inputProps={inputProps}
+              id={`input-${this.state.name}`}
+            />
+            <button
+              type="button"
+              className="TopicValidateButton"
+              onClick={() =>
+                this.updatingTopicList(
+                  this.state.currentSelection,
+                  this.props.id
+                )
+              }
+              disabled={!this.state.canValidateTopic}
+              id={`validateButton-${this.state.name}`}>
+              ✓
+            </button>
+            <button
+              type="button"
+              className="TopicCancelButton"
+              onClick={this.clearInput}
+              id={`cancelButton-${this.state.name}`}>
+              x
+            </button>
+          </div>
         </div>
       </div>
     );
