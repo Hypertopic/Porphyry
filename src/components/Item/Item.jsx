@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import Hypertopic from 'hypertopic';
 import groupBy from 'json-groupby';
 import Autosuggest from 'react-autosuggest';
-
 import conf from '../../config/config.json';
 import '../../styles/App.css';
 
@@ -45,13 +44,13 @@ class Item extends Component {
 
   _getAttributes() {
     return Object.entries(this.state)
-      .filter( x => !["topic", "resource","thumbnail"].includes(x[0]) )
-      .map( x =>
+      .filter(x => !['topic', 'resource', 'thumbnail'].includes(x[0]))
+      .map(x => (
         <div className="Attribute" key={x[0]}>
           <div className="Key">{x[0]}</div>
           <div className="Value">{x[1][0]}</div>
         </div>
-      );
+      ));
   }
 
   _getViewpoints() {
@@ -286,9 +285,9 @@ class Viewpoint extends Component {
 
   _getPaths() {
     if (!this.state.topics) return [];
-    return this.props.topics.map( t =>
+    return this.props.topics.map(t => (
       <TopicPath key={t.id} id={t.id} topics={this.state.topics} />
-    );
+    ));
   }
 
   componentDidMount() {
