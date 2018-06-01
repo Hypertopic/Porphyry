@@ -13,6 +13,8 @@ class Item extends Component {
       topic: []
     };
     this._assignTopic = this._assignTopic.bind(this);
+    this._removeTopic = this._removeTopic.bind(this);
+    this._fetchItem = this._fetchItem.bind(this);
   }
 
   render() {
@@ -60,6 +62,7 @@ class Item extends Component {
         id={v[0]}
         topics={v[1]}
         assignTopic={this._assignTopic}
+        removeTopic={this._removeTopic}
       />
     ));
   }
@@ -109,6 +112,33 @@ class Item extends Component {
         this.setState(newState);
       })
       .catch(error => console.log(`error : ${error}`));
+  }
+
+
+  _removeTopic(topicToDelete) {
+    let params = this.props.match.params;
+    let hypertopic = new Hypertopic(conf.services);
+
+    if (confirm('Voulez-vous vraiment retirer le topic de cette oeuvre ?')) {
+      hypertopic
+        .get({ _id: params.item })
+        .then(data => {
+          delete data.topics[topicToDelete.id];
+          return data;
+        })
+        .then(data => {
+          hypertopic.post(data);
+          let newState = this.state;
+          newState.topic[topicToDelete.viewpoint] = newState.topic[
+            topicToDelete.viewpoint
+          ].filter(stateTopic => topicToDelete.id !== stateTopic.id);
+          if (newState.topic[topicToDelete.viewpoint].length === 0) {
+            delete newState.topic[topicToDelete.viewpoint];
+          }
+          this.setState(newState);
+        })
+        .catch(error => console.log(`error : ${error}`));
+    }
   }
 }
 
@@ -286,7 +316,12 @@ class Viewpoint extends Component {
   _getPaths() {
     if (!this.state.topics) return [];
     return this.props.topics.map(t => (
-      <TopicPath key={t.id} id={t.id} topics={this.state.topics} />
+      <TopicPath
+        key={t.id}
+        id={t.id}
+        topics={this.state.topics}
+        removeTopic={() => this.props.removeTopic(t)}
+      />
     ));
   }
 
@@ -310,8 +345,8 @@ class Viewpoint extends Component {
 }
 
 class TopicPath extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       path: []
     };
@@ -319,9 +354,19 @@ class TopicPath extends Component {
 
   render() {
     let topics = this._getTopics();
+    const topicId = this.state.path[this.state.path.length - 1]
+      ? `deleteButton-${this.state.path[this.state.path.length - 1].id}`
+      : '';
     return (
       <div className="TopicPath">
         {topics}
+        <button
+          type="button"
+          className="DeleteTopicButton"
+          onClick={this.props.removeTopic}
+          id={topicId}>
+          x
+        </button>
       </div>
     );
   }
