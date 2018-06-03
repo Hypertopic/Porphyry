@@ -51,3 +51,74 @@ Alors("un des corpus affichés est {string}") do |corpus|
   expect(page).to have_content corpus
 end
 
+
+
+########
+#  TEST: Consult topics and attributes related to an item (see commit 0734b36)
+#  consult_item_topics_attributes.feature
+########
+
+# Conditions	
+
+Soit("le thème {string} rattaché au point de vue {string}") do |theme, viewpoint|	
+  # On the remote servers	
+end	
+	
+Soit("le thème {string} rattaché au thème {string}") do |theme, theme1|	
+  # On the remote servers	
+end	
+	
+Soit ("l'item {string} rattaché aux thèmes {string} et {string}") do |item, theme, theme1|	
+   # On the remote servers	
+end	
+	
+Soit ("{string} la valeur de l’attribut {string} rattaché à l’item {string}") do |value, attribut ,item|	
+   # On the remote servers	
+end	
+	
+Soit("{string} un item affiché dans la vue courante du visiteur") do |item|	
+  case item	
+  when "ACS"
+    
+  else	
+    pending	
+  end	
+end	
+	
+# Events 	
+	
+Quand("le visiteur sélectionne l’item {string}") do |item|	
+  case item	
+  when "ACS"
+    visit "/"
+    find(:xpath,'//*[@id="root"]/div/div[2]/div[2]/div/div/div[4]/a/img').click
+  else	
+    pending	
+  end	
+end		
+	
+# Outcomes
+
+Alors("le titre de l'item affiché {string}") do |item|
+  expect(page).to have_content(item)
+end
+	
+Alors("un des attributs affichés a la valeur {string}") do |value|	
+  expect(page).to have_content(value)	
+end
+	
+Alors("un des thèmes affichés du point de vue {string} est {string}") do |viewpoint, theme|	
+  expect(page).to have_content(viewpoint)	
+  expect(page).to have_content(theme)	
+end	
+	
+Alors("un des thèmes affichés rattaché au thème {string} est {string}") do |theme, theme1|	
+  expect(page).to have_content(theme)	
+  expect(page).to have_content(theme1)	
+end	
+	
+Et("{string}la valeur de l’attribut {string} rattaché à l’item {string}") do |value, attribut, item|	
+  expect(page).to have_content(value)	
+  expect(page).to have_content(attribut)	
+  expect(page).to have_content(item)	
+end 

@@ -17,7 +17,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "cucumber --format summary",
+    "test": "cucumber",
     "eject": "react-scripts eject"
   }
 }
