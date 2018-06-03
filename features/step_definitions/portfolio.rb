@@ -66,6 +66,11 @@ Soit("{string} une des rubriques développées") do |topic|
   find_link(topic).sibling('.Bullet').click
 end
 
+
+Soit("{string} la valeur de l'attribut {string} de l'item {string}") do |value, attribute ,item|
+   # On the remote servers
+end
+
 # Events 
 Soit("les rubriques {string} sont sélectionnées") do |topics|
   first = true
@@ -98,6 +103,10 @@ end
 
 Quand("on sélectionne la rubrique {string}") do |topic|
   click_on topic
+end
+
+Quand("on choisit l'item {string}") do |item|
+  click_on item
 end
 
 # Outcomes
@@ -138,3 +147,4 @@ end
 Alors ("l'item {string} n'est pas affiché") do |item|
   expect(page).not_to have_content item
 end
+

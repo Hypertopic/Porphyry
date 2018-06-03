@@ -8,7 +8,7 @@ Capybara.default_max_wait_time = 10
 
 # Conditions
 
-Soit("{string} l\'item affiché") do |item|
+Soit("{string} l'item affiché") do |item|
   visit "/"
   click_on item
 end
@@ -21,3 +21,17 @@ Quand("on choisit la rubrique {string}") do |topic|
 end
 
 # Outcomes
+
+Alors("le titre de l'item affiché est {string}") do |item|
+  expect(find("h1")).to have_content(item)
+end
+
+Alors("la valeur de l'attribut {string} est {string}") do |attribute, value|
+  expect(page).to have_content(value)
+  expect(page).to have_content(attribute)
+end
+
+Alors("une des rubriques de l'item est {string}") do |topic|
+  expect(page).to have_content(topic)
+end
+
