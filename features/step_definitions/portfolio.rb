@@ -16,18 +16,20 @@ Soit("le corpus {string} rattaché au portfolio {string}") do |viewpoint, portfo
   # On the remote servers
 end
 
+# Conditions getItems
+
 Soit("{string} le portfolio spécifié dans la configuration") do |portfolio|
   case portfolio
-  when "vitraux" 
-    true #current configuration
-  when "indéfini" 
+  when "vitraux"
+    true
+  when "indéfini"
     pending "alternate configuration"
   else
     false
   end
 end
 
-# Events 
+# Events
 
 Quand("un visiteur ouvre la page d'accueil du site") do
   visit "/"
@@ -35,6 +37,12 @@ end
 
 Quand("un visiteur ouvre la page d‘accueil d‘un site dont l‘adresse commence par {string}") do |portfolio|
   visit "/"
+end
+
+# Events getItems
+
+Quand("un visiteur clique le thème {string} dans le point de vue {string}") do |theme, viewpoint|
+  click_on theme
 end
 
 # Outcomes
@@ -50,4 +58,7 @@ end
 Alors("un des corpus affichés est {string}") do |corpus|
   expect(page).to have_content corpus
 end
-
+# Outcomes getItems
+Alors("le thème affiché est {string}") do |theme|
+  expect(page).to have_content(theme)
+end
