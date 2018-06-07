@@ -15,6 +15,11 @@
   min-height: 55px;
 }
 
+h1 a, h1 a:hover {
+  color: ivory;
+  text-decoration: none;
+}
+
 .Status {
   background-color: rgb(60, 50, 50);
   color: ivory;

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import conf from '../../config/config.json';
 
 class Header extends Component {
@@ -14,7 +15,7 @@ class Header extends Component {
         <div className="col-lg-2 col-md-3 col-sm-4">
           <input className="form-control" type="text" placeholder="Rechercher..."/>
         </div>
-        <h1 className="text-center col-lg-8 col-md-6 col-sm-8">{this.user}</h1>
+        <h1 className="text-center col-lg-8 col-md-6 col-sm-8"><Link to="/">{this.user}</Link></h1>
       </header>
     );
   }

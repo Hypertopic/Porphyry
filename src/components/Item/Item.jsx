@@ -21,7 +21,7 @@ class Item extends Component {
     return (
       <div className="App container-fluid">
         <Header />
-        <div className="Status row h5"><a href="/">Retour à l'accueil</a></div>
+        <div className="Status row h5"><Link to="/">Retour à l'accueil</Link></div>
         <div className="container-fluid">
           <div className="App-content row">
             <div className="col-md-4 p-4">
