@@ -55,6 +55,10 @@
   cursor: zoom-in;
 }
 
+.cursor-pointer {
+  cursor: pointer;
+}
+
 .DescriptionModality {
   flex-direction: column;
   background-color: #8b0000;
@@ -78,28 +82,15 @@
   color: black;
 }
 
-.Bullet {
+.Topic .oi {
   color: darkgrey;
-}
-
-.Closed > .Bullet:before {
-  content: '▶';
+  font-size: .9em;
+  text-align: center;
+  width: 1.5em;
 }
 
 .Closed > ul {
   display: none;
-}
-
-.Opened > .Bullet:before {
-  content: '▼';
-}
-
-.Topic:not(.Opened):not(.Closed) > .Bullet:before {
-  content: '◼';
-}
-
-.Topic span {
-  color: lightgrey;
 }
 
 .Selected {

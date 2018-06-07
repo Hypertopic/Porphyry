@@ -22,11 +22,13 @@ class Topic extends Component {
     let uri = '?' + queryString.stringify({
       t: toggle(this.props.selection, this.props.id)
     });
+
+    let bullet = getBullet(this.state.fold);
     return (
       <li className={topic}>
-        <a className="Bullet" onClick={this.handleCollapse} />
+        <span className={bullet.className} title={bullet.title} aria-hidden="true" onClick={this.handleCollapse}></span>
         <Link to={uri} className={isSelected}> {this.props.name} </Link>
-        <span className="badge badge-pill badge-secondary">{count}</span>
+        <span className="badge badge-pill badge-secondary ml-1">{count}</span>
         <ul>
         {subtopics}
         </ul>
@@ -64,4 +66,11 @@ function fold(x) {
   }
 }
 
+function getBullet(x) {
+  switch (x) {
+    case 'Closed': return {className: 'oi oi-caret-right cursor-pointer', title: 'Déplier'};
+    case 'Opened': return {className: 'oi oi-caret-bottom cursor-pointer', title: 'Replier'};
+    default: return {className: 'oi oi-minus', title: ''};
+  }
+}
 export default Topic;
