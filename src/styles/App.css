@@ -51,13 +51,8 @@
   background-color: #8b0000;
 }
 
-.fullImage {
-  text-align: center;
-  margin: .5rem 0;
-}
-
-.fullImage a {
-  color: dimgrey;
+.cursor-zoom {
+  cursor: zoom-in;
 }
 
 .DescriptionModality {

@@ -41,12 +41,9 @@ class Item extends Component {
               <div className="Subject">
                 <h2 className="h4 font-weight-bold text-center">{this.state.name}</h2>
                 <div className="p-3">
-                  <img src={this.state.resource} alt="resource"/>
-                  <p className="fullImage">
-                    <a target="_blank" href={this.state.resource}>
-                      Voir l'image en taille réelle.
-                    </a>
-                  </p>
+                  <a target="_blank" href={this.state.resource} className="cursor-zoom">
+                    <img src={this.state.resource} alt="resource"/>
+                  </a>
                 </div>
               </div>
             </div>
