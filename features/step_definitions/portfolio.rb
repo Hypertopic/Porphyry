@@ -18,16 +18,16 @@ end
 
 Soit("{string} le portfolio spécifié dans la configuration") do |portfolio|
   case portfolio
-  when "vitraux" 
+  when "vitraux"
     true #current configuration
-  when "indéfini" 
+  when "indéfini"
     pending "alternate configuration"
   else
     false
   end
 end
 
-# Events 
+# Events
 
 Quand("un visiteur ouvre la page d'accueil du site") do
   visit "/"
@@ -60,39 +60,20 @@ end
 
 # Events
 
-Quand("un visiteur {string}") do |useraction|
-  case useraction
-  when "ne sélectionne aucun thème"
-    if page.current_url != Capybara.app_host
-      visit "/"
-      print page.current_url;
-    end
-  when "sélectionne un thème"
-    visit "/?t=d8d2654decd91140bfd93a952817d852"
-    print page.current_url;
-  when "sélectionne plusieurs thèmes"
-    visit "/?t=d8d2654decd91140bfd93a952817d852&t=9699bc2f8010944aa0574deabe8edb6d"
-    print page.current_url;
-  else
-    false
+Quand("un visiteur sélectionne:") do |table|
+  # table is a Cucumber::Ast::Table
+  table.hashes.each do |value|
+    click_on value['selected']
   end
 end
 
 
 # Outcomes
 
-Alors("chaque thème dans tous les points de vue affiche {string}") do |content|
-  case content
-  when "le nombre d'items qu'il contient"
-    expect(page).to have_content("Artiste")
-    expect(page).to have_content("(119)")
-  when "le nombre d'items qu'il contient et qui a une relation avec le thème sélectionné"
-    expect(page).to have_content("Albrecht Dürer (d'après)")
-    expect(page).to have_content("(11)")
-  when "le nombre d'items qu'il contient et qui a une relation avec les thèmes sélectionnés"
-    expect(page).to have_content("Albrecht Dürer (d'après)")
-    expect(page).to have_content("1er quart XVIe")
-    expect(page).to have_content("(1)")
+Alors("chaque thème dans tous les points de vue affiche:") do |table|
+  # table is a Cucumber::Ast::Table
+  table.hashes.each do |value|
+    expect(page).to have_content("#{value['theme']}")
+    expect(page).to have_content("(#{value['number']})")
   end
 end
-
