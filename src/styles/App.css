@@ -79,7 +79,7 @@
   list-style-type: none;
 }
 
-.Topic a {
+.Topic a, a.Topic {
   color: black;
 }
 
@@ -153,11 +153,20 @@
   flex-direction: row;
 }
 
-.TopicPath > .Topic:not(:last-of-type):after {
-  content: '>';
-  padding: 5px;
+.TopicPath > .Topic:not(:last-of-type) {
+  opacity: 0.7;
+  text-decoration: underline;
+}
+
+.TopicPath > .Topic:hover, .TopicPath > .Topic:last-of-type:hover {
+  opacity: 1;
+}
+
+.TopicPath > .TopicSeparator {
+  padding: 0 5px;
 }
 
 .TopicPath > .Topic:last-of-type {
+  opacity: 0.8;
   font-weight: bold;
 }

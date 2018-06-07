@@ -155,6 +155,10 @@ class TopicPath extends Component {
 
   render() {
     let topics = this._getTopics();
+	for (let i = 1; i < topics.length; ++i) {
+		topics.splice(i, 0, <span className="TopicSeparator">&gt;</span>);
+		++i;
+	}
     return (
       <div className="TopicPath">
         {topics}
