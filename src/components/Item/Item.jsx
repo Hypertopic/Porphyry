@@ -3,16 +3,24 @@ import { Link } from 'react-router-dom';
 import Hypertopic from 'hypertopic';
 import groupBy from 'json-groupby';
 import conf from '../../config/config.json';
+const hypertopic = require('hypertopic');
 
 import '../../styles/App.css';
+
 
 class Item extends Component {
   constructor() {
     super();
     this.state = {
-      topic: []
+     isClick: false,
+     topic: []
     }
+    // This binding is necessary to make `this` work in the callback
+   this.checkIsClick = this.checkIsClick.bind(this);
+   this.buttonValider =this.buttonValider.bind(this);
+   this.buttonCreer = this.buttonCreer.bind(this);
   }
+
 
   render() {
     let attributes = this._getAttributes();
@@ -25,8 +33,11 @@ class Item extends Component {
           <div className="Description">
             <div className="DescriptionModality">
               <h3>Attributs du document</h3>
+              {!this.state.isClick ? this.buttonCreer():""}
+              {this.state.isClick ? this.buttonValider():""}
               <div className="Attributes">
                 {attributes}
+                {this.state.isClick ? this.getForm() : ""}
               </div>
             </div>
             {viewpoints}
@@ -40,10 +51,60 @@ class Item extends Component {
       </div>
     );
   }
+//Show button with the value valider
+  buttonValider(){
+    return(<button id="buttonCreer" onClick={this.checkIsClick}>Valider</button>)
+  }
+  //show the button withe the value Creer
+  buttonCreer(){
+    return(<button id="buttonCreer" onClick={this.checkIsClick}>Creer</button>)
+  }
+//show the form to create a new Attribute
+  getForm(){
+ return(
+    <form className="Attribute">
+      <div className ="Key"> <input id="key" type="text" size="8" /></div>
+      <div className="Value"> <input id="value" type="text" size="8" /></div>
+    </form>
+    );
+  }
+//create a new attribute
+  setAttribute(key,value){
+    if(key!="" && value!=""){
+     let hypertopic = new Hypertopic(conf.services);
+     const _log = (x) => console.log(JSON.stringify(x, null, 2));
+     const _error = (x) => console.error(x.message);
+     var myObj = {};
+     myObj[key] = value;
+     hypertopic.get({_id:this.props.match.params.item})
+          .then(x => Object.assign(x, myObj))
+          .then(hypertopic.post)
+          .then(_log)
+          .catch(_error);
+        }
+    else console.log("Créez un attribut non vide");
+  }
 
-  _getAttributes() {
+//check the value of isClick and when isClisk is click twice it call setAttribute to create a new attribute
+  checkIsClick(){
+    ;
+  if(!this.state.isClick){
+    this.setState(prevState => ({
+        isClick: !prevState.isClick
+        }))
+  }else{
+      this.setState(prevState => ({
+          isClick: !prevState.isClick
+          }))
+    var key=document.getElementById("key").value; //retrieve the value of the input which is contains the key of the future attribute
+    var value=document.getElementById("value").value; //retrieve the value of the input whiche is contains the value of the future attribute
+    this.setAttribute(key,value);
+   }
+}
+
+  _getAttributes(){
     return Object.entries(this.state)
-      .filter( x => !["topic", "resource","thumbnail"].includes(x[0]) )
+      .filter( x => !["topic", "resource","thumbnail","isClick"].includes(x[0]) )
       .map( x =>
         <div className="Attribute" key={x[0]}>
           <div className="Key">{x[0]}</div>
@@ -168,7 +229,15 @@ class TopicPath extends Component {
       );
     });
   }
-
+  // createTestItem(){
+  //   let db = hypertopic([
+  //     "http://argos2.test.hypertopic.org",
+  //     "http://steatite.hypertopic.org"
+  //   ]);
+  //   db.post({_id:'007', item_name:'Bond', item_corpus:'TEST'})
+  //   .then(_log)
+  //   .catch(_error);
+  // }
 }
 
 export default Item;
