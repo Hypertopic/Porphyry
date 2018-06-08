@@ -1,4 +1,4 @@
-require 'capybara/cucumber'
+﻿require 'capybara/cucumber'
 require 'selenium/webdriver'
 
 Capybara.run_server = false
@@ -18,16 +18,16 @@ end
 
 Soit("{string} le portfolio spécifié dans la configuration") do |portfolio|
   case portfolio
-  when "vitraux" 
+  when "vitraux"
     true #current configuration
-  when "indéfini" 
+  when "indéfini"
     pending "alternate configuration"
   else
     false
   end
 end
 
-# Events 
+# Events
 
 Quand("un visiteur ouvre la page d'accueil du site") do
   visit "/"
@@ -51,3 +51,32 @@ Alors("un des corpus affichés est {string}") do |corpus|
   expect(page).to have_content corpus
 end
 
+# For every topic, get the number of selected items assigned to it (see #37)
+# get_number_selected_items_assigned_to_topic.feature
+
+Soit("un visiteur ouvre la page d'accueil") do
+  visit "/"
+end
+
+# Events
+
+Quand("un visiteur sélectionne:") do |table|
+  # table is a Cucumber::Ast::Table
+  page.all(:css, '.Bullet').each do |el|
+    el.click
+  end
+  table.hashes.each do |value|
+    click_on value['selected']
+  end
+end
+
+
+# Outcomes
+
+Alors("chaque thème dans tous les points de vue affiche:") do |table|
+  # table is a Cucumber::Ast::Table
+  table.hashes.each do |value|
+    expect(page).to have_content("#{value['theme']}")
+    expect(page).to have_content("(#{value['number']})")
+  end
+end
