@@ -10,16 +10,21 @@ class Item extends Component {
   constructor() {
     super();
     this.state = {
+      isCreatable: false,
       topic: []
     };
+    // These bindings are necessary to make `this` work in the callback
     this._assignTopic = this._assignTopic.bind(this);
     this._removeTopic = this._removeTopic.bind(this);
     this._fetchItem = this._fetchItem.bind(this);
+    this._checkIsCreatable = this._checkIsCreatable.bind(this);
   }
 
   render() {
     let attributes = this._getAttributes();
     let viewpoints = this._getViewpoints();
+    let attributeButtonLabel = this.state.isCreatable? 'Valider' : 'Créer';
+    let attributeForm = this.state.isCreatable? this._getAttributeCreationForm() : '';
     return (
       <div className="App">
         <h1>{this.state.name}</h1>
@@ -28,8 +33,10 @@ class Item extends Component {
           <div className="Description">
             <div className="DescriptionModality">
               <h3>Attributs du document</h3>
+              <button onClick={this._checkIsCreatable}>{attributeButtonLabel}</button>
               <div className="Attributes">
                 {attributes}
+                {attributeForm}
               </div>
             </div>
             {viewpoints}
@@ -46,7 +53,7 @@ class Item extends Component {
 
   _getAttributes() {
     return Object.entries(this.state)
-      .filter(x => !['topic', 'resource', 'thumbnail'].includes(x[0]))
+      .filter(x => !['topic', 'resource', 'thumbnail', 'isCreatable'].includes(x[0]))
       .map(x => (
         <div className="Attribute" key={x[0]}>
           <div className="Key">{x[0]}</div>
@@ -88,6 +95,40 @@ class Item extends Component {
       item.topic = (item.topic) ? groupBy(item.topic, ['viewpoint']) : [];
       this.setState(item);
     });
+  }
+
+  _getAttributeCreationForm() {
+    return (
+      <form className="Attribute">
+        <div className="Key"> <input id="key" type="text" size="8" /></div>
+        <div className="Value"> <input id="value" type="text" size="8" /></div>
+      </form>
+    );
+  }
+
+  _setAttribute(key, value) {
+    if (key!=='' && value!=='') {
+      let hypertopic = new Hypertopic(conf.services);
+      let attribute = {[key]: [value]};
+      hypertopic.get({_id: this.props.match.params.item})
+        .then(x => Object.assign(x, attribute))
+        .then(hypertopic.post)
+        .catch((x) => console.error(x.message));
+      this.setState(attribute);
+    } else {
+      console.log('Créez un attribut non vide');
+    }
+  }
+
+  _checkIsCreatable() {
+    this.setState(prevState => ({
+      isCreatable: !prevState.isCreatable
+    }));
+    if (this.state.isCreatable) {
+      let key = document.getElementById('key').value;
+      let value = document.getElementById('value').value;
+      this._setAttribute(key, value);
+    }
   }
 
   _assignTopic(topicToAssign, viewpointId) {
