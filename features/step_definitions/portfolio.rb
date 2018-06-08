@@ -62,6 +62,9 @@ end
 
 Quand("un visiteur sélectionne:") do |table|
   # table is a Cucumber::Ast::Table
+  page.all(:css, '.Bullet').each do |el|
+    el.click
+  end
   table.hashes.each do |value|
     click_on value['selected']
   end
