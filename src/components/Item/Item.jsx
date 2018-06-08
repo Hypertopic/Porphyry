@@ -3,16 +3,22 @@ import { Link } from 'react-router-dom';
 import Hypertopic from 'hypertopic';
 import groupBy from 'json-groupby';
 import conf from '../../config/config.json';
-
 import '../../styles/App.css';
+
 
 class Item extends Component {
   constructor() {
     super();
     this.state = {
-      topic: []
+     topic: [],
+      isCreatable: false
     }
+    // This binding is necessary to make `this` work in the callback
+   this.checkIsCreatable = this.checkIsCreatable.bind(this);
+   this.buttonValidate =this.buttonValidate.bind(this);
+   this.buttonCreate = this.buttonCreate.bind(this);
   }
+
 
   render() {
     let attributes = this._getAttributes();
@@ -25,8 +31,10 @@ class Item extends Component {
           <div className="Description">
             <div className="DescriptionModality">
               <h3>Attributs du document</h3>
+              {!this.state.isCreatable ? this.buttonCreate(): this.buttonValidate()}
               <div className="Attributes">
                 {attributes}
+                {this.state.isCreatable ? this.getForm() : ""}
               </div>
             </div>
             {viewpoints}
@@ -41,9 +49,54 @@ class Item extends Component {
     );
   }
 
-  _getAttributes() {
+  buttonValidate(){
+    return(<button id="buttonCreer" onClick={this.checkIsCreatable}>Valider</button>)
+  }
+
+  buttonCreate(){
+    return(<button id="buttonCreer" onClick={this.checkIsCreatable}>Creer</button>)
+  }
+
+//show the form to create a new Attribute
+  getForm(){
+ return(
+    <form className="Attribute">
+      <div className="Key"> <input id="key" type="text" size="8" /></div>
+      <div className="Value"> <input id="value" type="text" size="8" /></div>
+    </form>
+    );
+  }
+
+  setAttribute(key,value){
+    if(key!=="" && value!=="") {
+      let hypertopic = new Hypertopic(conf.services);
+      const _log = (x) => console.log(JSON.stringify(x, null, 2));
+      const _error = (x) => console.error(x.message);
+      var myObj = {};
+      myObj[key] = value;
+      hypertopic.get({_id:this.props.match.params.item})
+          .then(x => Object.assign(x, myObj))
+          .then(hypertopic.post)
+          .then(_log)
+          .catch(_error);
+    }
+    else console.log("Créez un attribut non vide");
+  }
+
+  checkIsCreatable(){
+    this.setState(prevState => ({
+       isCreatable: !prevState.isCreatable
+    }))
+    if(this.state.isCreatable){
+      var key=document.getElementById("key").value;
+      var value=document.getElementById("value").value;
+      this.setAttribute(key,value);
+   }
+}
+
+  _getAttributes(){
     return Object.entries(this.state)
-      .filter( x => !["topic", "resource","thumbnail"].includes(x[0]) )
+      .filter( x => !["topic", "resource","thumbnail","isCreatable"].includes(x[0]) )
       .map( x =>
         <div className="Attribute" key={x[0]}>
           <div className="Key">{x[0]}</div>
@@ -168,7 +221,6 @@ class TopicPath extends Component {
       );
     });
   }
-
 }
 
 export default Item;
