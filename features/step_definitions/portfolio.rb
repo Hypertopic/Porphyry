@@ -37,7 +37,7 @@ Quand("un visiteur ouvre la page d‘accueil d‘un site dont l‘adresse commen
   visit "/"
 end
 
-# Outcomes
+# Outcomes  
 
 Alors("le titre affiché est {string}") do |portfolio|
   expect(page).to have_content(portfolio)
@@ -51,3 +51,39 @@ Alors("un des corpus affichés est {string}") do |corpus|
   expect(page).to have_content corpus
 end
 
+# Conditions
+
+
+Soit("la page d'accueil chargée") do
+  visit "/"
+end
+
+Soit("le topic {string} présent sur la page") do |topic|
+  expect(page).to have_content(topic)
+end
+
+Soit("le topic {string} et {string} présentent sur la page") do |topic1,topic2|
+  expect(page).to have_content(topic1)
+  expect(page).to have_content(topic2)
+end
+# Events
+
+Quand("un utilisateur clique sur le topic {string}") do |topic|
+  click_link(topic)
+end
+
+Quand("un utilisateur clique sur deux topic {string} et {string}") do |topic1,topic2|
+  visit "/"
+  click_link(topic1)
+  click_link(topic2)
+end
+
+# Outcomes
+
+Alors("le topic {string} a class Selected") do |topic|
+  page.find("a.Selected").should have_text(topic)
+end
+
+Alors("le number class Selected est 2") do
+  expect(page).to have_selector("a.Selected", count: 2)
+end
