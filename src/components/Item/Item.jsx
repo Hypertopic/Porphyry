@@ -10,21 +10,27 @@ class Item extends Component {
   constructor() {
     super();
     this.state = {
-      isCreatable: false,
-      topic: []
+    topic: [],
+    isCreatable: false,
+    isDeletable: false
     };
     // These bindings are necessary to make `this` work in the callback
     this._assignTopic = this._assignTopic.bind(this);
     this._removeTopic = this._removeTopic.bind(this);
     this._fetchItem = this._fetchItem.bind(this);
-    this._checkIsCreatable = this._checkIsCreatable.bind(this);
+    this.checkIsCreatable = this.checkIsCreatable.bind(this);
+    this.buttonValidateCreate =this.buttonValidateCreate.bind(this);
+    this.buttonCreate = this.buttonCreate.bind(this);
+    this.handleDeleteClick = this.handleDeleteClick.bind(this);
+    this.handleValidateDeleteClick = this.handleValidateDeleteClick.bind(this);
+    this.deleteAttribut = this.deleteAttribut.bind(this);
   }
 
   render() {
+    //console.log('DEBUG' ,this);
     let attributes = this._getAttributes();
     let viewpoints = this._getViewpoints();
-    let attributeButtonLabel = this.state.isCreatable? 'Valider' : 'Créer';
-    let attributeForm = this.state.isCreatable? this._getAttributeCreationForm() : '';
+
     return (
       <div className="App">
         <h1>{this.state.name}</h1>
@@ -33,11 +39,13 @@ class Item extends Component {
           <div className="Description">
             <div className="DescriptionModality">
               <h3>Attributs du document</h3>
-              <button onClick={this._checkIsCreatable}>{attributeButtonLabel}</button>
+              {!this.state.isCreatable ? this.buttonCreate(): this.buttonValidateCreate()}
+              {this.state.isDeletable ?  this.buttonValidateDelete() : this.buttonDelete()}
               <div className="Attributes">
-                {attributes}
-                {attributeForm}
+              {attributes}
+              {this.state.isCreatable ? this.getForm() : ""}
               </div>
+
             </div>
             {viewpoints}
           </div>
@@ -53,11 +61,12 @@ class Item extends Component {
 
   _getAttributes() {
     return Object.entries(this.state)
-      .filter(x => !['topic', 'resource', 'thumbnail', 'isCreatable'].includes(x[0]))
+      .filter(x => !['topic', 'resource', 'thumbnail', 'isCreatable','isDeletable'].includes(x[0]))
       .map(x => (
         <div className="Attribute" key={x[0]}>
           <div className="Key">{x[0]}</div>
           <div className="Value">{x[1][0]}</div>
+          {this.state.isDeletable ? this.getFormDeletable(x[0].concat("Button")) : ""}
         </div>
       ));
   }
@@ -97,38 +106,106 @@ class Item extends Component {
     });
   }
 
-  _getAttributeCreationForm() {
-    return (
-      <form className="Attribute">
-        <div className="Key"> <input id="key" type="text" size="8" /></div>
-        <div className="Value"> <input id="value" type="text" size="8" /></div>
-      </form>
+buttonValidateCreate(){
+    return(<button id="buttonCreer" onClick={this.checkIsCreatable}>Valider</button>)
+  }
+
+  buttonCreate(){
+    return(<button id="buttonCreer" onClick={this.checkIsCreatable}>Creer</button>)
+  }
+
+//show the form to create a new Attribute
+  getForm(){
+ return(
+    <form className="Attribute">
+      <div className="Key"> <input id="key" type="text" size="8" /></div>
+      <div className="Value"> <input id="value" type="text" size="8" /></div>
+    </form>
     );
   }
 
-  _setAttribute(key, value) {
-    if (key!=='' && value!=='') {
+  setAttribute(key,value){
+    if(key!=="" && value!=="") {
       let hypertopic = new Hypertopic(conf.services);
-      let attribute = {[key]: [value]};
-      hypertopic.get({_id: this.props.match.params.item})
-        .then(x => Object.assign(x, attribute))
-        .then(hypertopic.post)
-        .catch((x) => console.error(x.message));
-      this.setState(attribute);
-    } else {
-      console.log('Créez un attribut non vide');
+      const _log = (x) => console.log("LOG", JSON.stringify(x, null, 2));
+      const _error = (x) => console.error("ERR", x);
+      var myObj = {};
+      myObj[key] = value;
+      hypertopic.get({_id:this.props.match.params.item})
+          .then(x => Object.assign(x, myObj))
+          .then(hypertopic.post)
+          .then(_log)
+          .catch(_error);
     }
+
+    else console.log("Créez un attribut non vide");
   }
 
-  _checkIsCreatable() {
+  checkIsCreatable(){
     this.setState(prevState => ({
-      isCreatable: !prevState.isCreatable
+       isCreatable: !prevState.isCreatable
+    }))
+    if(this.state.isCreatable){
+      var key=document.getElementById("key").value;
+      var value=document.getElementById("value").value;
+      this.setAttribute(key,value);
+      document.getElementById("delete").style.visibility = "visible";
+   }else{
+     document.getElementById("delete").style.visibility = "hidden";
+   }
+}
+
+getFormDeletable(key){
+     return(
+       <button id={key} value="delete" onClick={this.deleteAttribut.bind(this,key)}>X</button>
+       );
+      }
+
+ buttonDelete(){
+    return(
+      <button id= "delete" value="modifier" onClick={this.handleDeleteClick}>Supprimer</button>
+    );
+  }
+
+  buttonValidateDelete(){
+    return(
+      <button value="ok" onClick={this.handleValidateDeleteClick}>Ok</button>
+    );
+  }
+
+  handleDeleteClick(){
+    this.setState(prevState => ({
+      isDeletable: true
     }));
-    if (this.state.isCreatable) {
-      let key = document.getElementById('key').value;
-      let value = document.getElementById('value').value;
-      this._setAttribute(key, value);
+    document.getElementById("buttonCreer").style.visibility = "hidden";
     }
+
+ handleValidateDeleteClick(){
+    this.setState(prevState => ({
+      isDeletable: false
+   }));
+   document.getElementById("buttonCreer").style.visibility = "visible";
+}
+
+  deleteAttribut(key){
+    var att=document.getElementById(key).parentElement.getElementsByClassName("Key");
+    var id_att= att[0].childNodes[0];
+    var tmp = document.createElement("div");
+    tmp.appendChild(id_att);
+    var attributeClicked = tmp.innerHTML;
+    document.getElementById(key).parentElement.remove();
+    let hypertopic = new Hypertopic(conf.services);
+    const _log = (x) => console.log(JSON.stringify(x, null, 2));
+    const _error = (x) => console.error(x.message);
+
+    hypertopic.get({_id:this.props.match.params.item})
+       .then(x => {
+         delete x[attributeClicked]
+         return x;
+       })
+       .then(hypertopic.post)
+       .then(_log)
+       .catch(_error);
   }
 
   _assignTopic(topicToAssign, viewpointId) {
@@ -177,6 +254,8 @@ class Item extends Component {
     }
   }
 }
+
+
 
 class Viewpoint extends Component {
   constructor(props) {
