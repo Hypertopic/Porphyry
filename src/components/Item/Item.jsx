@@ -10,13 +10,20 @@ class Item extends Component {
   constructor() {
     super();
     this.state = {
-      topic: []
+     isClick: false,
+     topic: []
     }
+    // This binding is necessary to make this work in the callback
+    this.handleModifierClick = this.handleModifierClick.bind(this);
+    this.handleValiderClick = this.handleValiderClick.bind(this);
+    this.deleteAttribut = this.deleteAttribut.bind(this);
   }
 
   render() {
+    //console.log('DEBUG' ,this);
     let attributes = this._getAttributes();
     let viewpoints = this._getViewpoints();
+
     return (
       <div className="App">
         <h1>{this.state.name}</h1>
@@ -24,10 +31,14 @@ class Item extends Component {
         <div className="App-content">
           <div className="Description">
             <div className="DescriptionModality">
-              <h3>Attributs du document</h3>
+              <h3>Attributs du document
+              {this.state.isClick ?  this.validerButton() : this.modifierButton()}
+              </h3>
               <div className="Attributes">
-                {attributes}
+
+               {attributes}
               </div>
+
             </div>
             {viewpoints}
           </div>
@@ -43,11 +54,13 @@ class Item extends Component {
 
   _getAttributes() {
     return Object.entries(this.state)
-      .filter( x => !["topic", "resource","thumbnail"].includes(x[0]) )
+
+      .filter( x => !["topic", "resource","thumbnail","isClick"].includes(x[0]) )
       .map( x =>
         <div className="Attribute" key={x[0]}>
           <div className="Key">{x[0]}</div>
           <div className="Value">{x[1][0]}</div>
+          {this.state.isClick ? this.getForm(x[0].concat("Button")) : ""}
         </div>
       );
   }
@@ -80,7 +93,62 @@ class Item extends Component {
       this.setState(item);
     });
   }
+
+  getForm(key){
+     return(
+       <button id={key} value="delete" onClick={this.deleteAttribut.bind(this,key)}>X</button>
+       );
+      }
+
+  modifierButton(){
+    return(
+      <button value="modifier" onClick={this.handleModifierClick}>Modifier</button>
+    );
+  }
+
+  handleModifierClick(){
+
+    this.setState(prevState => ({
+    isClick: true
+ }));
+    }
+
+  validerButton(){
+    return(
+      <button value="ok" onClick={this.handleValiderClick}>Ok</button>
+    );
+  }
+
+  handleValiderClick(){
+      this.setState(prevState => ({
+     isClick: false
+   }));
+      }
+
+  deleteAttribut(key){
+    var att=document.getElementById(key).parentElement.getElementsByClassName("Key");
+    var id_att= att[0].childNodes[0];
+    var tmp = document.createElement("div");
+    tmp.appendChild(id_att);
+    var attributeClicked = tmp.innerHTML;
+    document.getElementById(key).parentElement.remove();
+    let hypertopic = new Hypertopic(conf.services);
+    const _log = (x) => console.log(JSON.stringify(x, null, 2));
+    const _error = (x) => console.error(x.message);
+
+    hypertopic.get({_id:this.props.match.params.item})
+       .then(x => {
+         delete x[attributeClicked]
+         return x;
+       })
+       .then(hypertopic.post)
+       .then(_log)
+       .catch(_error);
+  }
+
 }
+
+
 
 class Viewpoint extends Component {
   constructor(props) {
