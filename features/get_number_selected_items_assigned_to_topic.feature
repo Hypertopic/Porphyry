@@ -11,8 +11,8 @@ Contexte:
 Scénario: quand aucune rubrique n'est sélectionnée
 
     Soit "vitraux" le portfolio ouvert
-    Alors il doit y avoir au moins 21 items sélectionnés décrits par "Artiste"
-    Et il doit y avoir au moins 21 items sélectionnés décrits par "Datation"
+    Alors il doit y avoir au moins 18 items sélectionnés décrits par "Artiste"
+    Et il doit y avoir au moins 18 items sélectionnés décrits par "Datation"
 
 Scénario: quand une rubrique est sélectionnée
 
@@ -20,5 +20,5 @@ Scénario: quand une rubrique est sélectionnée
     Et "Artiste" une des rubriques développées
     Et "Datation" une des rubriques développées
     Quand on sélectionne la rubrique "Ateliers du Carmel du Mans"
-    Alors il doit y avoir au moins 21 items sélectionnés décrits par "Ateliers du Carmel du Mans"
-    Et il doit y avoir au moins 21 items sélectionnés décrits par "XIXe s."
+    Alors il doit y avoir au moins 18 items sélectionnés décrits par "Ateliers du Carmel du Mans"
+    Et il doit y avoir au moins 18 items sélectionnés décrits par "XIXe s."
