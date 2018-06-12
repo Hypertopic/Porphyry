@@ -13,7 +13,7 @@
     "sort-by": "^1.2.0"
   },
   "devDependencies": {
-    "react-scripts": "0.9.5"
+    "react-scripts": "1.1.4"
   },
   "scripts": {
     "start": "react-scripts start",

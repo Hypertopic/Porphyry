@@ -119,7 +119,7 @@ class Item extends Component {
     let params = this.props.match.params;
     let hypertopic = new Hypertopic(conf.services);
 
-    if (confirm('Voulez-vous vraiment retirer le topic de cette oeuvre ?')) {
+    if (window.confirm('Voulez-vous vraiment retirer le topic de cette oeuvre ?')) {
       hypertopic
         .get({ _id: params.item })
         .then(data => {
