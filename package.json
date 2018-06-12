@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "deep-equal": "^1.0.1",
     "hypertopic": "^3.1.2",
     "json-groupby": "^1.0.2",
     "query-string": "^4.3.4",
@@ -12,7 +13,7 @@
     "sort-by": "^1.2.0"
   },
   "devDependencies": {
-    "react-scripts": "0.9.5"
+    "react-scripts": "^0.9.5"
   },
   "scripts": {
     "start": "react-scripts start",

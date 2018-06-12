@@ -5,6 +5,7 @@ import Hypertopic from 'hypertopic';
 import conf from '../../config/config.json';
 import Viewpoint from '../Viewpoint/Viewpoint.jsx';
 import Corpora from '../Corpora/Corpora.jsx';
+import ViewpointCreator from '../Viewpoint/ViewpointCreator.jsx';
 
 import '../../styles/App.css';
 
@@ -32,6 +33,7 @@ class Portfolio extends Component {
         <div className="Status">{status}</div>
         <div className="App-content">
           <div className="Description">
+            <ViewpointCreator />
             {viewpoints}
           </div>
           {corpora}

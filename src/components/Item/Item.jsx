@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Hypertopic from 'hypertopic';
 import groupBy from 'json-groupby';
+import FacebookProvider, { Comments } from 'react-facebook';
 import conf from '../../config/config.json';
 
 import '../../styles/App.css';
@@ -9,14 +10,16 @@ import '../../styles/App.css';
 class Item extends Component {
   constructor() {
     super();
+    this.resource_old = false;
     this.state = {
-      topic: []
+      topic: [],
     }
   }
 
   render() {
     let attributes = this._getAttributes();
     let viewpoints = this._getViewpoints();
+    let comment = this._getFacebookComment();
     return (
       <div className="App">
         <h1>{this.state.name}</h1>
@@ -30,6 +33,7 @@ class Item extends Component {
               </div>
             </div>
             {viewpoints}
+            {comment}
           </div>
           <div className="Subject">
             <div>
@@ -55,6 +59,25 @@ class Item extends Component {
   _getViewpoints() {
     return Object.entries(this.state.topic).map(v =>
       <Viewpoint key={v[0]} id={v[0]} topics={v[1]} />
+    );
+  }
+
+  _getFacebookComment(){
+    let c_url = String(this.state.resource);
+    /*
+    console.log(c_url);
+    console.log(this.resource_old);
+    if(this.resource_old==c_url){
+      c_url = this.resource_old;
+    }
+    else{
+      this.resource_old = c_url;
+    }
+    */
+    return (
+      <FacebookProvider appId="566160170436215">
+        <Comments href={c_url} />
+      </FacebookProvider>
     );
   }
 
@@ -97,6 +120,7 @@ class Viewpoint extends Component {
           {paths}
         </div>
       </div>
+
     );
   }
 

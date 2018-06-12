@@ -1,4 +1,4 @@
-require 'capybara/cucumber'
+﻿require 'capybara/cucumber'
 require 'selenium/webdriver'
 
 Capybara.run_server = false

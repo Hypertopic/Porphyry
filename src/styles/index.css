@@ -33,3 +33,12 @@ a {
 a:hover {
   color: dimgrey;
 }
+
+a.remove {
+  cursor: pointer;
+}
+
+a.outliner {
+  cursor: pointer;
+  float: right;
+}
