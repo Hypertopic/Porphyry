@@ -119,7 +119,7 @@ class Item extends Component {
     let params = this.props.match.params;
     let hypertopic = new Hypertopic(conf.services);
 
-    if (window.confirm('Voulez-vous vraiment retirer le topic de cette oeuvre ?')) {
+    if (window.confirm('Voulez-vous réellement que l\'item affiché ne soit plus décrit à l\'aide de cette rubrique ?')) {
       hypertopic
         .get({ _id: params.item })
         .then(data => {
@@ -264,7 +264,7 @@ class Viewpoint extends Component {
     const paths = this._getPaths();
     const { topicInputvalue, suggestions } = this.state;
     const inputProps = {
-      placeholder: 'Ajouter un topic...',
+      placeholder: 'Ajouter une rubrique...',
       value: topicInputvalue,
       onChange: this.onTopicInputChange
     };
