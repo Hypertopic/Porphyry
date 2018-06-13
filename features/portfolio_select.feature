@@ -22,17 +22,18 @@ Scénario: quand elle est vide
  Soit la liste des rubriques sélectionnées est vide
  Et "Artiste" une des rubriques développées
  Quand on sélectionne la rubrique "Ateliers du Carmel du Mans"
- Alors les rubriques "Ateliers du Carmel du Mans" sont surlignées
+ Alors les rubriques surlignées sont au nombre de 1
  Et l'item "DSN 001" est affiché
  Et l'item "DSN 003" est affiché
  Et l'item "Villenauxe-la-Grande" n'est pas affiché
 
 Scénario: quand elle est non vide
  Soit les rubriques "Ateliers du Carmel du Mans" sont sélectionnées
+ Et "Artiste" une des rubriques développées
  Et "Datation" une des rubriques développées
  Et "XIXe s." une des rubriques développées
  Quand on sélectionne la rubrique "1868"
- Alors les rubriques "Ateliers du Carmel du Mans|1868" sont surlignées
+ Alors les rubriques surlignées sont au nombre de 2
  Et l'item "DSN 001" est affiché
  Et l'item "DSN 003" n'est pas affiché
  Et l'item "Villenauxe-la-Grande" n'est pas affiché

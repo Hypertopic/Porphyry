@@ -127,17 +127,8 @@ Alors("il doit y avoir au moins {int} items sélectionnés décrits par {string}
   expect(find_link(topic).sibling('span').text.scan(/\d+/)[0].to_i).to be >= itemsNb 
 end
 
-Alors("les rubriques {string} sont surlignées") do |topics|
-  uri = URI.parse(current_url).to_s
-  topics.split("|").each do |topic|
-    uuid = getUUID(topic)
-    if (uuid == nil)
-      pending "undefined UUID"
-    elsif (!uri.include? getUUID(topic))
-      false
-    end
-  end
-  true
+Alors("les rubriques surlignées sont au nombre de {int}") do |topicNb|
+  expect(page).to have_selector('.Selected', :count => topicNb)
 end
 
 Alors ("l'item {string} est affiché") do |item|
