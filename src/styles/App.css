@@ -4,7 +4,7 @@
 }
 
 .App h1 {
-  background-color: rgb(153, 51,0);
+  background-color: rgb(153, 51, 0);
   color: ivory;
   background-image: url('../images/porphyry.gif');
   background-repeat: no-repeat;
@@ -36,7 +36,7 @@
 
 .Subject > div {
   background-color: dimgrey;
-  color: rgb(240,240,240);
+  color: rgb(240, 240, 240);
   padding: 4px;
   margin: 2px;
 }
@@ -47,7 +47,7 @@
 
 .DescriptionModality {
   flex-direction: column;
-  background-color: rgb(153, 51,0);
+  background-color: rgb(153, 51, 0);
   color: ivory;
   padding: 4px;
   margin: 1px;
@@ -66,6 +66,27 @@
 
 .Topic {
   text-align: left;
+  list-style-type: none;
+}
+
+.Bullet {
+  color: darkgrey;
+}
+
+.Closed > .Bullet:before {
+  content: '▶';
+}
+
+.Closed > ul {
+  display: none;
+}
+
+.Opened > .Bullet:before {
+  content: '▼';
+}
+
+.Topic:not(.Opened):not(.Closed) > .Bullet:before {
+  content: '◼';
 }
 
 .Topic span {
@@ -75,7 +96,8 @@
 .Selected {
   background-color: rgb(204, 153, 51);
   font-weight: bold;
-  padding: 5px;
+  padding: 1px;
+  border-radius: 3px;
 }
 
 .Items {
@@ -135,4 +157,55 @@
 
 .Outliner ul {
   background-color: whitesmoke;
+}
+
+.TopicAdding {
+  padding-top: 5px;
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  width: 100%;
+}
+
+.TopicValidateButton {
+  font-size: 12px;
+  text-align: center;
+  margin-left: 5px;
+  width: 25px;
+  height: 20px;
+  background-color: rgb(153, 51, 0);
+  color: ivory;
+}
+
+.TopicValidateButton:disabled,
+.TopicValidateButton[disabled] {
+  background-color: #cccccc;
+}
+
+.TopicCancelButton {
+  font-size: 14px;
+  text-align: center;
+  margin-left: 5px;
+  padding-bottom: 5px;
+  width: 25px;
+  height: 20px;
+  background-color: rgb(153, 51, 0);
+  color: ivory;
+}
+
+.SuggestionItem {
+  font-size: 14px;
+  text-align: left;
+  font-weight: normal;
+}
+
+.react-autosuggest__input {
+  width: 17vw;
+}
+
+.DeleteTopicButton {
+  margin-left: 5px;
+  align-self: center;
+  background-color: rgb(153, 51, 0);
+  color: ivory;
 }

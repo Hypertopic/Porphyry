@@ -18,7 +18,7 @@ class Portfolio extends Component {
       selectedItems: [],
       topicsItems: new Map()
     };
-    this.user = conf.user || location.hostname.split('.', 1)[0];
+    this.user = conf.user || window.location.hostname.split('.', 1)[0];
     this._updateSelection();
   }
 
@@ -77,7 +77,7 @@ class Portfolio extends Component {
   }
 
   _updateSelection() {
-    let selection = queryString.parse(location.search).t;
+    let selection = queryString.parse(window.location.search).t;
     this.selection = (selection instanceof Array)? selection
       : (selection)? [selection]
       : [];

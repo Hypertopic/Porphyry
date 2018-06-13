@@ -1,0 +1,15 @@
+language: node_js
+node_js: lts/*
+
+addons:
+  chrome: stable
+
+cache:
+  directories:
+    - ~/.rvm/gems
+    - node_modules
+
+install:
+  - npm install
+  - npm start >/dev/null &
+  - gem install cucumber rspec capybara selenium-webdriver chromedriver-helper
