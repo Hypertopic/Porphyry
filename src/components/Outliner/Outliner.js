@@ -1,21 +1,21 @@
 import React from "react";
 import Hypertopic from 'hypertopic';
 import conf from '../../config/config.json';
-const db = new Hypertopic(conf.services);
-
-var equal = require('deep-equal');
-
+import Tree from 'react-ui-tree-porphyry';
+import equal from "deep-equal";
 import '../../styles/App.css';
+
+const db = new Hypertopic(conf.services);
 
 const _log = (x) => console.log(JSON.stringify(x, null, 2));
 const _error = (x) => console.error(x.message);
 
 function makeID() {
   var id = '';
-  for (var i = 0; i<6;i++) {
+  for (var i = 0; i < 6; i++) {
     id += Math.random().toString(15).substring(10);
   }
-  id = id.slice(0,32);
+  id = id.slice(0, 32);
   return id;
 }
 
@@ -23,22 +23,31 @@ class Outliner extends React.Component {
 
   constructor() {
     super();
-    this.state = {stop : true, nextTitle : ''};
+    this.state = { stop: true, nextTitle: '', t_data: false, active: null };
+    this.user = conf.user || window.location.hostname.split('.', 1)[0];
   }
 
   render() {
     var title = this._getTitle();
+    let status = this._getStatus();
     return (
-    <div>
-      <div className='App'>
-        <h1>{title} </h1>
-        <div className='Status'>Modification du point de vue</div>
+      <div>
+        <div className='App'>
+          <h1>{title}</h1>
+          <div className='Status'>{status}</div>
+        </div>
+        <div className="Outliner">
+          {this.state.t_data ? <Tree tree={this.state.t_data} renderNode={this.renderNode} onChange={this.handleChange} isNodeCollapsed={this.isNodeCollapsed} /> : null}
+        </div>
+        <button className="Return" onClick={this._returnHome}>
+          🏠
+        </button>
       </div>
-      <div className="Outliner">
-      <Tree data={this.state} childs={this.state.upper} father={[]} uri={this.props.match.params.id} stop={this.state.stop}/>
-      </div>
-    </div>
     );
+  }
+
+  _returnHome() {
+    window.location = '/';
   }
 
   _getTitle() {
@@ -48,36 +57,47 @@ class Outliner extends React.Component {
       return (
         <div>
           <a className='add' onClick={(e) => this._newVP(this)}>+&nbsp;</a>
-          <input type="text" value={this.state.nextTitle} onChange={this.addTitle.bind(this)} onKeyPress={this.handleKeyPress.bind(this)}/>
+          <input type="text" value={this.state.nextTitle} onChange={this.addTitle.bind(this)} onKeyPress={this.handleKeyPressOnTitle.bind(this)} />
         </div>);
     }
   }
 
-  _newVP() {
-    db.post({_id:this.props.match.params.id, viewpoint_name: this.state.nextTitle, topics:{}})
-      .then(_log)
-      .then(this.setState({title : this.state.nextTitle}))
-      .catch(_error);
-  }
-
-  handleKeyPress(event){
-    if(event.key === 'Enter'){
-      this._newVP(this);
+  _getStatus() {
+    if (this.state.title !== undefined) {
+      return "Modification du point de vue (Press CTRL to drag and drop)";
+    } else {
+      return "Création du point de vue";
     }
   }
 
-  addTitle(event){
-    this.setState({nextTitle : event.target.value})
+  _newVP() {
+    db.post({ _id: this.props.match.params.id, viewpoint_name: this.state.nextTitle, topics: {}, users: [this.user] })
+      .then(_log)
+      .then(_ => this.setState({ title: this.state.nextTitle }))
+      .then(_ => this._fetchData())
+      .catch(_error);
+  }
+
+  handleKeyPressOnTitle(event) {
+    if (event.key === 'Enter') {
+      this._newVP();
+    }
+  }
+
+  addTitle(event) {
+    this.setState({ nextTitle: event.target.value })
   }
 
   componentDidMount() {
     this._fetchData();
     this._timer = setInterval(
       () => {
-        if (this.state.fathers.upper !== this.state.upper) {
-          this.setState({upper: this.state.fathers.upper})
-        };
-        db.get({_id: this.props.match.params.id})
+        if(this.state.fathers&&this.state.upper){
+          if (this.state.fathers.upper !== this.state.upper) {
+            this.setState({ upper: this.state.fathers.upper })
+          }
+        }
+        db.get({ _id: this.props.match.params.id })
           .then(x => {
             if (this.state.topics === undefined || !equal(x.topics, this.state.topics)) {
               this._fetchData()
@@ -92,205 +112,125 @@ class Outliner extends React.Component {
     clearInterval(this._timer);
   }
 
+  onClickNode = node => {
+    this.setState({
+      active: node
+    });
+  };
+
+  renderNode = (node, nodeIndex, removeNodeByID, addNode, forceChange) => {
+    return (
+      <div
+        onClick={this.onClickNode.bind(null, node)}
+        className="wrap">
+        <span>
+          {node.edit ? <input type='text' defaultValue={node.module} onKeyPress={(e) => { if (e.key === 'Enter') { let m = e.target.value; if (m === '') return null; else node.module = m; node.edit = false; this.setState({ update: true }); forceChange(); } }} /> : node.module}&nbsp;&nbsp;
+         {nodeIndex !== 1 ? <button onMouseUp={() => { removeNodeByID(nodeIndex) }}>❌</button> : null}
+          <button onMouseUp={() => { node.edit = true }}>✏️</button>
+          <button onMouseUp={() => { let node = { id: makeID(), edit: true, module: '' }; addNode(nodeIndex, node) }}>➕</button>
+        </span>
+      </div>
+    );
+  };
+
+  applyChange(tree) {
+    let topics = {};
+    let stack = [];
+    stack.push([tree.children, false]);
+    while (stack.length !== 0) {
+      let nowNode = stack.pop();
+      const lenNode = nowNode[0].length;
+      let i = 0;
+      for (i = 0; i < lenNode; i++) {
+        if (!topics[nowNode[0][i].id]) {
+          topics[nowNode[0][i].id] = { broader: nowNode[1] ? [nowNode[1]] : [], name: nowNode[0][i].module };
+        }
+        else {
+          topics[nowNode[0][i].id].broader.push(nowNode[1]);
+        }
+        if (nowNode[0][i].children && nowNode[0][i].children.length !== 0) {
+          stack.push([nowNode[0][i].children, nowNode[0][i].id]);
+        }
+      }
+    }
+    db.get({ _id: this.props.match.params.id })
+      .then(function (data) { data.topics = topics; return data; })
+      .then(db.post);
+  }
+
+  handleChange = tree => {
+    this.applyChange(tree);
+  };
+
+  _buildTree(data) {
+    let treeData = { module: data.viewpoint_name, children: [] };
+    const topics = data.topics;
+    let _tData = treeData.children;
+    let tFind = {};
+
+    let i = {};
+    let pi = 0;
+    for (i in topics) {
+      tFind[i] = pi;
+      _tData.push({
+        module: topics[i].name,
+        id: i,
+        children: []
+      });
+      ++pi;
+    }
+    let ndata = [];
+
+    for (i in topics) {
+      let topic = topics[i];
+      const broader = topic.broader;
+      let lb = broader.length;
+      if (lb !== 0) {
+        let j = 0;
+        for (j = 0; j < lb; j++) {
+          _tData[tFind[broader[j]]].children.push(_tData[tFind[i]]);
+        }
+      }
+      else {
+        ndata.push(_tData[tFind[i]]);
+      }
+    }
+
+    treeData.children = ndata;
+    this.setState({ t_data: treeData });
+    console.log(treeData);
+  }
+
   _fetchData() {
     var listFatherGroup = {};
-    return db.get({_id: this.props.match.params.id})
+    return db.get({ _id: this.props.match.params.id })
       .then(x => {
-          this.setState({stop : true});
-          this.setState({topics: x.topics});
-          this.setState({title: x.viewpoint_name});
-          return x.topics
+        this._buildTree(x);
+        this.setState({ stop: true });
+        this.setState({ topics: x.topics });
+        this.setState({ title: x.viewpoint_name });
+        return x.topics
       })
       .then(x => {
         let listFather = Object.keys(x).map(
           k => (k = x[k].broader.length < 1 ?
-            {upper: [k]} :
-            {[x[k].broader]: [k]})
+            { upper: [k] } :
+            { [x[k].broader]: [k] })
         );
         listFather.forEach(
           e =>
-          typeof listFatherGroup[Object.keys(e)] === "undefined" ?
-          (listFatherGroup[Object.keys(e)] = Object.values(e)[0]) :
-          (listFatherGroup[Object.keys(e)] = [
-            ...listFatherGroup[Object.keys(e)],
-            ...Object.values(e)[0]
-          ])
+            typeof listFatherGroup[Object.keys(e)] === "undefined" ?
+              (listFatherGroup[Object.keys(e)] = Object.values(e)[0]) :
+              (listFatherGroup[Object.keys(e)] = [
+                ...listFatherGroup[Object.keys(e)],
+                ...Object.values(e)[0]
+              ])
         );
+        console.log(listFatherGroup);
         return listFatherGroup;
       })
-    .then(x => this.setState({fathers: x, stop : false}));
+      .then(x => this.setState({ fathers: x, stop: false }));
   }
-}
-
-class Tree extends React.Component {
-
-    constructor(props) {
-      super(props);
-      this.state = {
-        add: "",
-        addSub: [""],
-        childs: [],
-        edit: false
-      };
-    }
-
-    handleChange(type, index, event) {
-      switch (type) {
-        case 'edit':
-          this.setState({edit : true});
-          var childs = this.state.childs.slice();
-          childs[index] = event.target.value;
-          this.setState({childs : childs});
-          break;
-        case 'add':
-          this.setState({add : event.target.value});
-          break;
-        case 'sub':
-          var addSub = this.state.addSub.slice();
-          addSub[index] = event.target.value;
-          this.setState({addSub: addSub});
-          break;
-        default:
-          console.log(type);
-      }
-    }
-
-    handleKeyPress(type, index, event) {
-      if(event.key === 'Enter'){
-        switch (type) {
-          case 'child':
-            this._push(this.state.add,this.props.father);
-            break;
-          case 'sub':
-            this._push(this.state.addSub[index],[this.props.childs[index]])
-            break;
-          case 'edit':
-            this._editTopic(index);
-            break;
-          case 'first':
-            this._push(this.state.add,[]);
-            this.setState({childs: [this.state.add]});
-            break;
-          default:
-            console.log(type);
-        }
-      }
-    }
-
-    _editTopic(index) {
-      db.get({_id: this.props.uri})
-        .then(data => {
-          Object.assign(data.topics[this.props.childs[index]], {name: this.state.copy[index]});
-          return data
-        })
-        .then(db.post)
-        .catch(_error);
-    }
-
-    _deleteChild(index) {
-      let listDelete = [];
-      listDelete = this.collectChilds(this.props.childs[index],listDelete);
-      this.deleteTop(listDelete);
-      let childs = this.state.childs.slice(0,0);
-      this.setState({childs : childs});
-    }
-
-    deleteTop(list){
-      db.get({_id: this.props.uri})
-        .then(data => {
-          list.forEach(e =>
-          delete data.topics[e]);
-          return data
-        })
-        .then(db.post)
-        .then(() => {
-          let childs = this.state.childs.slice(0,0);
-          this.setState({childs : childs})
-        })
-        .catch(_error);
-      }
-
-    collectChilds(e,list) {
-      if (this.props.data.fathers[e] !== undefined) {
-        this.props.data.fathers[e].map(c => {
-          list = this.collectChilds(c,list);
-        });
-      }
-      list.push(e);
-      return list;
-    }
-
-    _push(name,broader) {
-      var id = makeID();
-      if (name !== ""){
-        var newTopic = {name : name, broader : broader};
-        db.get({_id: this.props.uri})
-          .then(data => {
-            Object.assign(data.topics, {[id] : newTopic});
-            return data
-          })
-          .then(db.post)
-          .then(() => this.setState({add : ''}))
-          .catch(_error);
-      }
-    }
-
-    display(idx) {
-      if (!this.state.edit) {
-        return this.state.childs[idx]
-      } else {
-        return this.state.copy[idx]
-      }
-    }
-
-    render() {
-      if (Array.isArray(this.props.childs) && !this.props.stop) {
-        this.state.copy = this.state.childs.slice();
-        this.state.childs = this.state.childs.slice(0,0);
-        var childs = this.props.childs.map((e, idx) =>
-          (typeof this.props.data.fathers[e] === "object") ?
-          (this.state.childs.push(this.props.data.topics[e].name),
-          <li key={e} className='outliner'>
-            <a className='remove' onClick={(e) => this._deleteChild(idx)}>
-              🗑&nbsp;
-            </a>
-            <input type="text" value={this.display(idx)} onChange={this.handleChange.bind(this, 'edit', idx)} onKeyPress={this.handleKeyPress.bind(this, 'edit', idx)}/>
-            <ul className='outliner'>
-              {this._getChilds(e)}
-            </ul>
-          </li>)
-          : (this.state.childs.push(this.props.data.topics[e].name),
-          <li key={e} className='outliner'>
-            <a className='remove' onClick={(e) => this._deleteChild(idx)}>
-              🗑&nbsp;
-            </a>
-            <input type="text" value={this.display(idx)} onChange={this.handleChange.bind(this, 'edit', idx)} onKeyPress={this.handleKeyPress.bind(this,'edit',idx)}/>
-            <ul className='outliner'>
-              <li key={idx} className='add'>
-                <input type="text" value={this.state.addSub[idx]} onChange={this.handleChange.bind(this, 'sub', idx)} onKeyPress={this.handleKeyPress.bind(this, 'sub',idx)}/>
-              </li>
-            </ul>
-          </li>));
-      return (
-      <ul>
-        <li className='add'>
-          <input type="text" value={this.state.add} onChange={this.handleChange.bind(this, 'add', 0)} onKeyPress={this.handleKeyPress.bind(this,'child',0)}/>
-        </li>
-        {childs}
-      </ul>);
-    } else {
-      return(
-      <li className='add'>
-        <a className='add' onClick={(e) => this._push(this.state.add,[])}>+&nbsp;</a>
-        <input type="text" value={this.state.add} onChange={this.handleChange.bind(this, 'add', 0)} onKeyPress={this.handleKeyPress.bind(this,'first',0)}/>
-      </li>);
-    }
-  }
-
-  _getChilds(e) {
-    return (<Tree childs={this.props.data.fathers[e]} father={[e]} data={this.props.data} uri={this.props.uri} stop={this.state.stop}/>);
-  }
-
 }
 
 export default Outliner;
