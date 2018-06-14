@@ -5,6 +5,7 @@ import Hypertopic from 'hypertopic';
 import conf from '../../config/config.json';
 import Viewpoint from '../Viewpoint/Viewpoint.jsx';
 import Corpora from '../Corpora/Corpora.jsx';
+import ViewpointCreator from '../Viewpoint/ViewpointCreator.jsx';
 
 import '../../styles/App.css';
 
@@ -18,7 +19,7 @@ class Portfolio extends Component {
       selectedItems: [],
       topicsItems: new Map()
     };
-    this.user = conf.user || location.hostname.split('.', 1)[0];
+    this.user = conf.user || window.location.hostname.split('.', 1)[0];
     this._updateSelection();
   }
 
@@ -32,6 +33,7 @@ class Portfolio extends Component {
         <div className="Status">{status}</div>
         <div className="App-content">
           <div className="Description">
+            <ViewpointCreator />
             {viewpoints}
           </div>
           {corpora}
@@ -77,7 +79,7 @@ class Portfolio extends Component {
   }
 
   _updateSelection() {
-    let selection = queryString.parse(location.search).t;
+    let selection = queryString.parse(window.location.search).t;
     this.selection = (selection instanceof Array)? selection
       : (selection)? [selection]
       : [];
