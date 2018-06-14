@@ -70,7 +70,7 @@ function getBullet(x) {
   switch (x) {
     case 'Closed': return {className: 'oi oi-caret-right cursor-pointer', title: 'Déplier'};
     case 'Opened': return {className: 'oi oi-caret-bottom cursor-pointer', title: 'Replier'};
-    default: return {className: 'oi oi-minus', title: ''};
+    default: return {className: 'oi leaf', title: ''};
   }
 }
 export default Topic;
