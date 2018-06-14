@@ -27,13 +27,6 @@ h1 a, h1 a:hover {
   padding: 4px;
 }
 
-.Status a {
-  color: ivory;
-  display: block;
-  padding: 0 1rem;
-  text-align: left;
-}
-
 .App-content {
   min-height: 100vh;
 }
@@ -172,19 +165,26 @@ h1 a, h1 a:hover {
   font-weight: bold;
 }
 
-.TopicTag {
+.TopicTag, .TopicTag[href], .TopicTag[href]:hover {
+  background-color: #f8f9fa;
+  color: #212529;
+  display: inline-block;
   margin: 0 .3em;
 }
 
-.TopicTag > a {
+.TopicTag > .badge-pill {
   border-radius: 100%;
   display: inline-block;
   font-size: 50%;
   opacity: .9;
-  padding: .3em .5em .5em;
+  padding: .4em .5em .5em;
   vertical-align: top;
 }
 
-.TopicTag > a:hover {
+.TopicTag > .badge-pill.oi-x {
+  padding-top: .3em;
+}
+
+.TopicTag > .badge-pill:hover {
   opacity: 1;
 }

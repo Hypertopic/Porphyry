@@ -21,7 +21,9 @@ class Item extends Component {
     return (
       <div className="App container-fluid">
         <Header />
-        <div className="Status row h5"><Link to="/">Retour à l'accueil</Link></div>
+        <div className="Status row h5"><Link to="/" className="badge badge-pill badge-light TopicTag">
+          <span className="badge badge-pill badge-dark oi oi-chevron-left"> </span> Retour à l'accueil
+        </Link></div>
         <div className="container-fluid">
           <div className="App-content row">
             <div className="col-md-4 p-4">
