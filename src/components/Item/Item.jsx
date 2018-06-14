@@ -133,12 +133,7 @@ class Item extends Component {
 
   _assignTopic(topicToAssign, viewpointId) {
     let hypertopic = new Hypertopic(conf.services);
-    const ressourceId = this.state.resource[0].substr(
-      this.state.resource[0].lastIndexOf('/') + 1
-    );
-
-    return hypertopic
-      .get({ _id: ressourceId })
+    return hypertopic.get({ _id: this.props.match.params.item })
       .then(data => {
         data.topics[topicToAssign.id] = { viewpoint: viewpointId };
         return data;
