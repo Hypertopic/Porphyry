@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import by from 'sort-by';
 import queryString from 'query-string';
 import Hypertopic from 'hypertopic';
@@ -79,9 +80,25 @@ class Portfolio extends Component {
   _getStatus() {
     let topics = this.selection.map(t => {
       let topic = this._getTopic(t);
-      return (topic)? topic.name : 'Thème inconnu';
+      if (!topic) {
+          return 'Thème inconnu';
+      }
+      let uri = '?' + queryString.stringify({
+        t: this._toggleTopic(this.selection, t)
+      });
+      return <span className="badge badge-pill badge-light TopicTag">
+        {topic.name} <Link to={uri} className="badge badge-pill badge-dark oi oi-x" title="Fermer"> </Link>
+      </span>;
     });
-    return topics.join(' + ') || 'Tous les items';
+    return topics.length ? topics : 'Tous les items';
+  }
+
+  _toggleTopic(array, item) {
+    let s = new Set(array);
+    if (!s.delete(item)) {
+      s.add(item);
+    }
+    return [...s];
   }
 
   _updateSelection() {
