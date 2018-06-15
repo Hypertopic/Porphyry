@@ -53,8 +53,8 @@
   margin: 1px;
 }
 
-.Topics,
-.Attributes {
+
+.Topics, .Attributes, .Outliner{
   background-color: whitesmoke;
   color: black;
 }
@@ -149,6 +149,18 @@
   font-weight: bold;
 }
 
+
+.Outliner {
+  margin: 0;
+  font-size: 20px;
+  text-align: left;
+  text-indent: 100px;
+}
+
+.Outliner ul {
+  background-color: whitesmoke;
+}
+
 .TopicAdding {
   padding-top: 5px;
   display: flex;
@@ -171,6 +183,7 @@
 .TopicValidateButton[disabled] {
   background-color: #cccccc;
 }
+
 .TopicCancelButton {
   font-size: 14px;
   text-align: center;
@@ -191,9 +204,77 @@
 .react-autosuggest__input {
   width: 17vw;
 }
+
 .DeleteTopicButton {
   margin-left: 5px;
   align-self: center;
   background-color: rgb(153, 51, 0);
   color: ivory;
 }
+
+.DescriptionModality.ViewpointCreator a{
+  color: ivory;
+}
+.DescriptionModality.ViewpointCreator:hover {
+  background-color: darkred;
+  cursor: pointer;
+}
+
+.Return {
+  position: fixed;
+  width:60px;
+	height:60px;
+	bottom:40px;
+	right:40px;
+}
+
+.f-no-select {
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.m-tree {
+  position: relative;
+  overflow: hidden;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.m-draggable {
+  position: absolute;
+  opacity: 0.8;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.m-node.placeholder > * {
+  visibility: hidden;
+}
+.m-node.placeholder {
+  border: 1px dashed #ccc;
+}
+.m-node .inner {
+  position: relative;
+  cursor: pointer;
+  padding-left: 10px;
+}
+.m-node .collapse {
+  position: absolute;
+  left: 0;
+  cursor: pointer;
+}
+.m-node .caret-right:before {
+  content: '\25B8';
+}
+.m-node .caret-down:before {
+  content: '\25BE';
+}
+
+.wrap:hover button{display: inherit;margin-right: 10px;z-index: 999}
+.wrap button{display:none;}

@@ -3,13 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "classnames": "^2.2.6",
+    "deep-equal": "^1.0.1",
     "hypertopic": "^3.1.2",
+    "js-tree": "^2.0.1",
     "json-groupby": "^1.0.2",
     "query-string": "^4.3.4",
-    "react": "^15.5.4",
+    "react": "^16.4.0",
     "react-autosuggest": "^9.3.4",
-    "react-dom": "^15.5.4",
+    "react-dom": "^16.4.0",
     "react-router-dom": "^4.1.1",
+    "react-ui-tree-porphyry": "^1.0.3",
     "sort-by": "^1.2.0"
   },
   "devDependencies": {

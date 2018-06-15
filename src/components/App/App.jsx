@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Portfolio from '../Portfolio/Portfolio.jsx';
 import Item from '../Item/Item.jsx';
+import Outliner from '../Outliner/Outliner.js';
 
 class App extends React.Component {
 
@@ -10,6 +11,7 @@ class App extends React.Component {
       <Router>
         <Switch>
           <Route path="/item/:corpus/:item" component={Item} />
+          <Route path="/viewpoint/:id" component={Outliner} />
           <Route path="/" component={Portfolio} />
         </Switch>
       </Router>
