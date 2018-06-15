@@ -1,6 +1,6 @@
 #language: fr
 
-Fonctionnalité: Create a sibling topic
+Fonctionnalité: Créer une soeur d'une catégorie
 
 Scénario: Créer une soeur à une catégorie
 Soit l`utilisateur dans la page de modification du point de vue "Histoire de l'art"
