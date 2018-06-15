@@ -278,3 +278,17 @@
 
 .wrap:hover button{display: inherit;margin-right: 10px;z-index: 999}
 .wrap button{display:none;}
+
+.Article {
+  border-bottom: 1px solid #DDD;
+  color: black;
+  display: block;
+  margin: 1em;
+  text-align: left;
+  width: 100%;
+}
+
+.ArticleTitle {
+  font-weight: bold;
+}
+
