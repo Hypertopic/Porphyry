@@ -87,7 +87,7 @@ class Portfolio extends Component {
         t: this._toggleTopic(this.selection, t)
       });
       return <span className="badge badge-pill badge-light TopicTag">
-        {topic.name} <Link to={uri} className="badge badge-pill badge-dark oi oi-x" title="Fermer"> </Link>
+        {topic.name} <Link to={uri} className="badge badge-pill badge-dark oi oi-x" title="Déselectionner"> </Link>
       </span>;
     });
     return topics.length ? topics : 'Tous les items';
