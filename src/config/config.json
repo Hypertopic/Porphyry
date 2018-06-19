@@ -3,5 +3,9 @@
   "services": [
     "http://argos2.test.hypertopic.org",
     "http://steatite.hypertopic.org"
+  ],
+  "reservedViewpoints": [
+    "Histoire de l'art",
+    "Histoire des religions"
   ]
 }

@@ -278,3 +278,7 @@
 
 .wrap:hover button{display: inherit;margin-right: 10px;z-index: 999}
 .wrap button{display:none;}
+
+.ViewpointDeletor {
+  cursor: pointer;
+}
