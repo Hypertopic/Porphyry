@@ -23,3 +23,8 @@ Scénario: Visualiser le point de vue créé
 Soit l'utilisateur ouvre la page de création de nouveau point de vue
 Quand l'utilisateur revient au portfolio
 Alors le portfolio contient le nom de point de vue
+
+Scénario: Faire de ménage
+
+Quand l`utilisateur finit ce test
+Alors le point de vue créé est supprimé

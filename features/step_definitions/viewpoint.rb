@@ -75,3 +75,11 @@ end
 Alors("le portfolio contient le nom de point de vue") do
   expect(page).to have_content(viewpoint)
 end
+
+Alors("le point de vue créé est supprimé") do
+  visit "/"
+  accept_alert do
+    find("h3", text: viewpoint).find(:css, ".ViewpointDeletor").click
+  end
+  expect(page).not_to have_content(viewpoint)
+end
