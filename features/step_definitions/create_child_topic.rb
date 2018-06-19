@@ -7,6 +7,7 @@ Capybara.app_host = "http://localhost:3000"
 Capybara.default_max_wait_time = 10
 
 Quand("l`utilisateur crée la catégorie {string} sous le point de vue {string}") do |daughter, parent|
+  expect(page).to have_css("span", :text => parent)
   page.find('span', text: parent).hover
   click_on('➕')
   find('input').set(daughter)
@@ -14,6 +15,7 @@ Quand("l`utilisateur crée la catégorie {string} sous le point de vue {string}"
 end
 
 Quand("l`utilisateur crée la catégorie {string} sous {string}") do |daughter, parent|
+  expect(page).to have_css("span", :text => parent)
   page.find('span', text: parent).hover
   click_on('➕')
   find('input').set(daughter)
