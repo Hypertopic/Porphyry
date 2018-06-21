@@ -13,11 +13,16 @@ class Corpora extends Component {
 
   render() {
     let items = this._getItems();
+    let count = this.props.items.length;
+    let total = this.props.from;
     return(
-      <div className="Subject">
-        <div>
-          <h3>{this.props.ids.join(' + ')} ({this.props.items.length}/{this.props.from})</h3>
-          <div className="Items">
+      <div className="col-md-8 p-4">
+        <div className="Subject">
+          <h2 className="h4 font-weight-bold text-center">
+            {this.props.ids.join(' + ')}
+            <span className="badge badge-pill badge-light ml-4">{count} / {total}</span>
+          </h2>
+          <div className="Items m-3">
             {items}
           </div>
         </div>
@@ -53,8 +58,8 @@ function getString(obj) {
 }
 
 function Article(item) {
-  let propList = listView.props.map(key => {
-    return <li><strong>{key}</strong>: {getString(item[key])}</li>;
+  let propList = (listView.props || []).map(key => {
+    return <li>{key} : <strong>{getString(item[key])}</strong></li>;
   });
 
   let uri = `/item/${item.corpus}/${item.id}`;
@@ -76,7 +81,7 @@ function Picture(item) {
       <Link to={uri}>
         <img src={img} alt={name}/>
       </Link>
-      <div>{name}</div>
+      <div className="text-center">{name}</div>
     </div>
   );
 }
