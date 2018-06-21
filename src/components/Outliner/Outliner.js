@@ -26,13 +26,13 @@ class Outliner extends React.Component {
 
   constructor() {
     super();
-    this.state = { stop: true, title: '', nextTitle: '', t_data: false, active: null };
+    this.state = { stop: true, title: '', t_data: false, active: null };
     this.user = conf.user || window.location.hostname.split('.', 1)[0];
   }
 
   render() {
     let status = this._getStatus();
-    let helper = (this.state.title && "Press CTRL to drag and drop");
+    let helper = (this.state.title && "Appuyer CTRL pour glisser déposer");
     return (
       <div className="App container-fluid">
         <Header />
@@ -46,7 +46,7 @@ class Outliner extends React.Component {
                 <h2 className="h4 font-weight-bold text-center">{status}</h2>
                 <div className="h6 font-weight-bold text-center mb-0 mt-4">{helper}</div>
                 <div className="p-3">
-                  {this._getTitle()}
+                  {this._getTitleCreator()}
                   <div className="Outliner">
                     {this.state.t_data ? <Tree tree={this.state.t_data} renderNode={this.renderNode} onChange={this.handleChange} isNodeCollapsed={this.isNodeCollapsed} /> : null}
                   </div>
@@ -59,24 +59,24 @@ class Outliner extends React.Component {
     );
   }
 
-  _getTitle() {
-    if (this.state.title) {
-      return this.state.title;
-    } else {
+  _getTitleCreator() {
+    if (!this.state.title) {
       return (
         <form className="input-group" onSubmit={(e) => this._newVP(e)}>
-          <input type="text" name="newTitle" className="form-control" placeholder="Nom du point de vue" value={this.state.nextTitle} onChange={this.addTitle.bind(this)} onKeyPress={this.handleKeyPressOnTitle.bind(this)} />
+          <input type="text" name="newTitle" className="form-control" placeholder="Nom du point de vue" />
           <div className="input-group-append">
             <button type="submit" className="btn add btn-sm btn-light"><span className="oi oi-plus"> </span></button>
           </div>
         </form>
       );
+    } else {
+      return null;
     }
   }
 
   _getStatus() {
     if (this.state.title) {
-      return "Modification du point de vue (Press CTRL to drag and drop)";
+      return "Modification du point de vue";
     } else {
       return "Création du point de vue";
     }
@@ -140,19 +140,19 @@ class Outliner extends React.Component {
       }
     };
     if (node.edit) {
-      controls.push(<input type='text' defaultValue={node.module} onKeyPress={handleInput} />);
+      controls.push(<input type='text' defaultValue={node.module} onKeyPress={handleInput} key="input" />);
     } else {
       controls.push(node.module);
     }
     if (nodeIndex !== 1) {
-      controls.push(<button className="btn btn-xs btn-light" onMouseUp={() => removeNodeByID(nodeIndex)}>
+      controls.push(<button className="btn btn-xs btn-light" onMouseUp={() => removeNodeByID(nodeIndex)} key="delete">
         <span className="oi oi-x"> </span>
       </button>);
     }
-    controls.push(<button className="btn btn-xs btn-light" onMouseUp={() => { node.edit = true }}>
+    controls.push(<button className="btn btn-xs btn-light" onMouseUp={() => { node.edit = true }} key="edit">
       <span className="oi oi-pencil"> </span>
     </button>);
-    controls.push(<button className="btn btn-xs btn-light" onMouseUp={() => addNode(nodeIndex, { id: makeID(), edit: true, module: '' })}>
+    controls.push(<button className="btn btn-xs btn-light" onMouseUp={() => addNode(nodeIndex, { id: makeID(), edit: true, module: '' })} key="newchild">
       <span className="oi oi-plus"> </span>
     </button>);
     return (<div onClick={this.onClickNode.bind(null, node)} className="wrap">

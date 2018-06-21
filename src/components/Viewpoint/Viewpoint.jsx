@@ -18,10 +18,11 @@ class Viewpoint extends Component {
     let outliner = this._getOutliner();
     return (
       <div>
+        {this.props.index > 0 ? <hr/> : null}
         <h3 className="h4">
           {this.props.viewpoint.name}
-          <a class="outliner btn btn-sm btn-light float-right" href={outliner}>
-            <span class="oi oi-pencil"> </span>
+          <a className="outliner btn btn-sm btn-light float-right" href={outliner}>
+            <span className="oi oi-pencil"> </span>
           </a>
           {
             this._isReserved() ? null :
