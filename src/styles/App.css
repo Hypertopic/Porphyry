@@ -138,9 +138,11 @@ h1 a, h1 a:hover {
   font-weight: bold;
 }
 
-.TopicPath {
-  display: flex;
-  flex-direction: row;
+.TopicPath > .DeleteTopicButton, .Attribute > .DeleteTopicButton {
+  visibility: hidden;
+}
+.TopicPath:hover > .DeleteTopicButton, .Attribute:hover > .DeleteTopicButton {
+  visibility: visible;
 }
 
 .TopicPath > .Topic:not(:last-of-type) {
@@ -189,12 +191,6 @@ h1 a, h1 a:hover {
   opacity: 1;
 }
 
-.Outliner {
-  margin: 0;
-  font-size: 20px;
-  text-align: left;
-}
-
 .Outliner ul {
   background-color: whitesmoke;
 }
@@ -207,8 +203,13 @@ h1 a, h1 a:hover {
   width: 100%;
 }
 
-.TopicValidateButton, .TopicCancelButton {
+.TopicCancelButton {
   background-color: #8b0000;
+  color: ivory;
+}
+
+.TopicValidateButton {
+  background-color: #f1bb5b;
   color: ivory;
 }
 
@@ -233,17 +234,16 @@ h1 a, h1 a:hover {
   color: ivory;
 }
 
-.creationButton, .deleteButton {
-  background: white;
+.creationButton {
   margin-bottom: 1rem;
 }
 
 .Return {
   position: fixed;
   width:60px;
-	height:60px;
-	bottom:40px;
-	right:40px;
+  height:60px;
+  bottom:40px;
+  right:40px;
 }
 
 .f-no-select {
@@ -296,14 +296,31 @@ h1 a, h1 a:hover {
 }
 
 .wrap {
-  height: 34px;
-}
-.wrap:hover button {
-  display: inherit;
-  margin-right: 10px;
-  z-index: 999
+  min-height: 34px;
 }
 .wrap button {
   display: none;
+  margin-left: 10px;
+}
+.wrap:hover button {
+  display: inherit;
+}
+
+.btn-xs {
+  border-radius: .2rem;
+  font-size: .6rem;
+  line-height: 1.5;
+  padding: .15rem .3rem;
+}
+
+.btn-light {
+  border-color: #dddddd;
+}
+
+.btn.add, .input-group-append .btn {
+  border: 1px solid #ced4da;
+}
+.btn:not(.btn-xs) .oi {
+  vertical-align: middle;
 }
 

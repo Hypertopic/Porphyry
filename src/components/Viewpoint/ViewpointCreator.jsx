@@ -12,11 +12,11 @@ function makeID() {
 
 class ViewpointCreator extends Component {
   render() {
-    return (
-      <button className="btn btn-block creationButton" onClick={_ => this._goToNewViewpoint()}>
+    return (<div className="text-center">
+      <button className="btn btn-light creationButton" onClick={_ => this._goToNewViewpoint()}>
         Nouveau point de vue
       </button>
-    );
+    </div>);
   }
 
   _goToNewViewpoint() {

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Hypertopic from 'hypertopic';
 import conf from '../../config/config.json';
 import Tree from 'react-ui-tree-porphyry';
@@ -31,15 +32,19 @@ class Outliner extends React.Component {
 
   render() {
     let status = this._getStatus();
+    let helper = (this.state.title && "Press CTRL to drag and drop");
     return (
       <div className="App container-fluid">
         <Header />
-        <div className="Status row h5 text-center">{status}</div>
+        <div className="Status row h5"><Link to="/" className="badge badge-pill badge-light TopicTag">
+          <span className="badge badge-pill badge-dark oi oi-chevron-left"> </span> Retour à l'accueil
+        </Link></div>
         <div className="container-fluid">
           <div className="App-content row">
             <div className="col-md-4 p-4">
               <div className="Description">
-                <h2 className="h4 font-weight-bold text-center">Point de vue</h2>
+                <h2 className="h4 font-weight-bold text-center">{status}</h2>
+                <div className="h6 font-weight-bold text-center mb-0 mt-4">{helper}</div>
                 <div className="p-3">
                   {this.state.title ? '' : this._getTitle()}
                   <div className="Outliner">
@@ -50,29 +55,22 @@ class Outliner extends React.Component {
             </div>
           </div>
         </div>
-        <button className="Return" onClick={this._returnHome}>
-          🏠
-        </button>
       </div>
     );
-  }
-
-  _returnHome() {
-    window.location = '/';
   }
 
   _getTitle() {
     return (<form className="input-group" onSubmit={(e) => this._newVP(e)}>
       <input type="text" name="newTitle" className="form-control" placeholder="Nom du point de vue" />
       <div className="input-group-append">
-        <button type="submit" className="btn add">+</button>
+        <button type="submit" className="btn add btn-sm btn-light"><span className="oi oi-plus"> </span></button>
       </div>
     </form>);
   }
 
   _getStatus() {
     if (this.state.title !== undefined) {
-      return "Modification du point de vue (Press CTRL to drag and drop)";
+      return "Modification du point de vue";
     } else {
       return "Création du point de vue";
     }
@@ -122,18 +120,36 @@ class Outliner extends React.Component {
   };
 
   renderNode = (node, nodeIndex, removeNodeByID, addNode, forceChange) => {
-    return (
-      <div
-        onClick={this.onClickNode.bind(null, node)}
-        className="wrap">
-        <span>
-          {node.edit ? <input type='text' defaultValue={node.module} onKeyPress={(e) => { if (e.key === 'Enter') { let m = e.target.value; if (m === '') return null; else node.module = m; node.edit = false; this.setState({ update: true }); forceChange(); } }} /> : node.module}&nbsp;&nbsp;
-         {nodeIndex !== 1 ? <button className="btn btn-sm" onMouseUp={() => { removeNodeByID(nodeIndex) }}>❌</button> : null}
-          <button className="btn btn-sm" onMouseUp={() => { node.edit = true }}>✏️</button>
-          <button className="btn btn-sm" onMouseUp={() => { let node = { id: makeID(), edit: true, module: '' }; addNode(nodeIndex, node) }}>➕</button>
-        </span>
-      </div>
-    );
+    let controls = [];
+    let handleInput = (e) => {
+      if (e.key === 'Enter') {
+        let m = e.target.value;
+        if (m === '') return null;
+        node.module = m;
+        node.edit = false;
+        this.setState({ update: true });
+        forceChange();
+      }
+    };
+    if (node.edit) {
+      controls.push(<input type='text' defaultValue={node.module} onKeyPress={handleInput} />);
+    } else {
+      controls.push(node.module);
+    }
+    if (nodeIndex !== 1) {
+      controls.push(<button className="btn btn-xs btn-light" onMouseUp={() => removeNodeByID(nodeIndex)}>
+        <span className="oi oi-x"> </span>
+      </button>);
+    }
+    controls.push(<button className="btn btn-xs btn-light" onMouseUp={() => { node.edit = true }}>
+      <span className="oi oi-pencil"> </span>
+    </button>);
+    controls.push(<button className="btn btn-xs btn-light" onMouseUp={() => addNode(nodeIndex, {id: makeID(), edit: true, module: ''})}>
+      <span className="oi oi-plus"> </span>
+    </button>);
+    return (<div onClick={this.onClickNode.bind(null, node)} className="wrap">
+      <span>{controls}</span>
+    </div>);
   };
 
   applyChange(tree) {
