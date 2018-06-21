@@ -4,82 +4,53 @@ require 'selenium/webdriver'
 Capybara.run_server = false
 Capybara.default_driver = :selenium_chrome_headless
 Capybara.app_host = "http://localhost:3000"
-Capybara.default_max_wait_time = 10
-
-def id()
-  s = [*'a'..'z', *'A'..'Z', *'0'..'9'].shuffle[0, 8].join
-end
-
-def clickOnNewViewpointCreatorButton
-  find(".creationButton").click
-end
-
-viewpoint = "test" + id()
-
-viewpointTextField = ".App-content .Description input[name='newTitle']"
-viewpointTitle = ".Outliner"
-buttonReturn = "a.TopicTag[href='/']"
+Capybara.default_max_wait_time = 20
 
 # Conditions
 
-Soit("l'utilisateur ouvre la page d'accueil du site") do
+Soit("l`utilisateur dans le portfolio") do
   visit "/"
-end
-
-Soit("un nouveau nom de point de vue généré") do
-  true
-end
-
-Soit("l'utilisateur ouvre la page de création de nouveau point de vue") do
-  visit "/"
-  clickOnNewViewpointCreatorButton()
 end
 
 # Events
 
-Quand("l'utilisateur crée un nouveau point de vue") do
-  clickOnNewViewpointCreatorButton()
+Quand("l`utilisateur clique le bouton Nouveau point de vue") do
+  find("button", text: "Nouveau point de vue").click
 end
 
-Quand("l'utilisateur entre le nom de point de vue") do
-  find(:css, viewpointTextField).set(viewpoint)
-  find(:css, viewpointTextField).native.send_keys(:return)
+Quand("l`utilisateur entre {string} comme le nom de point de vue et tappe Entrée") do |vp|
+  find("input[name='newTitle']").set(vp).native.send_keys(:return)
+end
+
+Quand("l`utilisateur clique le bouton de modification de point de vue {string} et ouvre la page de modification de point de vue") do |vp|
+  find("h3", text: vp).find("a span.oi-pencil").click
+end
+
+Quand("l`utilisateur clique le bouton de modification à côté de {string}") do |string|
+  find("span", text: string).hover.find("span.oi-pencil").click
+end
+
+Quand("l`utilisateur change {string} en {string} et tappe Entrée") do |string, string2|
+  find("input[value='" + string + "']").set(string2).native.send_keys(:return)
+end
+
+Quand("l`utilisateur revient au portfolio en cliquant Retour à l'accueil") do
+  find("a", text: "Retour à l'accueil").click
+  page.evaluate_script 'window.location.reload()'
+end
+
+Quand("l`utilisateur clique le bouton de suppression de point de vue {string} et accept l'avertissement") do |string|
+  accept_alert do
+    find("h3", text: string).find("a span.oi-circle-x").click
+  end
 end
 
 # Outcomes
 
-Alors("la page de point de vue s'ouvre") do
-  expect(page).to have_current_path(/\/viewpoint\/\w+/)
-end
+Alors("le point de vue {string} est affiché") do |vp|
+  expect(page).to have_css("h3", text: vp)
+end  
 
-Alors("la page de point de vue contient un champ de texte") do
-  expect(page).to have_css(viewpointTextField)
-end
-
-Alors("la page contient un bouton de retour") do
-  expect(page).to have_css(buttonReturn)
-end
-
-Alors("le champ de texte disparaît") do
-  expect(page).not_to have_css(viewpointTextField)
-end
-
-Alors("le nom du point de vue est affiché") do
-  expect(page).to have_selector(viewpointTitle, text: /#{viewpoint}/i)
-end
-
-Quand("l'utilisateur revient au portfolio") do
-  find(buttonReturn).click
-end
-
-Alors("le portfolio contient le nom de point de vue") do
-  expect(page).to have_content(viewpoint)
-end
-
-Alors("le point de vue créé est supprimé") do
-  visit "/"
-  accept_alert do
-    find("h3", text: viewpoint).find(:css, ".ViewpointDeletor").click
-  end
-  expect(page).not_to have_content(viewpoint)
+Alors("le point de vue {string} n'est plus affiché") do |string|
+  expect(page).not_to have_css("h3", text: string)
 end
