@@ -207,7 +207,7 @@
   color: ivory;
 }
 
-.creationButton {
+.creationButton, .deleteButton {
   background: white;
   margin-bottom: 1rem;
 }
