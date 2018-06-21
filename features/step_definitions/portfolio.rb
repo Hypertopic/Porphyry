@@ -63,7 +63,7 @@ Soit("{string} le portfolio ouvert") do |portfolio|
 end
 
 Soit("{string} une des rubriques développées") do |topic|
-  find_link(topic).sibling('.Bullet').click
+  find_link(topic).sibling('.oi').click
 end
 
 
@@ -124,7 +124,7 @@ Alors("un des corpus affichés est {string}") do |corpus|
 end
 
 Alors("il doit y avoir au moins {int} items sélectionnés décrits par {string}") do |itemsNb, topic|
-  expect(find_link(topic).sibling('span').text.scan(/\d+/)[0].to_i).to be >= itemsNb
+  expect(find_link(topic).sibling('.badge').text.scan(/\d+/)[0].to_i).to be >= itemsNb
 end
 
 Alors("les rubriques surlignées sont au nombre de {int}") do |topicNb|

@@ -18,7 +18,7 @@ viewpoint = "test" + id()
 
 viewpointTextField = ".App-content .Description input[name='newTitle']"
 viewpointTitle = ".Outliner"
-buttonReturn = "button.Return"
+buttonReturn = "a.TopicTag[href='/']"
 
 # Conditions
 
@@ -56,7 +56,7 @@ Alors("la page de point de vue contient un champ de texte") do
   expect(page).to have_css(viewpointTextField)
 end
 
-Alors("la page de point de vue contient un bouton homepage") do
+Alors("la page contient un bouton de retour") do
   expect(page).to have_css(buttonReturn)
 end
 
