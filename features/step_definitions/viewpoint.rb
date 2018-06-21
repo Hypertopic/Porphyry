@@ -11,14 +11,14 @@ def id()
 end
 
 def clickOnNewViewpointCreatorButton
-  find(".ViewpointCreator a").click
+  find(".creationButton").click
 end
 
 viewpoint = "test" + id()
 
-viewpointTextField = ".App h1 input[type='text']"
-viewpointHeader = ".App h1"
-buttonReturn = "button.Return"
+viewpointTextField = ".App-content .Description input[name='newTitle']"
+viewpointTitle = ".Outliner"
+buttonReturn = "a.TopicTag[href='/']"
 
 # Conditions
 
@@ -52,11 +52,11 @@ Alors("la page de point de vue s'ouvre") do
   expect(page).to have_current_path(/\/viewpoint\/\w+/)
 end
 
-Alors("la page de point de vue contient un champ de texte dans le titre") do
+Alors("la page de point de vue contient un champ de texte") do
   expect(page).to have_css(viewpointTextField)
 end
 
-Alors("la page de point de vue contient un bouton homepage") do
+Alors("la page contient un bouton de retour") do
   expect(page).to have_css(buttonReturn)
 end
 
@@ -64,8 +64,8 @@ Alors("le champ de texte disparaît") do
   expect(page).not_to have_css(viewpointTextField)
 end
 
-Alors("le titre de page devient le nom de point de vue") do
-  expect(page).to have_selector(viewpointHeader, text: /#{viewpoint}/i)
+Alors("le nom du point de vue est affiché") do
+  expect(page).to have_selector(viewpointTitle, text: /#{viewpoint}/i)
 end
 
 Quand("l'utilisateur revient au portfolio") do

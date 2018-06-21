@@ -17,19 +17,20 @@ class Viewpoint extends Component {
     let topics = this._getTopics();
     let outliner = this._getOutliner();
     return (
-      <div className="DescriptionModality">
-        <h3>
+      <div>
+        <h3 className="h4">
           {this.props.viewpoint.name}
-          <a className='outliner' href={outliner}>
-            ✏️
+          <a class="outliner btn btn-sm btn-light float-right" href={outliner}>
+            <span class="oi oi-pencil"> </span>
           </a>
           {
             this._isReserved() ? null :
-              <a className='ViewpointDeletor' onClick={this._onDeleteHandler.bind(this)}>
-                ❌
+              <a className='outliner btn btn-sm btn-light float-right' onClick={this._onDeleteHandler.bind(this)}>
+                <span className="oi oi-circle-x"></span>
               </a>
           }
         </h3>
+        <hr/>
         <div className="Topics">
           <ul>
             {topics}
