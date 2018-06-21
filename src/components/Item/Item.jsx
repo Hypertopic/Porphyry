@@ -5,6 +5,8 @@ import groupBy from 'json-groupby';
 import Autosuggest from 'react-autosuggest';
 import conf from '../../config/config.json';
 import Header from '../Header/Header.jsx';
+import getConfig from '../../config/config.js'
+import FacebookProvider, { Comments } from 'react-facebook';
 
 import '../../styles/App.css';
 
@@ -17,6 +19,11 @@ class Item extends Component {
       isCreatable: false,
       topic: []
     };
+    // Read Facebook comment config file
+    this.fbConfig = getConfig("facebookComment", {
+      "enable":false,
+      "Appid":null
+    });
     // These bindings are necessary to make `this` work in the callback
     this._assignTopic = this._assignTopic.bind(this);
     this._removeTopic = this._removeTopic.bind(this);
@@ -28,6 +35,7 @@ class Item extends Component {
   render() {
     let attributes = this._getAttributes();
     let viewpoints = this._getViewpoints();
+    let comment = this._getFacebookComment();
     let attributeButtonLabel = this.state.isCreatable? 'Valider' : 'Ajouter un attribut';
     let attributeForm = this.state.isCreatable? this._getAttributeCreationForm() : '';
     return (
@@ -52,6 +60,7 @@ class Item extends Component {
                     {attributeForm}
                   </div>
                   {viewpoints}
+                  {comment}
                 </div>
               </div>
             </div>
@@ -69,6 +78,24 @@ class Item extends Component {
         </div>
       </div>
     );
+  }
+
+  _getFacebookComment(){
+    if(this.fbConfig.enable) {
+      let c_url = String(this.state.resource);
+      return (
+        <div>
+          <hr/>
+          <h3 className="h4">Commentaire du document</h3>
+          <hr/>
+          <FacebookProvider appId={this.fbConfig.Appid}>
+            <Comments href={c_url} />
+          </FacebookProvider>
+        </div>
+      );
+    } else {
+      return null;
+    }
   }
 
   _getAttributes() {

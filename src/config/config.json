@@ -3,5 +3,13 @@
   "services": [
     "http://argos2.test.hypertopic.org",
     "http://steatite.hypertopic.org"
-  ]
+  ],
+  "customization": {
+    "vitraux": {
+      "facebookComment":{
+        "enable":true,
+        "Appid":"566160170436215"
+      }
+    }
+  }
 }
