@@ -5,7 +5,7 @@ import conf from '../../config/config.json';
 class Header extends Component {
   constructor() {
     super();
-    this.user = conf.user || location.hostname.split('.', 1)[0];
+    this.user = conf.user || window.location.hostname.split('.', 1)[0];
   }
 
   render() {

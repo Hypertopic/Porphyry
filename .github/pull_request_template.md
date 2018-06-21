@@ -20,7 +20,7 @@ Please check that your pull request is correct:
         - `PROCESS` for a change in the way the software is built, tested, deployed,
         - `DOC` when it concerns only internal documentation (however it is better to combine it with the contribution that required this documentation change),
     - [ ] be followed by a colon (`:`) with one space after and no space before,
-    - [ ] be followed by a title as short, as user-centered and as explicit as possible
+    - [ ] be followed by a title (written in English) as short, as user-centered and as explicit as possible
         - If it is a feature, the title must be the user action (beginning with a verb, and please not `manage`),
         - If it is a fix, the title must describe the intended behavior (with `should`).
     - [ ] ends with a reference to the corresponding ticket with the following syntax:

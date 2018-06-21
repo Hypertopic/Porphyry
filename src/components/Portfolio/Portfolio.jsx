@@ -7,6 +7,7 @@ import conf from '../../config/config.json';
 import Viewpoint from '../Viewpoint/Viewpoint.jsx';
 import Corpora from '../Corpora/Corpora.jsx';
 import Header from '../Header/Header.jsx';
+import ViewpointCreator from '../Viewpoint/ViewpointCreator.jsx';
 
 import '../../styles/App.css';
 
@@ -20,7 +21,7 @@ class Portfolio extends Component {
       selectedItems: [],
       topicsItems: new Map()
     };
-    this.user = conf.user || location.hostname.split('.', 1)[0];
+    this.user = conf.user || window.location.hostname.split('.', 1)[0];
     this._updateSelection();
   }
 
@@ -38,6 +39,7 @@ class Portfolio extends Component {
               <div className="Description">
                 <h2 className="h4 font-weight-bold text-center">Points de vue</h2>
                 <div className="p-3">
+                  <ViewpointCreator />
                   {viewpoints}
                 </div>
               </div>
@@ -102,7 +104,7 @@ class Portfolio extends Component {
   }
 
   _updateSelection() {
-    let selection = queryString.parse(location.search).t;
+    let selection = queryString.parse(window.location.search).t;
     this.selection = (selection instanceof Array)? selection
       : (selection)? [selection]
       : [];
@@ -189,9 +191,9 @@ class Portfolio extends Component {
 
   _getViewpoints() {
     return this.state.viewpoints.sort(by('name')).map((v, i) =>
-      <div>
+      <div key={v.id}>
         {i > 0 && <hr/>}
-        <Viewpoint key={v.id} viewpoint={v} selection={this.selection}
+        <Viewpoint viewpoint={v} selection={this.selection}
           topicsItems={this.state.topicsItems} />
       </div>
     );
