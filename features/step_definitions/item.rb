@@ -9,10 +9,8 @@ Capybara.default_max_wait_time = 10
 # Conditions
 
 Soit("{string} l'item affiché") do |item|
-  visit "/"
   click_on item
 end
-
 
 # Events
 
@@ -23,7 +21,7 @@ end
 # Outcomes
 
 Alors("le titre de l'item affiché est {string}") do |item|
-  expect(find("h1")).to have_content(item)
+  expect(find(".Subject h2")).to have_content(item)
 end
 
 Alors("la valeur de l'attribut {string} est {string}") do |attribute, value|

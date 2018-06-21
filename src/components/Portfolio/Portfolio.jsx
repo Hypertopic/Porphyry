@@ -174,9 +174,9 @@ class Portfolio extends Component {
 
   _getViewpoints() {
     return this.state.viewpoints.sort(by('name')).map((v, i) =>
-      <div>
+      <div key={v.id}>
         {i > 0 && <hr/>}
-        <Viewpoint key={v.id} viewpoint={v} selection={this.selection}
+        <Viewpoint viewpoint={v} selection={this.selection}
           topicsItems={this.state.topicsItems} />
       </div>
     );

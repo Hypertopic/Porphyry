@@ -254,9 +254,10 @@
 .m-node .inner {
   position: relative;
   cursor: pointer;
-  padding-left: 10px;
+  padding-left: 15px;
 }
 .m-node .collapse {
+  display: block;
   position: absolute;
   left: 0;
   cursor: pointer;
