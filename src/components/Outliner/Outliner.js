@@ -23,7 +23,7 @@ class Outliner extends React.Component {
 
   constructor() {
     super();
-    this.state = { stop: true, title: '', t_data: false, active: null };
+    this.state = { stop: true, title: '', nextTitle: '', t_data: false, active: null };
     this.user = conf.user || window.location.hostname.split('.', 1)[0];
   }
 
@@ -57,7 +57,7 @@ class Outliner extends React.Component {
       return (
         <div>
           <a className='add' onClick={(e) => this._newVP(this)}>+&nbsp;</a>
-          <input type="text" value={this.state.title} onChange={this.addTitle.bind(this)} onKeyPress={this.handleKeyPressOnTitle.bind(this)} />
+          <input type="text" value={this.state.nextTitle} onChange={this.addTitle.bind(this)} onKeyPress={this.handleKeyPressOnTitle.bind(this)} />
         </div>);
     }
   }
@@ -71,7 +71,7 @@ class Outliner extends React.Component {
   }
 
   _newVP() {
-    db.post({ _id: this.props.match.params.id, viewpoint_name: this.state.title, topics: {}, users: [this.user] })
+    db.post({ _id: this.props.match.params.id, viewpoint_name: this.state.nextTitle, topics: {}, users: [this.user] })
       .then(_log)
       .then(_ => this._fetchData())
       .catch(_error);
@@ -84,7 +84,7 @@ class Outliner extends React.Component {
   }
 
   addTitle(event) {
-    this.setState({ title: event.target.value })
+    this.setState({ nextTitle: event.target.value })
   }
 
   componentDidMount() {
