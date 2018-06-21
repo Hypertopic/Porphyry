@@ -13,11 +13,9 @@ function makeID() {
 class ViewpointCreator extends Component {
   render() {
     return (
-      <div className="DescriptionModality ViewpointCreator" onClick={_ => this._goToNewViewpoint()}>
-        <h3>
-          <a>Nouveau point de vue</a>
-        </h3>
-      </div>
+      <button className="btn btn-block creationButton" onClick={_ => this._goToNewViewpoint()}>
+        Nouveau point de vue
+      </button>
     );
   }
 

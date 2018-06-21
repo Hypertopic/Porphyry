@@ -7,13 +7,12 @@ class Viewpoint extends Component {
     let topics = this._getTopics();
     let outliner = this._getOutliner();
     return (
-      <div className="DescriptionModality">
-        <h3>
+      <div>
+        <h3 className="h4">
           {this.props.viewpoint.name}
-          <a className='outliner' href={outliner}>
-            ✏️
-          </a>
+          <a className='outliner' href={outliner}>✏️</a>
         </h3>
+        <hr/>
         <div className="Topics">
           <ul>
             {topics}

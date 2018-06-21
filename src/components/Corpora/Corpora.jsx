@@ -6,10 +6,10 @@ class Corpora extends Component {
   render() {
     let items = this._getItems();
     return(
-      <div className="Subject">
-        <div>
-          <h3>{this.props.ids.join(' + ')} ({this.props.items.length}/{this.props.from})</h3>
-          <div className="Items">
+      <div className="col-md-8 p-4">
+        <div className="Subject">
+          <h2 className="h4 font-weight-bold text-center">{this.props.ids.join(' + ')} ({this.props.items.length}/{this.props.from})</h2>
+          <div className="Items m-3">
             {items}
           </div>
         </div>
@@ -33,7 +33,7 @@ function Item(props) {
       <Link to={uri}>
         <img src={props.thumbnail} alt={props.name} />
       </Link>
-      <div>{props.name}</div>
+      <div className="text-center">{props.name}</div>
     </div>
   );
 }

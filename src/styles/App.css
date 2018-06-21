@@ -1,62 +1,71 @@
-.App {
-  display: flex;
-  flex-direction: column;
+#root {
+  background: #e6ecf0;
 }
 
-.App h1 {
-  background-color: rgb(153, 51, 0);
+.App header {
+  background-color: #8b0000;
   color: ivory;
+  margin-bottom: 0;
+}
+
+.App header .logo {
   background-image: url('../images/porphyry.gif');
   background-repeat: no-repeat;
-  background-position: right;
+  background-position: center;
+  min-height: 55px;
 }
 
 .Status {
   background-color: rgb(60, 50, 50);
   color: ivory;
-  padding: 2px;
+  display: block;
+  padding: 4px;
+}
+
+.Status a {
+  color: ivory;
+  display: block;
+  padding: 0 1rem;
+  text-align: left;
 }
 
 .App-content {
-  display: flex;
   min-height: 100vh;
-  flex-direction: row;
 }
 
-.Description {
-  flex-direction: column;
-  flex-grow: 1;
-  margin: 1px;
+.Subject, .Description {
+  background: #fff;
 }
 
-.Subject {
-  flex-direction: column;
-  flex-grow: 2;
+.Subject h2, .Description h2 {
+  color: ivory;
+  margin: 0;
+  padding: .5rem;
 }
 
-.Subject > div {
+.Subject h2 {
   background-color: dimgrey;
-  color: rgb(240, 240, 240);
-  padding: 4px;
-  margin: 2px;
 }
 
-.Subject > div > div {
-  background-color: ghostwhite;
+.Description h2 {
+  background-color: #8b0000;
+}
+
+.fullImage {
+  text-align: center;
+  margin: .5rem 0;
+}
+
+.fullImage a {
+  color: dimgrey;
 }
 
 .DescriptionModality {
   flex-direction: column;
-  background-color: rgb(153, 51, 0);
+  background-color: #8b0000;
   color: ivory;
   padding: 4px;
   margin: 1px;
-}
-
-
-.Topics, .Attributes, .Outliner{
-  background-color: whitesmoke;
-  color: black;
 }
 
 .Topics {
@@ -68,6 +77,10 @@
 .Topic {
   text-align: left;
   list-style-type: none;
+}
+
+.Topic a {
+  color: black;
 }
 
 .Bullet {
@@ -154,7 +167,6 @@
   margin: 0;
   font-size: 20px;
   text-align: left;
-  text-indent: 100px;
 }
 
 .Outliner ul {
@@ -169,30 +181,15 @@
   width: 100%;
 }
 
-.TopicValidateButton {
-  font-size: 12px;
-  text-align: center;
-  margin-left: 5px;
-  width: 25px;
-  height: 20px;
-  background-color: rgb(153, 51, 0);
+.TopicValidateButton, .TopicCancelButton {
+  background-color: #8b0000;
   color: ivory;
 }
 
 .TopicValidateButton:disabled,
 .TopicValidateButton[disabled] {
   background-color: #cccccc;
-}
-
-.TopicCancelButton {
-  font-size: 14px;
-  text-align: center;
-  margin-left: 5px;
-  padding-bottom: 5px;
-  width: 25px;
-  height: 20px;
-  background-color: rgb(153, 51, 0);
-  color: ivory;
+  color: dimgrey;
 }
 
 .SuggestionItem {
@@ -206,18 +203,13 @@
 }
 
 .DeleteTopicButton {
-  margin-left: 5px;
-  align-self: center;
-  background-color: rgb(153, 51, 0);
+  background-color: #8b0000;
   color: ivory;
 }
 
-.DescriptionModality.ViewpointCreator a{
-  color: ivory;
-}
-.DescriptionModality.ViewpointCreator:hover {
-  background-color: darkred;
-  cursor: pointer;
+.creationButton, .deleteButton {
+  background: white;
+  margin-bottom: 1rem;
 }
 
 .Return {
@@ -262,9 +254,10 @@
 .m-node .inner {
   position: relative;
   cursor: pointer;
-  padding-left: 10px;
+  padding-left: 15px;
 }
 .m-node .collapse {
+  display: block;
   position: absolute;
   left: 0;
   cursor: pointer;
@@ -276,5 +269,14 @@
   content: '\25BE';
 }
 
-.wrap:hover button{display: inherit;margin-right: 10px;z-index: 999}
-.wrap button{display:none;}
+.wrap {
+  height: 34px;
+}
+.wrap:hover button {
+  display: inherit;
+  margin-right: 10px;
+  z-index: 999
+}
+.wrap button {
+  display: none;
+}

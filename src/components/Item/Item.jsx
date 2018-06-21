@@ -4,6 +4,8 @@ import Hypertopic from 'hypertopic';
 import groupBy from 'json-groupby';
 import Autosuggest from 'react-autosuggest';
 import conf from '../../config/config.json';
+import Header from '../Header/Header.jsx';
+
 import '../../styles/App.css';
 
 class Item extends Component {
@@ -27,28 +29,42 @@ class Item extends Component {
   render() {
     let attributes = this._getAttributes();
     let viewpoints = this._getViewpoints();
-    let attributeButtonLabel = this.state.isCreatable? 'Valider' : 'Créer';
+    let attributeButtonLabel = this.state.isCreatable? 'Valider' : 'Ajouter un attribut';
     let attributeForm = this.state.isCreatable? this._getAttributeCreationForm() : '';
     return (
-      <div className="App">
-        <h1>{this.state.name}</h1>
-        <div className="Status">Item</div>
-        <div className="App-content">
-          <div className="Description">
-            <div className="DescriptionModality">
-              <h3>Attributs du document</h3>
-              <button id="createAttribute" onClick={this._checkIsCreatable}>{attributeButtonLabel}</button>
-              {this.state.isDeletable ?  this.buttonValidateDelete() : this.buttonDelete()}
-              <div className="Attributes">
-                {attributes}
-                {attributeForm}
+      <div className="App container-fluid">
+        <Header />
+        <div className="Status row h5"><a href="/">Retour à l'accueil</a></div>
+        <div className="container-fluid">
+          <div className="App-content row">
+            <div className="col-md-4 p-4">
+              <div className="Description">
+                <h2 className="h4 font-weight-bold text-center">Description</h2>
+                <div className="p-3">
+                  <h3 className="h4">Attributs du document</h3>
+                  <hr/>
+                  <button className="btn btn-block creationButton" onClick={this._checkIsCreatable}>{attributeButtonLabel}</button>
+                  {this.state.isDeletable ?  this.buttonValidateDelete() : this.buttonDelete()}
+                  <div className="Attributes">
+                    {attributes}
+                    {attributeForm}
+                  </div>
+                  {viewpoints}
+                </div>
               </div>
             </div>
-            {viewpoints}
-          </div>
-          <div className="Subject">
-            <div>
-              <img src={this.state.resource} alt="resource" />
+            <div className="col-md-8 p-4">
+              <div className="Subject">
+                <h2 className="h4 font-weight-bold text-center">{this.state.name}</h2>
+                <div className="p-3">
+                  <img src={this.state.resource} alt="resource"/>
+                  <p className="fullImage">
+                    <a target="_blank" href={this.state.resource}>
+                      Voir l'image en taille réelle.
+                    </a>
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -69,15 +85,13 @@ class Item extends Component {
   }
 
   _getViewpoints() {
-    return Object.entries(this.state.topic).map(v => (
-      <Viewpoint
-        key={v[0]}
-        id={v[0]}
-        topics={v[1]}
-        assignTopic={this._assignTopic}
-        removeTopic={this._removeTopic}
-      />
-    ));
+    return Object.entries(this.state.topic).map(v =>
+      <div>
+        <hr/>
+        <Viewpoint key={v[0]} id={v[0]} topics={v[1]}
+          assignTopic={this._assignTopic} removeTopic={this._removeTopic} />
+      </div>
+    );
   }
 
   componentDidMount() {
@@ -106,8 +120,8 @@ class Item extends Component {
   _getAttributeCreationForm() {
     return (
       <form className="Attribute">
-        <div className="Key"> <input id="key" type="text" size="8" /></div>
-        <div className="Value"> <input id="value" type="text" size="8" /></div>
+        <div className="Key"> <input id="key" className="form-control" placeholder="Attribut" type="text" size="8" /></div>
+        <div className="Value"> <input id="value" className="form-control" placeholder="Valeur" type="text" /></div>
       </form>
     );
   }
@@ -127,6 +141,7 @@ class Item extends Component {
   }
 
   _checkIsCreatable() {
+    let delButton = document.querySelector('.deleteButton');
     this.setState(prevState => ({
       isCreatable: !prevState.isCreatable
     }));
@@ -134,9 +149,9 @@ class Item extends Component {
       let key = document.getElementById('key').value;
       let value = document.getElementById('value').value;
       this._setAttribute(key, value);
-      document.getElementById('delete').style.visibility = "visible";
+      delButton.style.visibility = "visible";
     } else {
-      document.getElementById('delete').style.visibility = "hidden";
+      delButton.style.visibility = "hidden";
     }
   }
 
@@ -148,13 +163,13 @@ class Item extends Component {
 
  buttonDelete() {
     return (
-      <button id="delete" onClick={this.handleDeleteClick}>Supprimer</button>
+      <button id="delete" className="btn btn-block deleteButton" onClick={this.handleDeleteClick}>Supprimer</button>
     );
   }
 
   buttonValidateDelete() {
     return (
-      <button value='ok' onClick={this.handleValidateDeleteClick}>OK</button>
+      <button className="btn btn-block deleteButton" onClick={this.handleValidateDeleteClick}>OK</button>
     );
   }
 
@@ -162,14 +177,14 @@ class Item extends Component {
     this.setState(prevState => ({
       isDeletable: true
     }));
-    document.getElementById('createAttribute').style.visibility = 'hidden';
+    document.querySelector('.creationButton').style.visibility = 'hidden';
   }
 
   handleValidateDeleteClick() {
     this.setState(prevState => ({
       isDeletable: false
     }));
-    document.getElementById('createAttribute').style.visibility = 'visible';
+    document.querySelector('.creationButton').style.visibility = 'visible';
   }
 
   deleteAttribute(key) {
@@ -364,14 +379,23 @@ class Viewpoint extends Component {
       value: topicInputvalue,
       onChange: this.onTopicInputChange
     };
-    console.log('this.state', this.state);
+    const theme = {
+      container: 'autosuggest',
+      input: 'form-control',
+      suggestionsContainer: 'dropdown open',
+      suggestionsList: `dropdown-menu ${suggestions.length ? 'show' : ''}`,
+      suggestion: 'dropdown-item',
+      suggestionHighlighted: 'active'
+    };
     return (
-      <div className="DescriptionModality">
-        <h3>{this.state.name}</h3>
+      <div>
+        <h3 className="h4">{this.state.name}</h3>
+        <hr/>
         <div className="Topics">
           {paths}
-          <div className="TopicAdding">
+          <div className="TopicAdding input-group">
             <Autosuggest
+              theme={theme}
               className="TopicSuggest"
               suggestions={suggestions}
               onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
@@ -383,26 +407,22 @@ class Viewpoint extends Component {
               inputProps={inputProps}
               id={`input-${this.state.name}`}
             />
-            <button
-              type="button"
-              className="TopicValidateButton"
-              onClick={() =>
-                this.updatingTopicList(
-                  this.state.currentSelection,
-                  this.props.id
-                )
-              }
-              disabled={!this.state.canValidateTopic}
-              id={`validateButton-${this.state.name}`}>
-              ✓
-            </button>
-            <button
-              type="button"
-              className="TopicCancelButton"
-              onClick={this.clearInput}
-              id={`cancelButton-${this.state.name}`}>
-              x
-            </button>
+            <div class="input-group-append">
+              <button type="button" className="TopicValidateButton btn" onClick={() =>
+                  this.updatingTopicList(
+                    this.state.currentSelection,
+                    this.props.id
+                  )
+                }
+                disabled={!this.state.canValidateTopic}
+                id={`validateButton-${this.state.name}`}>
+                ✓
+              </button>
+              <button type="button" className="TopicCancelButton btn" onClick={this.clearInput}
+                id={`cancelButton-${this.state.name}`}>
+                x
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -456,11 +476,8 @@ class TopicPath extends Component {
     return (
       <div className="TopicPath">
         {topics}
-        <button
-          type="button"
-          className="DeleteTopicButton"
-          onClick={this.props.removeTopic}
-          id={topicId}>
+        <button type="button" className="btn btn-sm ml-3 DeleteTopicButton"
+          onClick={this.props.removeTopic} id={topicId}>
           x
         </button>
       </div>

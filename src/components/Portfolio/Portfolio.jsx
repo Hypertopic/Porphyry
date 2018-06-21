@@ -5,6 +5,7 @@ import Hypertopic from 'hypertopic';
 import conf from '../../config/config.json';
 import Viewpoint from '../Viewpoint/Viewpoint.jsx';
 import Corpora from '../Corpora/Corpora.jsx';
+import Header from '../Header/Header.jsx';
 import ViewpointCreator from '../Viewpoint/ViewpointCreator.jsx';
 
 import '../../styles/App.css';
@@ -28,15 +29,22 @@ class Portfolio extends Component {
     let corpora = this._getCorpora();
     let status = this._getStatus();
     return (
-      <div className="App">
-        <h1>{this.user}</h1>
-        <div className="Status">{status}</div>
-        <div className="App-content">
-          <div className="Description">
-            <ViewpointCreator />
-            {viewpoints}
+      <div className="App container-fluid">
+        <Header />
+        <div className="Status row h5 text-center">{status}</div>
+        <div className="container-fluid">
+          <div className="App-content row">
+            <div className="col-md-4 p-4">
+              <div className="Description">
+                <h2 className="h4 font-weight-bold text-center">Points de vue</h2>
+                <div className="p-3">
+                  <ViewpointCreator />
+                  {viewpoints}
+                </div>
+              </div>
+            </div>
+            {corpora}
           </div>
-          {corpora}
         </div>
       </div>
     );
@@ -165,9 +173,12 @@ class Portfolio extends Component {
   }
 
   _getViewpoints() {
-    return this.state.viewpoints.sort(by('name')).map(v =>
-      <Viewpoint key={v.id} viewpoint={v} selection={this.selection}
-        topicsItems={this.state.topicsItems} />
+    return this.state.viewpoints.sort(by('name')).map((v, i) =>
+      <div key={v.id}>
+        {i > 0 && <hr/>}
+        <Viewpoint viewpoint={v} selection={this.selection}
+          topicsItems={this.state.topicsItems} />
+      </div>
     );
   }
 

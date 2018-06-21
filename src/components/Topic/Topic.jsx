@@ -18,7 +18,7 @@ class Topic extends Component {
     let isSelected = this.props.selection.includes(this.props.id)? 'Selected' : '';
     let topic = 'Topic ' + this.state.fold;
     let items = this.props.topicsItems.get(this.props.id);
-    let count = (items)? `(${items.size})` : '';
+    let count = (items) ? items.size : '';
     let uri = '?' + queryString.stringify({
       t: toggle(this.props.selection, this.props.id)
     });
@@ -26,7 +26,7 @@ class Topic extends Component {
       <li className={topic}>
         <a className="Bullet" onClick={this.handleCollapse} />
         <Link to={uri} className={isSelected}> {this.props.name} </Link>
-        <span> {count}</span>
+        <span className="badge badge-pill badge-secondary">{count}</span>
         <ul>
         {subtopics}
         </ul>
