@@ -3,7 +3,9 @@ import { Link } from 'react-router-dom';
 import Hypertopic from 'hypertopic';
 import groupBy from 'json-groupby';
 import Autosuggest from 'react-autosuggest';
+import FacebookProvider, { Comments } from 'react-facebook';
 import conf from '../../config/config.json';
+import getConfig from '../../config/config.js'
 import '../../styles/App.css';
 
 class Item extends Component {
@@ -19,6 +21,10 @@ class Item extends Component {
     this._removeTopic = this._removeTopic.bind(this);
     this._fetchItem = this._fetchItem.bind(this);
     this._checkIsCreatable = this._checkIsCreatable.bind(this);
+    this.fbConfig = getConfig("facebookComment", {
+      "enable":false,
+      "Appid":null
+    });
     this.handleDeleteClick = this.handleDeleteClick.bind(this);
     this.handleValidateDeleteClick = this.handleValidateDeleteClick.bind(this);
     this.deleteAttribute = this.deleteAttribute.bind(this);
@@ -27,6 +33,7 @@ class Item extends Component {
   render() {
     let attributes = this._getAttributes();
     let viewpoints = this._getViewpoints();
+    let comment = this._getFacebookComment();
     let attributeButtonLabel = this.state.isCreatable? 'Valider' : 'Créer';
     let attributeForm = this.state.isCreatable? this._getAttributeCreationForm() : '';
     return (
@@ -45,6 +52,7 @@ class Item extends Component {
               </div>
             </div>
             {viewpoints}
+            {comment}
           </div>
           <div className="Subject">
             <div>
@@ -78,6 +86,19 @@ class Item extends Component {
         removeTopic={this._removeTopic}
       />
     ));
+  }
+
+  _getFacebookComment(){
+    if(this.fbConfig.enable) {
+      let c_url = String(this.state.resource);
+      return (
+        <FacebookProvider appId={this.fbConfig.Appid}>
+          <Comments href={c_url} />
+        </FacebookProvider>
+      );
+    } else {
+      return null;
+    }
   }
 
   componentDidMount() {
