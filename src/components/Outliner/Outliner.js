@@ -23,7 +23,7 @@ class Outliner extends React.Component {
 
   constructor() {
     super();
-    this.state = { stop: true, nextTitle: '', t_data: false, active: null };
+    this.state = { stop: true, title: '', nextTitle: '', t_data: false, active: null };
     this.user = conf.user || window.location.hostname.split('.', 1)[0];
   }
 
@@ -51,7 +51,7 @@ class Outliner extends React.Component {
   }
 
   _getTitle() {
-    if (this.state.title !== undefined) {
+    if (this.state.title) {
       return this.state.title;
     } else {
       return (
@@ -63,7 +63,7 @@ class Outliner extends React.Component {
   }
 
   _getStatus() {
-    if (this.state.title !== undefined) {
+    if (this.state.title) {
       return "Modification du point de vue (Press CTRL to drag and drop)";
     } else {
       return "Création du point de vue";
@@ -73,7 +73,6 @@ class Outliner extends React.Component {
   _newVP() {
     db.post({ _id: this.props.match.params.id, viewpoint_name: this.state.nextTitle, topics: {}, users: [this.user] })
       .then(_log)
-      .then(_ => this.setState({ title: this.state.nextTitle }))
       .then(_ => this._fetchData())
       .catch(_error);
   }
@@ -92,7 +91,7 @@ class Outliner extends React.Component {
     this._fetchData();
     this._timer = setInterval(
       () => {
-        if(this.state.fathers&&this.state.upper){
+        if (this.state.fathers && this.state.upper) {
           if (this.state.fathers.upper !== this.state.upper) {
             this.setState({ upper: this.state.fathers.upper })
           }
@@ -124,7 +123,7 @@ class Outliner extends React.Component {
         onClick={this.onClickNode.bind(null, node)}
         className="wrap">
         <span>
-          {node.edit ? <input type='text' defaultValue={node.module} onKeyPress={(e) => { if (e.key === 'Enter') { let m = e.target.value; if (m === '') return null; else node.module = m; node.edit = false; this.setState({ update: true }); forceChange(); } }} /> : node.module}&nbsp;&nbsp;
+          {node.edit ? <input type='text' defaultValue={node.module} onKeyPress={(e) => { if (e.key === 'Enter') { let m = e.target.value; if (m === '') return null; else node.module = m; node.edit = false; let nextTitle = this.state.title; if (nodeIndex === 1) { nextTitle = m }; this.setState({ update: true, title: nextTitle }); forceChange(); } }} /> : node.module}&nbsp;&nbsp;
          {nodeIndex !== 1 ? <button onMouseUp={() => { removeNodeByID(nodeIndex) }}>❌</button> : null}
           <button onMouseUp={() => { node.edit = true }}>✏️</button>
           <button onMouseUp={() => { let node = { id: makeID(), edit: true, module: '' }; addNode(nodeIndex, node) }}>➕</button>
@@ -154,7 +153,7 @@ class Outliner extends React.Component {
       }
     }
     db.get({ _id: this.props.match.params.id })
-      .then(function (data) { data.topics = topics; return data; })
+      .then(data => { data.topics = topics; data.viewpoint_name = this.state.title; return data; })
       .then(db.post);
   }
 
@@ -206,9 +205,11 @@ class Outliner extends React.Component {
     return db.get({ _id: this.props.match.params.id })
       .then(x => {
         this._buildTree(x);
-        this.setState({ stop: true });
-        this.setState({ topics: x.topics });
-        this.setState({ title: x.viewpoint_name });
+        this.setState({
+          stop: true,
+          topics: x.topics,
+          title: x.viewpoint_name
+        });
         return x.topics
       })
       .then(x => {
