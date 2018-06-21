@@ -11,6 +11,7 @@ class Item extends Component {
     super();
     this.state = {
       isCreatable: false,
+      isDeletable: false,
       topic: []
     };
     // These bindings are necessary to make `this` work in the callback
@@ -18,6 +19,9 @@ class Item extends Component {
     this._removeTopic = this._removeTopic.bind(this);
     this._fetchItem = this._fetchItem.bind(this);
     this._checkIsCreatable = this._checkIsCreatable.bind(this);
+    this.handleDeleteClick = this.handleDeleteClick.bind(this);
+    this.handleValidateDeleteClick = this.handleValidateDeleteClick.bind(this);
+    this.deleteAttribute = this.deleteAttribute.bind(this);
   }
 
   render() {
@@ -33,7 +37,8 @@ class Item extends Component {
           <div className="Description">
             <div className="DescriptionModality">
               <h3>Attributs du document</h3>
-              <button onClick={this._checkIsCreatable}>{attributeButtonLabel}</button>
+              <button id="createAttribute" onClick={this._checkIsCreatable}>{attributeButtonLabel}</button>
+              {this.state.isDeletable ?  this.buttonValidateDelete() : this.buttonDelete()}
               <div className="Attributes">
                 {attributes}
                 {attributeForm}
@@ -53,11 +58,12 @@ class Item extends Component {
 
   _getAttributes() {
     return Object.entries(this.state)
-      .filter(x => !['topic', 'resource', 'thumbnail', 'isCreatable'].includes(x[0]))
+      .filter(x => !['topic', 'resource', 'thumbnail', 'isCreatable','isDeletable'].includes(x[0]))
       .map(x => (
         <div className="Attribute" key={x[0]}>
           <div className="Key">{x[0]}</div>
           <div className="Value">{x[1][0]}</div>
+          {this.state.isDeletable ? this.getFormDeletable(x[0].concat("Button")) : ""}
         </div>
       ));
   }
@@ -128,7 +134,61 @@ class Item extends Component {
       let key = document.getElementById('key').value;
       let value = document.getElementById('value').value;
       this._setAttribute(key, value);
+      document.getElementById('delete').style.visibility = "visible";
+    } else {
+      document.getElementById('delete').style.visibility = "hidden";
     }
+  }
+
+  getFormDeletable(key) {
+    return (
+      <button id={key} onClick={this.deleteAttribute.bind(this,key)}>X</button>
+    );
+  }
+
+ buttonDelete() {
+    return (
+      <button id="delete" onClick={this.handleDeleteClick}>Supprimer</button>
+    );
+  }
+
+  buttonValidateDelete() {
+    return (
+      <button value='ok' onClick={this.handleValidateDeleteClick}>OK</button>
+    );
+  }
+
+  handleDeleteClick() {
+    this.setState(prevState => ({
+      isDeletable: true
+    }));
+    document.getElementById('createAttribute').style.visibility = 'hidden';
+  }
+
+  handleValidateDeleteClick() {
+    this.setState(prevState => ({
+      isDeletable: false
+    }));
+    document.getElementById('createAttribute').style.visibility = 'visible';
+  }
+
+  deleteAttribute(key) {
+    var att = document.getElementById(key).parentElement.getElementsByClassName('Key');
+    var id_att = att[0].childNodes[0];
+    var tmp = document.createElement('div');
+    tmp.appendChild(id_att);
+    var attributeClicked = tmp.innerHTML;
+    document.getElementById(key).parentElement.remove();
+    let hypertopic = new Hypertopic(conf.services);
+    const _log = (x) => console.log(JSON.stringify(x, null, 2));
+    const _error = (x) => console.error(x.message);
+    hypertopic.get({_id:this.props.match.params.item})
+      .then(x => {
+        delete x[attributeClicked]
+        return x;
+      })
+      .then(hypertopic.post)
+      .catch(_error);
   }
 
   _assignTopic(topicToAssign, viewpointId) {
