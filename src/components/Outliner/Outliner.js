@@ -1,8 +1,11 @@
-import React from "react";
+import React from 'react';
+import { Link } from 'react-router-dom';
 import Hypertopic from 'hypertopic';
 import conf from '../../config/config.json';
 import Tree from 'react-ui-tree-porphyry';
-import equal from "deep-equal";
+import equal from 'deep-equal';
+import Header from '../Header/Header.jsx';
+
 import '../../styles/App.css';
 
 const db = new Hypertopic(conf.services);
@@ -23,68 +26,73 @@ class Outliner extends React.Component {
 
   constructor() {
     super();
-    this.state = { stop: true, title: '', nextTitle: '', t_data: false, active: null };
+    this.state = { stop: true, title: '', t_data: false, active: null };
     this.user = conf.user || window.location.hostname.split('.', 1)[0];
   }
 
   render() {
-    var title = this._getTitle();
     let status = this._getStatus();
+    let helper = (this.state.title && "Appuyer CTRL pour glisser déposer");
     return (
-      <div>
-        <div className='App'>
-          <h1>{title}</h1>
-          <div className='Status'>{status}</div>
+      <div className="App container-fluid">
+        <Header />
+        <div className="Status row h5"><Link to="/" className="badge badge-pill badge-light TopicTag">
+          <span className="badge badge-pill badge-dark oi oi-chevron-left"> </span> Retour à l'accueil
+        </Link></div>
+        <div className="container-fluid">
+          <div className="App-content row">
+            <div className="col-md-4 p-4">
+              <div className="Description">
+                <h2 className="h4 font-weight-bold text-center">{status}</h2>
+                <div className="h6 font-weight-bold text-center mb-0 mt-4">{helper}</div>
+                <div className="p-3">
+                  {this._getTitleCreator()}
+                  <div className="Outliner">
+                    {this.state.t_data ? <Tree tree={this.state.t_data} renderNode={this.renderNode} onChange={this.handleChange} isNodeCollapsed={this.isNodeCollapsed} /> : null}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div className="Outliner">
-          {this.state.t_data ? <Tree tree={this.state.t_data} renderNode={this.renderNode} onChange={this.handleChange} isNodeCollapsed={this.isNodeCollapsed} /> : null}
-        </div>
-        <button className="Return" onClick={this._returnHome}>
-          🏠
-        </button>
       </div>
     );
   }
 
-  _returnHome() {
-    window.location = '/';
-  }
-
-  _getTitle() {
-    if (this.state.title) {
-      return this.state.title;
-    } else {
+  _getTitleCreator() {
+    if (!this.state.title) {
       return (
-        <div>
-          <a className='add' onClick={(e) => this._newVP(this)}>+&nbsp;</a>
-          <input type="text" value={this.state.nextTitle} onChange={this.addTitle.bind(this)} onKeyPress={this.handleKeyPressOnTitle.bind(this)} />
-        </div>);
+        <form className="input-group" onSubmit={(e) => this._newVP(e)}>
+          <input type="text" name="newTitle" className="form-control" placeholder="Nom du point de vue" />
+          <div className="input-group-append">
+            <button type="submit" className="btn add btn-sm btn-light"><span className="oi oi-plus"> </span></button>
+          </div>
+        </form>
+      );
+    } else {
+      return null;
     }
   }
 
   _getStatus() {
     if (this.state.title) {
-      return "Modification du point de vue (Press CTRL to drag and drop)";
+      return "Modification du point de vue";
     } else {
       return "Création du point de vue";
     }
   }
 
-  _newVP() {
-    db.post({ _id: this.props.match.params.id, viewpoint_name: this.state.nextTitle, topics: {}, users: [this.user] })
+  _newVP(e) {
+    e.preventDefault();
+    let title = e.target.newTitle.value;
+    if (!title) {
+      return;
+    }
+    db.post({ _id: this.props.match.params.id, viewpoint_name: title, topics: {}, users: [this.user] })
       .then(_log)
+      .then(_ => this.setState({ title }))
       .then(_ => this._fetchData())
       .catch(_error);
-  }
-
-  handleKeyPressOnTitle(event) {
-    if (event.key === 'Enter') {
-      this._newVP();
-    }
-  }
-
-  addTitle(event) {
-    this.setState({ nextTitle: event.target.value })
   }
 
   componentDidMount() {
@@ -118,18 +126,38 @@ class Outliner extends React.Component {
   };
 
   renderNode = (node, nodeIndex, removeNodeByID, addNode, forceChange) => {
-    return (
-      <div
-        onClick={this.onClickNode.bind(null, node)}
-        className="wrap">
-        <span>
-          {node.edit ? <input type='text' defaultValue={node.module} onKeyPress={(e) => { if (e.key === 'Enter') { let m = e.target.value; if (m === '') return null; else node.module = m; node.edit = false; let nextTitle = this.state.title; if (nodeIndex === 1) { nextTitle = m }; this.setState({ update: true, title: nextTitle }); forceChange(); } }} /> : node.module}&nbsp;&nbsp;
-         {nodeIndex !== 1 ? <button onMouseUp={() => { removeNodeByID(nodeIndex) }}>❌</button> : null}
-          <button onMouseUp={() => { node.edit = true }}>✏️</button>
-          <button onMouseUp={() => { let node = { id: makeID(), edit: true, module: '' }; addNode(nodeIndex, node) }}>➕</button>
-        </span>
-      </div>
-    );
+    let controls = [];
+    let handleInput = (e) => {
+      if (e.key === 'Enter') {
+        let m = e.target.value;
+        if (m === '') return null;
+        node.module = m;
+        node.edit = false;
+        let nextTitle = this.state.title;
+        if (nodeIndex === 1) nextTitle = m;
+        this.setState({ update: true, title: nextTitle });
+        forceChange();
+      }
+    };
+    if (node.edit) {
+      controls.push(<input type='text' defaultValue={node.module} onKeyPress={handleInput} key="input" />);
+    } else {
+      controls.push(node.module);
+    }
+    if (nodeIndex !== 1) {
+      controls.push(<button className="btn btn-xs btn-light" onMouseUp={() => removeNodeByID(nodeIndex)} key="delete">
+        <span className="oi oi-x"> </span>
+      </button>);
+    }
+    controls.push(<button className="btn btn-xs btn-light" onMouseUp={() => { node.edit = true }} key="edit">
+      <span className="oi oi-pencil"> </span>
+    </button>);
+    controls.push(<button className="btn btn-xs btn-light" onMouseUp={() => addNode(nodeIndex, { id: makeID(), edit: true, module: '' })} key="newchild">
+      <span className="oi oi-plus"> </span>
+    </button>);
+    return (<div onClick={this.onClickNode.bind(null, node)} className="wrap">
+      <span>{controls}</span>
+    </div>);
   };
 
   applyChange(tree) {
@@ -153,7 +181,11 @@ class Outliner extends React.Component {
       }
     }
     db.get({ _id: this.props.match.params.id })
-      .then(data => { data.topics = topics; data.viewpoint_name = this.state.title; return data; })
+      .then(data => {
+        data.topics = topics;
+        data.viewpoint_name = this.state.title;
+        return data;
+      })
       .then(db.post);
   }
 

@@ -4,14 +4,17 @@ import Hypertopic from 'hypertopic';
 import groupBy from 'json-groupby';
 import Autosuggest from 'react-autosuggest';
 import conf from '../../config/config.json';
+import Header from '../Header/Header.jsx';
+
 import '../../styles/App.css';
+
+let hypertopic = new Hypertopic(conf.services);
 
 class Item extends Component {
   constructor() {
     super();
     this.state = {
       isCreatable: false,
-      isDeletable: false,
       topic: []
     };
     // These bindings are necessary to make `this` work in the callback
@@ -19,36 +22,48 @@ class Item extends Component {
     this._removeTopic = this._removeTopic.bind(this);
     this._fetchItem = this._fetchItem.bind(this);
     this._checkIsCreatable = this._checkIsCreatable.bind(this);
-    this.handleDeleteClick = this.handleDeleteClick.bind(this);
-    this.handleValidateDeleteClick = this.handleValidateDeleteClick.bind(this);
     this.deleteAttribute = this.deleteAttribute.bind(this);
   }
 
   render() {
     let attributes = this._getAttributes();
     let viewpoints = this._getViewpoints();
-    let attributeButtonLabel = this.state.isCreatable? 'Valider' : 'Créer';
+    let attributeButtonLabel = this.state.isCreatable? 'Valider' : 'Ajouter un attribut';
     let attributeForm = this.state.isCreatable? this._getAttributeCreationForm() : '';
     return (
-      <div className="App">
-        <h1>{this.state.name}</h1>
-        <div className="Status">Item</div>
-        <div className="App-content">
-          <div className="Description">
-            <div className="DescriptionModality">
-              <h3>Attributs du document</h3>
-              <button id="createAttribute" onClick={this._checkIsCreatable}>{attributeButtonLabel}</button>
-              {this.state.isDeletable ?  this.buttonValidateDelete() : this.buttonDelete()}
-              <div className="Attributes">
-                {attributes}
-                {attributeForm}
+      <div className="App container-fluid">
+        <Header />
+        <div className="Status row h5"><Link to="/" className="badge badge-pill badge-light TopicTag">
+          <span className="badge badge-pill badge-dark oi oi-chevron-left"> </span> Retour à l'accueil
+        </Link></div>
+        <div className="container-fluid">
+          <div className="App-content row">
+            <div className="col-md-4 p-4">
+              <div className="Description">
+                <h2 className="h4 font-weight-bold text-center">Description</h2>
+                <div className="p-3">
+                  <h3 className="h4">Attributs du document</h3>
+                  <hr/>
+                  <div className="text-center">
+                    <button className="btn btn-light creationButton" onClick={this._checkIsCreatable}>{attributeButtonLabel}</button>
+                  </div>
+                  <div className="Attributes">
+                    {attributes}
+                    {attributeForm}
+                  </div>
+                  {viewpoints}
+                </div>
               </div>
             </div>
-            {viewpoints}
-          </div>
-          <div className="Subject">
-            <div>
-              <img src={this.state.resource} alt="resource" />
+            <div className="col-md-8 p-4">
+              <div className="Subject">
+                <h2 className="h4 font-weight-bold text-center">{this.state.name}</h2>
+                <div className="p-3">
+                  <a target="_blank" href={this.state.resource} className="cursor-zoom">
+                    <img src={this.state.resource} alt="resource"/>
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -58,26 +73,26 @@ class Item extends Component {
 
   _getAttributes() {
     return Object.entries(this.state)
-      .filter(x => !['topic', 'resource', 'thumbnail', 'isCreatable','isDeletable'].includes(x[0]))
+      .filter(x => !['topic', 'resource', 'thumbnail', 'isCreatable'].includes(x[0]))
       .map(x => (
         <div className="Attribute" key={x[0]}>
           <div className="Key">{x[0]}</div>
           <div className="Value">{x[1][0]}</div>
-          {this.state.isDeletable ? this.getFormDeletable(x[0].concat("Button")) : ""}
+          <button onClick={this.deleteAttribute.bind(this,x[0])} className="btn btn-xs ml-3 DeleteTopicButton">
+            <span className="oi oi-x"> </span>
+          </button>
         </div>
       ));
   }
 
   _getViewpoints() {
-    return Object.entries(this.state.topic).map(v => (
-      <Viewpoint
-        key={v[0]}
-        id={v[0]}
-        topics={v[1]}
-        assignTopic={this._assignTopic}
-        removeTopic={this._removeTopic}
-      />
-    ));
+    return Object.entries(this.state.topic).map(v =>
+      <div>
+        <hr/>
+        <Viewpoint key={v[0]} id={v[0]} topics={v[1]}
+          assignTopic={this._assignTopic} removeTopic={this._removeTopic} />
+      </div>
+    );
   }
 
   componentDidMount() {
@@ -95,7 +110,6 @@ class Item extends Component {
   _fetchItem() {
     let uri = this.props.match.url;
     let params = this.props.match.params;
-    let hypertopic = new Hypertopic(conf.services);
     hypertopic.getView(uri).then((data) => {
       let item = data[params.corpus][params.item];
       item.topic = (item.topic) ? groupBy(item.topic, ['viewpoint']) : [];
@@ -106,15 +120,14 @@ class Item extends Component {
   _getAttributeCreationForm() {
     return (
       <form className="Attribute">
-        <div className="Key"> <input id="key" type="text" size="8" /></div>
-        <div className="Value"> <input id="value" type="text" size="8" /></div>
+        <div className="Key"> <input id="key" className="form-control" placeholder="Attribut" type="text" size="8" /></div>
+        <div className="Value"> <input id="value" className="form-control" placeholder="Valeur" type="text" /></div>
       </form>
     );
   }
 
   _setAttribute(key, value) {
     if (key!=='' && value!=='') {
-      let hypertopic = new Hypertopic(conf.services);
       let attribute = {[key]: [value]};
       hypertopic.get({_id: this.props.match.params.item})
         .then(x => Object.assign(x, attribute))
@@ -134,57 +147,16 @@ class Item extends Component {
       let key = document.getElementById('key').value;
       let value = document.getElementById('value').value;
       this._setAttribute(key, value);
-      document.getElementById('delete').style.visibility = "visible";
-    } else {
-      document.getElementById('delete').style.visibility = "hidden";
     }
   }
 
-  getFormDeletable(key) {
-    return (
-      <button id={key} onClick={this.deleteAttribute.bind(this,key)}>X</button>
-    );
-  }
-
- buttonDelete() {
-    return (
-      <button id="delete" onClick={this.handleDeleteClick}>Supprimer</button>
-    );
-  }
-
-  buttonValidateDelete() {
-    return (
-      <button value='ok' onClick={this.handleValidateDeleteClick}>OK</button>
-    );
-  }
-
-  handleDeleteClick() {
-    this.setState(prevState => ({
-      isDeletable: true
-    }));
-    document.getElementById('createAttribute').style.visibility = 'hidden';
-  }
-
-  handleValidateDeleteClick() {
-    this.setState(prevState => ({
-      isDeletable: false
-    }));
-    document.getElementById('createAttribute').style.visibility = 'visible';
-  }
-
   deleteAttribute(key) {
-    var att = document.getElementById(key).parentElement.getElementsByClassName('Key');
-    var id_att = att[0].childNodes[0];
-    var tmp = document.createElement('div');
-    tmp.appendChild(id_att);
-    var attributeClicked = tmp.innerHTML;
-    document.getElementById(key).parentElement.remove();
-    let hypertopic = new Hypertopic(conf.services);
-    const _log = (x) => console.log(JSON.stringify(x, null, 2));
     const _error = (x) => console.error(x.message);
     hypertopic.get({_id:this.props.match.params.item})
       .then(x => {
-        delete x[attributeClicked]
+        delete x[key];
+        delete this.state[key];
+        this.setState(this.state);
         return x;
       })
       .then(hypertopic.post)
@@ -192,7 +164,6 @@ class Item extends Component {
   }
 
   _assignTopic(topicToAssign, viewpointId) {
-    let hypertopic = new Hypertopic(conf.services);
     return hypertopic.get({ _id: this.props.match.params.item })
       .then(data => {
         data.topics[topicToAssign.id] = { viewpoint: viewpointId };
@@ -213,7 +184,6 @@ class Item extends Component {
 
   _removeTopic(topicToDelete) {
     let params = this.props.match.params;
-    let hypertopic = new Hypertopic(conf.services);
 
     if (window.confirm('Voulez-vous réellement que l\'item affiché ne soit plus décrit à l\'aide de cette rubrique ?')) {
       hypertopic
@@ -364,14 +334,23 @@ class Viewpoint extends Component {
       value: topicInputvalue,
       onChange: this.onTopicInputChange
     };
-    console.log('this.state', this.state);
+    const theme = {
+      container: 'autosuggest',
+      input: 'form-control',
+      suggestionsContainer: 'dropdown open',
+      suggestionsList: `dropdown-menu ${suggestions.length ? 'show' : ''}`,
+      suggestion: 'dropdown-item',
+      suggestionHighlighted: 'active'
+    };
     return (
-      <div className="DescriptionModality">
-        <h3>{this.state.name}</h3>
+      <div>
+        <h3 className="h4">{this.state.name}</h3>
+        <hr/>
         <div className="Topics">
           {paths}
-          <div className="TopicAdding">
+          <div className="TopicAdding input-group">
             <Autosuggest
+              theme={theme}
               className="TopicSuggest"
               suggestions={suggestions}
               onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
@@ -383,26 +362,22 @@ class Viewpoint extends Component {
               inputProps={inputProps}
               id={`input-${this.state.name}`}
             />
-            <button
-              type="button"
-              className="TopicValidateButton"
-              onClick={() =>
-                this.updatingTopicList(
-                  this.state.currentSelection,
-                  this.props.id
-                )
-              }
-              disabled={!this.state.canValidateTopic}
-              id={`validateButton-${this.state.name}`}>
-              ✓
-            </button>
-            <button
-              type="button"
-              className="TopicCancelButton"
-              onClick={this.clearInput}
-              id={`cancelButton-${this.state.name}`}>
-              x
-            </button>
+            <div className="input-group-append">
+              <button type="button" className="btn btn-sm TopicValidateButton btn" onClick={() =>
+                  this.updatingTopicList(
+                    this.state.currentSelection,
+                    this.props.id
+                  )
+                }
+                disabled={!this.state.canValidateTopic}
+                id={`validateButton-${this.state.name}`}>
+                <span className="oi oi-check"> </span>
+              </button>
+              <button type="button" className="btn btn-sm TopicCancelButton btn" onClick={this.clearInput}
+                id={`cancelButton-${this.state.name}`}>
+                <span className="oi oi-x"> </span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -426,7 +401,6 @@ class Viewpoint extends Component {
   }
 
   _fetchViewpoint() {
-    const hypertopic = new Hypertopic(conf.services);
     let uri = '/viewpoint/' + this.props.id;
     hypertopic.getView(uri).then((data) => {
       let viewpoint = data[this.props.id];
@@ -450,18 +424,19 @@ class TopicPath extends Component {
 
   render() {
     let topics = this._getTopics();
+    for (let i = 1; i < topics.length; ++i) {
+        topics.splice(i, 0, <span className="TopicSeparator">&gt;</span>);
+        ++i;
+    }
     const topicId = this.state.path[this.state.path.length - 1]
       ? `deleteButton-${this.state.path[this.state.path.length - 1].id}`
       : '';
     return (
       <div className="TopicPath">
         {topics}
-        <button
-          type="button"
-          className="DeleteTopicButton"
-          onClick={this.props.removeTopic}
-          id={topicId}>
-          x
+        <button type="button" className="btn btn-xs ml-3 float-right DeleteTopicButton"
+          onClick={this.props.removeTopic} id={topicId}>
+          <span className="oi oi-x"> </span>
         </button>
       </div>
     );

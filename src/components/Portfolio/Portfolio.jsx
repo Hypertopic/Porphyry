@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import by from 'sort-by';
 import queryString from 'query-string';
 import Hypertopic from 'hypertopic';
 import conf from '../../config/config.json';
 import Viewpoint from '../Viewpoint/Viewpoint.jsx';
 import Corpora from '../Corpora/Corpora.jsx';
+import Header from '../Header/Header.jsx';
 import ViewpointCreator from '../Viewpoint/ViewpointCreator.jsx';
 
 import '../../styles/App.css';
@@ -28,15 +30,22 @@ class Portfolio extends Component {
     let corpora = this._getCorpora();
     let status = this._getStatus();
     return (
-      <div className="App">
-        <h1>{this.user}</h1>
-        <div className="Status">{status}</div>
-        <div className="App-content">
-          <div className="Description">
-            <ViewpointCreator />
-            {viewpoints}
+      <div className="App container-fluid">
+        <Header />
+        <div className="Status row h5 text-center">{status}</div>
+        <div className="container-fluid">
+          <div className="App-content row">
+            <div className="col-md-4 p-4">
+              <div className="Description">
+                <h2 className="h4 font-weight-bold text-center">Points de vue</h2>
+                <div className="p-3">
+                  <ViewpointCreator />
+                  {viewpoints}
+                </div>
+              </div>
+            </div>
+            {corpora}
           </div>
-          {corpora}
         </div>
       </div>
     );
@@ -73,27 +82,43 @@ class Portfolio extends Component {
   _getStatus() {
     let topics = this.selection.map(t => {
       let topic = this._getTopic(t);
-      return (topic)? topic.name : 'Thème inconnu';
+      if (!topic) {
+        return 'Thème inconnu';
+      }
+      let uri = '?' + queryString.stringify({
+        t: this._toggleTopic(this.selection, t)
+      });
+      return <span className="badge badge-pill badge-light TopicTag">
+        {topic.name} <Link to={uri} className="badge badge-pill badge-dark oi oi-x" title="Déselectionner"> </Link>
+      </span>;
     });
-    return topics.join(' + ') || 'Tous les items';
+    return topics.length ? topics : 'Tous les items';
+  }
+
+  _toggleTopic(array, item) {
+    let s = new Set(array);
+    if (!s.delete(item)) {
+      s.add(item);
+    }
+    return [...s];
   }
 
   _updateSelection() {
     let selection = queryString.parse(window.location.search).t;
-    this.selection = (selection instanceof Array)? selection
-      : (selection)? [selection]
-      : [];
+    this.selection = (selection instanceof Array) ? selection
+      : (selection) ? [selection]
+        : [];
   }
 
   _getTopicPath(topicId) {
     let topic = this._getTopic(topicId);
-    let path = (topic && topic.broader)? this._getTopicPath(topic.broader[0].id) : [];
+    let path = (topic && topic.broader) ? this._getTopicPath(topic.broader[0].id) : [];
     path.push(topicId);
     return path;
   }
 
   _getItemTopicsPaths(item) {
-    return (item.topic||[]).map(t => this._getTopicPath(t.id));
+    return (item.topic || []).map(t => this._getTopicPath(t.id));
   }
 
   _getRecursiveItemTopics(item) {
@@ -113,7 +138,7 @@ class Portfolio extends Component {
         push(topicsItems, t, e.id);
       }
     }
-    this.setState({selectedItems, topicsItems});
+    this.setState({ selectedItems, topicsItems });
   }
 
   _fetchAll() {
@@ -122,7 +147,7 @@ class Portfolio extends Component {
       .then(data => {
         let user = data[this.user];
         if (!this.state.viewpoints.length && !this.state.corpora.length) { //TODO compare old and new
-          this.setState({viewpoints:user.viewpoint, corpora:user.corpus});
+          this.setState({ viewpoints: user.viewpoint, corpora: user.corpus });
         }
         return user;
       })
@@ -138,14 +163,14 @@ class Portfolio extends Component {
           viewpoint.id = v.id;
           viewpoints.push(viewpoint);
         }
-        this.setState({viewpoints});
+        this.setState({ viewpoints });
         return data;
       })
       .then(data => {
         let items = [];
         for (let corpus of this.state.corpora) {
           for (let itemId in data[corpus.id]) {
-            if (!['id','name','user'].includes(itemId)) {
+            if (!['id', 'name', 'user'].includes(itemId)) {
               let item = data[corpus.id][itemId];
               if (!item.name || !item.name.length || !item.thumbnail || !item.thumbnail.length) {
                 console.log(itemId, "has no name or thumbnail!", item);
@@ -157,7 +182,7 @@ class Portfolio extends Component {
             }
           }
         }
-        this.setState({items:items.sort(by('name'))});
+        this.setState({ items: items.sort(by('name')) });
       })
       .then(x => {
         this._updateSelectedItems();
@@ -165,8 +190,8 @@ class Portfolio extends Component {
   }
 
   _getViewpoints() {
-    return this.state.viewpoints.sort(by('name')).map(v =>
-      <Viewpoint key={v.id} viewpoint={v} selection={this.selection}
+    return this.state.viewpoints.sort(by('name')).map((v, i) =>
+      <Viewpoint viewpoint={v} selection={this.selection} key={v.id} index={i}
         topicsItems={this.state.topicsItems} />
     );
   }
@@ -182,7 +207,7 @@ class Portfolio extends Component {
 function includes(array1, array2) {
   let set1 = new Set(array1);
   return array2.map(e => set1.has(e))
-    .reduce((c1,c2) => c1 && c2, true);
+    .reduce((c1, c2) => c1 && c2, true);
 }
 
 function push(map, topicId, itemId) {

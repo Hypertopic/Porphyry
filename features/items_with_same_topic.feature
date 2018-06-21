@@ -12,6 +12,7 @@ Contexte:
 
 Scénario:
 
+ Soit "vitraux" le portfolio ouvert
  Soit "BSS 007" l'item affiché
  Quand on choisit la rubrique "Figuration du donateur"
  Alors le titre affiché est "VITRAUX"
