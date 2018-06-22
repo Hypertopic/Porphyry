@@ -15,7 +15,7 @@ Scénario: Renommer un point de vue
 Soit l`utilisateur dans le portfolio
 Quand l`utilisateur clique le bouton de modification de point de vue "Mon nouveau pdv" et ouvre la page de modification de point de vue
 Et l`utilisateur clique le bouton de modification à côté de "Mon nouveau pdv"
-Et l`utilisateur change "Mon nouveau pdv" en "My viewpoint" et tappe Entrée
+Et l`utilisateur change le nom du point de vue "Mon nouveau pdv" en "My viewpoint" et tappe Entrée
 Et l`utilisateur revient au portfolio en cliquant Retour à l'accueil
 Alors le point de vue "My viewpoint" est affiché
 Et le point de vue "Mon nouveau pdv" n'est plus affiché
