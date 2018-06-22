@@ -4,11 +4,28 @@ import Hypertopic from 'hypertopic';
 import groupBy from 'json-groupby';
 import Autosuggest from 'react-autosuggest';
 import conf from '../../config/config.json';
+import getConfig from '../../config/config.js';
 import Header from '../Header/Header.jsx';
 
 import '../../styles/App.css';
 
 let hypertopic = new Hypertopic(conf.services);
+
+// Get the configured item display mode
+let itemView = getConfig('itemView', {
+  mode: 'picture',
+  name: 'name',
+  image: 'resource',
+  linkTo: 'resource',
+  hiddenProps: ['topic', 'resource', 'thumbnail', 'isCreatable']
+});
+
+function getString(obj) {
+  if (Array.isArray(obj)) {
+    return obj.map(val => getString(val)).join(', ');
+  }
+  return String(obj);
+}
 
 class Item extends Component {
   constructor() {
@@ -26,6 +43,7 @@ class Item extends Component {
   }
 
   render() {
+    let name = getString(this.state[itemView.name]);
     let attributes = this._getAttributes();
     let viewpoints = this._getViewpoints();
     let attributeButtonLabel = this.state.isCreatable? 'Valider' : 'Ajouter un attribut';
@@ -57,12 +75,8 @@ class Item extends Component {
             </div>
             <div className="col-md-8 p-4">
               <div className="Subject">
-                <h2 className="h4 font-weight-bold text-center">{this.state.name}</h2>
-                <div className="p-3">
-                  <a target="_blank" href={this.state.resource} className="cursor-zoom">
-                    <img src={this.state.resource} alt="resource"/>
-                  </a>
-                </div>
+                <h2 className="h4 font-weight-bold text-center">{name}</h2>
+                <ShowItem item={this.state} />
               </div>
             </div>
           </div>
@@ -73,7 +87,7 @@ class Item extends Component {
 
   _getAttributes() {
     return Object.entries(this.state)
-      .filter(x => !['topic', 'resource', 'thumbnail', 'isCreatable'].includes(x[0]))
+      .filter(x => !itemView.hiddenProps.includes(x[0]))
       .map(x => (
         <div className="Attribute" key={x[0]}>
           <div className="Key">{x[0]}</div>
@@ -206,6 +220,41 @@ class Item extends Component {
         .catch(error => console.log(`error : ${error}`));
     }
   }
+}
+
+function ShowItem(props) {
+  switch (itemView.mode) {
+  case 'article':
+    return Article(props.item);
+  case 'picture':
+    return Picture(props.item);
+  default:
+    return Picture(props.item);
+  }
+}
+
+function Article(item) {
+  let text = getString(item[itemView.text]);
+  let link = getString(item[itemView.linkTo]);
+  return (
+    <div className="p-4">
+      <p>{text}</p>
+      <a href={link} target="_blank">Télécharger</a>
+    </div>
+  );
+}
+
+function Picture(item) {
+  let img = getString(item[itemView.image]);
+  let name = getString(item[itemView.name]);
+  let link = getString(item[itemView.linkTo]);
+  return (
+    <div className="p-3">
+      <a target="_blank" href={link} className="cursor-zoom">
+        <img src={img} alt={name}/>
+      </a>
+    </div>
+  );
 }
 
 class Viewpoint extends Component {

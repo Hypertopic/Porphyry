@@ -76,7 +76,7 @@ h1 a, h1 a:hover {
   list-style-type: none;
 }
 
-.Topic a, a.Topic {
+.Topic a, a.Topic, .ArticleTitle a {
   color: black;
 }
 
@@ -154,7 +154,8 @@ h1 a, h1 a:hover {
   opacity: 0.8;
 }
 
-.TopicPath > .Topic:hover, .TopicPath > .Topic:last-of-type:hover, .Topics .Topic > a:hover {
+.TopicPath > .Topic:hover, .TopicPath > .Topic:last-of-type:hover,
+.Topics .Topic > a:hover, .ArticleTitle:hover a {
   opacity: 1;
 }
 
@@ -162,7 +163,7 @@ h1 a, h1 a:hover {
   padding: 0 5px;
 }
 
-.TopicPath > .Topic:last-of-type {
+.TopicPath > .Topic:last-of-type, .ArticleTitle a {
   opacity: 0.8;
   font-weight: bold;
 }
@@ -293,6 +294,22 @@ h1 a, h1 a:hover {
 }
 .m-node .caret-down:before {
   content: '\25BE';
+}
+
+.wrap:hover button{display: inherit;margin-right: 10px;z-index: 999}
+.wrap button{display:none;}
+
+.Article {
+  border-bottom: 1px solid #DDD;
+  color: black;
+  display: block;
+  margin: 1em;
+  text-align: left;
+  width: 100%;
+}
+
+.ArticleTitle {
+  font-weight: bold;
 }
 
 .wrap {
