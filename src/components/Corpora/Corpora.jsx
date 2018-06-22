@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import getConfig from '../../config/config.js';
+import LazyLoad from "react-lazyload";
 
 // Get the configured list display mode
 let listView = getConfig('listView', {
@@ -15,7 +16,7 @@ class Corpora extends Component {
     let items = this._getItems();
     let count = this.props.items.length;
     let total = this.props.from;
-    return(
+    return (
       <div className="col-md-8 p-4">
         <div className="Subject">
           <h2 className="h4 font-weight-bold text-center">
@@ -32,8 +33,8 @@ class Corpora extends Component {
 
   _getItems() {
     return this.props.items.map(item =>
-        <Item key={item.id} item={item}
-          id={item.corpus+'/'+item.id} />
+      <Item key={item.id} item={item}
+        id={item.corpus + '/' + item.id} />
     );
   }
 
@@ -41,12 +42,12 @@ class Corpora extends Component {
 
 function Item(props) {
   switch (listView.mode) {
-  case 'article':
-    return Article(props.item);
-  case 'picture':
-    return Picture(props.item);
-  default:
-    return Picture(props.item);
+    case 'article':
+      return Article(props.item);
+    case 'picture':
+      return Picture(props.item);
+    default:
+      return Picture(props.item);
   }
 }
 
@@ -79,7 +80,9 @@ function Picture(item) {
   return (
     <div className="Item">
       <Link to={uri}>
-        <img src={img} alt={name}/>
+        <LazyLoad once throttle={200} height={100}>
+          <img src={img} alt={name} />
+        </LazyLoad>
       </Link>
       <div className="text-center">{name}</div>
     </div>

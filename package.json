@@ -13,6 +13,7 @@
     "react": "^16.4.0",
     "react-autosuggest": "^9.3.4",
     "react-dom": "^16.4.0",
+    "react-lazyload": "^2.3.0",
     "react-router-dom": "^4.1.1",
     "react-ui-tree-porphyry": "^1.0.3",
     "sort-by": "^1.2.0"
