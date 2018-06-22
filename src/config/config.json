@@ -7,5 +7,13 @@
   "reservedViewpoints": [
     "Histoire de l'art",
     "Histoire des religions"
-  ]
+  ],
+  "customization": {
+    "vitraux": {
+      "facebookComment":{
+        "enable":true,
+        "Appid":"566160170436215"
+      }
+    }
+  }
 }

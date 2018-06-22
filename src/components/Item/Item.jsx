@@ -6,6 +6,10 @@ import Autosuggest from 'react-autosuggest';
 import conf from '../../config/config.json';
 import getConfig from '../../config/config.js';
 import Header from '../Header/Header.jsx';
+import getConfig from '../../config/config.js'
+import FacebookProvider, { Comments } from 'react-facebook';
+import "react-image-gallery/styles/css/image-gallery.css";
+import ImageGallery from 'react-image-gallery';
 
 import '../../styles/App.css';
 
@@ -32,8 +36,21 @@ class Item extends Component {
     super();
     this.state = {
       isCreatable: false,
-      topic: []
+      topic: [],
+      corpora: [],
+      sameNamePicsDict: [],
+      item: {},
+      items: [],
+      uri: null,
+      params: null
     };
+    this.isFoundSameNamePic = false;
+    this.user = conf.user || window.location.hostname.split('.', 1)[0];
+    // Read Facebook comment config file
+    this.fbConfig = getConfig("facebookComment", {
+      "enable":false,
+      "Appid":null
+    });
     // These bindings are necessary to make `this` work in the callback
     this._assignTopic = this._assignTopic.bind(this);
     this._removeTopic = this._removeTopic.bind(this);
@@ -46,8 +63,19 @@ class Item extends Component {
     let name = getString(this.state[itemView.name]);
     let attributes = this._getAttributes();
     let viewpoints = this._getViewpoints();
+    let comment = this._getFacebookComment();
     let attributeButtonLabel = this.state.isCreatable? 'Valider' : 'Ajouter un attribut';
     let attributeForm = this.state.isCreatable? this._getAttributeCreationForm() : '';
+    let imageGalleryProps = {
+      renderItem: this.renderImg,
+      onThumbnailClick: this.clickChangeItem.bind(this),
+      onSlide: this.slideChangeItem.bind(this),
+      showPlayButton: false,
+      showFullscreenButton: false,
+      showIndex: true,
+      showBullets: true,
+      items: this.state.sameNamePicsDict
+    };
     return (
       <div className="App container-fluid">
         <Header />
@@ -70,13 +98,16 @@ class Item extends Component {
                     {attributeForm}
                   </div>
                   {viewpoints}
+                  {comment}
                 </div>
               </div>
             </div>
             <div className="col-md-8 p-4">
               <div className="Subject">
-                <h2 className="h4 font-weight-bold text-center">{name}</h2>
-                <ShowItem item={this.state} />
+                <h2 className="h4 font-weight-bold text-center">{this.state.item.name}</h2>
+                <div className="p-3">
+                  <ImageGallery  {...imageGalleryProps}/>
+                </div>
               </div>
             </div>
           </div>
@@ -85,9 +116,57 @@ class Item extends Component {
     );
   }
 
+  slideChangeItem(index){
+    this.changeItem(index);
+  }
+
+  clickChangeItem(event,index){
+    this.changeItem(index);
+  }
+
+  changeItem(index){
+    const item = this.state.items[index];
+    let uri = null;
+    let params = null;
+    // Record new selected pic
+    if(item.corpus&&item.id){
+      uri = "/item/"+item.corpus+"/"+item.id;
+      params = {corpus:item.corpus, item:item.id};
+      delete item.id;
+      delete item.corpus;
+    }
+    this.setState({item:item, uri:uri, params: params});
+  }
+
+  renderImg(img){
+    return (
+      <a target="_blank" href={img.original[0]} className="cursor-zoom">
+        <img src={img.original[0]} alt={img.originalAlt[0]}/>
+      </a>
+    );
+  }
+
+  _getFacebookComment(){
+    if(this.fbConfig.enable) {
+      let c_url = String(this.state.item.resource);
+      return (
+        <div className="p-3">
+          <hr/>
+          <h3 className="h4">Commentaire du document</h3>
+          <hr/>
+          <FacebookProvider appId={this.fbConfig.Appid}>
+            <Comments width="100%" href={c_url} />
+          </FacebookProvider>
+        </div>
+      );
+    } else {
+      return null;
+    }
+  }
+
   _getAttributes() {
-    return Object.entries(this.state)
-      .filter(x => !itemView.hiddenProps.includes(x[0]))
+    return Object.entries(this.state.item)
+      .filter(x => !['topic', 'resource', 'thumbnail', 'isCreatable'].includes(x[0]))
       .map(x => (
         <div className="Attribute" key={x[0]}>
           <div className="Key">{x[0]}</div>
@@ -124,10 +203,85 @@ class Item extends Component {
   _fetchItem() {
     let uri = this.props.match.url;
     let params = this.props.match.params;
+
+    let newUri = this.state.uri;
+    let newParams = this.state.params;
+    if(newUri&&newParams){
+      uri = newUri;
+      params = newParams;
+    }
     hypertopic.getView(uri).then((data) => {
       let item = data[params.corpus][params.item];
       item.topic = (item.topic) ? groupBy(item.topic, ['viewpoint']) : [];
-      this.setState(item);
+      this.setState({item:item});
+
+      // Find all the same name pics
+      if(!this.isFoundSameNamePic){
+        this.setState({sameNamePicsDict:[{
+          original: item.resource,
+          thumbnail: item.resource,
+          originalAlt: "resource"
+        }]});
+
+        hypertopic.getView(`/user/${this.user}`)
+        .then(data => {
+          let user = data[this.user];
+          if (!this.state.corpora.length) {
+            this.setState({corpora:user.corpus});
+          }
+          return user;
+        })
+        .then(x =>
+          x.viewpoint.map(y => `/viewpoint/${y.id}`)
+            .concat(x.corpus.map(y => `/corpus/${y.id}`))
+        )
+        .then(hypertopic.getView)
+        .then(data => {
+          let allSameNameDict = [{
+            original: item.resource,
+            thumbnail: item.thumbnail,
+            originalAlt: "resource"
+          }];
+          let _items = [item];
+          for (let corpus of this.state.corpora) {
+            for (let itemId in data[corpus.id]) {
+              if (!['id','name','user'].includes(itemId)) {
+                let _item = data[corpus.id][itemId];
+                if (!_item.name || !_item.name.length || !_item.thumbnail || !_item.thumbnail.length) {
+                  console.log(itemId, "has no name or thumbnail!", _item);
+                } else {
+                  if(_item.resource[0]!==item.resource){
+                    _item.id = itemId;
+                    _item.corpus = corpus.id;
+                    const names = _item.name;
+                    const namesLen = names.length;
+                    const _names = item.name;
+                    const _namesLen = _names.length;
+                    let i = 0;
+                    let j = 0;
+                    for(i=0;i<namesLen;i++){
+                      for(j=0;j<_namesLen;j++){
+                        if(names[i]===_names[j]){
+                          let picItem = {
+                            original: _item.resource,
+                            thumbnail: _item.thumbnail,
+                            originalAlt: "resource"
+                          };
+                          allSameNameDict.push(picItem);
+                          _items.push(_item);
+                          break;
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+          this.setState({sameNamePicsDict:allSameNameDict, items:_items});
+          this.isFoundSameNamePic = true;
+        });
+      }
     });
   }
 
