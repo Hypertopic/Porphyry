@@ -6,7 +6,6 @@ import Autosuggest from 'react-autosuggest';
 import conf from '../../config/config.json';
 import getConfig from '../../config/config.js';
 import Header from '../Header/Header.jsx';
-import getConfig from '../../config/config.js'
 import FacebookProvider, { Comments } from 'react-facebook';
 import "react-image-gallery/styles/css/image-gallery.css";
 import ImageGallery from 'react-image-gallery';
