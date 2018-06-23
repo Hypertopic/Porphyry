@@ -10,8 +10,8 @@ class Viewpoint extends Component {
       <div>
         <h3 className="h4">
           {this.props.viewpoint.name}
-          <a class="outliner btn btn-sm btn-light float-right" href={outliner}>
-            <span class="oi oi-pencil"> </span>
+          <a className="outliner btn btn-sm btn-light float-right" href={outliner}>
+            <span className="oi oi-pencil"> </span>
           </a>
         </h3>
         <hr/>

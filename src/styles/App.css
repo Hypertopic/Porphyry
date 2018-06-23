@@ -15,7 +15,8 @@
   min-height: 55px;
 }
 
-h1 a, h1 a:hover {
+h1 a,
+h1 a:hover {
   color: ivory;
   text-decoration: none;
 }
@@ -31,11 +32,13 @@ h1 a, h1 a:hover {
   min-height: 100vh;
 }
 
-.Subject, .Description {
+.Subject,
+.Description {
   background: #fff;
 }
 
-.Subject h2, .Description h2 {
+.Subject h2,
+.Description h2 {
   color: ivory;
   margin: 0;
   padding: .5rem;
@@ -76,7 +79,9 @@ h1 a, h1 a:hover {
   list-style-type: none;
 }
 
-.Topic a, a.Topic {
+.Topic a,
+a.Topic,
+.ArticleTitle a {
   color: black;
 }
 
@@ -93,7 +98,7 @@ h1 a, h1 a:hover {
   vertical-align: .3em;
 }
 
-.Closed > ul {
+.Closed>ul {
   display: none;
 }
 
@@ -121,7 +126,7 @@ h1 a, h1 a:hover {
 }
 
 .Attribute {
-  display: table-row;
+  display: table-row-group;
 }
 
 .Key {
@@ -138,43 +143,52 @@ h1 a, h1 a:hover {
   font-weight: bold;
 }
 
-.TopicPath > .DeleteTopicButton, .Attribute > .DeleteTopicButton {
+.TopicPath>.DeleteTopicButton,
+.Attribute>.AttributeButton {
   visibility: hidden;
 }
-.TopicPath:hover > .DeleteTopicButton, .Attribute:hover > .DeleteTopicButton {
+
+.TopicPath:hover>.DeleteTopicButton,
+.Attribute:hover>.AttributeButton {
   visibility: visible;
 }
 
-.TopicPath > .Topic:not(:last-of-type) {
+.TopicPath>.Topic:not(:last-of-type) {
   opacity: 0.7;
   font-style: italic;
 }
 
-.Topics .Topic > a {
+.Topics .Topic>a {
   opacity: 0.8;
 }
 
-.TopicPath > .Topic:hover, .TopicPath > .Topic:last-of-type:hover, .Topics .Topic > a:hover {
+.TopicPath>.Topic:hover,
+.TopicPath>.Topic:last-of-type:hover,
+.Topics .Topic>a:hover,
+.ArticleTitle:hover a {
   opacity: 1;
 }
 
-.TopicPath > .TopicSeparator {
+.TopicPath>.TopicSeparator {
   padding: 0 5px;
 }
 
-.TopicPath > .Topic:last-of-type {
+.TopicPath>.Topic:last-of-type,
+.ArticleTitle a {
   opacity: 0.8;
   font-weight: bold;
 }
 
-.TopicTag, .TopicTag[href], .TopicTag[href]:hover {
+.TopicTag,
+.TopicTag[href],
+.TopicTag[href]:hover {
   background-color: #f8f9fa;
   color: #212529;
   display: inline-block;
   margin: 0 .3em;
 }
 
-.TopicTag > .badge-pill {
+.TopicTag>.badge-pill {
   border-radius: 100%;
   display: inline-block;
   font-size: 50%;
@@ -183,11 +197,11 @@ h1 a, h1 a:hover {
   vertical-align: top;
 }
 
-.TopicTag > .badge-pill.oi-x {
+.TopicTag>.badge-pill.oi-x {
   padding-top: .3em;
 }
 
-.TopicTag > .badge-pill:hover {
+.TopicTag>.badge-pill:hover {
   opacity: 1;
 }
 
@@ -232,6 +246,13 @@ h1 a, h1 a:hover {
 .DeleteTopicButton {
   background-color: #8b0000;
   color: ivory;
+  margin: 0px;
+}
+
+.AttributeButton {
+  background-color: #8b0000;
+  color: ivory;
+  margin: 0px;
 }
 
 .creationButton {
@@ -240,10 +261,10 @@ h1 a, h1 a:hover {
 
 .Return {
   position: fixed;
-  width:60px;
-  height:60px;
-  bottom:40px;
-  right:40px;
+  width: 60px;
+  height: 60px;
+  bottom: 40px;
+  right: 40px;
 }
 
 .f-no-select {
@@ -253,6 +274,7 @@ h1 a, h1 a:hover {
   -ms-user-select: none;
   user-select: none;
 }
+
 .m-tree {
   position: relative;
   overflow: hidden;
@@ -262,6 +284,7 @@ h1 a, h1 a:hover {
   -ms-user-select: none;
   user-select: none;
 }
+
 .m-draggable {
   position: absolute;
   opacity: 0.8;
@@ -271,37 +294,68 @@ h1 a, h1 a:hover {
   -ms-user-select: none;
   user-select: none;
 }
-.m-node.placeholder > * {
+
+.m-node.placeholder>* {
   visibility: hidden;
 }
+
 .m-node.placeholder {
   border: 1px dashed #ccc;
 }
+
 .m-node .inner {
   position: relative;
   cursor: pointer;
   padding-left: 15px;
 }
+
 .m-node .collapse {
   display: block;
   position: absolute;
   left: 0;
   cursor: pointer;
 }
+
 .m-node .caret-right:before {
   content: '\25B8';
 }
+
 .m-node .caret-down:before {
   content: '\25BE';
+}
+
+.wrap:hover button {
+  display: inherit;
+  margin-right: 10px;
+  z-index: 999
+}
+
+.wrap button {
+  display: none;
+}
+
+.Article {
+  border-bottom: 1px solid #DDD;
+  color: black;
+  display: block;
+  margin: 1em;
+  text-align: left;
+  width: 100%;
+}
+
+.ArticleTitle {
+  font-weight: bold;
 }
 
 .wrap {
   min-height: 34px;
 }
+
 .wrap button {
   display: none;
   margin-left: 10px;
 }
+
 .wrap:hover button {
   display: inherit;
 }
@@ -317,10 +371,11 @@ h1 a, h1 a:hover {
   border-color: #dddddd;
 }
 
-.btn.add, .input-group-append .btn {
+.btn.add,
+.input-group-append .btn {
   border: 1px solid #ced4da;
 }
+
 .btn:not(.btn-xs) .oi {
   vertical-align: middle;
 }
-
