@@ -275,12 +275,12 @@ class Item extends Component {
 
 function ShowItem(props) {
   switch (itemView.mode) {
-    case 'article':
-      return Article(props.item);
-    case 'picture':
-      return Picture(props.item);
-    default:
-      return Picture(props.item);
+  case 'article':
+    return Article(props.item);
+  case 'picture':
+    return Picture(props.item);
+  default:
+    return Picture(props.item);
   }
 }
 
@@ -302,7 +302,7 @@ function Picture(item) {
   return (
     <div className="p-3">
       <a target="_blank" href={link} className="cursor-zoom">
-        <img src={img} alt={name} />
+        <img src={img} alt={name}/>
       </a>
     </div>
   );
