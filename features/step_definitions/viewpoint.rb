@@ -4,7 +4,7 @@ require 'selenium/webdriver'
 Capybara.run_server = false
 Capybara.default_driver = :selenium_chrome_headless
 Capybara.app_host = "http://localhost:3000"
-Capybara.default_max_wait_time = 10
+Capybara.default_max_wait_time = 30
 
 def id()
   s = [*'a'..'z', *'A'..'Z', *'0'..'9'].shuffle[0, 8].join
