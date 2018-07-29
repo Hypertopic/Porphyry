@@ -145,7 +145,11 @@ class Portfolio extends Component {
     const hypertopic = new Hypertopic(conf.services);
     return hypertopic.getView(`/user/${this.user}`)
       .then(data => {
-        let user = data[this.user];
+        let user = data[this.user] || {};
+        user = {
+          viewpoint: user.viewpoint || [],
+          corpus: user.corpus || []
+        };
         if (!this.state.viewpoints.length && !this.state.corpora.length) { //TODO compare old and new
           this.setState({viewpoints:user.viewpoint, corpora:user.corpus});
         }
