@@ -15,6 +15,22 @@ Installation requirements
 
 * Git client
 * Node.js
+* [Argos v4](https://github.com/Hypertopic/Argos) (on a server)
+
+The CouchDB instance thats hosts Argos must be set so that:
+
+```ini
+[HTTPD]
+enable_cors = true
+secure_rewrites = false
+
+[CORS]
+origins = http://localhost:3000
+methods = GET, PUT, POST, HEAD, DELETE
+headers = accept, authorization, content-type, origin, referer, if-match
+```
+
+Create user `alice`.
 
 Installation procedure
 ----------------------
