@@ -12,4 +12,4 @@ cache:
 install:
   - npm install
   - npm start >/dev/null &
-  - gem install cucumber rspec capybara selenium-webdriver chromedriver-helper
+  - gem install cucumber rspec capybara selenium-webdriver chromedriver-helper:1.2
