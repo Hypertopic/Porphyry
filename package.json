@@ -18,11 +18,13 @@
     "sort-by": "^1.2.0"
   },
   "devDependencies": {
-    "react-scripts": "1.1.5"
+    "react-scripts": "1.1.5",
+    "serve": "^10.0.2"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "preprod": "serve -s build -p 3000 &",
     "test": "cucumber --format summary",
     "eject": "react-scripts eject"
   }
