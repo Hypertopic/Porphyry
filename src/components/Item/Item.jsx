@@ -41,6 +41,7 @@ class Item extends Component {
     this._fetchItem = this._fetchItem.bind(this);
     this._checkIsCreatable = this._checkIsCreatable.bind(this);
     this.deleteAttribute = this.deleteAttribute.bind(this);
+    this.user=conf.user || window.location.hostname.split('.', 1)[0];
   }
 
   render() {
@@ -132,6 +133,16 @@ class Item extends Component {
       let item = data[params.corpus][params.item];
       item.topic = (item.topic) ? groupBy(item.topic, ['viewpoint']) : [];
       this.setState(item);
+    }).then(() => hypertopic.getView(`/user/${this.user}`))
+      .then((data) => {
+      let user = data[this.user] || {};
+      if (user.viewpoint) {
+        let topic=this.state.topic;
+        for (let vp of user.viewpoint) {
+          topic[vp.id]=topic[vp.id] || [];
+        }
+        this.setState({topic});
+      }
     });
   }
 
