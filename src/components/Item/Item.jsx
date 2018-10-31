@@ -39,7 +39,7 @@ class Item extends Component {
     this._assignTopic = this._assignTopic.bind(this);
     this._removeTopic = this._removeTopic.bind(this);
     this._fetchItem = this._fetchItem.bind(this);
-    this._checkIsCreatable = this._checkIsCreatable.bind(this);
+    this._switchCreatable = this._switchCreatable.bind(this);
     this.deleteAttribute = this.deleteAttribute.bind(this);
   }
 
@@ -67,7 +67,7 @@ class Item extends Component {
                   <h3 className="h4">Attributs du document</h3>
                   <hr/>
                   <div className="text-center">
-                    <button className="btn btn-light creationButton" onClick={this._checkIsCreatable}>{attributeButtonLabel}</button>
+                    <button className="btn btn-light creationButton" onClick={this._switchCreatable}>{attributeButtonLabel}</button>
                   </div>
                   <div className="Attributes">
                     {attributes}
@@ -161,14 +161,14 @@ class Item extends Component {
       hypertopic.get({_id: this.props.match.params.item})
         .then(x => Object.assign(x, attribute))
         .then(hypertopic.post)
+        .then(_ => this.setState(attribute))
         .catch((x) => console.error(x.message));
-      this.setState(attribute);
     } else {
       console.log('Créez un attribut non vide');
     }
   }
 
-  _checkIsCreatable() {
+  _switchCreatable() {
     this.setState(prevState => ({
       isCreatable: !prevState.isCreatable
     }));
@@ -184,11 +184,13 @@ class Item extends Component {
     hypertopic.get({_id:this.props.match.params.item})
       .then(x => {
         delete x[key];
-        delete this.state[key];
-        this.setState(this.state);
         return x;
       })
       .then(hypertopic.post)
+      .then(_ => {
+        delete this.state[key];
+        this.setState(this.state);
+      })
       .catch(_error);
   }
 
@@ -198,8 +200,8 @@ class Item extends Component {
         data.topics[topicToAssign.id] = { viewpoint: viewpointId };
         return data;
       })
+      .then(hypertopic.post)
       .then(data => {
-        hypertopic.post(data);
         let newState = this.state;
         newState.topic[viewpointId].push({
           viewpoint: viewpointId,
@@ -221,8 +223,8 @@ class Item extends Component {
           delete data.topics[topicToDelete.id];
           return data;
         })
-        .then(data => {
-          hypertopic.post(data);
+        .then(hypertopic.post)
+        .then((res)=> {
           let newState = this.state;
           newState.topic[topicToDelete.viewpoint] = newState.topic[
             topicToDelete.viewpoint

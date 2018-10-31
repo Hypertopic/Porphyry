@@ -81,10 +81,10 @@ class Outliner extends React.Component {
   }
 
   _newVP(e) {
-	e.preventDefault();
+    e.preventDefault();
     let title = e.target.newTitle.value;
     if (!title) {
-        return;
+      return;
     }
     db.post({ _id: this.props.match.params.id, viewpoint_name: title, topics: {}, users: [this.user] })
       .then(_log)
@@ -182,7 +182,11 @@ class Outliner extends React.Component {
         data.viewpoint_name = tree.module;
         return data;
       })
-      .then(db.post);
+      .then(db.post)
+      .catch(_ => {
+        _error(_);
+        this._fetchData()
+      });
   }
 
   handleChange = tree => {
