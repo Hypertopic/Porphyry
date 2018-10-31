@@ -131,7 +131,12 @@ class Item extends Component {
     let params = this.props.match.params;
     hypertopic.getView(uri).then((data) => {
       let item = data[params.corpus][params.item];
-      item.topic = (item.topic) ? groupBy(item.topic, ['viewpoint']) : [];
+      let itemTopics = (item.topic) ? groupBy(item.topic, ['viewpoint']) : {};
+      let topics=this.state.topic || {};
+      for (let id in itemTopics) {
+        topics[id]=itemTopics[id];
+      }
+      item.topic=topics;
       this.setState(item);
     }).then(() => hypertopic.getView(`/user/${this.user}`))
       .then((data) => {
