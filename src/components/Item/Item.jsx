@@ -114,11 +114,22 @@ class Item extends Component {
   }
 
   componentDidMount() {
-    this._fetchItem();
-    this._timer = setInterval(
-      () => this._fetchItem(),
-      15000
-    );
+    let start=new Date().getTime();
+    let self=this;
+    this._fetchItem().then(() => {
+      let end=new Date().getTime();
+      let elapsedTime=end-start;
+      console.log("elapsed Time ",elapsedTime);
+
+      let intervalTime=Math.max(10000,elapsedTime*5);
+      console.log("reload every ",intervalTime);
+      self._timer = setInterval(
+        () => {
+          self._fetchItem();
+        },
+        intervalTime
+      );
+    });
   }
 
   componentWillUnmount() {
@@ -128,7 +139,7 @@ class Item extends Component {
   _fetchItem() {
     let uri = this.props.match.url;
     let params = this.props.match.params;
-    hypertopic.getView(uri).then((data) => {
+    return hypertopic.getView(uri).then((data) => {
       let item = data[params.corpus][params.item];
       item.topic = (item.topic) ? groupBy(item.topic, ['viewpoint']) : [];
       this.setState(item);

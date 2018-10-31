@@ -56,13 +56,22 @@ class Portfolio extends Component {
   }
 
   componentDidMount() {
-    this._fetchAll();
-    this._timer = setInterval(
-      () => {
-        this._fetchAll();
-      },
-      10000
-    );
+    let start=new Date().getTime();
+    var self=this;
+    this._fetchAll().then(() => {
+      let end=new Date().getTime();
+      let elapsedTime=end-start;
+      console.log("elapsed Time ",elapsedTime);
+
+      let intervalTime=Math.max(10000,elapsedTime*5);
+      console.log("reload every ",intervalTime);
+      self._timer = setInterval(
+        () => {
+          self._fetchAll();
+        },
+        intervalTime
+      );
+    });
   }
 
   componentDidUpdate(prevProps) {
