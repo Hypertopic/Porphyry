@@ -105,11 +105,8 @@ class Item extends Component {
 
   _getViewpoints() {
     return Object.entries(this.state.topic).map(v =>
-      <div>
-        <hr/>
-        <Viewpoint key={v[0]} id={v[0]} topics={v[1]}
-          assignTopic={this._assignTopic} removeTopic={this._removeTopic} />
-      </div>
+      <Viewpoint key={v[0]} id={v[0]} topics={v[1]}
+        assignTopic={this._assignTopic} removeTopic={this._removeTopic} />
     );
   }
 
