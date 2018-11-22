@@ -42,6 +42,7 @@ class Item extends Component {
     this._getOrCreateItem = this._getOrCreateItem.bind(this);
     this._switchCreatable = this._switchCreatable.bind(this);
     this.deleteAttribute = this.deleteAttribute.bind(this);
+    this.user=conf.user || window.location.hostname.split('.', 1)[0];
   }
 
   render() {
@@ -149,8 +150,23 @@ class Item extends Component {
     let params = this.props.match.params;
     return hypertopic.getView(uri).then((data) => {
       let item = data[params.corpus][params.item];
-      item.topic = (item.topic) ? groupBy(item.topic, ['viewpoint']) : [];
+      let itemTopics = (item.topic) ? groupBy(item.topic, ['viewpoint']) : {};
+      let topics=this.state.topic || {};
+      for (let id in itemTopics) {
+        topics[id]=itemTopics[id];
+      }
+      item.topic=topics;
       this.setState(item);
+    }).then(() => hypertopic.getView(`/user/${this.user}`))
+      .then((data) => {
+      let user = data[this.user] || {};
+      if (user.viewpoint) {
+        let topic=this.state.topic;
+        for (let vp of user.viewpoint) {
+          topic[vp.id]=topic[vp.id] || [];
+        }
+        this.setState({topic});
+      }
     });
   }
 
@@ -236,9 +252,6 @@ class Item extends Component {
           newState.topic[topicToDelete.viewpoint] = newState.topic[
             topicToDelete.viewpoint
           ].filter(stateTopic => topicToDelete.id !== stateTopic.id);
-          if (newState.topic[topicToDelete.viewpoint].length === 0) {
-            delete newState.topic[topicToDelete.viewpoint];
-          }
           this.setState(newState);
         })
         .catch(error => console.log(`error : ${error}`));
