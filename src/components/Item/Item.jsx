@@ -516,7 +516,7 @@ class TopicPath extends Component {
   }
 
   _getTopic(id) {
-    let topic = this.props.topics[id];
+    let topic = this.props.topics[id] || {};
     topic.id = id;
     return topic;
   }
