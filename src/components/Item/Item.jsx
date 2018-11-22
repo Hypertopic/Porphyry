@@ -488,8 +488,9 @@ class TopicPath extends Component {
   render() {
     let topics = this._getTopics();
     for (let i = 1; i < topics.length; ++i) {
-        topics.splice(i, 0, <span className="TopicSeparator">&gt;</span>);
-        ++i;
+      let key="separator-"+i;
+      topics.splice(i, 0, <span key={key} className="TopicSeparator">&gt;</span>);
+      ++i;
     }
     const topicId = this.state.path[this.state.path.length - 1]
       ? `deleteButton-${this.state.path[this.state.path.length - 1].id}`
