@@ -39,6 +39,7 @@ class Item extends Component {
     this._assignTopic = this._assignTopic.bind(this);
     this._removeTopic = this._removeTopic.bind(this);
     this._fetchItem = this._fetchItem.bind(this);
+    this._getOrCreateItem = this._getOrCreateItem.bind(this);
     this._switchCreatable = this._switchCreatable.bind(this);
     this.deleteAttribute = this.deleteAttribute.bind(this);
   }
@@ -133,6 +134,16 @@ class Item extends Component {
     clearInterval(this._timer);
   }
 
+  _getOrCreateItem() {
+    return hypertopic.get({_id: this.props.match.params.item})
+    .catch(e => {
+      return {
+        _id: this.props.match.params.item,
+        item_corpus: this.props.match.params.corpus
+      };
+    });
+  }
+
   _fetchItem() {
     let uri = this.props.match.url;
     let params = this.props.match.params;
@@ -155,7 +166,7 @@ class Item extends Component {
   _setAttribute(key, value) {
     if (key!=='' && value!=='') {
       let attribute = {[key]: [value]};
-      hypertopic.get({_id: this.props.match.params.item})
+      this._getOrCreateItem()
         .then(x => Object.assign(x, attribute))
         .then(hypertopic.post)
         .then(_ => this.setState(attribute))
@@ -178,7 +189,7 @@ class Item extends Component {
 
   deleteAttribute(key) {
     const _error = (x) => console.error(x.message);
-    hypertopic.get({_id:this.props.match.params.item})
+    this._getOrCreateItem()
       .then(x => {
         delete x[key];
         return x;
@@ -192,8 +203,9 @@ class Item extends Component {
   }
 
   _assignTopic(topicToAssign, viewpointId) {
-    return hypertopic.get({ _id: this.props.match.params.item })
+    return this._getOrCreateItem()
       .then(data => {
+        data.topics=data.topics || {};
         data.topics[topicToAssign.id] = { viewpoint: viewpointId };
         return data;
       })
@@ -211,12 +223,10 @@ class Item extends Component {
 
 
   _removeTopic(topicToDelete) {
-    let params = this.props.match.params;
-
     if (window.confirm('Voulez-vous réellement que l\'item affiché ne soit plus décrit à l\'aide de cette rubrique ?')) {
-      hypertopic
-        .get({ _id: params.item })
+      return this._getOrCreateItem()
         .then(data => {
+          data.topics=data.topics || {};
           delete data.topics[topicToDelete.id];
           return data;
         })
