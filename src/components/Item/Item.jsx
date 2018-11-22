@@ -232,9 +232,6 @@ class Item extends Component {
           newState.topic[topicToDelete.viewpoint] = newState.topic[
             topicToDelete.viewpoint
           ].filter(stateTopic => topicToDelete.id !== stateTopic.id);
-          if (newState.topic[topicToDelete.viewpoint].length === 0) {
-            delete newState.topic[topicToDelete.viewpoint];
-          }
           this.setState(newState);
         })
         .catch(error => console.log(`error : ${error}`));
