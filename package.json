@@ -4,7 +4,6 @@
   "private": true,
   "dependencies": {
     "bootstrap": "^4.1.1",
-    "deep-equal": "^1.0.1",
     "hypertopic": "^3.1.4",
     "js-tree": "^2.0.1",
     "json-groupby": "^1.0.2",

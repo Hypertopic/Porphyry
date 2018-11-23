@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import Hypertopic from 'hypertopic';
 import conf from '../../config/config.json';
 import Tree from 'react-ui-tree-porphyry';
-import equal from 'deep-equal';
 import Header from '../Header/Header.jsx';
 import Authenticated from '../Authenticated/Authenticated.jsx';
 
@@ -27,7 +26,7 @@ class Outliner extends React.Component {
 
   constructor() {
     super();
-    this.state = { stop: true, t_data: false, active: null };
+    this.state = { t_data: false };
     this.user = conf.user || window.location.hostname.split('.', 1)[0];
   }
 
@@ -95,22 +94,7 @@ class Outliner extends React.Component {
 
   componentDidMount() {
     this._fetchData();
-    this._timer = setInterval(
-      () => {
-        if(this.state.fathers&&this.state.upper){
-          if (this.state.fathers.upper !== this.state.upper) {
-            this.setState({ upper: this.state.fathers.upper })
-          }
-        }
-        db.get({ _id: this.props.match.params.id })
-          .then(x => {
-            if (this.state.topics === undefined || !equal(x.topics, this.state.topics)) {
-              this._fetchData()
-            }
-          });
-      },
-      1000
-    );
+    this._timer = setInterval(this._fetchData.bind(this),1000);
   }
 
   componentWillUnmount() {
@@ -233,34 +217,12 @@ class Outliner extends React.Component {
   }
 
   _fetchData() {
-    var listFatherGroup = {};
     return db.get({ _id: this.props.match.params.id })
       .then(x => {
         this._buildTree(x);
-        this.setState({ stop: true });
         this.setState({ topics: x.topics });
         this.setState({ title: x.viewpoint_name });
-        return x.topics
-      })
-      .then(x => {
-        let listFather = Object.keys(x).map(
-          k => (k = x[k].broader.length < 1 ?
-            { upper: [k] } :
-            { [x[k].broader]: [k] })
-        );
-        listFather.forEach(
-          e =>
-            typeof listFatherGroup[Object.keys(e)] === "undefined" ?
-              (listFatherGroup[Object.keys(e)] = Object.values(e)[0]) :
-              (listFatherGroup[Object.keys(e)] = [
-                ...listFatherGroup[Object.keys(e)],
-                ...Object.values(e)[0]
-              ])
-        );
-        console.log(listFatherGroup);
-        return listFatherGroup;
-      })
-      .then(x => this.setState({ fathers: x, stop: false }));
+      });
   }
 }
 
