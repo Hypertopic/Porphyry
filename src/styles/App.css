@@ -268,53 +268,32 @@ h1 a, h1 a:hover {
   right:40px;
 }
 
-.f-no-select {
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-.m-tree {
+.outliner-node > ul {
   position: relative;
-  overflow: hidden;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+  padding-left: 10px;
+  background-color: #fff;
 }
-.m-draggable {
-  position: absolute;
-  opacity: 0.8;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-.m-node.placeholder > * {
-  visibility: hidden;
-}
-.m-node.placeholder {
-  border: 1px dashed #ccc;
-}
-.m-node .inner {
-  position: relative;
+
+.outliner-node .caret {
   cursor: pointer;
-  padding-left: 15px;
-}
-.m-node .collapse {
-  display: block;
   position: absolute;
-  left: 0;
-  cursor: pointer;
+  left: -10px;
 }
-.m-node .caret-right:before {
+
+.outliner-node.closed > .caret:before {
   content: '\25B8';
 }
-.m-node .caret-down:before {
+.outliner-node.open > .caret:before {
   content: '\25BE';
+}
+
+.outliner-node.closed > ul {
+  display: none;
+}
+
+.outliner-node li {
+  list-style-type: none;
+  min-height: 2em;
 }
 
 .wrap:hover button{display: inherit;margin-right: 10px;z-index: 999}
@@ -335,6 +314,7 @@ h1 a, h1 a:hover {
 
 .wrap {
   min-height: 34px;
+  display: block;
 }
 .wrap button {
   display: none;
@@ -361,4 +341,3 @@ h1 a, h1 a:hover {
 .btn:not(.btn-xs) .oi {
   vertical-align: middle;
 }
-

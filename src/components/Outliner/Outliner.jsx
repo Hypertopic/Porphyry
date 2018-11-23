@@ -2,7 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Hypertopic from 'hypertopic';
 import conf from '../../config/config.json';
-import Tree from 'react-ui-tree-porphyry';
 import Header from '../Header/Header.jsx';
 import Authenticated from '../Authenticated/Authenticated.jsx';
 
@@ -26,13 +25,12 @@ class Outliner extends React.Component {
 
   constructor() {
     super();
-    this.state = { t_data: false };
+    this.state = { };
     this.user = conf.user || window.location.hostname.split('.', 1)[0];
   }
 
   render() {
     let status = this._getStatus();
-    let helper = (this.state.title && "Press CTRL to drag and drop");
     return (
       <div className="App container-fluid">
         <Header />
@@ -44,15 +42,14 @@ class Outliner extends React.Component {
         </div>
         <div className="container-fluid">
           <div className="App-content row">
-            <div className="col-md-4 p-4">
+            <div className="col-md-12 p-4">
               <div className="Description">
                 <h2 className="h4 font-weight-bold text-center">{status}</h2>
-                <div className="h6 font-weight-bold text-center mb-0 mt-4">{helper}</div>
                 <div className="p-3">
                   {this.state.title ? '' : this._getTitle()}
-                  <div className="Outliner">
-                   {this.state.t_data ? <Tree tree={this.state.t_data} renderNode={this.renderNode} onChange={this.handleChange} isNodeCollapsed={this.isNodeCollapsed} /> : null}
-                  </div>
+                  <ul className="Outliner">
+                    <Node topics={this.state.topics} name={this.state.title}/>
+                  </ul>
                 </div>
               </div>
             </div>
@@ -101,69 +98,11 @@ class Outliner extends React.Component {
     clearInterval(this._timer);
   }
 
-  onClickNode = node => {
-    this.setState({
-      active: node
-    });
-  };
-
-  renderNode = (node, nodeIndex, removeNodeByID, addNode, forceChange) => {
-    let controls = [];
-    let handleInput = (e) => {
-      if (e.key === 'Enter') {
-        let m = e.target.value;
-        if (m === '') return null;
-        node.module = m;
-        node.edit = false;
-        this.setState({ update: true });
-        forceChange();
-      }
-    };
-    if (node.edit) {
-      controls.push(<input type='text' defaultValue={node.module} onKeyPress={handleInput} />);
-    } else {
-      controls.push(node.module);
-    }
-    if (nodeIndex !== 1) {
-      controls.push(<button className="btn btn-xs btn-light" onMouseUp={() => removeNodeByID(nodeIndex)}>
-        <span className="oi oi-x"> </span>
-      </button>);
-    }
-    controls.push(<button className="btn btn-xs btn-light" onMouseUp={() => { node.edit = true }}>
-      <span className="oi oi-pencil"> </span>
-    </button>);
-    controls.push(<button className="btn btn-xs btn-light" onMouseUp={() => addNode(nodeIndex, {id: makeID(), edit: true, module: ''})}>
-      <span className="oi oi-plus"> </span>
-    </button>);
-    return (<div onClick={this.onClickNode.bind(null, node)} className="wrap">
-      <span>{controls}</span>
-    </div>);
-  };
-
-  applyChange(tree) {
-    let topics = {};
-    let stack = [];
-    stack.push([tree.children, false]);
-    while (stack.length !== 0) {
-      let nowNode = stack.pop();
-      const lenNode = nowNode[0].length;
-      let i = 0;
-      for (i = 0; i < lenNode; i++) {
-        if (!topics[nowNode[0][i].id]) {
-          topics[nowNode[0][i].id] = { broader: nowNode[1] ? [nowNode[1]] : [], name: nowNode[0][i].module };
-        }
-        else {
-          topics[nowNode[0][i].id].broader.push(nowNode[1]);
-        }
-        if (nowNode[0][i].children && nowNode[0][i].children.length !== 0) {
-          stack.push([nowNode[0][i].children, nowNode[0][i].id]);
-        }
-      }
-    }
+  applyChange() {
     db.get({ _id: this.props.match.params.id })
       .then(data => {
-        data.topics = topics;
-        data.viewpoint_name = tree.module;
+        data.topics = this.props.topics;
+        data.viewpoint_name = this.state.title;
         return data;
       })
       .then(db.post)
@@ -173,57 +112,64 @@ class Outliner extends React.Component {
       });
   }
 
-  handleChange = tree => {
-    this.applyChange(tree);
-  };
-
-  _buildTree(data) {
-    let treeData = { module: data.viewpoint_name, children: [] };
-    const topics = data.topics;
-    let _tData = treeData.children;
-    let tFind = {};
-
-    let i = {};
-    let pi = 0;
-    for (i in topics) {
-      tFind[i] = pi;
-      _tData.push({
-        module: topics[i].name,
-        id: i,
-        children: []
-      });
-      ++pi;
-    }
-    let ndata = [];
-
-    for (i in topics) {
-      let topic = topics[i];
-      const broader = topic.broader;
-      let lb = broader.length;
-      if (lb !== 0) {
-        let j = 0;
-        for (j = 0; j < lb; j++) {
-          _tData[tFind[broader[j]]].children.push(_tData[tFind[i]]);
-        }
-      }
-      else {
-        ndata.push(_tData[tFind[i]]);
-      }
-    }
-
-    treeData.children = ndata;
-    this.setState({ t_data: treeData });
-    console.log(treeData);
-  }
-
   _fetchData() {
     return db.get({ _id: this.props.match.params.id })
       .then(x => {
-        this._buildTree(x);
-        this.setState({ topics: x.topics });
-        this.setState({ title: x.viewpoint_name });
+        this.setState({ topics: x.topics, title: x.viewpoint_name });
       });
   }
+
+
+}
+
+class Node extends React.Component {
+
+  constructor() {
+    super();
+    this.state = { edit:false, active:false, open: false };
+    this.user = conf.user || window.location.hostname.split('.', 1)[0];
+  }
+
+  render = () => {
+    let switchOpen = () => {
+      this.setState({open:!this.state.open});
+    }
+    let handleInput = (e) => {
+    };
+    let thisNode;
+    if (this.state.edit) {
+      thisNode=<input type='text' defaultValue={this.props.name} onKeyPress={handleInput} />;
+    } else {
+      thisNode=<span className="node">{this.props.name}</span>;
+    }
+    let children=[];
+    if (this.props.topics) {
+      for (var topID in this.props.topics) {
+        let topic=this.props.topics[topID];
+        if (this.props.id && topic.broader.indexOf(this.props.id)!=-1
+          || !this.props.id && topic.broader.length==0) {
+            children.push(
+              <Node key={topID} id={topID} name={topic.name} topics={this.props.topics} parent={this.props.id} />
+            );
+        }
+      }
+    }
+    var classes=["outliner-node"];
+    let caret;
+    if (this.props.id && children.length) {
+      caret=<span className="caret" onClick={switchOpen}> </span>;
+      if (this.state.open) classes.push("open");
+      else classes.push("closed");
+    } else {
+      caret=null;
+    }
+    return (
+      <li className={classes.join(" ")}>
+        {caret}<span className="wrap">{thisNode}</span>
+        <ul>{children}</ul>
+      </li>);
+  };
+
 }
 
 export default Outliner;
