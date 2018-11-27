@@ -291,9 +291,13 @@ h1 a, h1 a:hover {
   display: none;
 }
 
-.outliner-node li {
+.Outliner li {
   list-style-type: none;
   min-height: 2em;
+}
+
+.Outliner li.active > span.wrap {
+  background-color: rgb(199, 222, 237);
 }
 
 .wrap:hover button{display: inherit;margin-right: 10px;z-index: 999}

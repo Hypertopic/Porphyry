@@ -48,7 +48,8 @@ class Outliner extends React.Component {
                 <div className="p-3">
                   {this.state.title ? '' : this._getTitle()}
                   <ul className="Outliner">
-                    <Node topics={this.state.topics} name={this.state.title} change={this.editTopic.bind(this)}/>
+                    <Node topics={this.state.topics} name={this.state.title} activeNode={this.state.activeNode}
+                      change={this.editTopic.bind(this)} activate={this.activeNode.bind(this)}/>
                   </ul>
                 </div>
               </div>
@@ -89,6 +90,9 @@ class Outliner extends React.Component {
       .catch(_error);
   }
 
+  activeNode(id) {
+    this.setState({activeNode:id});
+  }
   editTopic(id,change) {
     if (!this.setState) {
       console.log("no setState ?");
@@ -161,30 +165,30 @@ class Node extends React.Component {
     let switchOpen = () => {
       this.setState({open:!this.state.open});
     }
-    let switchEdit = () => {
+    let switchEdit = (e) => {
+      e.stopPropagation();
       this.setState({edit:!this.state.edit});
     }
     let change=this.props.change;
     let commitEdit = (e) => {
       let newName=e.target.value;
       change(this.props.id,{name:newName});
-      switchEdit();
+      switchEdit(e);
     }
     let handleInput = (e) => {
       if (e.key==="Enter") {
         commitEdit(e);
       }
     };
-    let handleAction = (e) => {
-      if (e.key==="Enter") {
-        console.log("enter on span");
-      }
-    };
+    let activeMe = (e) => {
+      e.stopPropagation();
+      this.props.activate(this.props.id);
+    }
     let thisNode;
     if (this.state.edit) {
       thisNode=<input autoFocus type='text' defaultValue={this.props.name} onKeyPress={handleInput} onBlur={commitEdit}/>;
     } else {
-      thisNode=<span className="node" onDoubleClick={switchEdit} onKeyPress={handleAction}>{this.props.name}</span>;
+      thisNode=<span className="node" onDoubleClick={switchEdit}>{this.props.name}</span>;
     }
     let children=[];
     if (this.props.topics) {
@@ -193,12 +197,16 @@ class Node extends React.Component {
         if ((this.props.id && topic.broader.indexOf(this.props.id)!==-1)
           || (!this.props.id && topic.broader.length===0)) {
             children.push(
-              <Node key={topID} id={topID} name={topic.name} topics={this.props.topics} parent={this.props.id} change={this.props.change}/>
+              <Node key={topID} id={topID} name={topic.name} topics={this.props.topics} activeNode={this.props.activeNode} parent={this.props.id}
+                activate={this.props.activate} change={this.props.change}/>
             );
         }
       }
     }
     var classes=["outliner-node"];
+    if (this.props.activeNode===this.props.id) {
+      classes.push("active");
+    }
     let caret;
     if (this.props.id && children.length) {
       caret=<span className="caret" onClick={switchOpen}> </span>;
@@ -209,7 +217,7 @@ class Node extends React.Component {
     }
     return (
       <li className={classes.join(" ")}>
-        {caret}<span className="wrap">{thisNode}</span>
+        {caret}<span className="wrap" onClick={activeMe}>{thisNode}</span>
         <ul>{children}</ul>
       </li>);
   };
