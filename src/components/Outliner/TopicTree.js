@@ -1,0 +1,124 @@
+class TopicTree {
+  constructor(topics,rootName) {
+    this.topics=topics;
+    this.rootName=rootName;
+  }
+
+  getTopic(id) {
+    var topic=false;
+    if (id!==false) {
+      if (id) {
+        topic=this.topics[id] || {
+          id:id,
+          broader:[]
+        }
+      } else {
+        topic={name:this.rootName};
+      }
+    }
+    return topic;
+  }
+
+  getParent(id) {
+    let topic=this.getTopic(id);
+    if (topic) {
+      topic.broader=topic.broader || [];
+      if (topic.broader.length) return topic.broader[0];
+      else return "";
+    }
+    return false;
+  }
+
+  getChildren(id) {
+    let children=[];
+    for (var topID in this.topics) {
+      let topic=this.topics[topID];
+      if ((id && topic.broader.indexOf(id)!==-1)
+        || (!id && topic.broader.length===0)) {
+          children.push(topID);
+      }
+    }
+    return children;
+  }
+
+  getSiblings(id) {
+    return this.getChildren(this.getParent(id));
+  }
+
+  getPreviousSibling(id) {
+    let siblings=this.getSiblings(id);
+    let pos=siblings.indexOf(id);
+    if (pos>0) {
+      return siblings[pos-1];
+    }
+    return false;
+  }
+
+  getNextSibling(id) {
+    let siblings=this.getSiblings(id);
+    let pos=siblings.indexOf(id);
+    if (pos<siblings.length-1) {
+      return siblings[pos+1];
+    }
+    return false;
+  }
+
+  setParent(id,parent) {
+    let topic=this.getTopic(id);
+    if (topic && parent!==false) {
+      console.log(`${parent} is new parent of ${id}`);
+      if (!parent) {
+        topic.broader=[]
+      } else {
+        topic.broader=[parent];
+      }
+    }
+    return topic;
+  }
+
+  setOrder(children) {
+    var changed=false;
+    children.forEach(c => {
+      let topic=this.topics[c];
+      if (topic) {
+        delete this.topics[c];
+        this.topics[c]=topic;
+        changed=true;
+      }
+    });
+    return changed;
+  }
+
+  promote(id) {
+    //attach to parent's parent
+    let parent=this.getParent(id);
+    if (this.getTopic(parent)) {
+      let newParent=this.getParent(parent);
+      var newSiblings=this.getChildren(newParent);
+      if (this.setParent(id,newParent)) {
+        let pos=newSiblings.indexOf(parent);
+        if (pos != -1) {
+          newSiblings.splice(pos+1,0,id);
+          return this.setOrder(newSiblings);
+        }
+      }
+    }
+    return false;
+  }
+
+  demote(id) {
+    //attach to previous sibling and set as last children
+    let previousSibling=this.getPreviousSibling(id);
+    if (previousSibling) {
+      var newParent=previousSibling;
+      var children=this.getChildren(newParent);
+      if (this.setParent(id,newParent)) {
+        children.push(id);
+        return this.setOrder(children);
+      }
+    }
+    return false;
+  }
+}
+
+module.exports=TopicTree;

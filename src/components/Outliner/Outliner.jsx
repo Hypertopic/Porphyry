@@ -4,6 +4,7 @@ import Hypertopic from 'hypertopic';
 import conf from '../../config/config.json';
 import Header from '../Header/Header.jsx';
 import Authenticated from '../Authenticated/Authenticated.jsx';
+import TopicTree from './TopicTree.js';
 
 import '../../styles/App.css';
 
@@ -93,6 +94,30 @@ class Outliner extends React.Component {
   activeNode(id) {
     this.setState({activeNode:id});
   }
+
+  handleKeyAction(e) {
+    var changed=false;
+    if (!this.state.activeNode || !this.state.topics[this.state.activeNode]) {
+      //nothing to work on
+      return;
+    }
+    switch (e.key) {
+      case "Tab":
+        if (!e.altKey && !e.ctrlKey) {
+          if (e.shiftKey) {
+            changed=this.topicTree.promote(this.state.activeNode);
+          } else {
+            changed=this.topicTree.demote(this.state.activeNode);
+          }
+        }
+        break;
+    }
+    if (changed) {
+      this.setState({topics:this.topicTree.topics},this.applyChange.bind(this));
+    }
+    return;
+  };
+
   editTopic(id,change) {
     if (!this.setState) {
       console.log("no setState ?");
@@ -124,6 +149,7 @@ class Outliner extends React.Component {
   componentDidMount() {
     this._fetchData();
     this._timer = setInterval(this._fetchData.bind(this),1000);
+    document.addEventListener("keypress", this.handleKeyAction.bind(this));
   }
 
   componentWillUnmount() {
@@ -148,6 +174,7 @@ class Outliner extends React.Component {
     return db.get({ _id: this.props.match.params.id })
       .then(x => {
         this.setState({ topics: x.topics, title: x.viewpoint_name });
+        this.topicTree=new TopicTree(x. topics);
       });
   }
 
