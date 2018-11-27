@@ -13,15 +13,6 @@ const db = new Hypertopic(conf.services);
 const _log = (x) => console.log(JSON.stringify(x, null, 2));
 const _error = (x) => console.error(x.message);
 
-function makeID() {
-  var id = '';
-  for (var i = 0; i < 6; i++) {
-    id += Math.random().toString(15).substring(10);
-  }
-  id = id.slice(0, 32);
-  return id;
-}
-
 class Outliner extends React.Component {
 
   constructor() {
@@ -101,7 +92,12 @@ class Outliner extends React.Component {
       //nothing to work on
       return;
     }
+    if (e.cancelBubble) return;
     switch (e.key) {
+      case "Enter":
+        let topic=this.topicTree.newSibling(this.state.activeNode);
+        changed=true;
+        break;
       case "Tab":
         if (!e.altKey && !e.ctrlKey) {
           if (e.shiftKey) {
@@ -126,11 +122,7 @@ class Outliner extends React.Component {
     return this.setState(previousState => {
       let topics=previousState.topics;
       let topic;
-      if (!id) {
-        id=makeID();
-        topic={};
-        topics[id]={};
-      } else if (topics[id]) {
+      if (id && topics[id]) {
         if (change.delete) {
           delete topics[id];
         } else {
@@ -204,6 +196,7 @@ class Node extends React.Component {
     }
     let handleInput = (e) => {
       if (e.key==="Enter") {
+        e.cancelBubble=true;
         commitEdit(e);
       }
     };
@@ -212,7 +205,7 @@ class Node extends React.Component {
       this.props.activate(this.props.id);
     }
     let thisNode;
-    if (this.state.edit) {
+    if (this.state.edit || !this.props.name) {
       thisNode=<input autoFocus type='text' defaultValue={this.props.name} onKeyPress={handleInput} onBlur={commitEdit}/>;
     } else {
       thisNode=<span className="node" onDoubleClick={switchEdit}>{this.props.name}</span>;

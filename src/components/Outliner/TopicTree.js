@@ -4,6 +4,15 @@ class TopicTree {
     this.rootName=rootName;
   }
 
+  makeID() {
+    var id = '';
+    for (var i = 0; i < 6; i++) {
+      id += Math.random().toString(15).substring(10);
+    }
+    id = id.slice(0, 32);
+    return id;
+  }
+
   getTopic(id) {
     var topic=false;
     if (id!==false) {
@@ -87,6 +96,27 @@ class TopicTree {
       }
     });
     return changed;
+  }
+
+  newChildren(parent) {
+    let newId=this.makeID();
+    let topic=this.getTopic(newId);
+    this.topics[newId]=topic;
+    let children=this.getChildren(parent);
+    this.setParent(newId,parent);
+    children.splice(0,0,newId);
+    this.setOrder(children);
+    return topic;
+  }
+
+  newSibling(sibling) {
+    let parent=this.getParent(sibling);
+    let siblings=this.getSiblings(sibling);
+    let topic=this.newChildren(parent);
+    let pos=siblings.indexOf(sibling);
+    siblings.splice(pos+1,0,topic.id);
+    this.setOrder(siblings);
+    return topic;
   }
 
   promote(id) {
