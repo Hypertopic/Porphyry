@@ -119,6 +119,20 @@ class TopicTree {
     return topic;
   }
 
+  deleteTopic(id) {
+    if (!id || this.topics[id]) {
+      let topic=this.getTopic(id);
+      let children=this.getChildren(id);
+      let parent=this.getParent(id);
+      children.forEach(id => {
+        this.setParent(id,parent);
+      });
+      delete this.topics[id];
+      return true;
+    }
+    return false;
+  }
+
   promote(id) {
     //attach to parent's parent
     let parent=this.getParent(id);

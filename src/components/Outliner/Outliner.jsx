@@ -107,6 +107,10 @@ class Outliner extends React.Component {
           }
         }
         break;
+      case 'Delete':
+        if (!e.altKey && !e.ctrlKey && !e.shiftKey) {
+          changed=this.topicTree.deleteTopic(this.state.activeNode);
+        }
     }
     if (changed) {
       this.setState({topics:this.topicTree.topics},this.applyChange.bind(this));
