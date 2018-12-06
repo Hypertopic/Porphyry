@@ -117,6 +117,7 @@ class Outliner extends React.Component {
         changed=false;
     }
     if (changed) {
+      e.preventDefault();
       this.setState({topics:this.topicTree.topics},this.applyChange.bind(this));
     }
     return;
