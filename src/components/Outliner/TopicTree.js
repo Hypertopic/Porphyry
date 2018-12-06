@@ -121,7 +121,6 @@ class TopicTree {
 
   deleteTopic(id) {
     if (!id || this.topics[id]) {
-      let topic=this.getTopic(id);
       let children=this.getChildren(id);
       let parent=this.getParent(id);
       children.forEach(id => {
@@ -141,7 +140,7 @@ class TopicTree {
       var newSiblings=this.getChildren(newParent);
       if (this.setParent(id,newParent)) {
         let pos=newSiblings.indexOf(parent);
-        if (pos != -1) {
+        if (pos !== -1) {
           newSiblings.splice(pos+1,0,id);
           return this.setOrder(newSiblings);
         }
