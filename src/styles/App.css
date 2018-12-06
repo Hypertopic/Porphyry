@@ -300,6 +300,12 @@ h1 a, h1 a:hover {
   background-color: rgb(199, 222, 237);
 }
 
+.Outliner input {
+  border: none;
+  background: transparent;
+}
+
+
 .wrap:hover button{display: inherit;margin-right: 10px;z-index: 999}
 .wrap button{display:none;}
 
