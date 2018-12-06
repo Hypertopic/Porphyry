@@ -18,6 +18,7 @@ class Outliner extends React.Component {
   constructor() {
     super();
     this.state = { };
+    this.changing=false;
     this.user = conf.user || window.location.hostname.split('.', 1)[0];
   }
 
@@ -92,10 +93,10 @@ class Outliner extends React.Component {
       //nothing to work on
       return;
     }
-    if (e.cancelBubble) return;
     switch (e.key) {
       case "Enter":
-        this.topicTree.newSibling(this.state.activeNode);
+        var topic=this.topicTree.newSibling(this.state.activeNode);
+        this.activeNode(topic.id);
         changed=true;
         break;
       case "Tab":
@@ -156,25 +157,34 @@ class Outliner extends React.Component {
   }
 
   applyChange() {
-    return db.get({ _id: this.props.match.params.id })
-      .then(data => {
-        data.topics = this.state.topics;
-        data.viewpoint_name = this.state.title;
-        return data;
-      })
-      .then(db.post)
-      .catch(_ => {
-        _error(_);
-        this._fetchData()
-      });
+    if (!this.changing) {
+      this.changing=db.get({ _id: this.props.match.params.id })
+        .then(data => {
+          data.topics = this.state.topics;
+          data.viewpoint_name = this.state.title;
+          return data;
+        })
+        .then(db.post)
+        .catch(_ => {
+          _error(_);
+          this._fetchData();
+        }).finally(() => {
+          this.changing=false;
+        });
+    }
+    return this.changing;
   }
 
   _fetchData() {
+    if (!this.changing) {
     return db.get({ _id: this.props.match.params.id })
       .then(x => {
         this.setState({ topics: x.topics, title: x.viewpoint_name });
         this.topicTree=new TopicTree(x.topics);
       });
+    } else {
+      return true;
+    }
   }
 
 }
@@ -203,7 +213,6 @@ class Node extends React.Component {
     }
     let handleInput = (e) => {
       if (e.key==="Enter") {
-        e.cancelBubble=true;
         commitEdit(e);
       }
     };
