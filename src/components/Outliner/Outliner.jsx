@@ -109,12 +109,13 @@ class Outliner extends React.Component {
         }
         break;
       case 'Delete':
+      case 'Backspace':
         if (!e.altKey && !e.ctrlKey && !e.shiftKey) {
-          changed=this.topicTree.deleteTopic(this.state.activeNode);
+          if (e.target.tagName==="BODY" || e.target.value==='' )
+            changed=this.topicTree.deleteTopic(this.state.activeNode);
         }
         break;
       default:
-        changed=false;
     }
     if (changed) {
       e.preventDefault();
@@ -194,7 +195,7 @@ class Node extends React.Component {
 
   constructor() {
     super();
-    this.state = { edit: false, active: false, open: false };
+    this.state = { edit: false, active: false, open: true };
     this.user = conf.user || window.location.hostname.split('.', 1)[0];
   }
 
@@ -213,8 +214,17 @@ class Node extends React.Component {
       switchEdit(e);
     }
     let handleInput = (e) => {
-      if (e.key==="Enter") {
-        commitEdit(e);
+      console.log("input",e.key);
+      switch(e.key) {
+        case "Enter":
+          commitEdit(e);
+          e.stopPropagation();
+          break;
+        case "Escape":
+          switchEdit(e);
+          e.stopPropagation();
+          break;
+        default:
       }
     };
     let activeMe = (e) => {
@@ -223,7 +233,7 @@ class Node extends React.Component {
     }
     let thisNode;
     if (this.state.edit || !this.props.name) {
-      thisNode=<input autoFocus type='text' defaultValue={this.props.name} onKeyPress={handleInput} onBlur={commitEdit}/>;
+      thisNode=<input autoFocus type='text' defaultValue={this.props.name} onKeyPress={handleInput} onKeyDown={handleInput} onBlur={commitEdit}/>;
     } else {
       thisNode=<span className="node" onDoubleClick={switchEdit}>{this.props.name}</span>;
     }

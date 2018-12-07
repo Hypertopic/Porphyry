@@ -303,8 +303,8 @@ h1 a, h1 a:hover {
 .Outliner input {
   border: none;
   background: transparent;
+  width:100%;
 }
-
 
 .wrap:hover button{display: inherit;margin-right: 10px;z-index: 999}
 .wrap button{display:none;}

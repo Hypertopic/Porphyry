@@ -123,10 +123,14 @@ class TopicTree {
     if (!id || this.topics[id]) {
       let children=this.getChildren(id);
       let parent=this.getParent(id);
-      children.forEach(id => {
-        this.setParent(id,parent);
+      let siblings=this.getSiblings(id);
+      let pos=siblings.indexOf(id);
+      children.forEach(children => {
+        this.setParent(children,parent);
+        siblings.splice(pos,0,children)
       });
       delete this.topics[id];
+      this.setOrder(siblings);
       return true;
     }
     return false;
