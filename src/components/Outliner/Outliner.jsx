@@ -89,7 +89,7 @@ class Outliner extends React.Component {
 
   handleKeyAction(e) {
     var changed=false;
-    if (!this.state.activeNode || !this.state.topics[this.state.activeNode]) {
+    if (this.state.activeNode &&!this.state.topics[this.state.activeNode]) {
       //nothing to work on
       return;
     }
@@ -132,7 +132,11 @@ class Outliner extends React.Component {
     return this.setState(previousState => {
       let topics=previousState.topics;
       let topic;
-      if (id && topics[id]) {
+      if (!id) {
+        if (change.name && change.name!==previousState.title) {
+          return {title:change.name}
+        }
+      } else if (topics[id]) {
         if (change.delete) {
           delete topics[id];
         } else {
