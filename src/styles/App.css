@@ -306,6 +306,13 @@ h1 a, h1 a:hover {
   width:100%;
 }
 
+.id {
+  display: none;
+  font-size: 0.8em;
+  color:#111;
+  padding:1em;
+}
+
 .wrap:hover button{display: inherit;margin-right: 10px;z-index: 999}
 .wrap button{display:none;}
 

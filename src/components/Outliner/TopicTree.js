@@ -14,15 +14,11 @@ class TopicTree {
   }
 
   getTopic(id) {
-    var topic=false;
-    if (id!==false) {
-      if (id) {
-        topic=this.topics[id] || {
-          id:id,
-          broader:[]
-        }
-      } else {
-        topic={name:this.rootName};
+    var topic={id:"root",name:this.rootName};
+    if (id && id!=="root") {
+      topic=this.topics[id] || {
+        id:id,
+        broader:[]
       }
     }
     return topic;
@@ -33,7 +29,7 @@ class TopicTree {
     if (topic) {
       topic.broader=topic.broader || [];
       if (topic.broader.length) return topic.broader[0];
-      else return "";
+      else return "root";
     }
     return false;
   }
@@ -42,9 +38,9 @@ class TopicTree {
     let children=[];
     for (var topID in this.topics) {
       let topic=this.topics[topID];
-      if ((id && topic.broader.indexOf(id)!==-1)
-        || (!id && topic.broader.length===0)) {
-          children.push(topID);
+      if ( (id==="root" && topic.broader.length===0)
+       || (id && topic.broader.indexOf(id)!==-1) ) {
+        children.push(topID);
       }
     }
     return children;
@@ -72,11 +68,50 @@ class TopicTree {
     return false;
   }
 
+  getLastChild(id) {
+    let children=this.getChildren(id);
+    if (children.length) {
+      return this.getLastChild(children[children.length-1]);
+    } else {
+      return id;
+    }
+  }
+
+  getPreviousTopic(id) {
+    //find previous sibling last child, or parent
+    let previousSibling=this.getPreviousSibling(id);
+    if (previousSibling) {
+      return this.getLastChild(previousSibling);
+    } else {
+      let parent=this.getParent(id);
+      if (parent!==false && parent!==id) {
+        return parent;
+      } else {
+        return id;
+      }
+    }
+  }
+
+  getNextTopic(id) {
+    //find next children or sibling
+    let children=this.getChildren(id);
+    if (children.length) {
+      return children[0];
+    } else {
+      var p=id,n;
+      while (p && p!=="root" && !(n=this.getNextSibling(p))) {
+        p=this.getParent(p);
+      }
+      if (n) return n;
+      else return id;
+    }
+  }
+
   setParent(id,parent) {
     let topic=this.getTopic(id);
     if (topic && parent!==false) {
       console.log(`${parent} is new parent of ${id}`);
-      if (!parent) {
+      if (parent==="root") {
         topic.broader=[]
       } else {
         topic.broader=[parent];
@@ -120,14 +155,14 @@ class TopicTree {
   }
 
   deleteTopic(id) {
-    if (!id || this.topics[id]) {
+    if (id && this.topics[id]) {
       let children=this.getChildren(id);
       let parent=this.getParent(id);
       let siblings=this.getSiblings(id);
-      let pos=siblings.indexOf(id);
+      var pos=siblings.indexOf(id);
       children.forEach(children => {
         this.setParent(children,parent);
-        siblings.splice(pos,0,children)
+        siblings.splice(pos++,0,children);
       });
       delete this.topics[id];
       this.setOrder(siblings);
