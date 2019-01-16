@@ -24,6 +24,7 @@ class Outliner extends React.Component {
 
   render() {
     let status = this._getStatus();
+    let topic={name:this.state.title};
     return (
       <div className="App container-fluid">
         <Header />
@@ -41,7 +42,7 @@ class Outliner extends React.Component {
                 <div className="p-3">
                   {this.state.title ? '' : this._getTitle()}
                   <ul className="Outliner">
-                    <Node topics={this.state.topics} name={this.state.title} activeNode={this.state.activeNode}
+                    <Node topics={this.state.topics} me={topic} activeNode={this.state.activeNode}
                       change={this.editTopic.bind(this)} activate={this.activeNode.bind(this)} id="root"/>
                   </ul>
                 </div>
@@ -93,8 +94,15 @@ class Outliner extends React.Component {
       case "Enter":
         var topic=this.topicTree.newSibling(this.state.activeNode);
         this.activeNode(topic.id);
-        changed=true;
-        break;
+        topic.new=true;
+        e.preventDefault();
+        this.setState(function(previousState) {
+          // previousState.temptopics=previousState.temptopics || [];
+          // previousState.temptopics.push(topic.id);
+          previousState.topics=this.topicTree.topics;
+          return previousState;
+        });
+        return;
       case "Tab":
         if (!e.altKey && !e.ctrlKey) {
           if (e.shiftKey) {
@@ -135,35 +143,50 @@ class Outliner extends React.Component {
 
   editTopic(id,change) {
     if (!this.setState) {
-      console.log("no setState ?");
       return;
     }
+    var toApply=false;
     return this.setState(previousState => {
       let topics=previousState.topics;
-      let topic;
-      if (!id) {
-        if (change.name && change.name!==previousState.title) {
-          return {title:change.name}
+      let activeNode=previousState.activeNode;
+      if (topics) {
+        let topic;
+        if (!id) {
+          if (change.name && change.name!==previousState.title) {
+            toApply=true;
+            return {title:change.name}
+          }
+        } else if (topics[id]) {
+          if (change.delete) {
+            if (!topics[id].new) toApply=true;
+            delete topics[id];
+          } else {
+            topic=topics[id];
+          }
         }
-      } else if (topics[id]) {
-        if (change.delete) {
-          delete topics[id];
-        } else {
-          topic=topics[id];
+        if (topic) {
+          for (let key in change) {
+            if (topic[key]!==change[key]) {
+              topic[key]=change[key];
+              toApply=true;
+            }
+          }
+          delete topic.new;
         }
+        return {topics,activeNode};
       }
-      if (topic) {
-        for (let key in change) {
-          topic[key]=change[key];
-        }
-      }
-      return {topics};
-    },this.applyChange.bind(this));
+      return {};
+    },function() {
+      if (toApply) this.applyChange();
+    });
+  }
+
+  deleteTopic(id) {
+
   }
 
   componentDidMount() {
     this._fetchData();
-    this._timer = setInterval(this._fetchData.bind(this),1000);
     document.addEventListener("keydown", this.handleKeyAction.bind(this));
   }
 
@@ -175,13 +198,19 @@ class Outliner extends React.Component {
     if (!this.changing) {
       this.changing=db.get({ _id: this.props.match.params.id })
         .then(data => {
-          data.topics = this.state.topics;
+          data.topics ={};
+          for (var id in this.state.topics) {
+            if (!this.state.topics.new) {
+              data.topics[id]=this.state.topics[id];
+            }
+          }
           data.viewpoint_name = this.state.title;
           return data;
         })
         .then(db.post)
         .catch(_ => {
           _error(_);
+          this.changing=false;
           this._fetchData();
         }).finally(() => {
           this.changing=false;
@@ -213,17 +242,24 @@ class Node extends React.Component {
   }
 
   render = () => {
+    let change=this.props.change;
     let switchOpen = () => {
       this.setState({open:!this.state.open});
     }
+    var isNew=this.props.me.new;
     let switchEdit = (e) => {
       e.stopPropagation();
-      this.setState({edit:!this.state.edit});
+      this.setState((previousState) => {
+        if (previousState.edit && isNew) {
+          change(this.props.id,{delete:true});
+        }
+        return {edit:!previousState.edit};
+      });
     }
-    let change=this.props.change;
     let commitEdit = (e) => {
       let newName=e.target.value;
       change(this.props.id,{name:newName});
+      isNew=false;
       switchEdit(e);
     }
     let handleInput = (e) => {
@@ -244,10 +280,10 @@ class Node extends React.Component {
       this.props.activate(this.props.id);
     }
     let thisNode;
-    if (this.state.edit || !this.props.name) {
-      thisNode=<input autoFocus type='text' defaultValue={this.props.name} onKeyPress={handleInput} onKeyDown={handleInput} onBlur={commitEdit}/>;
+    if (this.state.edit) {
+      thisNode=<input autoFocus type='text' defaultValue={this.props.me.name} onKeyPress={handleInput} onKeyDown={handleInput} onBlur={commitEdit}/>;
     } else {
-      thisNode=<span className="node" onDoubleClick={switchEdit}>{this.props.name}</span>;
+      thisNode=<span className="node" onDoubleClick={switchEdit}>{this.props.me.name}</span>;
     }
     let children=[];
     if (this.props.topics) {
@@ -256,8 +292,8 @@ class Node extends React.Component {
         if ((this.props.id && topic.broader.indexOf(this.props.id)!==-1)
           || (this.props.id==="root" && topic.broader.length===0)) {
             children.push(
-              <Node key={topID} id={topID} name={topic.name} topics={this.props.topics} activeNode={this.props.activeNode} parent={this.props.id}
-                activate={this.props.activate} change={this.props.change}/>
+              <Node key={topID} me={topic} id={topID} topics={this.props.topics} activeNode={this.props.activeNode} parent={this.props.id}
+                activate={this.props.activate} change={this.props.change} delete={this.props.delete}/>
             );
         }
       }
@@ -274,12 +310,19 @@ class Node extends React.Component {
     } else {
       caret=null;
     }
+    function setEdit(e) {
+      if (!this.state.edit) switchEdit(e);
+    }
     return (
       <li className={classes.join(" ")}>
-        {caret}<span className="wrap" onClick={activeMe}>{thisNode}<span className="id">{this.props.id}</span></span>
+        {caret}<span className="wrap" onClick={activeMe} onDoubleClick={setEdit.bind(this)}>{thisNode}<span className="id">{this.props.id}</span></span>
         <ul>{children}</ul>
       </li>);
   };
+
+  componentDidMount() {
+    if (!this.props.me.name || this.props.me.isNew) this.state.edit=true;
+  }
 
 }
 
