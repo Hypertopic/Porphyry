@@ -90,9 +90,14 @@ class Outliner extends React.Component {
 
   handleKeyAction(e) {
     var changed=false;
+    var isNew=false;
+    if (this.state.activeNode) {
+      var topic=this.topicTree.getTopic(this.state.activeNode);
+      isNew=topic.new || false;
+    }
     switch (e.key) {
       case "Enter":
-        var topic=this.topicTree.newSibling(this.state.activeNode);
+        topic=this.topicTree.newSibling(this.state.activeNode);
         this.activeNode(topic.id);
         topic.new=true;
         e.preventDefault();
@@ -136,7 +141,9 @@ class Outliner extends React.Component {
     }
     if (changed) {
       e.preventDefault();
-      this.setState({topics:this.topicTree.topics},this.applyChange.bind(this));
+      this.setState({topics:this.topicTree.topics},() => {
+        if (!isNew) this.applyChange.bind(this);
+      });
     }
     return;
   };
@@ -168,10 +175,10 @@ class Outliner extends React.Component {
           for (let key in change) {
             if (topic[key]!==change[key]) {
               topic[key]=change[key];
-              toApply=true;
+              if (!topics[id].new) toApply=true;
             }
           }
-          delete topic.new;
+          if (!topics[id].new) delete topics[id].new;
         }
         return {topics,activeNode};
       }
@@ -258,7 +265,7 @@ class Node extends React.Component {
     }
     let commitEdit = (e) => {
       let newName=e.target.value;
-      change(this.props.id,{name:newName});
+      change(this.props.id,{name:newName,new:false});
       isNew=false;
       switchEdit(e);
     }
@@ -321,7 +328,9 @@ class Node extends React.Component {
   };
 
   componentDidMount() {
-    if (!this.props.me.name || this.props.me.isNew) this.state.edit=true;
+    if (!this.props.me.name || this.props.me.isNew) {
+      this.setState({edit:true});
+    }
   }
 
 }
