@@ -164,7 +164,7 @@ class Outliner extends React.Component {
   componentDidMount() {
     this._fetchData();
     this._timer = setInterval(this._fetchData.bind(this),1000);
-    document.addEventListener("keypress", this.handleKeyAction.bind(this));
+    document.addEventListener("keydown", this.handleKeyAction.bind(this));
   }
 
   componentWillUnmount() {
