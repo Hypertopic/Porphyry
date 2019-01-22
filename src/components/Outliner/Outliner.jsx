@@ -158,7 +158,7 @@ class Outliner extends React.Component {
       let activeNode=previousState.activeNode;
       if (topics) {
         let topic;
-        if (!id) {
+        if (id==="root") {
           if (change.name && change.name!==previousState.title) {
             toApply=true;
             return {title:change.name}
