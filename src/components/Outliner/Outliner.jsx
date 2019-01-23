@@ -215,12 +215,13 @@ class Outliner extends React.Component {
           return data;
         })
         .then(db.post)
+        .then(() => {
+          this.changing=false;
+        })
         .catch(_ => {
           _error(_);
           this.changing=false;
           this._fetchData();
-        }).finally(() => {
-          this.changing=false;
         });
     }
     return this.changing;
