@@ -211,7 +211,7 @@ class Outliner extends React.Component {
         .then(data => {
           data.topics ={};
           for (var id in this.state.topics) {
-            if (!this.state.topics.new) {
+            if (!this.state.topics[id].new) {
               data.topics[id]=this.state.topics[id];
             }
           }
