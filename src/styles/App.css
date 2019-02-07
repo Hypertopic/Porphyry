@@ -213,10 +213,6 @@ h1 a, h1 a:hover {
   opacity: 1;
 }
 
-.Outliner ul {
-  background-color: whitesmoke;
-}
-
 .TopicAdding {
   padding-top: 5px;
   display: flex;
@@ -271,13 +267,27 @@ h1 a, h1 a:hover {
 .outliner-node > ul {
   position: relative;
   padding-left: 10px;
-  background-color: #fff;
 }
 
 .outliner-node .caret {
   cursor: pointer;
   position: absolute;
   left: -10px;
+}
+
+.outliner-node div.after-handle,
+.outliner-node li.first-handle {
+  height:25px;
+  border-style:dashed;
+  border-width: 1px;
+  border-color:black;
+  background-color: lightgrey;
+  display:none;
+}
+
+.outliner-node.dragged-after > div.after-handle,
+.outliner-node.dragged-into > ul > li.first-handle {
+  display:inline;
 }
 
 .outliner-node.closed > .caret:before {
@@ -294,6 +304,10 @@ h1 a, h1 a:hover {
 .Outliner li {
   list-style-type: none;
   min-height: 2em;
+}
+
+.Outliner li.dragged {
+  background-color: lightgrey;
 }
 
 .Outliner li.active > span.wrap {

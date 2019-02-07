@@ -177,9 +177,22 @@ class Outliner extends React.Component {
         }
         if (topic) {
           for (let key in change) {
-            if (topic[key]!==change[key]) {
-              topic[key]=change[key];
-              if (!topics[id].new) toApply=true;
+            switch(key) {
+              case "parent":
+                if (this.topicTree.getTopic(change.parent)) {
+                  toApply=this.topicTree.setParent(id,change.parent);
+                }
+                break;
+              case "moveAfter":
+                if (this.topicTree.getTopic(change.moveAfter)) {
+                  toApply=this.topicTree.moveAfter(id,change.moveAfter);
+                }
+                break;
+              default:
+                if (topic[key]!==change[key]) {
+                  topic[key]=change[key];
+                  if (!topics[id].new) toApply=true;
+                }
             }
           }
           if (!topics[id].new) delete topics[id].new;
@@ -314,6 +327,15 @@ class Node extends React.Component {
     if (this.props.activeNode===this.props.id) {
       classes.push("active");
     }
+    if (this.state.isDragged || this.state.isDraggedOver) {
+      classes.push("dragged");
+    }
+    if (this.state.isDraggedInto) {
+      classes.push("dragged-into");
+    }
+    if (this.state.isDraggedAfter) {
+      classes.push("dragged-after");
+    }
     let caret;
     if (this.props.id && children.length) {
       caret=<span className="caret" onClick={switchOpen}> </span>;
@@ -325,10 +347,84 @@ class Node extends React.Component {
     function setEdit(e) {
       if (!this.state.edit) switchEdit(e);
     }
+    var draggable=this.props.id!=="root";
+    function onDragStart(e) {
+      console.log("dragStart "+this.props.me.name);
+      e.stopPropagation();
+      e.dataTransfer.effectAllowed="move";
+      e.dataTransfer.setData("dragContent",this.props.id);
+      activeMe(e);
+      this.setState({isDragged:true});
+    }
+    function onDragStop(e) {
+      e.stopPropagation();
+      console.log("dragStop "+this.props.me.name);
+      this.setState({isDragged:false});
+    }
+
+    let onDragAfter=(e) => {
+      console.log("dragAfter "+this.props.me.name);
+      var draggedTopic=e.dataTransfer.getData("dragContent");
+      if (!draggedTopic) {console.error("no dragged topic"); return;}
+      if (!this.props.topics[draggedTopic]) {console.error("unknown dragged topic "+draggedTopic); return;}
+      var draggedName=this.props.topics[draggedTopic].name;
+      let topicTree=new TopicTree(this.props.topics);
+
+      console.log(e.target);
+      if (draggedTopic===this.props.id) {
+        return;
+      } else if (topicTree.isParent(this.props.id,draggedTopic)) {
+        console.log("accepted drop of "+draggedName+" as first child of "+this.props.me.name);
+        this.setState({isDraggedInto:true});
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+      } else if (topicTree.isSibling(this.props.id,draggedTopic)) {
+        console.log("accepted drop of "+draggedName+" after "+this.props.me.name);
+        this.setState({isDraggedAfter:true});
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+      }
+    }
+    function onDragLeaveAfter(e) {
+      console.log("dragLeave "+this.props.me.name);
+      this.setState({isDraggedAfter:false,isDraggedInto:false});
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    function onDropAfter(e) {
+      console.log("onDropAfter "+this.props.me.name);
+      this.setState({isDraggedAfter:false,isDraggedInto:false});
+      let topicTree=new TopicTree(this.props.topics);
+      var droppedTopic=e.dataTransfer.getData("dragContent");
+      if (droppedTopic===this.props.id) {
+        return;
+      } else if (topicTree.isParent(this.props.id,droppedTopic)) {
+        console.log("drop "+this.props.topics[droppedTopic].name+" into "+this.props.me.name);
+        e.stopPropagation();
+        this.props.change(droppedTopic,{moveAfter:false});
+      } else if (topicTree.isSibling(this.props.id,droppedTopic)) {
+        console.log("drop "+this.props.topics[droppedTopic].name+" after "+this.props.me.name);
+        e.stopPropagation();
+        this.props.change(droppedTopic,{moveAfter:this.props.id});
+      }
+    }
+
     return (
-      <li className={classes.join(" ")}>
+      <li className={classes.join(" ")}
+        draggable={draggable} onDragStart={onDragStart.bind(this)} onDragEnd={onDragStop.bind(this)}
+        onDragOver={onDragAfter.bind(this)}
+        onDragLeave={onDragLeaveAfter.bind(this)}
+        onDrop={onDropAfter.bind(this)}
+        //onDrop={onDrop.bind(this)} onDragLeave={onDragLeave.bind(this)}
+        >
         {caret}<span className="wrap" onClick={activeMe} onDoubleClick={setEdit.bind(this)}>{thisNode}<span className="id">{this.props.id}</span></span>
-        <ul>{children}</ul>
+        <ul>
+        <li class="first-handle"/>
+        {children}
+        </ul>
+        <div class="after-handle"/>
       </li>);
   };
 

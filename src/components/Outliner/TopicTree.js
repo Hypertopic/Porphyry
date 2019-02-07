@@ -1,5 +1,20 @@
+function isInteger(int) {
+  return int === parseInt(int, 10);
+}
+
+/*eslint no-extend-native: ["error", { "exceptions": ["Array"] }]*/
+Array.prototype.move = function(from, to) {
+  if (!isInteger(from) || !isInteger(to)) {
+    console.error("bad parameters for Array.move");
+    return;
+  }
+  if (from < to) to--;
+  this.splice(to, 0, this.splice(from, 1)[0]);
+};
+
 class TopicTree {
   constructor(topics,rootName) {
+    rootName=rootName||"anonymous-root";
     this.topics=topics;
     this.rootName=rootName;
   }
@@ -26,6 +41,23 @@ class TopicTree {
       }
     }
     return topic;
+  }
+
+  isParent(id1,id2) {
+    return this.getParent(id2)===id1;
+  }
+
+  isSibling(id1,id2) {
+    return this.getSiblings(id1).indexOf(id2)!==-1;
+  }
+
+  isAncestor(id1,id2) {
+    var parent=id2;
+    while (parent!=="root") {
+      if (parent===id1) return true;
+      parent=this.getParent(parent);
+    }
+    return false;
   }
 
   getParent(id) {
@@ -122,6 +154,27 @@ class TopicTree {
       }
     }
     return topic;
+  }
+
+  moveAfter(id,previousTopic) {
+    if (!id) return;
+    var siblings=this.getSiblings(id);
+    let pos=siblings.indexOf(id);
+    if (pos!==-1) {
+      var newPos;
+      if (!previousTopic) newPos=-1;
+      else {
+        newPos=siblings.indexOf(previousTopic);
+        if (newPos===-1) return false;
+      }
+      siblings.move(pos,newPos+1);
+      this.setOrder(siblings);
+      return true;
+    } else {
+      //maybe accept to also change parent if
+      // previousTopic is not a sibling?
+    }
+    return false;
   }
 
   setOrder(children) {
