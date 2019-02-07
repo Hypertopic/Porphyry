@@ -13,6 +13,10 @@ class TopicTree {
     return id;
   }
 
+  setRootName(rootName) {
+    this.rootName=rootName;
+  }
+
   getTopic(id) {
     var topic={id:"root",name:this.rootName};
     if (id && id!=="root") {

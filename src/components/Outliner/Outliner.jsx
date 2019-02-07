@@ -19,6 +19,7 @@ class Outliner extends React.Component {
     super();
     this.state = { };
     this.changing=false;
+    this.topicTree=new TopicTree({});
     this.user = conf.user || window.location.hostname.split('.', 1)[0];
   }
 
@@ -40,11 +41,13 @@ class Outliner extends React.Component {
               <div className="Description">
                 <h2 className="h4 font-weight-bold text-center">{status}</h2>
                 <div className="p-3">
-                  {this.state.title ? '' : this._getTitle()}
-                  <ul className="Outliner">
-                    <Node topics={this.state.topics} me={topic} activeNode={this.state.activeNode}
-                      change={this.editTopic.bind(this)} activate={this.activeNode.bind(this)} id="root"/>
-                  </ul>
+                  {this.state.title ?
+                    <ul className="Outliner">
+                      <Node topics={this.state.topics} me={topic} activeNode={this.state.activeNode}
+                        change={this.editTopic.bind(this)} activate={this.activeNode.bind(this)} id="root"/>
+                    </ul>
+                    : this._getTitle()
+                  }
                 </div>
               </div>
             </div>
@@ -161,6 +164,7 @@ class Outliner extends React.Component {
         if (id==="root") {
           if (change.name && change.name!==previousState.title) {
             toApply=true;
+            this.topicTree.setRootName(change.name);
             return {title:change.name}
           }
         } else if (topics[id]) {
