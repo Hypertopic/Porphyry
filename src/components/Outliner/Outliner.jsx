@@ -158,7 +158,6 @@ class Outliner extends React.Component {
     var toApply=false;
     return this.setState(previousState => {
       let topics=previousState.topics;
-      let activeNode=previousState.activeNode;
       if (topics) {
         let topic;
         if (id==="root") {
@@ -206,10 +205,6 @@ class Outliner extends React.Component {
     },function() {
       if (toApply) this.applyChange();
     });
-  }
-
-  deleteTopic(id) {
-
   }
 
   componentDidMount() {
@@ -352,7 +347,6 @@ class Node extends React.Component {
     }
     var draggable=this.props.id!=="root";
     function onDragStart(e) {
-      console.log("dragStart "+this.props.me.name);
       e.stopPropagation();
       e.dataTransfer.effectAllowed="move";
       e.dataTransfer.setData("dragContent",this.props.id);
@@ -367,24 +361,19 @@ class Node extends React.Component {
     }
 
     let onDragAfter=(e) => {
-      console.log("dragAfter "+this.props.me.name);
       var draggedTopic=e.dataTransfer.getData("dragContent") || this.props.draggedTopic;
       if (!draggedTopic) {console.error("no dragged topic"); return;}
       if (!this.props.topics[draggedTopic]) {console.error("unknown dragged topic "+draggedTopic); return;}
-      var draggedName=this.props.topics[draggedTopic].name;
       let topicTree=new TopicTree(this.props.topics);
 
-      console.log(e.target);
       if (draggedTopic===this.props.id) {
         return;
       } else if (topicTree.isParent(this.props.id,draggedTopic)) {
-        console.log("accepted drop of "+draggedName+" as first child of "+this.props.me.name);
         this.setState({isDraggedInto:true});
         e.preventDefault();
         e.stopPropagation();
         return false;
       } else if (topicTree.isSibling(this.props.id,draggedTopic)) {
-        console.log("accepted drop of "+draggedName+" after "+this.props.me.name);
         this.setState({isDraggedAfter:true});
         e.preventDefault();
         e.stopPropagation();
@@ -392,13 +381,11 @@ class Node extends React.Component {
       }
     }
     function onDragLeaveAfter(e) {
-      console.log("dragLeave "+this.props.me.name);
       this.setState({isDraggedAfter:false,isDraggedInto:false});
       e.preventDefault();
       e.stopPropagation();
     }
     function onDropAfter(e) {
-      console.log("onDropAfter "+this.props.me.name);
       this.setState({isDraggedAfter:false,isDraggedInto:false});
       let topicTree=new TopicTree(this.props.topics);
       var droppedTopic=e.dataTransfer.getData("dragContent");
@@ -425,10 +412,10 @@ class Node extends React.Component {
         >
         {caret}<span className="wrap" onClick={activeMe} onDoubleClick={setEdit.bind(this)}>{thisNode}<span className="id">{this.props.id}</span></span>
         <ul>
-        <li class="first-handle"/>
+        <li className="first-handle"/>
         {children}
         </ul>
-        <div class="after-handle"/>
+        <div className="after-handle"/>
       </li>);
   };
 
