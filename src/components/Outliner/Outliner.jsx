@@ -43,7 +43,7 @@ class Outliner extends React.Component {
                 <div className="p-3">
                   {this.state.title ?
                     <ul className="Outliner">
-                      <Node topics={this.state.topics} me={topic} activeNode={this.state.activeNode}
+                      <Node topics={this.state.topics} me={topic} activeNode={this.state.activeNode} draggedTopic={this.state.draggedTopic}
                         change={this.editTopic.bind(this)} activate={this.activeNode.bind(this)} id="root"/>
                     </ul>
                     : this._getTitle()
@@ -188,6 +188,9 @@ class Outliner extends React.Component {
                   toApply=this.topicTree.moveAfter(id,change.moveAfter);
                 }
                 break;
+              case "startDrag":
+                previousState.draggedTopic=id;
+                break;
               default:
                 if (topic[key]!==change[key]) {
                   topic[key]=change[key];
@@ -197,7 +200,7 @@ class Outliner extends React.Component {
           }
           if (!topics[id].new) delete topics[id].new;
         }
-        return {topics,activeNode};
+        return previousState;
       }
       return {};
     },function() {
@@ -317,7 +320,7 @@ class Node extends React.Component {
         if ((this.props.id && topic.broader.indexOf(this.props.id)!==-1)
           || (this.props.id==="root" && topic.broader.length===0)) {
             children.push(
-              <Node key={topID} me={topic} id={topID} topics={this.props.topics} activeNode={this.props.activeNode} parent={this.props.id}
+              <Node key={topID} me={topic} id={topID} parent={this.props.id} topics={this.props.topics} activeNode={this.props.activeNode} draggedTopic={this.props.draggedTopic}
                 activate={this.props.activate} change={this.props.change} delete={this.props.delete}/>
             );
         }
@@ -355,6 +358,7 @@ class Node extends React.Component {
       e.dataTransfer.setData("dragContent",this.props.id);
       activeMe(e);
       this.setState({isDragged:true});
+      this.props.change(this.props.id,{startDrag:true});
     }
     function onDragStop(e) {
       e.stopPropagation();
@@ -364,7 +368,7 @@ class Node extends React.Component {
 
     let onDragAfter=(e) => {
       console.log("dragAfter "+this.props.me.name);
-      var draggedTopic=e.dataTransfer.getData("dragContent");
+      var draggedTopic=e.dataTransfer.getData("dragContent") || this.props.draggedTopic;
       if (!draggedTopic) {console.error("no dragged topic"); return;}
       if (!this.props.topics[draggedTopic]) {console.error("unknown dragged topic "+draggedTopic); return;}
       var draggedName=this.props.topics[draggedTopic].name;
