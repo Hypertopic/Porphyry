@@ -179,16 +179,24 @@ class Outliner extends React.Component {
             switch(key) {
               case "parent":
                 if (this.topicTree.getTopic(change.parent)) {
-                  toApply=this.topicTree.setParent(id,change.parent);
+                  toApply=this.topicTree.setParent(id,change.parent) &&
+                      this.topicTree.moveAfter(id);
                 }
                 break;
               case "moveAfter":
                 if (this.topicTree.getTopic(change.moveAfter)) {
-                  toApply=this.topicTree.moveAfter(id,change.moveAfter);
+                  var newParent=this.topicTree.getParent(change.moveAfter);
+                  if (newParent) {
+                    toApply=this.topicTree.setParent(id,newParent);
+                  }
+                  toApply=toApply && this.topicTree.moveAfter(id,change.moveAfter);
                 }
                 break;
               case "startDrag":
-                previousState.draggedTopic=id;
+                if (change.startDrag===true) previousState.draggedTopic=id;
+                else if (previousState.draggedTopic===id) {
+                  delete previousState.draggedTopic;
+                }
                 break;
               default:
                 if (topic[key]!==change[key]) {
@@ -328,20 +336,17 @@ class Node extends React.Component {
     if (this.state.isDragged || this.state.isDraggedOver) {
       classes.push("dragged");
     }
-    if (this.state.isDraggedInto) {
+    if (this.props.draggedTopic && this.state.isDraggedInto) {
       classes.push("dragged-into");
     }
-    if (this.state.isDraggedAfter) {
+    if (this.props.draggedTopic && this.state.isDraggedAfter) {
       classes.push("dragged-after");
     }
-    let caret;
     if (this.props.id && children.length) {
-      caret=<span className="caret" onClick={switchOpen}> </span>;
-      if (this.state.open) classes.push("open");
-      else classes.push("closed");
-    } else {
-      caret=null;
+      classes.push("has-children");
     }
+    if (this.state.open) classes.push("open");
+    else classes.push("closed");
     function setEdit(e) {
       if (!this.state.edit) switchEdit(e);
     }
@@ -358,59 +363,69 @@ class Node extends React.Component {
       e.stopPropagation();
       console.log("dragStop "+this.props.me.name);
       this.setState({isDragged:false});
+      this.props.change(this.props.id,{startDrag:false});
     }
 
-    let onDragAfter=(e) => {
+    let onDrag=(e) => {
       var draggedTopic=e.dataTransfer.getData("dragContent") || this.props.draggedTopic;
       if (!draggedTopic) {console.error("no dragged topic"); return;}
       if (!this.props.topics[draggedTopic]) {console.error("unknown dragged topic "+draggedTopic); return;}
       let topicTree=new TopicTree(this.props.topics);
 
-      if (draggedTopic===this.props.id) {
+      if (draggedTopic===this.props.id || topicTree.isAncestor(draggedTopic,this.props.id)) {
+        //can't be dropped into itself or its descendant
         return;
-      } else if (topicTree.isParent(this.props.id,draggedTopic)) {
+      } else if (e.currentTarget.className==="wrap") { //child
         this.setState({isDraggedInto:true});
-        e.preventDefault();
         e.stopPropagation();
+        e.preventDefault();
         return false;
-      } else if (topicTree.isSibling(this.props.id,draggedTopic)) {
+      } else if (e.currentTarget.className==="caret") {
         this.setState({isDraggedAfter:true});
-        e.preventDefault();
         e.stopPropagation();
+        e.preventDefault();
         return false;
+      } else {
+
       }
     }
-    function onDragLeaveAfter(e) {
+    let onDragLeave=(e) => {
       this.setState({isDraggedAfter:false,isDraggedInto:false});
       e.preventDefault();
       e.stopPropagation();
     }
-    function onDropAfter(e) {
+    let onDrop=(e) => {
       this.setState({isDraggedAfter:false,isDraggedInto:false});
       let topicTree=new TopicTree(this.props.topics);
       var droppedTopic=e.dataTransfer.getData("dragContent");
-      if (droppedTopic===this.props.id) {
+      if (droppedTopic===this.props.id || topicTree.isAncestor(droppedTopic,this.props.id)) {
+        //can't be dropped into itself or its descendant
         return;
-      } else if (topicTree.isParent(this.props.id,droppedTopic)) {
-        console.log("drop "+this.props.topics[droppedTopic].name+" into "+this.props.me.name);
+      } else if (e.currentTarget.className==="wrap") { //child
+        this.props.change(droppedTopic,{parent:this.props.id});
         e.stopPropagation();
-        this.props.change(droppedTopic,{moveAfter:false});
-      } else if (topicTree.isSibling(this.props.id,droppedTopic)) {
-        console.log("drop "+this.props.topics[droppedTopic].name+" after "+this.props.me.name);
-        e.stopPropagation();
+        e.preventDefault();
+      } else if (e.currentTarget.className==="caret") {
         this.props.change(droppedTopic,{moveAfter:this.props.id});
+        e.stopPropagation();
+        e.preventDefault();
       }
     }
 
     return (
       <li className={classes.join(" ")}
         draggable={draggable} onDragStart={onDragStart.bind(this)} onDragEnd={onDragStop.bind(this)}
-        onDragOver={onDragAfter.bind(this)}
-        onDragLeave={onDragLeaveAfter.bind(this)}
-        onDrop={onDropAfter.bind(this)}
-        //onDrop={onDrop.bind(this)} onDragLeave={onDragLeave.bind(this)}
         >
-        {caret}<span className="wrap" onClick={activeMe} onDoubleClick={setEdit.bind(this)}>{thisNode}<span className="id">{this.props.id}</span></span>
+        <span className="caret" onClick={switchOpen} onDragOver={onDrag}
+                onDragLeave={onDragLeave}
+                onDrop={onDrop}> </span>
+        <span className="wrap"
+                onDragOver={onDrag} onDrop={onDrop}
+                onDragLeave={onDragLeave}
+                onClick={activeMe} onDoubleClick={setEdit.bind(this)}>
+          {thisNode}
+          <span className="id">{this.props.id}</span>
+        </span>
         <ul>
         <li className="first-handle"/>
         {children}

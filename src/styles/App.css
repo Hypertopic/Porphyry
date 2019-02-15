@@ -266,13 +266,15 @@ h1 a, h1 a:hover {
 
 .outliner-node > ul {
   position: relative;
-  padding-left: 10px;
+  padding-left: 20px;
 }
 
 .outliner-node .caret {
   cursor: pointer;
   position: absolute;
-  left: -10px;
+  left: 0px;
+  min-width:25px;
+  min-height: 20px;
 }
 
 .outliner-node div.after-handle,
@@ -290,10 +292,10 @@ h1 a, h1 a:hover {
   display:inline;
 }
 
-.outliner-node.closed > .caret:before {
+.outliner-node.has-children.closed > .caret:before {
   content: '\25B8';
 }
-.outliner-node.open > .caret:before {
+.outliner-node.has-children.open > .caret:before {
   content: '\25BE';
 }
 
