@@ -264,6 +264,7 @@ h1 a, h1 a:hover {
   right:40px;
 }
 
+ul.Outliner,
 .outliner-node > ul {
   position: relative;
   padding-left: 20px;
