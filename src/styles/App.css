@@ -178,10 +178,10 @@ h1 a, h1 a:hover {
   font-weight: bold;
 }
 
-.TopicPath > .DeleteTopicButton, .Attribute > .DeleteTopicButton {
+.TopicPath > .DeleteTopicButton, .Attribute .DeleteTopicButton {
   visibility: hidden;
 }
-.TopicPath:hover > .DeleteTopicButton, .Attribute:hover > .DeleteTopicButton {
+.TopicPath:hover > .DeleteTopicButton, .Attribute:hover .DeleteTopicButton {
   visibility: visible;
 }
 

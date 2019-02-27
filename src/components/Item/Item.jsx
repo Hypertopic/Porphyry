@@ -91,11 +91,13 @@ class Item extends Component {
       .filter(x => !itemView.hiddenProps.includes(x[0]))
       .map(x => (
         <div className="Attribute" key={x[0]}>
-          <div className="Key">{x[0]}</div>
+          <div className="Key">
+            {x[0]}
+            <button onClick={this.deleteAttribute.bind(this,x[0])} className="btn btn-xs DeleteTopicButton">
+              <span className="oi oi-x"> </span>
+            </button>
+          </div>
           <div className="Value">{x[1][0]}</div>
-          <button onClick={this.deleteAttribute.bind(this,x[0])} className="btn btn-xs DeleteTopicButton">
-            <span className="oi oi-x"> </span>
-          </button>
         </div>
       ));
   }
