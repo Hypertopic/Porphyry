@@ -145,6 +145,24 @@ h1 a, h1 a:hover {
   display: table-row;
 }
 
+.AttributeForm {
+  text-align: center;
+}
+
+.AttributeForm input {
+  display: inline;
+  width: auto;
+  text-align: center;
+  padding: 0px;
+}
+.AttributeForm input.submit {
+  display: none;
+}
+.AttributeForm.active input.submit {
+  display: inline;
+  padding:inherit;
+}
+
 .Key {
   display: table-cell;
   padding: 5px;

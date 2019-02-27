@@ -40,7 +40,7 @@ class Item extends Component {
     this._removeTopic = this._removeTopic.bind(this);
     this._fetchItem = this._fetchItem.bind(this);
     this._getOrCreateItem = this._getOrCreateItem.bind(this);
-    this._switchCreatable = this._switchCreatable.bind(this);
+    this._submitAttribute = this._submitAttribute.bind(this);
     this.deleteAttribute = this.deleteAttribute.bind(this);
     this.user=conf.user || window.location.hostname.split('.', 1)[0];
   }
@@ -49,8 +49,6 @@ class Item extends Component {
     let name = getString(this.state[itemView.name]);
     let attributes = this._getAttributes();
     let viewpoints = this._getViewpoints();
-    let attributeButtonLabel = this.state.isCreatable? 'Valider' : 'Ajouter un attribut';
-    let attributeForm = this.state.isCreatable? this._getAttributeCreationForm() : '';
     return (
       <div className="App container-fluid">
         <Header />
@@ -68,13 +66,10 @@ class Item extends Component {
                 <div className="p-3">
                   <h3 className="h4">Attributs du document</h3>
                   <hr/>
-                  <div className="text-center">
-                    <button className="btn btn-light creationButton" onClick={this._switchCreatable}>{attributeButtonLabel}</button>
-                  </div>
                   <div className="Attributes">
                     {attributes}
-                    {attributeForm}
                   </div>
+                  {this._getAttributeCreationForm()}
                   {viewpoints}
                 </div>
               </div>
@@ -171,10 +166,32 @@ class Item extends Component {
   }
 
   _getAttributeCreationForm() {
+    var classes=["AttributeForm"];
+    if (this.state.isCreatable) {
+      classes.push("active");
+    }
+
+    function isValidValue(attribute) {
+      let [key,value]=attribute.split(":");
+      return key && value;
+    }
+
+    let setCreatable=(e) => {
+      if (e.key==="Escape") {
+        e.target.value="";
+      }
+      if (isValidValue(e.target.value) && !this.state.isCreatable) {
+        this.setState({isCreatable:true});
+      }
+      if (!isValidValue(e.target.value) && this.state.isCreatable) {
+        this.setState({isCreatable:false});
+      }
+    }
+
     return (
-      <form className="Attribute">
-        <div className="Key"> <input id="key" className="form-control" placeholder="Attribut" type="text" size="8" /></div>
-        <div className="Value"> <input id="value" className="form-control" placeholder="Valeur" type="text" /></div>
+      <form onSubmit={this._submitAttribute} className={classes.join(" ")}>
+        <input onClick={setCreatable} onFocus={setCreatable} onChange={setCreatable} onKeyDown={setCreatable} id="new-attribute" className="form-control" placeholder="Attribut:Value" type="text" size="16" />
+        <input type="submit" id="key-value" className="submit" value="Ajouter" />
       </form>
     );
   }
@@ -192,15 +209,19 @@ class Item extends Component {
     }
   }
 
-  _switchCreatable() {
+  _submitAttribute(e) {
+    e.preventDefault();
+    let key_value = document.getElementById('new-attribute').value;
+    if (key_value) {
+      let [key,value]=key_value.split(":");
+      if (key && value) this._setAttribute(key, value);
+      else return false;
+      document.getElementById('new-attribute').value="";
+    }
     this.setState(prevState => ({
       isCreatable: !prevState.isCreatable
     }));
-    if (this.state.isCreatable) {
-      let key = document.getElementById('key').value;
-      let value = document.getElementById('value').value;
-      this._setAttribute(key, value);
-    }
+    return false;
   }
 
   deleteAttribute(key) {
