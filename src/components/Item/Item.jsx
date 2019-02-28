@@ -18,7 +18,7 @@ let itemView = getConfig('itemView', {
   name: 'name',
   image: 'resource',
   linkTo: 'resource',
-  hiddenProps: ['topic', 'resource', 'thumbnail', 'isCreatable']
+  hiddenProps: ['topic', 'resource', 'thumbnail', 'displayButton', 'editedAttribute']
 });
 
 function getString(obj) {
@@ -32,7 +32,7 @@ class Item extends Component {
   constructor() {
     super();
     this.state = {
-      isCreatable: false,
+      displayButton: false,
       topic: []
     };
     // These bindings are necessary to make `this` work in the callback
@@ -93,11 +93,16 @@ class Item extends Component {
         <div className="Attribute" key={x[0]}>
           <div className="Key">
             {x[0]}
-            <button onClick={this.deleteAttribute.bind(this,x[0])} className="btn btn-xs DeleteTopicButton">
+            <button onClick={this.deleteAttribute.bind(this,x[0])} className="btn btn-xs DeleteButton">
               <span className="oi oi-x"> </span>
             </button>
           </div>
-          <div className="Value">{x[1][0]}</div>
+          <div className="Value">
+            <button onClick={this.editAttribute.bind(this,x[0])} className="btn btn-xs EditButton">
+              <span className="oi oi-pencil"> </span>
+            </button>
+            {x[1][0]}
+          </div>
         </div>
       ));
   }
@@ -169,7 +174,7 @@ class Item extends Component {
 
   _getAttributeCreationForm() {
     var classes=["AttributeForm"];
-    if (this.state.isCreatable) {
+    if (this.state.displayButton) {
       classes.push("active");
     }
 
@@ -178,22 +183,35 @@ class Item extends Component {
       return key && value;
     }
 
-    let setCreatable=(e) => {
+    let updateButton=(e) => {
       if (e.key==="Escape") {
         e.target.value="";
       }
-      if (isValidValue(e.target.value) && !this.state.isCreatable) {
-        this.setState({isCreatable:true});
+      var modifyState={}
+      if (isValidValue(e.target.value)) {
+        let value=e.target.value.split(":")[0];
+        if (value!==this.state.editedAttribute)
+          modifyState.editedAttribute=value;
+        if (!this.state.displayButton)
+          modifyState.displayButton=true;
+      } else {
+        if (this.state.displayButton) {
+          modifyState.displayButton=false;
+        }
       }
-      if (!isValidValue(e.target.value) && this.state.isCreatable) {
-        this.setState({isCreatable:false});
-      }
+      if (Object.keys(modifyState).length)
+        this.setState(modifyState);
+    }
+
+    var action="Ajouter";
+    if (this.state.editedAttribute && this.state[this.state.editedAttribute]) {
+      action="Modifier";
     }
 
     return (
       <form onSubmit={this._submitAttribute} className={classes.join(" ")}>
-        <input onClick={setCreatable} onFocus={setCreatable} onChange={setCreatable} onKeyDown={setCreatable} id="new-attribute" className="form-control" placeholder="Attribut:Value" type="text" size="16" />
-        <input type="submit" id="key-value" className="submit" value="Ajouter" />
+        <input ref={(input) => this.attributeInput=input} onClick={updateButton} onFocus={updateButton} onChange={updateButton} onKeyDown={updateButton} id="new-attribute" className="form-control" placeholder="Attribut:Value" type="text" size="16" />
+        <input type="submit" id="key-value" className="submit" value={action} />
       </form>
     );
   }
@@ -221,9 +239,18 @@ class Item extends Component {
       document.getElementById('new-attribute').value="";
     }
     this.setState(prevState => ({
-      isCreatable: !prevState.isCreatable
+      displayButton: !prevState.displayButton
     }));
     return false;
+  }
+
+  editAttribute(key) {
+    let value=this.state[key];
+    if (typeof value !== "undefined") {
+      document.getElementById('new-attribute').value=key+":"+value;
+      this.setState({displayButton:true,editedAttribute:key});
+      this.attributeInput.focus();
+    }
   }
 
   deleteAttribute(key) {
@@ -235,8 +262,10 @@ class Item extends Component {
       })
       .then(hypertopic.post)
       .then(_ => {
-        delete this.state[key];
-        this.setState(this.state);
+        this.setState(previousState => {
+          delete previousState[key];
+          return previousState;
+        });
       })
       .catch(_error);
   }
@@ -544,7 +573,7 @@ class TopicPath extends Component {
     return (
       <div className="TopicPath">
         {topics}
-        <button type="button" className="btn btn-xs ml-3 float-right DeleteTopicButton"
+        <button type="button" className="btn btn-xs ml-3 float-right DeleteButton"
           onClick={this.props.removeTopic} id={topicId}>
           <span className="oi oi-x"> </span>
         </button>
