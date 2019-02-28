@@ -146,21 +146,22 @@ h1 a, h1 a:hover {
 }
 
 .AttributeForm {
-  text-align: center;
+  padding-bottom: 2em;
 }
 
-.AttributeForm input {
+.AttributeForm input.form-control {
   display: inline;
-  width: auto;
+  width: 60%;
+  margin-left:10%;
   text-align: center;
   padding: 0px;
 }
 .AttributeForm input.submit {
   display: none;
+  width:auto;
 }
 .AttributeForm.active input.submit {
   display: inline;
-  padding:inherit;
 }
 
 .Key {
