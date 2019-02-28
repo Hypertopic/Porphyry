@@ -210,7 +210,7 @@ class Item extends Component {
 
     return (
       <form onSubmit={this._submitAttribute} className={classes.join(" ")}>
-        <input ref={(input) => this.attributeInput=input} onClick={updateButton} onFocus={updateButton} onChange={updateButton} onKeyDown={updateButton} id="new-attribute" className="form-control" placeholder="Attribut:Value" type="text" size="16" />
+        <input ref={(input) => this.attributeInput=input} onClick={updateButton} onFocus={updateButton} onChange={updateButton} onKeyDown={updateButton} id="new-attribute" className="form-control" placeholder="Attribut:Valeur" type="text" size="16" />
         <input type="submit" id="key-value" className="submit" value={action} />
       </form>
     );
