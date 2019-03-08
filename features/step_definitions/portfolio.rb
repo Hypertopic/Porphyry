@@ -48,6 +48,10 @@ Soit("l'item {string} rattaché à la rubrique {string}") do |item, topic|
   # On the remote servers
 end
 
+Soit("l'item {string} non rattaché à la rubrique {string}") do |item, topic|
+  # On the remote servers
+end
+
 Soit("{string} le portfolio spécifié dans la configuration") do |portfolio|
   case portfolio
   when "vitraux"
@@ -139,4 +143,3 @@ end
 Alors ("l'item {string} n'est pas affiché") do |item|
   expect(page).not_to have_content item
 end
-
