@@ -176,7 +176,7 @@ class Item extends Component {
     var classes=["AttributeForm"];
 
     function isValidValue(attribute) {
-      let [key,value]=attribute.split(":");
+      let [key,value]=attribute.split(":").map(t => t.trim());
       return key && value && !itemView.hiddenProps.includes(key);
     }
 
@@ -201,7 +201,7 @@ class Item extends Component {
     var action="Ajouter";
     if (isValidValue(this.state.attributeInputValue)) {
       classes.push("active");
-      let editedAttribute=this.state.attributeInputValue.split(":")[0];
+      let editedAttribute=this.state.attributeInputValue.split(":").map(t => t.trim())[0];
       if (this.state.item[editedAttribute]) {
         action="Modifier";
       }
@@ -243,7 +243,7 @@ class Item extends Component {
     e.preventDefault();
     let key_value = this.state.attributeInputValue;
     if (key_value) {
-      let [key,value]=key_value.split(":");
+      let [key,value]=key_value.split(":").map(t => t.trim());
       if (key && value) this._setAttribute(key, value);
       else return false;
     }
