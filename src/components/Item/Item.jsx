@@ -18,7 +18,7 @@ let itemView = getConfig('itemView', {
   name: 'name',
   image: 'resource',
   linkTo: 'resource',
-  hiddenProps: ['topic', 'resource', 'thumbnail', 'displayButton', 'editedAttribute']
+  hiddenProps: ['topic', 'resource', 'thumbnail', 'attributeInputValue']
 });
 
 function getString(obj) {
@@ -32,7 +32,7 @@ class Item extends Component {
   constructor() {
     super();
     this.state = {
-      displayButton: false,
+      attributeInputValue:"",
       topic: []
     };
     // These bindings are necessary to make `this` work in the callback
@@ -174,43 +174,36 @@ class Item extends Component {
 
   _getAttributeCreationForm() {
     var classes=["AttributeForm"];
-    if (this.state.displayButton) {
-      classes.push("active");
-    }
 
     function isValidValue(attribute) {
       let [key,value]=attribute.split(":");
       return key && value;
     }
 
-    let updateButton=(e) => {
+    let attributeInputChange=(e) => {
+      this.setState({ attributeInputValue:e.target.value });
+    }
+
+    let attributeInputChangeKeyDown=(e) => {
       if (e.key==="Escape") {
-        e.target.value="";
+        this.setState({ attributeInputValue:"" });
       }
-      var modifyState={}
-      if (isValidValue(e.target.value)) {
-        let value=e.target.value.split(":")[0];
-        if (value!==this.state.editedAttribute)
-          modifyState.editedAttribute=value;
-        if (!this.state.displayButton)
-          modifyState.displayButton=true;
-      } else {
-        if (this.state.displayButton) {
-          modifyState.displayButton=false;
-        }
-      }
-      if (Object.keys(modifyState).length)
-        this.setState(modifyState);
     }
 
     var action="Ajouter";
-    if (this.state.editedAttribute && this.state[this.state.editedAttribute]) {
-      action="Modifier";
+    if (isValidValue(this.state.attributeInputValue)) {
+      classes.push("active");
+      let editedAttribute=this.state.attributeInputValue.split(":")[0];
+      if (this.state[editedAttribute]) {
+        action="Modifier";
+      }
     }
 
     return (
       <form onSubmit={this._submitAttribute} className={classes.join(" ")}>
-        <input ref={(input) => this.attributeInput=input} onClick={updateButton} onFocus={updateButton} onChange={updateButton} onKeyDown={updateButton} id="new-attribute" className="form-control" placeholder="Attribut:Valeur" type="text" size="16" />
+        <input ref={(input) => this.attributeInput=input} value={this.state.attributeInputValue}
+          onChange={attributeInputChange} onKeyDown={attributeInputChangeKeyDown}
+          id="new-attribute" className="form-control" placeholder="Attribut:Valeur" type="text" size="16" />
         <input type="submit" id="key-value" className="submit" value={action} />
       </form>
     );
@@ -231,24 +224,23 @@ class Item extends Component {
 
   _submitAttribute(e) {
     e.preventDefault();
-    let key_value = document.getElementById('new-attribute').value;
+    let key_value = this.state.attributeInputValue;
     if (key_value) {
       let [key,value]=key_value.split(":");
       if (key && value) this._setAttribute(key, value);
       else return false;
-      document.getElementById('new-attribute').value="";
     }
     this.setState(prevState => ({
-      displayButton: !prevState.displayButton
+      attributeInputValue: ""
     }));
+    this.attributeInput.focus();
     return false;
   }
 
   editAttribute(key) {
     let value=this.state[key];
     if (typeof value !== "undefined") {
-      document.getElementById('new-attribute').value=key+":"+value;
-      this.setState({displayButton:true,editedAttribute:key});
+      this.setState({attributeInputValue:key+":"+value});
       this.attributeInput.focus();
     }
   }
