@@ -190,6 +190,14 @@ class Item extends Component {
       }
     }
 
+    let attributeInputFocus=(e) => {
+      this.setState({attributeInputFocus:true});
+    }
+
+    let attributeInputBlur=(e) => {
+      this.setState({attributeInputFocus:false});
+    }
+
     var action="Ajouter";
     if (isValidValue(this.state.attributeInputValue)) {
       classes.push("active");
@@ -199,11 +207,17 @@ class Item extends Component {
       }
     }
 
+    var placeholder="Ajouter un attribut et une valeur...";
+    if (this.state.attributeInputFocus) {
+      placeholder="attribut : valeur";
+    }
+
     return (
       <form onSubmit={this._submitAttribute} className={classes.join(" ")}>
         <input ref={(input) => this.attributeInput=input} value={this.state.attributeInputValue}
           onChange={attributeInputChange} onKeyDown={attributeInputChangeKeyDown}
-          id="new-attribute" className="form-control" placeholder="Attribut:Valeur" type="text" size="16" />
+          onFocus={attributeInputFocus} onBlur={attributeInputBlur}
+          id="new-attribute" className="form-control" placeholder={placeholder} type="text" size="16" />
         <input type="submit" id="key-value" className="submit" value={action} />
       </form>
     );
