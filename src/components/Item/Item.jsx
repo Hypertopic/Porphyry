@@ -18,7 +18,7 @@ let itemView = getConfig('itemView', {
   name: 'name',
   image: 'resource',
   linkTo: 'resource',
-  hiddenProps: ['topic', 'resource', 'thumbnail', 'attributeInputValue']
+  hiddenProps: ['topic', 'resource', 'thumbnail']
 });
 
 function getString(obj) {
@@ -33,7 +33,7 @@ class Item extends Component {
     super();
     this.state = {
       attributeInputValue:"",
-      topic: []
+      item:{topic:[]}
     };
     // These bindings are necessary to make `this` work in the callback
     this._assignTopic = this._assignTopic.bind(this);
@@ -46,7 +46,7 @@ class Item extends Component {
   }
 
   render() {
-    let name = getString(this.state[itemView.name]);
+    let name = getString(this.state.item[itemView.name]);
     let attributes = this._getAttributes();
     let viewpoints = this._getViewpoints();
     return (
@@ -77,7 +77,7 @@ class Item extends Component {
             <div className="col-md-8 p-4">
               <div className="Subject">
                 <h2 className="h4 font-weight-bold text-center">{name}</h2>
-                <ShowItem item={this.state} />
+                <ShowItem item={this.state.item} />
               </div>
             </div>
           </div>
@@ -87,7 +87,7 @@ class Item extends Component {
   }
 
   _getAttributes() {
-    return Object.entries(this.state)
+    return Object.entries(this.state.item)
       .filter(x => !itemView.hiddenProps.includes(x[0]))
       .map(x => (
         <div className="Attribute" key={x[0]}>
@@ -108,7 +108,7 @@ class Item extends Component {
   }
 
   _getViewpoints() {
-    return Object.entries(this.state.topic).map(v =>
+    return Object.entries(this.state.item.topic).map(v =>
       <Viewpoint key={v[0]} id={v[0]} topics={v[1]}
         assignTopic={this._assignTopic} removeTopic={this._removeTopic} />
     );
@@ -153,17 +153,17 @@ class Item extends Component {
     return hypertopic.getView(uri).then((data) => {
       let item = data[params.corpus][params.item];
       let itemTopics = (item.topic) ? groupBy(item.topic, ['viewpoint']) : {};
-      let topics=this.state.topic || {};
+      let topics=this.state.item.topic || {};
       for (let id in itemTopics) {
         topics[id]=itemTopics[id];
       }
       item.topic=topics;
-      this.setState(item);
+      this.setState({item});
     }).then(() => hypertopic.getView(`/user/${this.user}`))
       .then((data) => {
       let user = data[this.user] || {};
       if (user.viewpoint) {
-        let topic=this.state.topic;
+        let topic=this.state.item.topic;
         for (let vp of user.viewpoint) {
           topic[vp.id]=topic[vp.id] || [];
         }
@@ -177,7 +177,7 @@ class Item extends Component {
 
     function isValidValue(attribute) {
       let [key,value]=attribute.split(":");
-      return key && value;
+      return key && value && !itemView.hiddenProps.includes(key);
     }
 
     let attributeInputChange=(e) => {
@@ -194,7 +194,7 @@ class Item extends Component {
     if (isValidValue(this.state.attributeInputValue)) {
       classes.push("active");
       let editedAttribute=this.state.attributeInputValue.split(":")[0];
-      if (this.state[editedAttribute]) {
+      if (this.state.item[editedAttribute]) {
         action="Modifier";
       }
     }
@@ -215,7 +215,10 @@ class Item extends Component {
       this._getOrCreateItem()
         .then(x => Object.assign(x, attribute))
         .then(hypertopic.post)
-        .then(_ => this.setState(attribute))
+        .then(_ => this.setState(previousState => {
+          previousState.item[key]=[value];
+          return previousState
+        }))
         .catch((x) => console.error(x.message));
     } else {
       console.log('Créez un attribut non vide');
@@ -230,15 +233,15 @@ class Item extends Component {
       if (key && value) this._setAttribute(key, value);
       else return false;
     }
-    this.setState(prevState => ({
+    this.setState({
       attributeInputValue: ""
-    }));
+    });
     this.attributeInput.focus();
     return false;
   }
 
   editAttribute(key) {
-    let value=this.state[key];
+    let value=this.state.item[key];
     if (typeof value !== "undefined") {
       this.setState({attributeInputValue:key+":"+value});
       this.attributeInput.focus();
@@ -255,8 +258,8 @@ class Item extends Component {
       .then(hypertopic.post)
       .then(_ => {
         this.setState(previousState => {
-          delete previousState[key];
-          return previousState;
+          delete previousState.item[key];
+          return {item:previousState.item};
         });
       })
       .catch(_error);
