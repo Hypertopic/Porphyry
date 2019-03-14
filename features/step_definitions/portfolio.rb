@@ -91,6 +91,17 @@ Soit("la liste des rubriques sélectionnées est vide") do
   visit "/"
 end
 
+Soit("l'utilisateur est connecté") do
+  find(".Authenticated > a").click
+  find(".Authenticated").fill_in "nom d'utilisateur", with: "alice"
+  find(".Authenticated").fill_in "mot de passe", with: "whiterabbit"
+  find(".Authenticated > input:nth-child(3)").click
+end
+
+Soit("{string} la rubrique ouverte") do |item|
+  expect(page).to have_content item
+end
+
 # Events
 
 Quand("un visiteur ouvre la page d'accueil du site") do
@@ -107,6 +118,12 @@ end
 
 Quand("on choisit l'item {string}") do |item|
   click_on item
+end
+
+Quand("on crée le point de vue {string}") do |item|
+  click_on "Nouveau point de vue"
+  fill_in "Nom du point de vue", with: item
+  find(".add").click
 end
 
 # Outcomes
@@ -139,3 +156,7 @@ Alors ("l'item {string} n'est pas affiché") do |item|
   expect(page).not_to have_content item
 end
 
+
+Alors("le titre de la page est {string}") do |item|
+  expect(page).to have_content item
+end
