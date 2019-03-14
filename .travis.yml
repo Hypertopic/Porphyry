@@ -11,7 +11,7 @@ cache:
 
 install:
   - npm install
-  - gem install cucumber rspec capybara selenium-webdriver chromedriver-helper:1.2
+  - bundle install
 
 script:
   - npm run build

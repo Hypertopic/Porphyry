@@ -234,10 +234,6 @@ h1 a, h1 a:hover {
   opacity: 1;
 }
 
-.Outliner ul {
-  background-color: whitesmoke;
-}
-
 .TopicAdding {
   padding-top: 5px;
   display: flex;
@@ -289,22 +285,39 @@ h1 a, h1 a:hover {
   right:40px;
 }
 
+ul.Outliner,
 .outliner-node > ul {
   position: relative;
-  padding-left: 10px;
-  background-color: #fff;
+  padding-left: 20px;
 }
 
 .outliner-node .caret {
   cursor: pointer;
   position: absolute;
-  left: -10px;
+  left: 0px;
+  min-width:25px;
+  min-height: 20px;
 }
 
-.outliner-node.closed > .caret:before {
+.outliner-node div.after-handle,
+.outliner-node li.first-handle {
+  height:25px;
+  border-style:dashed;
+  border-width: 1px;
+  border-color:black;
+  background-color: lightgrey;
+  display:none;
+}
+
+.outliner-node.dragged-after > div.after-handle,
+.outliner-node.dragged-into > ul > li.first-handle {
+  display:inline;
+}
+
+.outliner-node.has-children.closed > .caret:before {
   content: '\25B8';
 }
-.outliner-node.open > .caret:before {
+.outliner-node.has-children.open > .caret:before {
   content: '\25BE';
 }
 
@@ -315,6 +328,10 @@ h1 a, h1 a:hover {
 .Outliner li {
   list-style-type: none;
   min-height: 2em;
+}
+
+.Outliner li.dragged {
+  background-color: lightgrey;
 }
 
 .Outliner li.active > span.wrap {
