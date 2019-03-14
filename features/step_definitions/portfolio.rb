@@ -17,6 +17,10 @@ def getUUID(itemName)
       uuid = "29e7a2c6a601c040985ade144901cb1f"
     when "Figuration du donateur"
       uuid = "fe94b684b6a42c4889c1e0d7458b9526"
+	 when "Histoire de l'art"
+      uuid = "a76306e4f17ed4f79e7e481eb9a1bd06"
+    when "1495"
+	  uuid = "7f42061666edad49836bf894eaf357a7"
   end
   return uuid
 end
@@ -69,6 +73,12 @@ end
 
 Soit("{string} la valeur de l'attribut {string} de l'item {string}") do |value, attribute ,item|
    # On the remote servers
+end
+
+Soit("le point de vue {string} est en cours de modification") do |rubrique|
+  uri = "/viewpoint/"
+  uri += getUUID(rubrique)
+  visit uri
 end
 
 # Events
