@@ -17,8 +17,19 @@ def getUUID(itemName)
       uuid = "29e7a2c6a601c040985ade144901cb1f"
     when "Figuration du donateur"
       uuid = "fe94b684b6a42c4889c1e0d7458b9526"
+    when "Histoire de l'art"
+      uuid = "a76306e4f17ed4f79e7e481eb9a1bd06"
   end
   return uuid
+end
+
+def getPassword(username)
+  password = nil
+  case username
+  when "alice"
+    password = "whiterabbit"
+  end
+  return password
 end
 
 # Conditions
@@ -87,8 +98,26 @@ Soit("les rubriques {string} sont sélectionnées") do |topics|
   visit uri
 end
 
+Soit("un visiteur sur la page d'édition du point de vue {string}") do |viewpoint|
+  visit "/"
+  viewpoint_item = page.find('h3', text: viewpoint, match: :prefer_exact)
+  within (viewpoint_item) do
+    first('a').click
+  end
+  #uri = "/viewpoint/" + getUUID(viewpoint)
+  #visit uri
+end
+
 Soit("la liste des rubriques sélectionnées est vide") do
   visit "/"
+end
+
+Soit ("l'utilisateur {string} connecté") do |username|
+  click_link('Se connecter...')
+  find('input[placeholder="nom d\'utilisateur"]').set username
+  find("input[placeholder='mot de passe']").set getPassword(username)
+  click_on('Se connecter')
+  expect(page).to have_content(username)
 end
 
 # Events
@@ -107,6 +136,24 @@ end
 
 Quand("on choisit l'item {string}") do |item|
   click_on item
+end
+
+Quand("un visiteur modifie le nom de la rubrique {string} en {string}") do |old_item_name, new_item_name|
+  old_item_element = page.find('span', text: old_item_name, match: :prefer_exact)
+  old_item_element.double_click
+  find("input[value='" + old_item_name + "']").set(new_item_name + "\n")
+end
+
+Quand("l'utilisateur crée la rubrique {string}") do |item|
+  page.driver.browser.action.send_keys(:enter).perform()
+  within (".App-content") do
+    first("input").set(item + "\n")
+  end
+end
+
+Quand("l'utilisateur supprime la rubrique {string}") do |item|
+  page.find('span', text: item, match: :prefer_exact).click
+  page.driver.browser.action.send_keys(:delete).perform()
 end
 
 # Outcomes
@@ -138,4 +185,3 @@ end
 Alors ("l'item {string} n'est pas affiché") do |item|
   expect(page).not_to have_content item
 end
-
