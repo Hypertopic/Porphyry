@@ -17,21 +17,18 @@ end
 
 Soit("{string} la page ouverte") do |titlePage|
   visit "/viewpoint/a76306e4f17ed4f79e7e481eb9a1bd06"
-
   expect(find("h2.h4")).to have_content(titlePage)
 end
 
-Soit(/^l'utilisateur est connecté avec le mot de passe$/) do
+Soit("l'utilisateur est connecté avec le mot de passe") do
   click_on('Se connecter...')
   fill_in("nom d'utilisateur", with: "alice")
   fill_in("mot de passe", with: "whiterabbit")
-
   click_on('Se connecter')
 end
 
 Soit("le point de vue {string} est développé") do |viewpoint|
   expect(find('.Outliner li.open', match: :first)).to have_content(viewpoint)
-
 end
 
 Quand("la catégorie {string} est modifiée en {string}") do |oldCategory, newCategory|
