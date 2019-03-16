@@ -237,6 +237,10 @@ h1 a, h1 a:hover {
   color: ivory;
 }
 
+.inactive .ValidateButton {
+  visibility: hidden;
+}
+
 .modify .ValidateButton {
   background-color: #f1bb5b;
   color: ivory;

@@ -191,15 +191,24 @@ class Item extends Component {
     }
 
     let attributeInputFocus=(e) => {
+      if (this.blurTimeout) {
+        this.blurTimeout=clearTimeout(this.blurTimeout);
+      }
       this.setState({attributeInputFocus:true});
     }
 
     let attributeInputBlur=(e) => {
-      this.setState({attributeInputFocus:false});
+      this.blurTimeout=setTimeout(() => {
+        this.setState({attributeInputFocus:false})
+      }, 10);
     }
 
-    if (isValidValue(this.state.attributeInputValue)) {
-      classes.push("active");
+    var valid=false;
+
+    if (!this.state.attributeInputFocus) {
+      classes.push("inactive");
+    } else if (isValidValue(this.state.attributeInputValue)) {
+      valid=true;
       let editedAttribute=this.state.attributeInputValue.split(":").map(t => t.trim())[0];
       if (this.state.item[editedAttribute]) {
         classes.push("modify")
@@ -221,8 +230,9 @@ class Item extends Component {
         </div>
         <div className="input-group-append">
           <button type="button" className="btn btn-sm ValidateButton btn"
-              onClick={this._submitAttribute}
-            disabled={!isValidValue(this.state.attributeInputValue)}
+            onClick={this._submitAttribute}
+            onFocus={attributeInputFocus} onBlur={attributeInputBlur}
+            disabled={!valid}
             id={`validateButton-${this.state.name}`}>
             <span className="oi oi-check"> </span>
           </button>
@@ -429,6 +439,19 @@ class Viewpoint extends Component {
     return filteredTopics;
   };
 
+  onTopicInputFocus = (event) => {
+    if (this.blurTimeout) {
+      this.blurTimeout=clearTimeout(this.blurTimeout);
+    }
+    this.setState({hasFocus:true});
+  }
+
+  onTopicInputBlur = (event) => {
+    this.blurTimeout=setTimeout(() => {
+      this.setState({hasFocus:false});
+    },10);
+  }
+
   onTopicInputkeyDown = (event) => {
     if (event.key==="Escape") {
       this.clearInput();
@@ -492,6 +515,8 @@ class Viewpoint extends Component {
     const inputProps = {
       placeholder: 'Ajouter une rubrique...',
       value: topicInputvalue,
+      onFocus: this.onTopicInputFocus,
+      onBlur: this.onTopicInputBlur,
       onChange: this.onTopicInputChange,
       onKeyDown: this.onTopicInputKeyDown,
     };
@@ -503,13 +528,17 @@ class Viewpoint extends Component {
       suggestion: 'dropdown-item',
       suggestionHighlighted: 'active'
     };
+    var classes=["TopicAdding","input-group"];
+    if (!this.state.hasFocus) {
+      classes.push("inactive");
+    }
     return (
       <div>
         <h3 className="h4">{this.state.name}</h3>
         <hr/>
         <div className="Topics">
           {paths}
-          <div className="TopicAdding input-group">
+          <div className={classes.join(" ")}>
             <Autosuggest
               theme={theme}
               className="TopicSuggest"
@@ -530,6 +559,7 @@ class Viewpoint extends Component {
                     this.props.id
                   )
                 }
+                onFocus={this.onTopicInputFocus} onBlur={this.onTopicInputBlur}
                 disabled={!this.state.currentSelection}
                 id={`validateButton-${this.state.name}`}>
                 <span className="oi oi-check"> </span>
