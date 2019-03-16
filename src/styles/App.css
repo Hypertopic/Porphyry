@@ -146,22 +146,12 @@ h1 a, h1 a:hover {
 }
 
 .AttributeForm {
-  padding-bottom: 2em;
+  padding: 20px;
+  padding-top: 5px;
 }
 
 .AttributeForm input.form-control {
-  display: inline;
-  width: 60%;
-  margin-left:10%;
   text-align: center;
-  padding: 0px;
-}
-.AttributeForm input.submit {
-  display: none;
-  width:auto;
-}
-.AttributeForm.active input.submit {
-  display: inline;
 }
 
 .Key {
@@ -234,7 +224,7 @@ h1 a, h1 a:hover {
   opacity: 1;
 }
 
-.TopicAdding {
+.TopicAdding, .AttributeForm {
   padding-top: 5px;
   display: flex;
   flex-direction: row;
@@ -242,18 +232,18 @@ h1 a, h1 a:hover {
   width: 100%;
 }
 
-.TopicCancelButton {
-  background-color: #8b0000;
+.ValidateButton {
+  background-color: #abd14b;
   color: ivory;
 }
 
-.TopicValidateButton {
+.modify .ValidateButton {
   background-color: #f1bb5b;
   color: ivory;
 }
 
-.TopicValidateButton:disabled,
-.TopicValidateButton[disabled] {
+.ValidateButton:disabled,
+.ValidateButton[disabled] {
   background-color: #cccccc;
   color: dimgrey;
 }

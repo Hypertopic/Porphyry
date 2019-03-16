@@ -173,7 +173,7 @@ class Item extends Component {
   }
 
   _getAttributeCreationForm() {
-    var classes=["AttributeForm"];
+    var classes=["AttributeForm","input-group"];
 
     function isValidValue(attribute) {
       let [key,value]=attribute.split(":").map(t => t.trim());
@@ -198,12 +198,11 @@ class Item extends Component {
       this.setState({attributeInputFocus:false});
     }
 
-    var action="Ajouter";
     if (isValidValue(this.state.attributeInputValue)) {
       classes.push("active");
       let editedAttribute=this.state.attributeInputValue.split(":").map(t => t.trim())[0];
       if (this.state.item[editedAttribute]) {
-        action="Modifier";
+        classes.push("modify")
       }
     }
 
@@ -214,11 +213,20 @@ class Item extends Component {
 
     return (
       <form onSubmit={this._submitAttribute} className={classes.join(" ")}>
-        <input ref={(input) => this.attributeInput=input} value={this.state.attributeInputValue}
-          onChange={attributeInputChange} onKeyDown={attributeInputChangeKeyDown}
-          onFocus={attributeInputFocus} onBlur={attributeInputBlur}
-          id="new-attribute" className="form-control" placeholder={placeholder} type="text" size="16" />
-        <input type="submit" id="key-value" className="submit" value={action} />
+        <div>
+          <input ref={(input) => this.attributeInput=input} value={this.state.attributeInputValue}
+            onChange={attributeInputChange} onKeyDown={attributeInputChangeKeyDown}
+            onFocus={attributeInputFocus} onBlur={attributeInputBlur}
+            id="new-attribute" className="form-control" placeholder={placeholder} type="text" />
+        </div>
+        <div className="input-group-append">
+          <button type="button" className="btn btn-sm ValidateButton btn"
+              onClick={this._submitAttribute}
+            disabled={!isValidValue(this.state.attributeInputValue)}
+            id={`validateButton-${this.state.name}`}>
+            <span className="oi oi-check"> </span>
+          </button>
+        </div>
       </form>
     );
   }
@@ -361,7 +369,6 @@ class Viewpoint extends Component {
     this.state = {
       topicInputvalue: '',
       suggestions: [],
-      canValidateTopic: false,
       currentSelection: '',
       currentPreSelection: ''
     };
@@ -422,12 +429,19 @@ class Viewpoint extends Component {
     return filteredTopics;
   };
 
+  onTopicInputkeyDown = (event) => {
+    if (event.key==="Escape") {
+      this.clearInput();
+    }
+  };
+
   onTopicInputChange = (event, { newValue }) => {
+    if (this.state.currentSelection) {
+      newValue="";
+    }
     this.setState({
-      topicInputvalue: newValue
-    });
-    this.setState({
-      canValidateTopic: false
+      topicInputvalue: newValue,
+      currentSelection:""
     });
   };
 
@@ -459,7 +473,6 @@ class Viewpoint extends Component {
   clearInput = () => {
     this.setState({
       topicInputvalue: '',
-      canValidateTopic: false,
       currentSelection: '',
       currentPreSelection: '',
       suggestions: []
@@ -479,7 +492,8 @@ class Viewpoint extends Component {
     const inputProps = {
       placeholder: 'Ajouter une rubrique...',
       value: topicInputvalue,
-      onChange: this.onTopicInputChange
+      onChange: this.onTopicInputChange,
+      onKeyDown: this.onTopicInputKeyDown,
     };
     const theme = {
       container: 'autosuggest',
@@ -510,19 +524,15 @@ class Viewpoint extends Component {
               id={`input-${this.state.name}`}
             />
             <div className="input-group-append">
-              <button type="button" className="btn btn-sm TopicValidateButton btn" onClick={() =>
+              <button type="button" className="btn btn-sm ValidateButton btn" onClick={() =>
                   this.updatingTopicList(
                     this.state.currentSelection,
                     this.props.id
                   )
                 }
-                disabled={!this.state.canValidateTopic}
+                disabled={!this.state.currentSelection}
                 id={`validateButton-${this.state.name}`}>
                 <span className="oi oi-check"> </span>
-              </button>
-              <button type="button" className="btn btn-sm TopicCancelButton btn" onClick={this.clearInput}
-                id={`cancelButton-${this.state.name}`}>
-                <span className="oi oi-x"> </span>
               </button>
             </div>
           </div>
