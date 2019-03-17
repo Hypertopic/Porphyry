@@ -43,6 +43,6 @@ end
 
 #Outcomes
 
-Alors("la catégorie {string} apparait dans l'arborescence") do |string|
-  page.has_content?(string)
+Alors("la catégorie {string} apparait dans l'arborescence") do |category|
+  exect(page).to have_content category
 end
