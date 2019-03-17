@@ -24,6 +24,17 @@ end
 
 # Conditions
 
+Soit("l'utilisateur {string} connecté avec le mot de passe {string}") do |username, password|
+  # On connecte l'utilisateur (/!\ malgré nos recherches, ces lignes ne fonctionnent pas...)
+  click_link('Se connecter...')
+  find("input[placeholder='nom d\'utilisateur']").set username
+  find("input[placeholder='mot de passe']").set password
+  find("input[value='Se connecter']").click
+
+  #Si l'utilisateur est connecté, son username est affiché sur la page
+  expect(page).to have_content(username)
+end
+
 Soit("le point de vue {string} rattaché au portfolio {string}") do |viewpoint, portfolio|
   # On the remote servers
 end

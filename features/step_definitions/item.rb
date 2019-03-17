@@ -9,11 +9,30 @@ Capybara.default_max_wait_time = 10
 
 # Conditions
 
+Soit("l'item {string} existant") do |item|
+  # On the remote servers
+end
+
+Soit("l'attribut {string} n'existant pas dans la liste des attributs de l'item {string}") do |attribut, item|
+  # On the remote servers
+end
+
 Soit("{string} l'item affiché") do |item|
   click_on item
 end
 
 # Events
+
+Quand("on ajoute un attribut {string} et la valeur {string}") do |attribut, value|
+
+  find_button('Ajouter un attribut').click
+
+  fill_in 'key', with: attribut
+
+  fill_in 'value', with: value
+
+  find_button('Valider').click
+end
 
 Quand("on choisit la rubrique {string}") do |topic|
   click_on topic
