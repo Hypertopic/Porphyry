@@ -16,6 +16,7 @@
     "sort-by": "^1.2.0"
   },
   "devDependencies": {
+    "cucumber": "^5.1.0",
     "react-scripts": "1.1.5",
     "serve": "^10.0.2"
   },
