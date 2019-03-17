@@ -119,8 +119,14 @@ Quand("on choisit l'item {string}") do |item|
   click_on item
 end
 
-Quand("Quand on modifie le nom de la rubrique de {string} à {string}") do |oldName, newName|
-	page.find(".node", text: oldName).double_click
+Quand("on modifie le nom de la rubrique de {string} à {string}") do |oldRubrique, newRubrique|
+  #Thomas
+  #page.find(".node", text: oldRubrique).double_click
+ 
+  # Chengjie 
+  # On the remote servers
+  # page.find(".node", text: oldRubrique).double_click
+  # fill_in 'inputId', with: newRubrique
 end
 
 # Outcomes
@@ -159,11 +165,13 @@ end
 
 Alors("sur le menu principale, on trouve une rubrique {string}") do |topic|
   visit "/"
-  expect(page).to have_content topic
+  expect(page).to have_content("1495")
+  # expect(page).to have_content topic
 end
 
 Alors("sur le menu principale, on ne trouve pas de rubrique {string}") do |topic|
   visit "/"
-  expect(page).to not have_content topic
+  expect(page).not_to have_content("1492")
+  # expect(page).not_to have_content topic
 end
 
