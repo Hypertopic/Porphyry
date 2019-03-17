@@ -1,11 +1,10 @@
 require 'capybara/cucumber'
-require 'capybara/cuprite'
+require 'selenium/webdriver'
 
 Capybara.run_server = false
-Capybara.default_driver = :cuprite
-Capybara.javascript_driver = :cuprite
+Capybara.default_driver = :selenium_chrome_headless
 Capybara.app_host = "http://localhost:3000"
-Capybara.default_max_wait_time = 10
+Capybara.default_max_wait_time = 30
 
 def getUUID(itemName)
   uuid = nil
@@ -92,6 +91,16 @@ Soit("la liste des rubriques sélectionnées est vide") do
   visit "/"
 end
 
+Soit ("l'utilisateur est sur la page de création de nouveau point de vue") do
+  click_on("Nouveau point de vue")
+end
+
+Soit ("l'utilisateur est connecté") do
+  click_link('Se connecter...')
+  fill_in("nom d'utilisateur", with: 'alice')
+  fill_in("mot de passe", with: 'whiterabbit')
+  click_on("Se connecter")
+end
 # Events
 
 Quand("un visiteur ouvre la page d'accueil du site") do
@@ -108,6 +117,11 @@ end
 
 Quand("on choisit l'item {string}") do |item|
   click_on item
+end
+
+Quand ("un utilisateur crée un nouveau point de vu nommé {string}") do |viewpoint|
+  fill_in('newTitle' , with:  viewpoint)
+  find(:xpath, ".//button[contains(@class,'add')]").click
 end
 
 # Outcomes
@@ -140,3 +154,6 @@ Alors ("l'item {string} n'est pas affiché") do |item|
   expect(page).not_to have_content item
 end
 
+Alors ("le point de vue {string} est ajouté au portfolio {string}") do |viewpoint, portfolio|
+  expect(page).to have_content viewpoint
+end
