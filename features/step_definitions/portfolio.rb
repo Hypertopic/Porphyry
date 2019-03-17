@@ -1,9 +1,8 @@
 require 'capybara/cucumber'
-require 'capybara/cuprite'
+require 'selenium/webdriver'
 
 Capybara.run_server = false
-Capybara.default_driver = :cuprite
-Capybara.javascript_driver = :cuprite
+Capybara.default_driver = :selenium_chrome_headless
 Capybara.app_host = "http://localhost:3000"
 Capybara.default_max_wait_time = 10
 
@@ -23,6 +22,10 @@ def getUUID(itemName)
 end
 
 # Conditions
+
+Soit("l'item {string} existant") do |item|
+  # On the remote servers
+end
 
 Soit("le point de vue {string} rattaché au portfolio {string}") do |viewpoint, portfolio|
   # On the remote servers
@@ -139,4 +142,3 @@ end
 Alors ("l'item {string} n'est pas affiché") do |item|
   expect(page).not_to have_content item
 end
-
