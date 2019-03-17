@@ -119,6 +119,10 @@ Quand("on choisit l'item {string}") do |item|
   click_on item
 end
 
+Quand("Quand on modifie le nom de la rubrique de {string} à {string}") do |oldName, newName|
+	page.find(".node", text: oldName).double_click
+end
+
 # Outcomes
 
 Alors("le titre affiché est {string}") do |portfolio|
@@ -147,5 +151,19 @@ end
 
 Alors ("l'item {string} n'est pas affiché") do |item|
   expect(page).not_to have_content item
+end
+
+Alors("le nom du rubrique est maintenant {string}") do |topic|
+  expect(page).to have_content topic
+end
+
+Alors("sur le menu principale, on trouve une rubrique {string}") do |topic|
+  visit "/"
+  expect(page).to have_content topic
+end
+
+Alors("sur le menu principale, on ne trouve pas de rubrique {string}") do |topic|
+  visit "/"
+  expect(page).to not have_content topic
 end
 
