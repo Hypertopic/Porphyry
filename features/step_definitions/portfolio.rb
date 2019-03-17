@@ -140,3 +140,8 @@ Alors ("l'item {string} n'est pas affiché") do |item|
   expect(page).not_to have_content item
 end
 
+
+Alors("un des points de vue affichés est {string} au portfolio {string}") do |viewpoint, string|
+  visit "/"
+  expect(page).to have_content viewpoint
+end
