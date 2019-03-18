@@ -6,6 +6,7 @@ Capybara.default_driver = :cuprite
 Capybara.javascript_driver = :cuprite
 Capybara.app_host = "http://localhost:3000"
 Capybara.default_max_wait_time = 10
+Capybara.ignore_hidden_elements = false
 
 def getUUID(itemName)
   uuid = nil
@@ -26,6 +27,13 @@ end
 
 Soit("le point de vue {string} rattaché au portfolio {string}") do |viewpoint, portfolio|
   # On the remote servers
+end
+
+Soit("l'utilisateur est connecté") do
+  find_link(href: '#login').click
+  fill_in("nom d'utilisateur", with: "alice")
+  fill_in("mot de passe", with: "whiterabbit")
+  click_on('Se connecter')
 end
 
 Soit("le corpus {string} rattaché au portfolio {string}") do |viewpoint, portfolio|
@@ -92,6 +100,11 @@ Soit("la liste des rubriques sélectionnées est vide") do
   visit "/"
 end
 
+Soit("l'item {string} affiché") do |item|
+  visit "/"
+  click_on item
+end
+
 # Events
 
 Quand("un visiteur ouvre la page d'accueil du site") do
@@ -110,6 +123,17 @@ Quand("on choisit l'item {string}") do |item|
   click_on item
 end
 
+Quand("on ajoute un attribut {string} avec pour valeur {string}") do |attribut, valeur|
+  find_button(class: ['btn', 'btn-light', 'creationButton']).click
+  fill_in('Attribut', with: attribut)
+  fill_in('Valeur', with: valeur)
+  click_button('Valider')
+end
+
+Quand("on supprime l'attribut {string} ayant pour valeur {string}") do |attribut, valeur|
+  find(class: 'Value', text: valeur).sibling(class: 'DeleteTopicButton').click
+end
+
 # Outcomes
 
 Alors("le titre affiché est {string}") do |portfolio|
@@ -122,6 +146,18 @@ end
 
 Alors("un des corpus affichés est {string}") do |corpus|
   expect(page).to have_content corpus
+end
+
+Alors("un nouvel attribut {string} avec pour valeur {string} est affiché") do |attribut, valeur|
+  expect(page).to have_content(valeur)
+end
+
+Alors("l'attribut {string} ayant pour valeur {string} n'est plus affiché") do |attribut, valeur|
+  expect(find(class: 'Attributes')).not_to have_content(valeur)
+end
+
+Alors("l'utilisateur se déconnecte") do
+  find_link(href: '#logout').click
 end
 
 Alors("il doit y avoir au moins {int} items sélectionnés décrits par {string}") do |itemsNb, topic|
@@ -139,4 +175,3 @@ end
 Alors ("l'item {string} n'est pas affiché") do |item|
   expect(page).not_to have_content item
 end
-
