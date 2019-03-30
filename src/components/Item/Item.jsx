@@ -93,9 +93,6 @@ class Item extends Component {
         <div className="Attribute" key={x[0]}>
           <div className="Key">
             {x[0]}
-            <button onClick={this.deleteAttribute.bind(this,x[0])} className="btn btn-xs DeleteButton">
-              <span className="oi oi-x"> </span>
-            </button>
           </div>
           <div className="Value">
             <button onClick={this.editAttribute.bind(this,x[0])} className="btn btn-xs EditButton">
@@ -103,6 +100,9 @@ class Item extends Component {
             </button>
             {x[1][0]}
           </div>
+          <button onClick={this.deleteAttribute.bind(this,x[0])} className="btn btn-xs DeleteButton">
+            <span className="oi oi-x"> </span>
+          </button>
         </div>
       ));
   }
