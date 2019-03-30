@@ -222,7 +222,7 @@ class Item extends Component {
 
     return (
       <form onSubmit={this._submitAttribute} className={classes.join(" ")}>
-        <div>
+        <div class="attributeInput">
           <input ref={(input) => this.attributeInput=input} value={this.state.attributeInputValue}
             onChange={attributeInputChange} onKeyDown={attributeInputChangeKeyDown}
             onFocus={attributeInputFocus} onBlur={attributeInputBlur}
