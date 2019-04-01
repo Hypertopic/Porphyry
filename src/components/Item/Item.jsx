@@ -41,7 +41,7 @@ class Item extends Component {
     this._fetchItem = this._fetchItem.bind(this);
     this._getOrCreateItem = this._getOrCreateItem.bind(this);
     this._submitAttribute = this._submitAttribute.bind(this);
-    this.deleteAttribute = this.deleteAttribute.bind(this);
+    this._deleteAttribute = this._deleteAttribute.bind(this);
     this.user=conf.user || window.location.hostname.split('.', 1)[0];
   }
 
@@ -90,20 +90,8 @@ class Item extends Component {
     return Object.entries(this.state.item)
       .filter(x => !itemView.hiddenProps.includes(x[0]))
       .map(x => (
-        <div className="Attribute" key={x[0]}>
-          <div className="Key">
-            {x[0]}
-          </div>
-          <div className="Value">
-            <button onClick={this.editAttribute.bind(this,x[0])} className="btn btn-xs EditButton">
-              <span className="oi oi-pencil"> </span>
-            </button>
-            {x[1][0]}
-          </div>
-          <button onClick={this.deleteAttribute.bind(this,x[0])} className="btn btn-xs DeleteButton">
-            <span className="oi oi-x"> </span>
-          </button>
-        </div>
+        <Attribute  key={x[0]} myKey={x[0]} value={x[1][0]}
+          setAttribute={this._setAttribute.bind(this)} deleteAttribute={this._deleteAttribute}/>
       ));
   }
 
@@ -222,7 +210,7 @@ class Item extends Component {
 
     return (
       <form onSubmit={this._submitAttribute} className={classes.join(" ")}>
-        <div class="attributeInput">
+        <div className="attributeInput">
           <input ref={(input) => this.attributeInput=input} value={this.state.attributeInputValue}
             onChange={attributeInputChange} onKeyDown={attributeInputChangeKeyDown}
             onFocus={attributeInputFocus} onBlur={attributeInputBlur}
@@ -244,7 +232,7 @@ class Item extends Component {
   _setAttribute(key, value) {
     if (key!=='' && value!=='') {
       let attribute = {[key]: [value]};
-      this._getOrCreateItem()
+      return this._getOrCreateItem()
         .then(x => Object.assign(x, attribute))
         .then(hypertopic.post)
         .then(_ => this.setState(previousState => {
@@ -253,7 +241,8 @@ class Item extends Component {
         }))
         .catch((x) => console.error(x.message));
     } else {
-      console.log('Créez un attribut non vide');
+      console.error('Créez un attribut non vide');
+      return new Promise().fail();
     }
   }
 
@@ -272,15 +261,7 @@ class Item extends Component {
     return false;
   }
 
-  editAttribute(key) {
-    let value=this.state.item[key];
-    if (typeof value !== "undefined") {
-      this.setState({attributeInputValue:key+":"+value});
-      this.attributeInput.focus();
-    }
-  }
-
-  deleteAttribute(key) {
+  _deleteAttribute(key) {
     const _error = (x) => console.error(x.message);
     this._getOrCreateItem()
       .then(x => {
@@ -336,6 +317,99 @@ class Item extends Component {
         .catch(error => console.log(`error : ${error}`));
     }
   }
+}
+
+class Attribute extends Component {
+
+  constructor() {
+    super();
+    this.state = {
+      editedValue:""
+    };
+  }
+
+  onKeyDown = (event) => {
+    console.log("key down");
+    if (event.key==="Escape") {
+      this.setState({edit:false});
+    }
+    if (event.key==="Enter") {
+      this.submitValue(event);
+    }
+  };
+
+  handleChange = (e) => {
+    console.log("Change "+e.target.value);
+    this.setState({editedValue:e.target.value});
+  };
+
+  handleFocus = (e) => {
+    console.log("Focus");
+  }
+
+  handleBlur = (e) => {
+    console.log("Blur");
+
+  }
+
+  setEdit = (e) => {
+    this.setState({edit:true,editedValue:this.props.value});
+  }
+
+  submitValue = (e) => {
+    this.props.setAttribute(this.props.myKey,this.state.editedValue).then(
+      _ => this.setState({edit:false})
+    );
+  }
+
+  render() {
+    var valueCtl,deleteButton;
+    let valid=this.state.editedValue;
+    if (!this.state.edit) {
+      valueCtl=(
+        <div className="Value">
+          <button onClick={this.setEdit} className="btn btn-xs EditButton">
+            <span className="oi oi-pencil"> </span>
+          </button>
+          {this.props.value}
+        </div>
+      );
+      deleteButton=(
+        <button onClick={this.props.deleteAttribute.bind(this,this.props.myKey)} className="btn btn-xs DeleteButton">
+          <span className="oi oi-x"> </span>
+        </button>
+      );
+    } else {
+      valueCtl=(
+        <div className="Value edit">
+          <button onClick={this.setEdit} className="btn btn-xs EditButton">
+            <span className="oi oi-pencil"> </span>
+          </button>
+          <input value={this.state.editedValue} placeholder="valeur obbligatoire"
+            autoFocus
+            onChange={this.handleChange} onKeyDown={this.onKeyDown}
+            onFocus={this.handleFocus} onBlur={this.handleBlur}
+          />
+          <button type="button" className="btn btn-sm ValidateButton btn"
+            onClick={this.submitValue}
+            onFocus={this.handleFocus} onBlur={this.handleBlur}
+            disabled={!valid}
+            id={`validateButton-${this.props.myKey}`}>
+            <span className="oi oi-check"> </span>
+          </button>
+        </div>
+      );
+    }
+    return (
+      <div className="Attribute">
+        <div className="Key">
+          {this.props.myKey}
+        </div>
+        {valueCtl}
+        {deleteButton}
+      </div>
+    );
+    }
 }
 
 function ShowItem(props) {

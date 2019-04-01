@@ -173,7 +173,7 @@ h1 a, h1 a:hover {
 }
 .TopicPath:hover > .DeleteButton,
 .Attribute:hover > .DeleteButton,
-.Attribute > .Value:hover > .EditButton {
+.Attribute > .Value:not(.edit):hover > .EditButton {
   visibility: visible;
 }
 
