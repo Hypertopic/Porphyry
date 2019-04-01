@@ -188,7 +188,7 @@ class Item extends Component {
     let attributeInputBlur=(e) => {
       this.blurTimeout=setTimeout(() => {
         this.setState({attributeInputFocus:false})
-      }, 10);
+      }, 200);
     }
 
     var valid=false;
