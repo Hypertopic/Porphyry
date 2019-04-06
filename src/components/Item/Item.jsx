@@ -282,17 +282,18 @@ class Item extends Component {
     return this._getOrCreateItem()
       .then(data => {
         data.topics=data.topics || {};
-        data.topics[topicToAssign.id] = { viewpoint: viewpointId };
+        data.topics[topicToAssign] = { viewpoint: viewpointId };
         return data;
       })
       .then(hypertopic.post)
       .then(data => {
-        let newState = this.state;
-        newState.topic[viewpointId].push({
-          viewpoint: viewpointId,
-          id: topicToAssign.id
-        });
-        this.setState(newState);
+        this.setState(newState => {
+          newState.topic[viewpointId].push({
+            viewpoint: viewpointId,
+            id: topicToAssign
+          });
+          return newState;
+        })
       })
       .catch(error => console.log(`error : ${error}`));
   }
@@ -555,7 +556,7 @@ class Viewpoint extends Component {
   };
 
   onSuggestionSelected = (event, { suggestion }) => {
-    this.setState({ canValidateTopic: true, currentSelection: suggestion });
+    this.setState({ currentSelection: suggestion });
   };
 
   onSuggestionHighlighted = ({ suggestion }) => {
@@ -606,6 +607,7 @@ class Viewpoint extends Component {
     if (!this.state.hasFocus) {
       classes.push("inactive");
     }
+    const canValidateTopic=this.state.currentSelection;
     return (
       <div>
         <h3 className="h4">{this.state.name}</h3>
@@ -629,12 +631,12 @@ class Viewpoint extends Component {
             <div className="input-group-append">
               <button type="button" className="btn btn-sm ValidateButton btn" onClick={() =>
                   this.updatingTopicList(
-                    this.state.currentSelection,
+                    this.state.currentSelection.id,
                     this.props.id
                   )
                 }
                 onFocus={this.onTopicInputFocus} onBlur={this.onTopicInputBlur}
-                disabled={!this.state.currentSelection}
+                disabled={!canValidateTopic}
                 id={`validateButton-${this.state.name}`}>
                 <span className="oi oi-check"> </span>
               </button>
@@ -691,13 +693,13 @@ class TopicPath extends Component {
       ++i;
     }
     const topicId = this.state.path[this.state.path.length - 1]
-      ? `deleteButton-${this.state.path[this.state.path.length - 1].id}`
+      ? `${this.state.path[this.state.path.length - 1].id}`
       : '';
     return (
       <div className="TopicPath">
         {topics}
         <button type="button" className="btn btn-xs ml-3 float-right DeleteButton"
-          onClick={this.props.removeTopic} id={topicId}>
+          onClick={this.props.removeTopic} id={`deleteButton-${topicId}`}>
           <span className="oi oi-x"> </span>
         </button>
       </div>
@@ -707,7 +709,7 @@ class TopicPath extends Component {
   componentDidMount() {
     let topic = this._getTopic(this.props.id);
     let path = [topic];
-    while (topic.broader) {
+    while (topic.broader && topic.broader.length) {
       topic = this._getTopic(topic.broader[0].id);
       path.unshift(topic);
     }
@@ -725,7 +727,7 @@ class TopicPath extends Component {
       let name = (t.name)? t.name : 'Sans nom';
       let uri = '../../?t=' + t.id;
       return (
-        <Link key={t.id} className="Topic" to={uri}>{name}</Link>
+        <Link title={t.id} key={t.id} className="Topic" to={uri}>{name}</Link>
       );
     });
   }
