@@ -7,6 +7,7 @@ import conf from '../../config/config.json';
 import getConfig from '../../config/config.js';
 import Header from '../Header/Header.jsx';
 import Authenticated from '../Authenticated/Authenticated.jsx';
+import TopicTree from '../Outliner/TopicTree.js';
 
 import '../../styles/App.css';
 
@@ -573,7 +574,8 @@ class Viewpoint extends Component {
       topicInputvalue: '',
       currentSelection: '',
       currentPreSelection: '',
-      suggestions: []
+      suggestions: [],
+      newTopic:""
     });
   };
 
@@ -607,7 +609,7 @@ class Viewpoint extends Component {
     if (!this.state.hasFocus) {
       classes.push("inactive");
     }
-    const canValidateTopic=this.state.currentSelection;
+    const canValidateTopic=this.state.currentSelection || this.state.topicInputvalue.length > 2;
     return (
       <div>
         <h3 className="h4">{this.state.name}</h3>
@@ -628,13 +630,32 @@ class Viewpoint extends Component {
               inputProps={inputProps}
               id={`input-${this.state.name}`}
             />
+            <div className="newTopic">{this.state.newTopic}</div>
             <div className="input-group-append">
-              <button type="button" className="btn btn-sm ValidateButton btn" onClick={() =>
-                  this.updatingTopicList(
-                    this.state.currentSelection.id,
-                    this.props.id
-                  )
-                }
+              <button type="button" className="btn btn-sm ValidateButton btn" onClick={() => {
+                  if (this.state.currentSelection) {
+                    if (this.state.newTopic) {
+                      this.createTopic(this.state.newTopic,this.state.currentSelection.id)
+                        .then(newId => {
+                          this.updatingTopicList(
+                            newId,
+                            this.props.id
+                          )
+                        })
+                        .then(this.clearInput);
+                    } else {
+                      this.updatingTopicList(
+                        this.state.currentSelection.id,
+                        this.props.id
+                      );
+                    }
+                  } else {
+                    this.setState({
+                      newTopic:this.state.topicInputvalue,
+                      topicInputvalue:""
+                    })
+                  }
+                }}
                 onFocus={this.onTopicInputFocus} onBlur={this.onTopicInputBlur}
                 disabled={!canValidateTopic}
                 id={`validateButton-${this.state.name}`}>
@@ -675,6 +696,37 @@ class Viewpoint extends Component {
       this.setState({name, topics});
     });
   }
+
+  createTopic(name,parent) {
+    var newId;
+    return hypertopic.get({ _id: this.props.id })
+      .then(x => {
+        var topicTree=new TopicTree(x.topics);
+        var newTopic=topicTree.newChildren(parent);
+        newTopic.name=name;
+        newId=newTopic.id;
+        delete newTopic.id;
+        x.topics=topicTree.topics;
+        return x;
+      })
+      .then(hypertopic.post)
+      .then(_ => {
+        this.setState(previousState => {
+          var parentTopic={
+            id:parent,
+            name:previousState.topics[parent].name
+          };
+          previousState.topics[newId]={
+            broader:[parentTopic],
+            id:newId,
+            name:[name]
+          }
+          return previousState;
+        })
+      })
+      .then(_ => {return newId});
+  }
+
 }
 
 class TopicPath extends Component {
