@@ -109,10 +109,8 @@ class Item extends Component {
     this._fetchItem().then(() => {
       let end=new Date().getTime();
       let elapsedTime=end-start;
-      console.log("elapsed Time ",elapsedTime);
 
       let intervalTime=Math.max(10000,elapsedTime*5);
-      console.log("reload every ",intervalTime);
       self._timer = setInterval(
         () => {
           self._fetchItem();
@@ -296,7 +294,7 @@ class Item extends Component {
           return newState;
         })
       })
-      .catch(error => console.log(`error : ${error}`));
+      .catch(error => console.error(error));
   }
 
 
@@ -316,7 +314,7 @@ class Item extends Component {
           ].filter(stateTopic => topicToDelete.id !== stateTopic.id);
           this.setState(newState);
         })
-        .catch(error => console.log(`error : ${error}`));
+        .catch(error => console.error(error));
     }
   }
 }
@@ -331,7 +329,6 @@ class Attribute extends Component {
   }
 
   onKeyDown = (event) => {
-    console.log("key down");
     if (event.key==="Escape") {
       this.setState({edit:false});
     }
@@ -341,17 +338,13 @@ class Attribute extends Component {
   };
 
   handleChange = (e) => {
-    console.log("Change "+e.target.value);
     this.setState({editedValue:e.target.value});
   };
 
   handleFocus = (e) => {
-    console.log("Focus");
   }
 
   handleBlur = (e) => {
-    console.log("Blur");
-
   }
 
   setEdit = (e) => {
@@ -561,7 +554,6 @@ class Viewpoint extends Component {
   };
 
   onSuggestionHighlighted = ({ suggestion }) => {
-    console.log(suggestion);
     if (suggestion && suggestion.id) {
       this.setState({ currentPreSelection: suggestion.id });
     } else {
