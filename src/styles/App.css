@@ -92,6 +92,13 @@ h1 a, h1 a:hover {
   justify-content: flex-start;
 }
 
+.Topics .newTopic {
+  position: relative;
+  right: 0px;
+  color: #999;
+  line-height: 2.5em;
+}
+
 .Topic {
   text-align: left;
   list-style-type: none;
