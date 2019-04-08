@@ -93,10 +93,9 @@ h1 a, h1 a:hover {
 }
 
 .Topics .newTopic {
-  position: relative;
-  right: 0px;
+  padding:5px;
+  width: 85%;
   color: #999;
-  line-height: 2.5em;
 }
 
 .Topic {
@@ -178,8 +177,8 @@ h1 a, h1 a:hover {
 .DeleteButton, .EditButton {
   visibility: hidden;
 }
-.TopicPath:hover > .DeleteButton,
-.Attribute:hover > .DeleteButton,
+
+div:hover > .DeleteButton,
 .Attribute > .Value:not(.edit):hover > .EditButton {
   visibility: visible;
 }

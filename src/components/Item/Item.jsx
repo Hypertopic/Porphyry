@@ -602,7 +602,11 @@ class Viewpoint extends Component {
     }
     var newTopic;
     if (this.state.newTopic) {
-      newTopic=<div className="newTopic"> &gt; {this.state.newTopic}</div>;
+      newTopic=<div className="newTopic">Ajouter nouveau : &gt; {this.state.newTopic}
+      <button type="button" className="btn btn-xs ml-3 float-right DeleteButton"
+        onClick={_ => this.setState({newTopic:""})} id="deleteButton-newTopic">
+        <span className="oi oi-x"> </span>
+      </button></div>;
     }
     const canValidateTopic=this.state.currentSelection || this.state.newTopic || this.state.topicInputvalue.length > 2;
     return (
@@ -626,7 +630,6 @@ class Viewpoint extends Component {
               id={`input-${this.state.name}`}
             />
             <div className="input-group-append">
-              {newTopic}
               <button type="button" className="btn btn-sm ValidateButton btn" onClick={() => {
                   if (this.state.newTopic && (this.state.currentSelection || !this.state.topicInputvalue)) {
                     var parentId;
@@ -659,6 +662,7 @@ class Viewpoint extends Component {
                 <span className="oi oi-check"> </span>
               </button>
             </div>
+            {newTopic}
           </div>
         </div>
       </div>
