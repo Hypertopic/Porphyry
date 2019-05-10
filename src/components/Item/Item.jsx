@@ -363,16 +363,18 @@ class Attribute extends Component {
   }
 
   render() {
-    var valueCtl,deleteButton;
+    var valueCtl,deleteButton,editButton;
     let valid=this.state.editedValue;
     if (!this.state.edit) {
       valueCtl=(
         <div className="Value">
-          <button onClick={this.setEdit} className="btn btn-xs EditButton">
-            <span className="oi oi-pencil"> </span>
-          </button>
           {this.props.value}
         </div>
+      );
+      editButton=(
+        <button onClick={this.setEdit} className="btn btn-xs EditButton">
+          <span className="oi oi-pencil"> </span>
+        </button>
       );
       deleteButton=(
         <button onClick={this.props.deleteAttribute.bind(this,this.props.myKey)} className="btn btn-xs DeleteButton">
@@ -382,9 +384,6 @@ class Attribute extends Component {
     } else {
       valueCtl=(
         <div className="Value edit">
-          <button onClick={this.setEdit} className="btn btn-xs EditButton">
-            <span className="oi oi-pencil"> </span>
-          </button>
           <input value={this.state.editedValue} placeholder="valeur obbligatoire"
             autoFocus
             onChange={this.handleChange} onKeyDown={this.onKeyDown}
@@ -406,6 +405,7 @@ class Attribute extends Component {
           {this.props.myKey}
         </div>
         {valueCtl}
+        {editButton}
         {deleteButton}
       </div>
     );
