@@ -518,7 +518,7 @@ class Viewpoint extends Component {
   onTopicInputBlur = (event) => {
     this.blurTimeout=setTimeout(() => {
       this.setState({hasFocus:false});
-    },10);
+    },200);
   }
 
   onTopicInputkeyDown = (event) => {
