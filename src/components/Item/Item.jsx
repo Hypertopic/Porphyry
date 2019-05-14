@@ -715,15 +715,14 @@ class Viewpoint extends Component {
       .then(_ => {
         this.setState(previousState => {
           let newTopic={
-            broader:[],
             id:newId,
             name:[name]
           };
           if (parent) {
-            newTopic.broader.push({
+            newTopic.broader=[{
               id:parent,
               name:previousState.topics[parent].name
-            });
+            }];
           }
           previousState.topics[newId]=newTopic;
           return previousState;
