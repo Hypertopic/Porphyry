@@ -179,7 +179,7 @@ h1 a, h1 a:hover {
 }
 
 div:hover > .DeleteButton,
-.Attribute > .Value:not(.edit):hover > .EditButton {
+div:hover > .EditButton {
   visibility: visible;
 }
 
@@ -389,6 +389,7 @@ ul.Outliner,
   font-size: .6rem;
   line-height: 1.5;
   padding: .15rem .3rem;
+  margin-left:2px;
 }
 
 .btn-light {
