@@ -15,11 +15,11 @@ class ItemCreator extends Component {
   }
 
   render() {
-    return (<div className="text-center">
-      <button className="btn btn-light creationButton" onClick={_ => this._newItem()}>
+    return (
+      <button className="btn btn-light creationItemButton" onClick={_ => this._newItem()}>
         +
       </button>
-    </div>);
+    );
   }
 
   _newItem() {
