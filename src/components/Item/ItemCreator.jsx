@@ -23,7 +23,7 @@ class ItemCreator extends Component {
   }
 
   _newItem() {
-    db.post({item_name:'default', item_corpus: this.props.corpus})
+    db.post({item_corpus: this.props.corpus})
     .then((data) => {
       _log(data);
       this._goToNewItem(data);
