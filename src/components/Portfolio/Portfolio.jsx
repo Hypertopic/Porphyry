@@ -9,6 +9,7 @@ import Corpora from '../Corpora/Corpora.jsx';
 import Header from '../Header/Header.jsx';
 import ViewpointCreator from '../Viewpoint/ViewpointCreator.jsx';
 import Authenticated from '../Authenticated/Authenticated.jsx';
+import ItemCreator from '../Item/ItemCreator.jsx';
 
 import '../../styles/App.css';
 
@@ -44,6 +45,7 @@ class Portfolio extends Component {
                 <h2 className="h4 font-weight-bold text-center">Points de vue</h2>
                 <div className="p-3">
                   <ViewpointCreator />
+                  <ItemCreator />
                   {viewpoints}
                 </div>
               </div>

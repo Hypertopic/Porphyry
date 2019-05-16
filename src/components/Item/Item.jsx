@@ -43,12 +43,14 @@ class Item extends Component {
     this._switchCreatable = this._switchCreatable.bind(this);
     this.deleteAttribute = this.deleteAttribute.bind(this);
     this.user=conf.user || window.location.hostname.split('.', 1)[0];
+    this._getCorpus = this._getCorpus.bind(this);
   }
 
   render() {
     let name = getString(this.state[itemView.name]);
     let attributes = this._getAttributes();
     let viewpoints = this._getViewpoints();
+    let corpus = this._getCorpus();
     let attributeButtonLabel = this.state.isCreatable? 'Valider' : 'Ajouter un attribut';
     let attributeForm = this.state.isCreatable? this._getAttributeCreationForm() : '';
     return (
@@ -66,6 +68,11 @@ class Item extends Component {
               <div className="Description">
                 <h2 className="h4 font-weight-bold text-center">Description</h2>
                 <div className="p-3">
+                  <h3 className="h4">Corpus</h3>
+                  <hr/>
+                  <div className="Corpus">
+                    {corpus}
+                  </div>
                   <h3 className="h4">Attributs du document</h3>
                   <hr/>
                   <div className="text-center">
@@ -237,7 +244,6 @@ class Item extends Component {
       .catch(error => console.log(`error : ${error}`));
   }
 
-
   _removeTopic(topicToDelete) {
     if (window.confirm('Voulez-vous réellement que l\'item affiché ne soit plus décrit à l\'aide de cette rubrique ?')) {
       return this._getOrCreateItem()
@@ -256,6 +262,10 @@ class Item extends Component {
         })
         .catch(error => console.log(`error : ${error}`));
     }
+  }
+
+  _getCorpus() {
+    console.log(this.props.match.params.corpus);
   }
 }
 
