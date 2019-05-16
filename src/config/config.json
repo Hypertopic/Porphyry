@@ -1,7 +1,6 @@
 {
-  "user": "vitraux",
   "services": [
-    "http://argos2.test.hypertopic.org",
+    "http://localhost",
     "http://steatite.hypertopic.org"
   ]
 }

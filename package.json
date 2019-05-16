@@ -5,15 +5,18 @@
   "dependencies": {
     "bootstrap": "^4.1.1",
     "hypertopic": "^3.1.4",
+    "jquery": "^3.4.1",
     "js-tree": "^2.0.1",
     "json-groupby": "^1.0.2",
     "open-iconic": "^1.1.1",
     "query-string": "^4.3.4",
     "react": "^16.4.0",
     "react-autosuggest": "^9.3.4",
+    "react-bootstrap": "^1.0.0-beta.8",
     "react-dom": "^16.4.0",
     "react-router-dom": "^4.1.1",
-    "sort-by": "^1.2.0"
+    "sort-by": "^1.2.0",
+    "styled-components": "^4.2.0"
   },
   "devDependencies": {
     "react-scripts": "^3.0.1",

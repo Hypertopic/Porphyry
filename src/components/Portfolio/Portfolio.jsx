@@ -20,8 +20,9 @@ class Portfolio extends Component {
       corpora: [],
       items: [],
       selectedItems: [],
-      topicsItems: new Map()
+      topicsItems: new Map(),
     };
+
     this.user = conf.user || window.location.hostname.split('.', 1)[0];
     this._updateSelection();
   }
@@ -30,12 +31,15 @@ class Portfolio extends Component {
     let viewpoints = this._getViewpoints();
     let corpora = this._getCorpora();
     let status = this._getStatus();
+
     return (
       <div className="App container-fluid">
         <Header />
         <div className="Status row h5 text-center">
-          <Authenticated/>
-          {status}
+          <ul>
+            {status}
+            <li><Authenticated portfolio={this.user} viewpoints={this.state.viewpoints} corpora={this.state.corpora}/></li>
+          </ul>
         </div>
         <div className="container-fluid">
           <div className="App-content row">
@@ -101,9 +105,9 @@ class Portfolio extends Component {
       let uri = '?' + queryString.stringify({
         t: this._toggleTopic(this.selection, t)
       });
-      return <span className="badge badge-pill badge-light TopicTag">
+      return <li><span className="badge badge-pill badge-light TopicTag">
         {topic.name} <Link to={uri} className="badge badge-pill badge-dark oi oi-x" title="Déselectionner"> </Link>
-      </span>;
+      </span></li>;
     });
     return topics.length ? topics : 'Tous les items';
   }
