@@ -23,11 +23,11 @@ class Duplicator extends Component {
         this.closeToast = this.closeToast.bind(this)
         this.addUserToEntity = this.addUserToEntity.bind(this)
       }
-    
+
     handleClose() {
         this.setState({ showModal: false, showModalConfirmation: false });
     }
-    
+
     handleShow() {
         this.setState({ showModal: true });
     }
@@ -133,22 +133,22 @@ class Duplicator extends Component {
         })
     }
 
-    render() {   
+    render() {
         let name = this.props.userConnected + '-' + this.props.portfolio
         let corpora = this.props.corpora.map((v, i) =>
             <div className='Modal-Group' key={v.id}>
-                <input className='Modal-CheckBox Corpus' value={v.id} onChange={this.onChangeCheckBox} type="checkbox"/>
+                <input name={v.id} className='Modal-CheckBox Corpus' value={v.id} onChange={this.onChangeCheckBox} type="checkbox"/>
                 {v.id}
             </div>
         );
 
         let viewpoints = this.props.viewpoints.map((v, i) =>
             <div className='Modal-Group' key={v.id}>
-                <input className='Modal-CheckBox ViewPoint' value={v.id} onChange={this.onChangeCheckBox} type="checkbox"/>
+                <input name={v.name} className='Modal-CheckBox ViewPoint' value={v.id} onChange={this.onChangeCheckBox} type="checkbox"/>
                 {v.name}
             </div>
         );
-        
+
 
         return (
             <div>
@@ -175,7 +175,7 @@ class Duplicator extends Component {
                 <Modal show={this.state.showModal}>
                     <Modal.Body>
                         <h3>Nom du portfolio</h3>
-                        <input type='text' className='Modal-Input form-control' defaultValue={name} placeholder='Nom du nouveau portfolio' id="portfolioDuplicatedName"/>
+                        <input type='text' name="copyName" className='Modal-Input form-control' defaultValue={name} placeholder='Nom du nouveau portfolio' id="portfolioDuplicatedName"/>
                         <div className='Modal-Group Modal-Title'>
                             <h3>Corpus</h3>
                             <div className='Modal-Group'><input className='Modal-CheckBox checkCorpora' type="checkbox" onChange={this.onChangeCheckBox}/>Tout</div>
@@ -187,7 +187,7 @@ class Duplicator extends Component {
                         <br/>
                         <div className='Modal-Group Modal-Title'>
                             <h3>Points de vue</h3>
-                            <div className='Modal-Group'><input className='Modal-CheckBox checkViewPoints' type="checkbox" onChange={this.onChangeCheckBox}/>Tout</div>
+                            <div className='Modal-Group'><input className='Modal-CheckBox checkViewPoints' name={name} type="checkbox" onChange={this.onChangeCheckBox}/>Tout</div>
                         </div>
                         <hr/>
                         <div id="viewPointsList">
@@ -205,7 +205,7 @@ class Duplicator extends Component {
                 </Modal>
                 <Dropdown.Item eventKey="2" onClick={this.handleShow}>Dupliquer</Dropdown.Item>
             </div>
-            
+
         )
     }
 }

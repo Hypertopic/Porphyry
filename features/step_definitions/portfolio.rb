@@ -4,7 +4,7 @@ require 'capybara/cuprite'
 Capybara.run_server = false
 Capybara.default_driver = :cuprite
 Capybara.javascript_driver = :cuprite
-Capybara.app_host = "http://localhost:3000"
+Capybara.app_host = "http://vitraux.local:3000"
 Capybara.default_max_wait_time = 10
 
 def getUUID(itemName)
@@ -46,6 +46,13 @@ end
 
 Soit("l'item {string} rattaché à la rubrique {string}") do |item, topic|
   # On the remote servers
+end
+
+Soit("l'utilisateur est connecté") do
+  find_link(href: '#login').click
+  fill_in("Nom d'utilisateur", with: "alice")
+  fill_in("Mot de passe", with: "whiterabbit")
+  click_on('Confirmer')
 end
 
 Soit("{string} le portfolio spécifié dans la configuration") do |portfolio|
@@ -106,8 +113,32 @@ Quand("on sélectionne la rubrique {string}") do |topic|
   click_on topic
 end
 
+Quand("on choisit la rubrique {string} contenue dans la rubrique {string}") do |string, string2|
+  click_on string
+  click_on string2
+end
+
 Quand("on choisit l'item {string}") do |item|
   click_on item
+end
+
+def in_modal()
+  f = find('.modal-content')
+end
+
+Quand("on créé une copie du portfolio appelée {string} avec le corpus {string} et le point de vue {string}") do |name, corpus, viewpoint|
+  case name
+  when "undefined"
+    pending "alternate configuration"
+  else
+    click_button('alice')
+    click_link('Dupliquer')
+    in_modal.fill_in('copyName', with: name)
+    in_modal.check(corpus)
+    in_modal.check(viewpoint)
+    in_modal.click_on('Valider')
+    in_modal.click_on('Confirmer')
+  end
 end
 
 # Outcomes
@@ -139,4 +170,3 @@ end
 Alors ("l'item {string} n'est pas affiché") do |item|
   expect(page).not_to have_content item
 end
-
