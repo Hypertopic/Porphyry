@@ -400,8 +400,10 @@ class Attribute extends Component {
           {this.props.myKey}
         </div>
         {valueCtl}
-        {editButton}
-        {deleteButton}
+        <div className="buttons">
+          {editButton}
+          {deleteButton}
+        </div>
       </div>
     );
     }

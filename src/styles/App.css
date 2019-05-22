@@ -174,10 +174,16 @@ h1 a, h1 a:hover {
   font-weight: bold;
 }
 
+.Attribute .buttons {
+  display: table-cell;
+  white-space: nowrap;
+}
+
 .DeleteButton, .EditButton {
   visibility: hidden;
 }
 
+div:hover > .buttons > button,
 div:hover > .DeleteButton,
 div:hover > .EditButton {
   visibility: visible;
