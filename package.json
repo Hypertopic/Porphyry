@@ -7,6 +7,7 @@
     "hypertopic": "^3.1.4",
     "js-tree": "^2.0.1",
     "json-groupby": "^1.0.2",
+    "languages-js": "^2.2.8",
     "open-iconic": "^1.1.1",
     "query-string": "^4.3.4",
     "react": "^16.4.0",
