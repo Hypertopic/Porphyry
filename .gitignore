@@ -10,3 +10,4 @@ build
 
 # misc
 .DS_Store
+yarn.lock
