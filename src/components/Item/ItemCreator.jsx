@@ -16,7 +16,7 @@ class ItemCreator extends Component {
 
   render() {
     return (
-      <button className="btn btn-light creationItemButton" onClick={_ => this._newItem()}>
+      <button className="btn btn-light creationItemButton" id={this.props.corpus} onClick={_ => this._newItem()}>
         +
       </button>
     );
