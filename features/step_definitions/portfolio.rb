@@ -21,6 +21,15 @@ def getUUID(itemName)
   return uuid
 end
 
+
+def getPassword(username)
+  password = nil
+  case username
+  when "alice"
+    password = "whiterabbit"
+  end
+  return password
+end
 # Conditions
 
 Soit("l'item {string} existant") do |item|
@@ -95,6 +104,14 @@ Soit("la liste des rubriques sélectionnées est vide") do
   visit "/"
 end
 
+Soit ("l'utilisateur {string} connecté") do |username|
+  click_link('Se connecter...')
+  find('input[placeholder="nom d\'utilisateur"]').set username
+  find("input[placeholder='mot de passe']").set getPassword(username)
+  click_on('Se connecter')
+  expect(page).to have_content(username)
+end
+
 # Events
 
 Quand("un visiteur ouvre la page d'accueil du site") do
@@ -113,6 +130,14 @@ Quand("on choisit l'item {string}") do |item|
   click_on item
 end
 
+Quand ("l'utilisateur clique sur le bouton de création d'item à coté du corpus {string} pour creer un item {string}") do |corpus, name|
+  find_button(:id => corpus).click
+  expect(page).to have_content("undefined")
+  find_button('Ajouter un attribut').click
+      fill_in "key", with: "name"
+      fill_in "value", with: name
+    find_button('Valider').click
+end
 # Outcomes
 
 Alors("le titre affiché est {string}") do |portfolio|

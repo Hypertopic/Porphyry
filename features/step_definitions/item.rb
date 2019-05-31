@@ -24,7 +24,6 @@ end
 
 Quand("on ajoute un attribut {string} et la valeur {string}") do |attribut, value|
   find_button('Ajouter un attribut').click
-
     fill_in "#key", with: attribut
 
     fill_in "#value", with: value
