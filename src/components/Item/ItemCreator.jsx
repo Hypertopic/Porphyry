@@ -16,14 +16,14 @@ class ItemCreator extends Component {
 
   render() {
     return (
-      <button className="btn btn-light creationItemButton" onClick={_ => this._newItem()}>
+      <button className="btn btn-light creationItemButton" id={this.props.corpus} onClick={_ => this._newItem()}>
         +
       </button>
     );
   }
 
   _newItem() {
-    db.post({item_corpus: this.props.corpus})
+    db.post({item_corpus: this.props.corpus, item_name: 'default'})
     .then((data) => {
       _log(data);
       this._goToNewItem(data);
