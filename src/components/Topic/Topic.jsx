@@ -15,19 +15,34 @@ class Topic extends Component {
 
   render() {
     let subtopics = this._getSubtopics();
-    let isSelected = this.props.selection.includes(this.props.id)? 'Selected' : '';
+    let isSelected = this.props.selection.includes(this.props.id);
+    let isExcluded = this.props.exclusion.includes(this.props.id);
+    let topicClasses = (isSelected? 'Selected' : '') + " " + (isExcluded? 'Excluded' : '');
     let topic = 'Topic ' + this.state.fold;
     let items = this.props.topicsItems.get(this.props.id);
     let count = (items) ? items.size : '';
-    let uri = '?' + queryString.stringify({
-      t: toggle(this.props.selection, this.props.id)
-    });
+    let uri = '?';
+    if(isSelected)
+      uri += queryString.stringify({
+          t: toggle(this.props.selection, this.props.id),
+          e: toggle(this.props.exclusion, this.props.id)
+      });
+    else if (isExcluded)
+        uri += queryString.stringify({
+            t: this.props.selection,
+            e: toggle(this.props.exclusion, this.props.id)
+        });
+    else
+        uri += queryString.stringify({
+            t: toggle(this.props.selection, this.props.id),
+            e: this.props.exclusion
+        });
 
     let bullet = getBullet(this.state.fold);
     return (
       <li className={topic}>
         <span className={bullet.className} title={bullet.title} aria-hidden="true" onClick={this.handleCollapse}></span>
-        <Link to={uri} className={isSelected}> {this.props.name} </Link>
+        <Link to={uri} className={topicClasses}> {this.props.name} </Link>
         <span className="badge badge-pill badge-secondary ml-1">{count}</span>
         <ul>
         {subtopics}
@@ -40,7 +55,7 @@ class Topic extends Component {
     const topic = this.props.topics[this.props.id];
     return (topic.narrower||[]).sort(by('name')).map(t =>
       <Topic key={t.id} id={t.id} name={t.name} topics={this.props.topics}
-        selection={this.props.selection} topicsItems={this.props.topicsItems} />
+        selection={this.props.selection} exclusion={this.props.exclusion} topicsItems={this.props.topicsItems} />
     );
   }
 
