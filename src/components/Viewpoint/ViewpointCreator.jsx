@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 
+
 function makeID() {
   var id = '';
   for (var i = 0; i < 6; i++) {
@@ -14,7 +15,7 @@ class ViewpointCreator extends Component {
   render() {
     return (<div className="text-center">
       <button className="btn btn-light creationButton" onClick={_ => this._goToNewViewpoint()}>
-        Nouveau point de vue
+        {'Nouveau point de vue'.t()}
       </button>
     </div>);
   }
