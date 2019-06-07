@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "babel-core": "^6.26.3",
     "bootstrap": "^4.1.1",
     "hypertopic": "^3.1.4",
     "js-tree": "^2.0.1",
