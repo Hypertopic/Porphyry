@@ -142,12 +142,12 @@ h1 a, h1 a:hover {
   color: black;
 }
 
-.Attributes {
+.Attributes, .Resources {
   display: table;
   width: 100%;
 }
 
-.Attribute {
+.Attribute, .Resource {
   display: table-row;
 }
 
@@ -186,6 +186,20 @@ h1 a, h1 a:hover {
 div:hover > .buttons > button,
 div:hover > .DeleteButton,
 div:hover > .EditButton {
+  visibility: visible;
+}
+
+.Resource > .resourceName {
+  display: table-cell;
+  padding: 5px;
+  text-align: left;
+}
+
+.TopicPath > .DeleteTopicButton, .Attribute > .DeleteTopicButton, .Resource > .buttons {
+  visibility: hidden;
+}
+
+.TopicPath:hover > .DeleteTopicButton, .Attribute:hover > .DeleteTopicButton, .Resource:hover > .buttons {
   visibility: visible;
 }
 

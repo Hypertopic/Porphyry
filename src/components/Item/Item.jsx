@@ -34,15 +34,20 @@ class Item extends Component {
     super();
     this.state = {
       attributeInputValue:"",
-      item:{topic:[]}
+      item:{topic:[]},
+      resources: [],
+      rev: ''
     };
     // These bindings are necessary to make `this` work in the callback
     this._assignTopic = this._assignTopic.bind(this);
     this._removeTopic = this._removeTopic.bind(this);
     this._fetchItem = this._fetchItem.bind(this);
+    this._fetchResourcesAndRev = this._fetchResourcesAndRev.bind(this);
     this._getOrCreateItem = this._getOrCreateItem.bind(this);
     this._submitAttribute = this._submitAttribute.bind(this);
     this._deleteAttribute = this._deleteAttribute.bind(this);
+    this._addResource = this._addResource.bind(this);
+    this._deleteResource = this._deleteResource.bind(this);
     this.user=conf.user || window.location.hostname.split('.', 1)[0];
   }
 
@@ -50,6 +55,8 @@ class Item extends Component {
     let name = getString(this.state.item[itemView.name]);
     let attributes = this._getAttributes();
     let viewpoints = this._getViewpoints();
+    let resources = this._getResources();
+    let resourceForm = this._getResourceCreationForm();
     return (
       <div className="App container-fluid">
         <Header />
@@ -72,6 +79,17 @@ class Item extends Component {
                   </div>
                   {this._getAttributeCreationForm()}
                   {viewpoints}
+                </div>
+              </div>
+              <br/>
+              <div className="Description">
+                <h2 className="h4 font-weight-bold text-center">Ressources</h2>
+                <div className="p-3">
+                  <div className="Resources">
+                    {resources}
+                  </div>
+                  <br/>
+                  {resourceForm}
                 </div>
               </div>
             </div>
@@ -103,9 +121,21 @@ class Item extends Component {
     );
   }
 
+  _getResources() {
+    return Object.entries(this.state.resources).map(resource =>
+      <Resource
+        match={this.props.match}
+        name={resource[0]}
+        deleteResource={this._deleteResource}
+        key={resource[1].digest}
+      />
+    );
+  }
+
   componentDidMount() {
     let start=new Date().getTime();
     let self=this;
+    this._fetchResourcesAndRev();
     this._fetchItem().then(() => {
       let end=new Date().getTime();
       let elapsedTime=end-start;
@@ -157,6 +187,20 @@ class Item extends Component {
         this.setState({topic});
       }
     });
+  }
+
+  _fetchResourcesAndRev() {
+    fetch(`${conf.services[0]}/${this.props.match.params.item}`)
+      .then(response => {
+        if (response.ok) {
+          response.json().then(json => {
+            this.setState({
+              rev: json._rev,
+              resources: json._attachments || []
+            });
+          });
+        }
+      });
   }
 
   _getAttributeCreationForm() {
@@ -228,6 +272,23 @@ class Item extends Component {
     );
   }
 
+  _getResourceCreationForm() {
+    return (
+      <form className="Resource">
+        <div className="custom-file">
+          <input
+            id="resourceName"
+            className="custom-file-input"
+            placeholder="Attribut"
+            type="file"
+            onChange={this._addResource}
+          />
+          <label className="custom-file-label" htmlFor="resourceName">Ajouter une ressource...</label>
+        </div>
+      </form>
+    );
+  }
+
   _setAttribute(key, value) {
     if (key!=='' && value!=='') {
       let attribute = {[key]: [value]};
@@ -275,6 +336,60 @@ class Item extends Component {
         });
       })
       .catch(_error);
+  }
+
+  _addResource(event) {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+    reader.readAsArrayBuffer(file);
+
+    reader.onload = () => {
+        const headers = {
+          'Content-Type': file.type,
+        };
+        if (this.state.rev) {
+          // Only send the revision if we already have one
+          // If we don't have a revision, it probably means there's no document on Argos yet (and therefore no attachments)
+          headers['If-Match'] = this.state.rev;
+        }
+
+        // Add an attachment to Argos
+        fetch(
+          `${conf.services[0]}/item/${this.props.match.params.corpus}/${this.props.match.params.item}/${file.name}`,
+          {
+            method: 'PUT',
+            credentials: 'include',
+            body: reader.result,
+            headers
+          }
+        ).then(response => {
+          if (response.ok) {
+            this._fetchResourcesAndRev();
+          }
+        });
+    };
+
+    reader.onerror = () => {
+      console.log('Could not initialize FileReader');
+    };
+  }
+
+  _deleteResource(name) {
+    // Remove an attachment from Argos
+    fetch(
+      `${conf.services[0]}/item/${this.props.match.params.corpus}/${this.props.match.params.item}/${name}`,
+      {
+        method: 'DELETE',
+        credentials: 'include',
+        headers: {
+          'If-Match': this.state.rev
+        }
+      }
+    ).then(response => {
+      if (response.ok) {
+        this._fetchResourcesAndRev();
+      }
+    });
   }
 
   _assignTopic(topicToAssign, viewpointId) {
@@ -442,6 +557,52 @@ function Picture(item) {
       </a>
     </div>
   );
+}
+
+class Resource extends Component {
+
+  constructor() {
+    super();
+    this.state = {
+      edit: false
+    };
+  }
+
+  setEdit = (event) => {
+    this.setState({
+      edit: true,
+      editedValue: this.props.value
+    });
+  }
+
+  render() {
+    let deleteButton;
+    if (!this.state.edit) {
+      deleteButton = (
+        <button onClick={this.props.deleteResource.bind(this, this.props.name)} className="btn btn-xs DeleteTopicButton">
+          <span className="oi oi-x"> </span>
+        </button>
+      );
+    } else {
+      deleteButton = null;
+    }
+
+    // CouchDB attachment from Argos
+    const url = `${conf.services[0]}/item/${this.props.match.params.corpus}/${this.props.match.params.item}/${this.props.name}`
+
+    return (
+      <div className="Resource">
+        <div className="resourceName">
+          <a download={this.props.name} href={url} target="_blank">
+            {this.props.name}
+          </a>
+        </div>
+        <div className="buttons">
+          {deleteButton}
+        </div>
+      </div>
+    )
+  }
 }
 
 class Viewpoint extends Component {
