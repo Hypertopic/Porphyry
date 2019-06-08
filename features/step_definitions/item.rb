@@ -13,10 +13,6 @@ Soit("{string} l'item affiché") do |item|
   click_on item
 end
 
-Soit("l'item {string} sélectionné") do |string|
-  # TODO: Implement test
-end
-
 # Events
 
 Quand("on choisit la rubrique {string}") do |topic|
@@ -25,6 +21,8 @@ end
 
 Quand("on ajoute une ressource {string} à un item") do |string|
   # TODO: Implement test
+  attach_file('Fichier', '/path/to/' + string)
+
 end
 
 # Outcomes
@@ -42,6 +40,6 @@ Alors("une des rubriques de l'item est {string}") do |topic|
   expect(page).to have_content(topic)
 end
 
-Alors("la ressource {string} est ajoutée à la liste des ressources associées à l'item {string}") do |string, string2|
-  # TODO: Implement test
+Alors("la ressource {ressource} est ajoutée à la liste des ressources associées à l'item {item}") do |ressource, item|
+  expect(item).to have_content(ressource)
 end

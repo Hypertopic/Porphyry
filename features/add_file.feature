@@ -8,8 +8,7 @@ Contexte:
   Soit le point de vue "Concours" rattaché au portfolio "dessins"
 
 Scénario:
-  Soit "dessins" le portfolio ouvert
-  Et l'item "1997_6-9_23-ex_ECU_R_C" sélectionné
+  Soit  "1997_6-9_23-ex_ECU_R_C" l'item affiché
   Quand on ajoute une ressource "description.txt" à un item
   Alors la ressource "description.txt" est ajoutée à la liste des ressources associées à l'item "1997_6-9_23-ex_ECU_R_C"
   Et le titre de l'item affiché est "1997_6-9_23-ex_ECU_R_C"
