@@ -64,7 +64,7 @@ class Item extends Component {
           <div className="App-content row">
             <div className="col-md-4 p-4">
               <div className="Description">
-                <h2 className="h4 font-weight-bold text-center">Description</h2>
+                <h2 className="h4 font-weight-bold text-center">{'Description'.t()}</h2>
                 <div className="p-3">
                   <h3 className="h4">Attributs du document</h3>
                   <hr/>
