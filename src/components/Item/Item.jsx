@@ -541,7 +541,7 @@ function Article(item) {
   return (
     <div className="p-4">
       <p>{text}</p>
-      <a href={link} target="_blank">Télécharger</a>
+      <a href={link} target="_blank" rel="noopener noreferrer">Télécharger</a>
     </div>
   );
 }
@@ -552,7 +552,7 @@ function Picture(item) {
   let link = getString(item[itemView.linkTo]);
   return (
     <div className="p-3">
-      <a target="_blank" href={link} className="cursor-zoom">
+      <a target="_blank" href={link} className="cursor-zoom" rel="noopener noreferrer">
         <img src={img} alt={name}/>
       </a>
     </div>
@@ -621,6 +621,7 @@ class Viewpoint extends Component {
 
   renderSuggestion = suggestion => {
     return (
+      // eslint-disable-next-line
       <a className="SuggestionItem" id={suggestion.id}>
         {suggestion.name}
       </a>
