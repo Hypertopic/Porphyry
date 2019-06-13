@@ -1,6 +1,9 @@
 [
     {
-      "Nouveau point de vue": "New View Point"
+      "New_Viewpoint_button": "New Viewpoint",
+      "Viewpoint_title": "Viewpoint",
+      "Logout_button": "Logout",
+      "Login_button": "Login..."
     },
     {}
   ]

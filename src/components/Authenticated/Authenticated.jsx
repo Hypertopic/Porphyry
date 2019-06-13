@@ -20,7 +20,7 @@ class Authenticated extends Component {
     if (this.state.user) {
       return (
         <div className="Authenticated"> {this.state.user}
-          <a href="#logout" onClick={this.handleLogout}>Se déconnecter</a>
+          <a href="#logout" onClick={this.handleLogout}>{'Logout_button'.t()}</a>
         </div>
       );
     }
@@ -35,7 +35,7 @@ class Authenticated extends Component {
     }
     return (
       <div className="Authenticated">
-        <a href="#login" onClick={this.handleAsk}>{'Se connecter...'.t()}</a>
+        <a href="#login" onClick={this.handleAsk}>{'Login_button'.t()}</a>
       </div>
     );
   }

@@ -41,7 +41,9 @@ class Portfolio extends Component {
           <div className="App-content row">
             <div className="col-md-4 p-4">
               <div className="Description">
-                <h2 className="h4 font-weight-bold text-center">{'Points de vue'.t()}</h2>
+                <h2 className="h4 font-weight-bold text-center">
+                {'Viewpoint_title'.t()}
+                </h2>
                 <div className="p-3">
                   <ViewpointCreator />
                   {viewpoints}
