@@ -1,0 +1,1 @@
+Ceci est un fichier de test qui sera ajouté à un item en tant que ressource.

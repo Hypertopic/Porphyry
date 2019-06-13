@@ -9,6 +9,13 @@ Capybara.default_max_wait_time = 10
 
 # Conditions
 
+Soit("l'utilisateur connecté") do
+  find_link(href: "#login").click
+  fill_in "nom d'utilisateur", with: "alice"
+  fill_in "mot de passe", with: "whiterabbit"
+  click_on "Se connecter"
+end
+
 Soit("{string} l'item affiché") do |item|
   click_on item
 end
@@ -17,6 +24,10 @@ end
 
 Quand("on choisit la rubrique {string}") do |topic|
   click_on topic
+end
+
+Quand("on ajoute une ressource {string} à un item") do |string|
+  attach_file("Ajouter une ressource...", "features/samples/#{string}", visible: false)
 end
 
 # Outcomes
@@ -34,3 +45,6 @@ Alors("une des rubriques de l'item est {string}") do |topic|
   expect(page).to have_content(topic)
 end
 
+Alors("une des ressources de l'item est {string}") do |resource|
+  expect(page).to have_content(resource)
+end
