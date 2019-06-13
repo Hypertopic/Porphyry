@@ -1,6 +1,25 @@
 [
     {
-      "Nouveau point de vue": "New View Point"
+      "New_Viewpoint_button": "New Viewpoint",
+      "Viewpoint_title": "Viewpoint",
+      "Logout_button": "Logout",
+      "Login_button": "Login...",
+      "All_items_title": "All Items ",
+      "Document_Attributes_title": "Document Attributes",
+      "Validate_button": "Validate",
+      "Add_an_attribute_button": "Add an attribute",
+      "Back_to_Home_button": "Back to Home",
+      "Attribute_input":"Attribute",
+      "Value_input": "Value",
+      "Add_a_section_input":"Add a section",
+      "LoginNamePlaceHolder":"login",
+      "PasswordPlaceHolder":"password",
+      "SearchPlaceHolder":"Search...",
+      "ViewPointNamePlaceHolder":"Viewpoint name",
+      "ViewPointModificaionTitle":"Viewpoint modification",
+      "ViewPointCreationTitle":"Viewpoint creation",
+      "connection_button": "Login"
+
     },
     {}
   ]

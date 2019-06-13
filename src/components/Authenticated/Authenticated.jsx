@@ -20,22 +20,22 @@ class Authenticated extends Component {
     if (this.state.user) {
       return (
         <div className="Authenticated"> {this.state.user}
-          <a href="#logout" onClick={this.handleLogout}>Se déconnecter</a>
+          <a href="#logout" onClick={this.handleLogout}>{'Logout_button'.t()}</a>
         </div>
       );
     }
     if (this.state.ask) {
       return(
         <form className="Authenticated" onSubmit={this.handleLogin}>
-          <input placeholder="nom d'utilisateur" ref={(x) => this.login = x} />
-          <input placeholder="mot de passe" ref={(x) => this.password = x} type="password" />
-          <input type="submit" value="Se connecter" />
+          <input placeholder={"LoginNamePlaceHolder".t()} ref={(x) => this.login = x} />
+          <input placeholder={"PasswordPlaceHolder".t()} ref={(x) => this.password = x} type="password" />
+          <input type="submit" value={"connection_button".t()} />
         </form>
       );
     }
     return (
       <div className="Authenticated">
-        <a href="#login" onClick={this.handleAsk}>{'Se connecter...'.t()}</a>
+        <a href="#login" onClick={this.handleAsk}>{'Login_button'.t()}</a>
       </div>
     );
   }

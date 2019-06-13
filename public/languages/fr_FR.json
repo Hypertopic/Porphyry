@@ -1,6 +1,16 @@
 [
     {
-      "Nouveau point de vue": "Nouveau point de vue"
+      "New_Viewpoint_button": "Nouveau point de vue",
+      "Viewpoint_title": "Point de vue",
+      "Logout_button": "Se déconnecter",
+      "Login_button":"Se connecter...",
+      "LoginNamePlaceHolder":"nom d'utilisateur",
+      "PasswordPlaceHolder": "mot de passe",
+      "SearchPlaceHolder":"Rechercher...",
+      "ViewPointNamePlaceHolder":"Nom du point de vue",
+      "ViewPointModificaionTitle":"Modification du point de vue",
+      "ViewPointCreationTitle":"Création du point de vue",
+      "connection_button": "Se connecter"
     },
     {}
   ]
