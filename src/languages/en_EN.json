@@ -1,8 +1,10 @@
 [
     {
-    "Nouveau point de vue": "New viewpoint"
+      "Points de vue": "Viewpoint",
+      "Nouveau point de vue": "New view point",
+      "Se connecter...": "Connect..."
     },
     {
         
     }
-]
+  ]
