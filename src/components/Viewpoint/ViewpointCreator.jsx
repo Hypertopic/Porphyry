@@ -17,6 +17,7 @@ class ViewpointCreator extends Component {
       <button className="btn btn-light creationButton" onClick={_ => this._goToNewViewpoint()}>
         {'Nouveau point de vue'.t()}
       </button>
+      <a id="str"></a>
     </div>);
   }
 
