@@ -21,8 +21,7 @@ end
 
 Quand("on ajoute une ressource {string} à un item") do |string|
   # TODO: Implement test
-  attach_file('Fichier', '/path/to/' + string)
-
+  attach_file('Fichier', 'samples/' + string)
 end
 
 # Outcomes
