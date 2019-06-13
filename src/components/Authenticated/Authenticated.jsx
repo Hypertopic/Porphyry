@@ -35,7 +35,7 @@ class Authenticated extends Component {
     }
     return (
       <div className="Authenticated">
-        <a href="#login" onClick={this.handleAsk}>Se connecter...</a>
+        <a href="#login" onClick={this.handleAsk}>{'Se connecter...'.t()}</a>
       </div>
     );
   }
