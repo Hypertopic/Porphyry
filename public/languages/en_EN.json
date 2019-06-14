@@ -6,7 +6,7 @@
       "Login_button": "Login...",
       "All_items_title": "All Items ",
       "Document_Attributes_title": "Document Attributes",
-      "Validate_button": "Valider",
+      "Validate_button": "Validate",
       "Add_an_attribute_button": "Add an attribute",
       "Back_to_Home_button": "Back to Home",
       "Attribute_input":"Attribute",
@@ -17,7 +17,8 @@
       "SearchPlaceHolder":"Search...",
       "ViewPointNamePlaceHolder":"Viewpoint name",
       "ViewPointModificaionTitle":"Viewpoint modification",
-      "ViewPointCreationTitle":"Viewpoint creation"
+      "ViewPointCreationTitle":"Viewpoint creation",
+      "connection_button": "Login"
 
     },
     {}

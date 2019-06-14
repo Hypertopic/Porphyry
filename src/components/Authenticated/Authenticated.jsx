@@ -29,7 +29,7 @@ class Authenticated extends Component {
         <form className="Authenticated" onSubmit={this.handleLogin}>
           <input placeholder={"LoginNamePlaceHolder".t()} ref={(x) => this.login = x} />
           <input placeholder={"PasswordPlaceHolder".t()} ref={(x) => this.password = x} type="password" />
-          <input type="submit" value="Se connecter" />
+          <input type="submit" value={"connection_button".t()} />
         </form>
       );
     }

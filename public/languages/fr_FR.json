@@ -17,7 +17,8 @@
       "SearchPlaceHolder":"Rechercher...",
       "ViewPointNamePlaceHolder":"Nom du point de vue",
       "ViewPointModificaionTitle":"Modification du point de vue",
-      "ViewPointCreationTitle":"Création du point de vue"
+      "ViewPointCreationTitle":"Création du point de vue",
+      "connection_button": "Se connecter"
     },
     {}
   ]
