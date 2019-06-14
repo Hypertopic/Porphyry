@@ -3,6 +3,9 @@ node_js: lts/*
 
 addons:
   chrome: stable
+  apt:
+    packages:
+    - xsel
 
 cache:
   directories:

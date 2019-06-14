@@ -146,7 +146,6 @@ class TopicTree {
   setParent(id,parent) {
     let topic=this.getTopic(id);
     if (topic && parent!==false) {
-      console.log(`${parent} is new parent of ${id}`);
       if (parent==="root") {
         topic.broader=[]
       } else {
@@ -260,4 +259,4 @@ class TopicTree {
   }
 }
 
-module.exports=TopicTree;
+export default TopicTree;

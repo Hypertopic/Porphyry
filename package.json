@@ -18,8 +18,8 @@
     "sort-by": "^1.2.0"
   },
   "devDependencies": {
-    "react-scripts": "1.1.5",
-    "serve": "^10.0.2"
+    "react-scripts": "^3.0.1",
+    "serve": "^11.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -27,5 +27,17 @@
     "preprod": "serve -s build -p 3000 &",
     "test": "cucumber --format summary",
     "eject": "react-scripts eject"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }
