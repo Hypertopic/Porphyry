@@ -49,7 +49,9 @@ class Item extends Component {
     let name = getString(this.state[itemView.name]);
     let attributes = this._getAttributes();
     let viewpoints = this._getViewpoints();
-    let attributeButtonLabel = this.state.isCreatable? 'Valider' : 'Ajouter un attribut';
+    let valider = 'Validate_button';
+    let ajouterAttribut = 'Add_an_attribute_button'
+    let attributeButtonLabel = this.state.isCreatable? valider.t() : ajouterAttribut.t();
     let attributeForm = this.state.isCreatable? this._getAttributeCreationForm() : '';
     return (
       <div className="App container-fluid">
@@ -57,7 +59,7 @@ class Item extends Component {
         <div className="Status row h5">
           <Authenticated/>
           <Link to="/" className="badge badge-pill badge-light TopicTag">
-            <span className="badge badge-pill badge-dark oi oi-chevron-left"> </span> Retour à l'accueil
+            <span className="badge badge-pill badge-dark oi oi-chevron-left"> </span> {'Back_to_Home_button'.t()}
           </Link>
         </div>
         <div className="container-fluid">
@@ -66,7 +68,7 @@ class Item extends Component {
               <div className="Description">
                 <h2 className="h4 font-weight-bold text-center">{'Description'.t()}</h2>
                 <div className="p-3">
-                  <h3 className="h4">Attributs du document</h3>
+                  <h3 className="h4">{'Document_Attributes_title'.t()}</h3>
                   <hr/>
                   <div className="text-center">
                     <button className="btn btn-light creationButton" onClick={this._switchCreatable}>{attributeButtonLabel}</button>
@@ -173,8 +175,8 @@ class Item extends Component {
   _getAttributeCreationForm() {
     return (
       <form className="Attribute">
-        <div className="Key"> <input id="key" className="form-control" placeholder="Attribut" type="text" size="8" /></div>
-        <div className="Value"> <input id="value" className="form-control" placeholder="Valeur" type="text" /></div>
+        <div className="Key"> <input id="key" className="form-control" placeholder={"Attribute_input".t()} type="text" size="8" /></div>
+        <div className="Value"> <input id="value" className="form-control" placeholder={"Value_input".t()} type="text" /></div>
       </form>
     );
   }
@@ -415,8 +417,9 @@ class Viewpoint extends Component {
   render() {
     const paths = this._getPaths();
     const { topicInputvalue, suggestions } = this.state;
+    let Ajouter_une_rubrique = "Add_a_section_input";
     const inputProps = {
-      placeholder: 'Ajouter une rubrique...',
+      placeholder: Ajouter_une_rubrique.t(),
       value: topicInputvalue,
       onChange: this.onTopicInputChange
     };

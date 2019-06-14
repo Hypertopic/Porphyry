@@ -1,6 +1,17 @@
 [
     {
-      "Nouveau point de vue": "Nouveau point de vue"
+      "New_Viewpoint_button": "Nouveau point de vue",
+      "Viewpoint_title": "Point de vue",
+      "Logout_button": "Se déconnecter",
+      "Login_button":"Se connecter...",
+      "All_items_title": "Tous les items",
+      "Document_Attributes_title": "Attributs Du Document",
+      "Validate_button": "Validate",
+      "Add_an_attribute_button": "Ajouter un attribut",
+      "Back_to_Home_button": "Retour à l'accueil",
+      "Attribute_input": "Attribut",
+      "Value_input": "Valeur",
+      "Add_a_section_input": "Ajouter une rubrique..."
     },
     {}
   ]
