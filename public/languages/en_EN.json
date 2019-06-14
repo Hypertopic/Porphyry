@@ -11,7 +11,14 @@
       "Back_to_Home_button": "Back to Home",
       "Attribute_input":"Attribute",
       "Value_input": "Value",
-      "Add_a_section_input":"Add a section"
+      "Add_a_section_input":"Add a section",
+      "LoginNamePlaceHolder":"login",
+      "PasswordPlaceHolder":"password",
+      "SearchPlaceHolder":"Search...",
+      "ViewPointNamePlaceHolder":"Viewpoint name",
+      "ViewPointModificaionTitle":"Viewpoint modification",
+      "ViewPointCreationTitle":"Viewpoint creation"
+
     },
     {}
   ]

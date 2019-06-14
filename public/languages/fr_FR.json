@@ -11,7 +11,13 @@
       "Back_to_Home_button": "Retour à l'accueil",
       "Attribute_input": "Attribut",
       "Value_input": "Valeur",
-      "Add_a_section_input": "Ajouter une rubrique..."
+      "Add_a_section_input": "Ajouter une rubrique...",
+      "LoginNamePlaceHolder":"nom d'utilisateur",
+      "PasswordPlaceHolder": "mot de passe",
+      "SearchPlaceHolder":"Rechercher...",
+      "ViewPointNamePlaceHolder":"Nom du point de vue",
+      "ViewPointModificaionTitle":"Modification du point de vue",
+      "ViewPointCreationTitle":"Création du point de vue"
     },
     {}
   ]

@@ -59,7 +59,7 @@ class Outliner extends React.Component {
 
   _getTitle() {
     return (<form className="input-group" onSubmit={(e) => this._newVP(e)}>
-      <input type="text" name="newTitle" className="form-control" placeholder="Nom du point de vue" />
+      <input type="text" name="newTitle" className="form-control" placeholder={"ViewPointNamePlaceHolder".t()} />
       <div className="input-group-append">
         <button type="submit" className="btn add btn-sm btn-light"><span className="oi oi-plus"> </span></button>
       </div>
@@ -68,9 +68,11 @@ class Outliner extends React.Component {
 
   _getStatus() {
     if (this.state.title !== undefined) {
-      return "Modification du point de vue";
+      let modification = "ViewPointModificaionTitle"
+      return modification.t();
     } else {
-      return "Création du point de vue";
+      let creation = "ViewPointCreationTitle"
+      return creation.t();
     }
   }
 

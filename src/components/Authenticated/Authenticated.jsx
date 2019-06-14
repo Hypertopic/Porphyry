@@ -27,8 +27,8 @@ class Authenticated extends Component {
     if (this.state.ask) {
       return(
         <form className="Authenticated" onSubmit={this.handleLogin}>
-          <input placeholder="nom d'utilisateur" ref={(x) => this.login = x} />
-          <input placeholder="mot de passe" ref={(x) => this.password = x} type="password" />
+          <input placeholder={"LoginNamePlaceHolder".t()} ref={(x) => this.login = x} />
+          <input placeholder={"PasswordPlaceHolder".t()} ref={(x) => this.password = x} type="password" />
           <input type="submit" value="Se connecter" />
         </form>
       );
