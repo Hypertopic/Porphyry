@@ -3,7 +3,13 @@
       "New_Viewpoint_button": "New Viewpoint",
       "Viewpoint_title": "Viewpoint",
       "Logout_button": "Logout",
-      "Login_button": "Login..."
+      "Login_button": "Login...",
+      "LoginNamePlaceHolder":"login",
+      "PasswordPlaceHolder":"password",
+      "SearchPlaceHolder":"Search...",
+      "ViewPointNamePlaceHolder":"Viewpoint name",
+      "ViewPointModificaionTitle":"Viewpoint modification",
+      "ViewPointCreationTitle":"Viewpoint creation"
     },
     {}
   ]
