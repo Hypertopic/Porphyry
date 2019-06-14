@@ -8,6 +8,32 @@
   margin-bottom: 0;
 }
 
+header ul{
+  position: static;
+  left: 0;
+  display: block;
+  width: 100%;
+  height: calc(1.5em + .75rem + 2px);
+  list-style: none;
+  margin: auto;
+  padding-left: 15px;
+  padding-right: 15px;
+  position: absolute;
+  z-index: 1;
+}
+header li.searchOption{
+  float: left;
+  list-style: none;
+  width: 100%;
+  color: #111;
+  background-color: ivory;
+  border-color: #111;
+  cursor: pointer;
+  border-radius: .25rem;
+}
+header a{
+  text-decoration: none;
+}
 .App header .logo {
   background-image: url('../images/porphyry.gif');
   background-repeat: no-repeat;
