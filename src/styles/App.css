@@ -92,6 +92,12 @@ h1 a, h1 a:hover {
   justify-content: flex-start;
 }
 
+.Topics .newTopic {
+  padding:5px;
+  width: 85%;
+  color: #999;
+}
+
 .Topic {
   text-align: left;
   list-style-type: none;
@@ -145,6 +151,15 @@ h1 a, h1 a:hover {
   display: table-row;
 }
 
+.AttributeForm {
+  padding: 20px;
+  padding-top: 5px;
+}
+
+.AttributeForm input.form-control {
+  text-align: center;
+}
+
 .Key {
   display: table-cell;
   padding: 5px;
@@ -159,10 +174,18 @@ h1 a, h1 a:hover {
   font-weight: bold;
 }
 
-.TopicPath > .DeleteTopicButton, .Attribute > .DeleteTopicButton {
+.Attribute .buttons {
+  display: table-cell;
+  white-space: nowrap;
+}
+
+.DeleteButton, .EditButton {
   visibility: hidden;
 }
-.TopicPath:hover > .DeleteTopicButton, .Attribute:hover > .DeleteTopicButton {
+
+div:hover > .buttons > button,
+div:hover > .DeleteButton,
+div:hover > .EditButton {
   visibility: visible;
 }
 
@@ -213,7 +236,7 @@ h1 a, h1 a:hover {
   opacity: 1;
 }
 
-.TopicAdding {
+.TopicAdding, .AttributeForm {
   padding-top: 5px;
   display: flex;
   flex-direction: row;
@@ -221,18 +244,22 @@ h1 a, h1 a:hover {
   width: 100%;
 }
 
-.TopicCancelButton {
-  background-color: #8b0000;
+.ValidateButton {
+  background-color: #abd14b;
   color: ivory;
 }
 
-.TopicValidateButton {
+.inactive .ValidateButton {
+  visibility: hidden;
+}
+
+.modify .ValidateButton {
   background-color: #f1bb5b;
   color: ivory;
 }
 
-.TopicValidateButton:disabled,
-.TopicValidateButton[disabled] {
+.ValidateButton:disabled,
+.ValidateButton[disabled] {
   background-color: #cccccc;
   color: dimgrey;
 }
@@ -247,7 +274,12 @@ h1 a, h1 a:hover {
   width: 17vw;
 }
 
-.DeleteTopicButton {
+div.attributeInput,
+div.autosuggest {
+  width:85%;
+}
+
+.DeleteButton {
   background-color: #8b0000;
   color: ivory;
 }
@@ -363,6 +395,7 @@ ul.Outliner,
   font-size: .6rem;
   line-height: 1.5;
   padding: .15rem .3rem;
+  margin-left:2px;
 }
 
 .btn-light {
