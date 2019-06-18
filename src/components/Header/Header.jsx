@@ -17,7 +17,7 @@ class Header extends Component {
       <header className="row align-items-center">
         <div className="col-lg-2 col-md-3 d-none d-md-block logo"></div>
         <div className="col-lg-2 col-md-3 col-sm-4">
-          <input className="form-control" type="text" placeholder="Rechercher..."
+          <input className="form-control" type="text" id="Rechercher" placeholder="Rechercher"
             value={this.state.searchWord}
             onChange={e => {
               this.setState({ searchWord: e.target.value })
@@ -44,7 +44,7 @@ class Header extends Component {
         const element = this.props.selectedItems[key];
         const uri = `/item/${element.corpus}/${element.id}`;
         if (element.name[0].includes(this.state.searchWord)) {
-          res.push(<li className="form-control" key={key}><Link to={uri}>{element.name}</Link></li>)
+          res.push(<li className="form-control" id="link" key={key}><Link  to={uri}>{element.name}</Link></li>)
         }
       }
     }
@@ -57,4 +57,3 @@ class Header extends Component {
 }
 
 export default Header;
-
