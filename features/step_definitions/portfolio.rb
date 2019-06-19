@@ -88,6 +88,9 @@ Soit("les rubriques {string} sont sélectionnées") do |topics|
   visit uri
 end
 
+Soit("la rubrique {string} est visible et sélectionnée") do |topic|
+    click_on topic
+end
 Soit("la liste des rubriques sélectionnées est vide") do
   visit "/"
 end
@@ -110,6 +113,9 @@ Quand("on choisit l'item {string}") do |item|
   click_on item
 end
 
+Quand("l'utilisateur exclue la rubrique {string}") do |topic|
+  click_on topic
+end
 # Outcomes
 
 Alors("le titre affiché est {string}") do |portfolio|
