@@ -259,4 +259,4 @@ class TopicTree {
   }
 }
 
-module.exports=TopicTree;
+export default TopicTree;
