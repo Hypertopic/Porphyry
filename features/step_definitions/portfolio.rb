@@ -60,7 +60,7 @@ Soit("{string} le portfolio spécifié dans la configuration") do |portfolio|
 end
 
 Soit("{string} le portfolio ouvert") do |portfolio|
-  visit "/"
+  visit "/" + portfolio
 end
 
 Soit("{string} une des rubriques développées") do |topic|
@@ -92,6 +92,22 @@ Soit("la liste des rubriques sélectionnées est vide") do
   visit "/"
 end
 
+Soit("la rubrique {string} sélectionnée") do |topic|
+  find_link(topic).click
+end
+
+Soit("l'utilisateur est connecté") do
+  find_link(href: '#login').click
+  fill_in("nom d'utilisateur", with: "alice")
+  fill_in("mot de passe", with: "whiterabbit")
+  click_on('Se connecter')
+end
+
+# For scenatio with multiple selection
+Soit("le mode sélection activé") do
+  click_on('Attribuer Topic')
+end
+
 # Events
 
 Quand("un visiteur ouvre la page d'accueil du site") do
@@ -108,6 +124,39 @@ end
 
 Quand("on choisit l'item {string}") do |item|
   click_on item
+end
+
+Quand("on ajoute un attribut de recherche {string} avec pour valeur {string}") do |attribut, valeur|
+fill_in('Attribut1', with: attribut)
+fill_in('Valeur1', with: valeur)
+click_button('Rechercher')
+end
+
+Quand("on ajoute un attribut de recherche {string} avec pour valeur {string} et un attribut de recherche {string} avec pour valeur {string}") do |attribut1, attribut2, valeur1, valeur2|
+fill_in('Attribut1', with: attribut1)
+fill_in('Valeur1', with: valeur1)
+find_button(class: ['btn', 'btn-light', 'creationButton']).click
+fill_in('Attribut2', with: attribut2)
+fill_in('Valeur2', with: valeur2)
+click_button('Rechercher')
+end
+
+Quand("on attribue la rubrique {string} aux items {string}, {string}, {string}, {string}, et {string}") do |topic, item1, item2, item3, item4, item5|
+
+  click_on(item1)
+  click_on(item2)
+  click_on(item3)
+  click_on(item4)
+  click_on(item5)
+  find('.TopicGroupAddInput').send_keys [topic, :down, :enter]
+  find('.TopicGroupAddButton').click
+  click_button('Confirmer')
+  click_button('Fermer')
+  click_button('Annuler')
+end
+
+Quand("on met {string} dans la barre de recherche") do |value|
+ fill_in('Rechercher...', with: value).native.send_keys(:return)
 end
 
 # Outcomes
@@ -140,3 +189,22 @@ Alors ("l'item {string} n'est pas affiché") do |item|
   expect(page).not_to have_content item
 end
 
+
+Alors("les dessins {string} et {string} sont parmi les dessins affichés") do |valeur1, valeur2|
+expect(page).to have_content(valeur1)
+expect(page).to have_content(valeur2)
+end
+
+
+Alors("les items {string}, {string}, {string}, {string} et {string} ont la rubrique {string}") do |item1, item2, item3, item4, item5, topic|
+  click_on(topic)
+  expect(page).to have_content item1
+  expect(page).to have_content item2
+  expect(page).to have_content item3
+  expect(page).to have_content item4
+  expect(page).to have_content item5
+end
+
+Alors("il doit y avoir au moins {int} items dans la rubrique {string}") do |int, string|
+  pending # Write code here that turns the phrase above into concrete actions
+end
