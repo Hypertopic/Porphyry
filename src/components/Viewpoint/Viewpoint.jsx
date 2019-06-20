@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import by from 'sort-by';
 import Topic from '../Topic/Topic.jsx';
+import { Link } from 'react-router-dom';
 
 class Viewpoint extends Component {
   render() {
@@ -10,9 +11,9 @@ class Viewpoint extends Component {
       <div>
         <h3 className="h4">
           {this.props.viewpoint.name}
-          <a className="outliner btn btn-sm btn-light float-right" href={outliner}>
-            <span className="oi oi-pencil"> </span>
-          </a>
+         <div className="outliner btn btn-sm btn-light float-right">
+            <Link to={outliner}><span className="oi oi-pencil"> </span></Link>
+          </div>
         </h3>
         <hr/>
         <div className="Topics">
