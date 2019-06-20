@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import by from 'sort-by';
 import queryString from 'query-string';
 import Hypertopic from 'hypertopic';
@@ -7,6 +6,7 @@ import conf from '../../config/config.json';
 import Viewpoint from '../Viewpoint/Viewpoint.jsx';
 import Corpora from '../Corpora/Corpora.jsx';
 import Header from '../Header/Header.jsx';
+import Status from '../Status/Status.jsx';
 import ViewpointCreator from '../Viewpoint/ViewpointCreator.jsx';
 import Authenticated from '../Authenticated/Authenticated.jsx';
 
@@ -29,13 +29,13 @@ class Portfolio extends Component {
   render() {
     let viewpoints = this._getViewpoints();
     let corpora = this._getCorpora();
-    let status = this._getStatus();
+
     return (
       <div className="App container-fluid">
         <Header />
         <div className="Status row h5 text-center">
           <Authenticated/>
-          {status}
+          <Status selectionJSON={this.selectionJSON} viewpoints={this.state.viewpoints}/>
         </div>
         <div className="container-fluid">
           <div className="App-content row">
@@ -92,62 +92,17 @@ class Portfolio extends Component {
     return null;
   }
 
-  _getStatus() {
-    let topics = this.selection.map(t => {
-      let topic = this._getTopic(t);
-      if (!topic) {
-          return 'Thème inconnu';
-      }
-      let uri = '?' + queryString.stringify({
-        t: this._toggleTopic(this.selection, t),
-          e: this.exclusion
-      });
-      let excludeUri = '?' + queryString.stringify({
-        t: this._toggleTopic(this.selection, t),
-          e: this._toggleTopic(this.exclusion, t)
-      });
-      return <span className="badge badge-pill badge-light TopicTag">
-        {topic.name} <Link to={excludeUri} className="badge badge-pill badge-dark oi oi-minus" title="Exclure"> </Link><Link to={uri} className="badge badge-pill badge-dark oi oi-x" title="Déselectionner"> </Link>
-      </span>;
-    });
-    if (this.exclusion.length)
-        topics.push(this.exclusion.map(t => {
-            let topic = this._getTopic(t);
-            if (!topic) {
-                return 'Thème inconnu';
-            }
-            let uri = '?' + queryString.stringify({
-                t: this.selection,
-                e: this._toggleTopic(this.exclusion, t)
-            });
-            let includeUri = '?' + queryString.stringify({
-                t: this._toggleTopic(this.selection, t),
-                e: this._toggleTopic(this.exclusion, t)
-            });
-            return <span className="badge badge-pill badge-light TopicTag text-danger">
-            {topic.name} <Link to={includeUri} className="badge badge-pill badge-dark oi oi-plus" title="Inclure"> </Link><Link to={uri} className="badge badge-pill badge-dark oi oi-x" title="Déselectionner"> </Link>
-          </span>;
-        }));
-    return (topics.length) ? topics : 'Tous les items';
-  }
-
-  _toggleTopic(array, item) {
-    let s = new Set(array);
-    if (!s.delete(item)) {
-      s.add(item);
-    }
-    return [...s];
-  }
-
   _updateSelection() {
-    let selection = queryString.parse(window.location.search).t;
-    this.selection = (selection instanceof Array)? selection
-      : (selection)? [selection]
-      : [];
-    let exclusion = queryString.parse(window.location.search).e;
-    this.exclusion = (exclusion instanceof Array)? exclusion
-      : (exclusion)? [exclusion]
-      : [];
+    try {
+      this.selectionJSON = JSON.parse(queryString.parse(window.location.search).t);
+    } catch (e) {
+      this.selectionJSON = {
+        type: 'intersection',
+        data: []
+      };
+    }
+    this.selection = (this.selectionJSON.hasOwnProperty('data'))? this.selectionJSON.data.map(s => (s.selection === undefined)?[]:s.selection).flat():[];
+    this.exclusion = (this.selectionJSON.hasOwnProperty('data'))? this.selectionJSON.data.map(s => (s.exclusion === undefined)?[]:s.exclusion).flat():[];
   }
 
   _getTopicPath(topicId) {
@@ -165,13 +120,20 @@ class Portfolio extends Component {
     return Array.prototype.concat(...this._getItemTopicsPaths(item));
   }
 
-  _isSelected(item, list, union = false) {
-    return includes(this._getRecursiveItemTopics(item), list, union);
+  _isSelected(item, list) {
+    let itemHasValue = list.data.map(l => includes(this._getRecursiveItemTopics(item), (l.selection || [] ), (l.exclusion || []), (l.type === 'union')));
+    if (list.type === 'union')
+      return itemHasValue.reduce((c1,c2) => c1 || c2, false);
+    else
+      return itemHasValue.reduce((c1,c2) => c1 && c2, true);
   }
 
   _updateSelectedItems() {
-    let selectedItems = this.state.items
-      .filter(e => this._isSelected(e, this.selection) && ((this.exclusion.length > 0)?!this._isSelected(e, this.exclusion, true):true));
+    let selectedItems;
+    if(this.selectionJSON.data.length > 0)
+      selectedItems = this.state.items.filter(e => this._isSelected(e, this.selectionJSON));
+    else
+      selectedItems = this.state.items;
     let topicsItems = new Map();
     for (let e of selectedItems) {
       for (let t of this._getRecursiveItemTopics(e)) {
@@ -237,7 +199,7 @@ class Portfolio extends Component {
     return this.state.viewpoints.sort(by('name')).map((v, i) =>
       <div key={v.id}>
         {i > 0 && <hr/>}
-        <Viewpoint viewpoint={v} selection={this.selection} exclusion={this.exclusion}
+        <Viewpoint viewpoint={v} selection={this.selection} exclusion={this.exclusion} selectionJSON={this.selectionJSON}
           topicsItems={this.state.topicsItems} />
       </div>
     );
@@ -250,14 +212,14 @@ class Portfolio extends Component {
     );
   }
 }
-
-function includes(array1, array2, union) {
+function includes(array1, array2, array3, union) {
   let set1 = new Set(array1);
   let arrayHasValue = array2.map(e => set1.has(e));
+  let arrayDontHaveValue = array3.map(e => set1.has(e));
   if (union)
-   return arrayHasValue.reduce((c1,c2) => c1 || c2, false);
+    return arrayHasValue.reduce((c1,c2) => c1 || c2, false) || ((array3.length > 0)?!arrayDontHaveValue.reduce((c1,c2) => c1 || c2, false):false);
   else
-    return arrayHasValue.reduce((c1,c2) => c1 && c2, true);
+    return arrayHasValue.reduce((c1,c2) => c1 && c2, true) && ((array3.length > 0)?!arrayDontHaveValue.reduce((c1,c2) => c1 && c2, true):true);
 }
 
 function push(map, topicId, itemId) {
@@ -268,5 +230,4 @@ function push(map, topicId, itemId) {
     map.set(topicId, new Set([itemId]));
   }
 }
-
 export default Portfolio;

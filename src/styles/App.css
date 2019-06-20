@@ -133,9 +133,12 @@ h1 a, h1 a:hover {
 .Excluded {
   background-color: rgba(238, 51, 51, 0.6);
   font-weight: bold;
-  text-decoration: line-through;
+  text-decoration: line-through !important;
   padding: 1px;
   border-radius: 3px;
+}
+.removeUnderlineOnFocus:focus {
+  text-decoration: none;
 }
 
 .Items {
