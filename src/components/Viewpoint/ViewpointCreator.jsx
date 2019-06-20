@@ -12,15 +12,13 @@ function makeID() {
 }
 
 class ViewpointCreator extends Component {
-
   render() {
     return (<div className="text-center">
       <button className="btn btn-light creationButton" onClick={_ => this._goToNewViewpoint()}>
         {'New_Viewpoint_button'.t()}
       </button>
-       </div>);
+    </div>);
   }
-  
 
   _goToNewViewpoint() {
     this.props.history.push('/viewpoint/' + makeID());

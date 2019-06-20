@@ -47,6 +47,7 @@ class Item extends Component {
   }
 
   render() {
+    
     let name = getString(this.state.item[itemView.name]);
     let attributes = this._getAttributes();
     let viewpoints = this._getViewpoints();
