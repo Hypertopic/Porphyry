@@ -110,6 +110,23 @@ Quand("on choisit l'item {string}") do |item|
   click_on item
 end
 
+
+Quand("on met {string} dans la barre de recherche et on clique sur {string}") do |value1, value2|
+    #fill_in "Rechercher", with: 'value1', visible: false
+
+    #within("form-control#Rechercher") do
+    #fill_in "Rechercher", :with => @visitor[:value2]
+    find('#Rechercher', visible: true).set value1
+    find('#link', visible: true).click
+    #click_on(value2)
+#end
+
+end
+
+Alors("le dessin {string} est affiché") do |valeur|
+  expect(page).to have_content valeur
+end
+
 # Outcomes
 
 Alors("le titre affiché est {string}") do |portfolio|
@@ -139,4 +156,3 @@ end
 Alors ("l'item {string} n'est pas affiché") do |item|
   expect(page).not_to have_content item
 end
-

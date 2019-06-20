@@ -32,7 +32,7 @@ class Portfolio extends Component {
     let status = this._getStatus();
     return (
       <div className="App container-fluid">
-        <Header />
+        <Header ref="header" selectedItems={this.state.selectedItems}/>
         <div className="Status row h5 text-center">
           <Authenticated/>
           {status}
