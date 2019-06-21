@@ -78,7 +78,7 @@ Soit("{string} le portfolio ouvert") do |portfolio|
 end
 
 Soit("{string} une des rubriques développées") do |topic|
-  find_link(topic).sibling('.oi').click
+  find_button(topic).sibling('.oi').click
 end
 
 
@@ -89,16 +89,17 @@ end
 # Events
 Soit("les rubriques {string} sont sélectionnées") do |topics|
   first = true
-  uri = "/?"
+  uri = "/?t={\"type\":\"intersection\",\"data\":["
   topics.split("|").each do |topic|
     uuid = getUUID(topic)
     if (first)
-      uri += "t=" + uuid
+      uri += "{\"type\":\"intersection\",\"selection\":[\"" + uuid + "\""
       first = false
     else
-      uri += "&t=" + uuid
+      uri += ",\"" + uuid + "\""
     end
   end
+  uri+= "],\"exclusion\":[]}]}"
   visit uri
 end
 
@@ -146,6 +147,12 @@ Quand ("l'utilisateur crée un item {string} dans le corpus {string}") do |name,
   find_button(class: ['btn', 'btn-sm', 'ValidateButton']).click
 end
 
+Quand ("l'utilisateur sélectionne {string} entre la rubrique {string} et la rubrique {string}") do |union, topic1, topic2|
+  within('.Status') do
+    find(:xpath, "//span[contains(text(), topic1)]/following-sibling::button", text: union, match: :first).click
+  end
+end
+
 # Outcomes
 
 Alors("le titre affiché est {string}") do |portfolio|
@@ -161,7 +168,7 @@ Alors("un des corpus affichés est {string}") do |corpus|
 end
 
 Alors("il doit y avoir au moins {int} items sélectionnés décrits par {string}") do |itemsNb, topic|
-  expect(find_link(topic).sibling('.badge').text.scan(/\d+/)[0].to_i).to be >= itemsNb
+  expect(find_button(topic).sibling('.badge').text.scan(/\d+/)[0].to_i).to be >= itemsNb
 end
 
 Alors("les rubriques surlignées sont au nombre de {int}") do |topicNb|
