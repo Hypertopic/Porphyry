@@ -1,7 +1,7 @@
 {
-  "user": "vitraux",
+  "user": "alice",
   "services": [
     "http://argos2.test.hypertopic.org",
-    "http://steatite.hypertopic.org"
+    "http://cassandre.hypertopic.org"
   ]
 }

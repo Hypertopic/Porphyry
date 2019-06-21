@@ -11,9 +11,6 @@ class Authenticated extends Component {
       user: '',
       ask: false
     }
-    this.handleAsk = this.handleAsk.bind(this);
-    this.handleLogin = this.handleLogin.bind(this);
-    this.handleLogout = this.handleLogout.bind(this);
   }
 
   render() {
@@ -40,18 +37,18 @@ class Authenticated extends Component {
     );
   }
 
-  handleAsk(e) {
-    e.preventDefault();
-    this.setState({ask: true});
+  handleAsk = e => {
+    e.preventDefault()
+    this.setState({ ask: true })
   }
 
-  handleLogin(e) {
+  handleLogin = e => {
     e.preventDefault();
     this._openSession();
     this.setState({ask: false});
   }
 
-  handleLogout(e) {
+  handleLogout = e => {
     e.preventDefault();
     this._closeSession();
   }
@@ -66,16 +63,16 @@ class Authenticated extends Component {
   _openSession() {
     let user = this.login.value;
     fetch(SESSION_URI, {
-      method:'POST',
+      method: 'POST',
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
-      body:`name=${user}&password=${this.password.value}`,
-      credentials:'include'
+      body: `name=${user}&password=${this.password.value}`,
+      credentials: 'include'
     })
       .then(x => {
         if (!x.ok) throw new Error('Bad credentials!');
-        this.setState({user})
+        this.setState({user});
       })
       .catch(() => this.setState({user: ''}));
   }

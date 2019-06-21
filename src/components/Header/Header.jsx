@@ -11,7 +11,7 @@ class Header extends Component {
   render() {
     return (
       <header className="row align-items-center">
-        <div className="col-lg-2 col-md-3 d-none d-md-block logo"></div>
+        <div className="col-lg-2 col-md-3 d-none d-md-block logo" />
         <div className="col-lg-2 col-md-3 col-sm-4">
           <input className="form-control" type="text" placeholder="Rechercher..."/>
         </div>

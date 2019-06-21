@@ -13,6 +13,8 @@
     "react-autosuggest": "^9.3.4",
     "react-dom": "^16.4.0",
     "react-router-dom": "^4.1.1",
+    "react-switch": "^5.0.0",
+    "react-tagcloud": "^1.4.0",
     "sort-by": "^1.2.0"
   },
   "devDependencies": {

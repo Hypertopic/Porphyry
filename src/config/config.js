@@ -25,7 +25,7 @@ const getConfig = (prop, def) => {
         }
     }
     return def;
-}
+};
 
 export default getConfig;
 

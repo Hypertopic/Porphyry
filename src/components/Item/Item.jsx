@@ -42,22 +42,27 @@ class Item extends Component {
     this._getOrCreateItem = this._getOrCreateItem.bind(this);
     this._switchCreatable = this._switchCreatable.bind(this);
     this.deleteAttribute = this.deleteAttribute.bind(this);
-    this.user=conf.user || window.location.hostname.split('.', 1)[0];
+    this.user = conf.user || window.location.hostname.split('.', 1)[0];
   }
 
   render() {
     let name = getString(this.state[itemView.name]);
     let attributes = this._getAttributes();
     let viewpoints = this._getViewpoints();
-    let attributeButtonLabel = this.state.isCreatable? 'Valider' : 'Ajouter un attribut';
-    let attributeForm = this.state.isCreatable? this._getAttributeCreationForm() : '';
+    let attributeButtonLabel = this.state.isCreatable
+      ? 'Valider'
+      : 'Ajouter un attribut';
+    let attributeForm = this.state.isCreatable
+      ? this._getAttributeCreationForm()
+      : '';
     return (
       <div className="App container-fluid">
         <Header />
         <div className="Status row h5">
-          <Authenticated/>
+          <Authenticated />
           <Link to="/" className="badge badge-pill badge-light TopicTag">
-            <span className="badge badge-pill badge-dark oi oi-chevron-left"> </span> Retour à l'accueil
+            <span className="badge badge-pill badge-dark oi oi-chevron-left" />
+            Retour à l'accueil
           </Link>
         </div>
         <div className="container-fluid">
@@ -67,9 +72,14 @@ class Item extends Component {
                 <h2 className="h4 font-weight-bold text-center">Description</h2>
                 <div className="p-3">
                   <h3 className="h4">Attributs du document</h3>
-                  <hr/>
+                  <hr />
                   <div className="text-center">
-                    <button className="btn btn-light creationButton" onClick={this._switchCreatable}>{attributeButtonLabel}</button>
+                    <button
+                      className="btn btn-light creationButton"
+                      onClick={this._switchCreatable}
+                    >
+                      {attributeButtonLabel}
+                    </button>
                   </div>
                   <div className="Attributes">
                     {attributes}
@@ -98,7 +108,10 @@ class Item extends Component {
         <div className="Attribute" key={x[0]}>
           <div className="Key">{x[0]}</div>
           <div className="Value">{x[1][0]}</div>
-          <button onClick={this.deleteAttribute.bind(this,x[0])} className="btn btn-xs DeleteTopicButton">
+          <button
+            onClick={this.deleteAttribute.bind(this, x[0])}
+            className="btn btn-xs DeleteTopicButton"
+          >
             <span className="oi oi-x"> </span>
           </button>
         </div>
@@ -106,28 +119,30 @@ class Item extends Component {
   }
 
   _getViewpoints() {
-    return Object.entries(this.state.topic).map(v =>
-      <Viewpoint key={v[0]} id={v[0]} topics={v[1]}
-        assignTopic={this._assignTopic} removeTopic={this._removeTopic} />
-    );
+    return Object.entries(this.state.topic).map(v => (
+      <Viewpoint
+        key={v[0]}
+        id={v[0]}
+        topics={v[1]}
+        assignTopic={this._assignTopic}
+        removeTopic={this._removeTopic}
+      />
+    ));
   }
 
   componentDidMount() {
-    let start=new Date().getTime();
-    let self=this;
+    let start = new Date().getTime();
+    let self = this;
     this._fetchItem().then(() => {
-      let end=new Date().getTime();
-      let elapsedTime=end-start;
-      console.log("elapsed Time ",elapsedTime);
+      let end = new Date().getTime();
+      let elapsedTime = end - start;
+      console.log('elapsed Time ', elapsedTime);
 
-      let intervalTime=Math.max(10000,elapsedTime*5);
-      console.log("reload every ",intervalTime);
-      self._timer = setInterval(
-        () => {
-          self._fetchItem();
-        },
-        intervalTime
-      );
+      let intervalTime = Math.max(10000, elapsedTime * 5);
+      console.log('reload every ', intervalTime);
+      self._timer = setInterval(() => {
+        self._fetchItem();
+      }, intervalTime);
     });
   }
 
@@ -136,8 +151,7 @@ class Item extends Component {
   }
 
   _getOrCreateItem() {
-    return hypertopic.get({_id: this.props.match.params.item})
-    .catch(e => {
+    return hypertopic.get({ _id: this.props.match.params.item }).catch(e => {
       return {
         _id: this.props.match.params.item,
         item_corpus: this.props.match.params.corpus
@@ -148,45 +162,63 @@ class Item extends Component {
   _fetchItem() {
     let uri = this.props.match.url;
     let params = this.props.match.params;
-    return hypertopic.getView(uri).then((data) => {
-      let item = data[params.corpus][params.item];
-      let itemTopics = (item.topic) ? groupBy(item.topic, ['viewpoint']) : {};
-      let topics=this.state.topic || {};
-      for (let id in itemTopics) {
-        topics[id]=itemTopics[id];
-      }
-      item.topic=topics;
-      this.setState(item);
-    }).then(() => hypertopic.getView(`/user/${this.user}`))
-      .then((data) => {
-      let user = data[this.user] || {};
-      if (user.viewpoint) {
-        let topic=this.state.topic;
-        for (let vp of user.viewpoint) {
-          topic[vp.id]=topic[vp.id] || [];
+    return hypertopic
+      .getView(uri)
+      .then(data => {
+        let item = data[params.corpus][params.item];
+        let itemTopics = item.topic ? groupBy(item.topic, ['viewpoint']) : {};
+        let topics = this.state.topic || {};
+        for (let id in itemTopics) {
+          topics[id] = itemTopics[id];
         }
-        this.setState({topic});
-      }
-    });
+        item.topic = topics;
+        this.setState(item);
+      })
+      .then(() => hypertopic.getView(`/user/${this.user}`))
+      .then(data => {
+        let user = data[this.user] || {};
+        if (user.viewpoint) {
+          let topic = this.state.topic;
+          for (let vp of user.viewpoint) {
+            topic[vp.id] = topic[vp.id] || [];
+          }
+          this.setState({ topic });
+        }
+      });
   }
 
   _getAttributeCreationForm() {
     return (
       <form className="Attribute">
-        <div className="Key"> <input id="key" className="form-control" placeholder="Attribut" type="text" size="8" /></div>
-        <div className="Value"> <input id="value" className="form-control" placeholder="Valeur" type="text" /></div>
+        <div className="Key">
+          <input
+            id="key"
+            className="form-control"
+            placeholder="Attribut"
+            type="text"
+            size="8"
+          />
+        </div>
+        <div className="Value">
+          <input
+            id="value"
+            className="form-control"
+            placeholder="Valeur"
+            type="text"
+          />
+        </div>
       </form>
     );
   }
 
   _setAttribute(key, value) {
-    if (key!=='' && value!=='') {
-      let attribute = {[key]: [value]};
+    if (key !== '' && value !== '') {
+      let attribute = { [key]: [value] };
       this._getOrCreateItem()
         .then(x => Object.assign(x, attribute))
         .then(hypertopic.post)
         .then(_ => this.setState(attribute))
-        .catch((x) => console.error(x.message));
+        .catch(x => console.error(x.message));
     } else {
       console.log('Créez un attribut non vide');
     }
@@ -204,7 +236,7 @@ class Item extends Component {
   }
 
   deleteAttribute(key) {
-    const _error = (x) => console.error(x.message);
+    const _error = x => console.error(x.message);
     this._getOrCreateItem()
       .then(x => {
         delete x[key];
@@ -221,7 +253,7 @@ class Item extends Component {
   _assignTopic(topicToAssign, viewpointId) {
     return this._getOrCreateItem()
       .then(data => {
-        data.topics=data.topics || {};
+        data.topics = data.topics || {};
         data.topics[topicToAssign.id] = { viewpoint: viewpointId };
         return data;
       })
@@ -237,17 +269,20 @@ class Item extends Component {
       .catch(error => console.log(`error : ${error}`));
   }
 
-
   _removeTopic(topicToDelete) {
-    if (window.confirm('Voulez-vous réellement que l\'item affiché ne soit plus décrit à l\'aide de cette rubrique ?')) {
+    if (
+      window.confirm(
+        "Voulez-vous réellement que l'item affiché ne soit plus décrit à l'aide de cette rubrique ?"
+      )
+    ) {
       return this._getOrCreateItem()
         .then(data => {
-          data.topics=data.topics || {};
+          data.topics = data.topics || {};
           delete data.topics[topicToDelete.id];
           return data;
         })
         .then(hypertopic.post)
-        .then((res)=> {
+        .then(res => {
           let newState = this.state;
           newState.topic[topicToDelete.viewpoint] = newState.topic[
             topicToDelete.viewpoint
@@ -261,12 +296,12 @@ class Item extends Component {
 
 function ShowItem(props) {
   switch (itemView.mode) {
-  case 'article':
-    return Article(props.item);
-  case 'picture':
-    return Picture(props.item);
-  default:
-    return Picture(props.item);
+    case 'article':
+      return Article(props.item);
+    case 'picture':
+      return Picture(props.item);
+    default:
+      return Picture(props.item);
   }
 }
 
@@ -276,7 +311,9 @@ function Article(item) {
   return (
     <div className="p-4">
       <p>{text}</p>
-      <a href={link} target="_blank">Télécharger</a>
+      <a href={link} target="_blank">
+        Télécharger
+      </a>
     </div>
   );
 }
@@ -288,7 +325,7 @@ function Picture(item) {
   return (
     <div className="p-3">
       <a target="_blank" href={link} className="cursor-zoom">
-        <img src={img} alt={name}/>
+        <img src={img} alt={name} />
       </a>
     </div>
   );
@@ -431,7 +468,7 @@ class Viewpoint extends Component {
     return (
       <div>
         <h3 className="h4">{this.state.name}</h3>
-        <hr/>
+        <hr />
         <div className="Topics">
           {paths}
           <div className="TopicAdding input-group">
@@ -449,18 +486,26 @@ class Viewpoint extends Component {
               id={`input-${this.state.name}`}
             />
             <div className="input-group-append">
-              <button type="button" className="btn btn-sm TopicValidateButton btn" onClick={() =>
+              <button
+                type="button"
+                className="btn btn-sm TopicValidateButton btn"
+                onClick={() =>
                   this.updatingTopicList(
                     this.state.currentSelection,
                     this.props.id
                   )
                 }
                 disabled={!this.state.canValidateTopic}
-                id={`validateButton-${this.state.name}`}>
+                id={`validateButton-${this.state.name}`}
+              >
                 <span className="oi oi-check"> </span>
               </button>
-              <button type="button" className="btn btn-sm TopicCancelButton btn" onClick={this.clearInput}
-                id={`cancelButton-${this.state.name}`}>
+              <button
+                type="button"
+                className="btn btn-sm TopicCancelButton btn"
+                onClick={this.clearInput}
+                id={`cancelButton-${this.state.name}`}
+              >
                 <span className="oi oi-x"> </span>
               </button>
             </div>
@@ -488,14 +533,14 @@ class Viewpoint extends Component {
 
   _fetchViewpoint() {
     let uri = '/viewpoint/' + this.props.id;
-    hypertopic.getView(uri).then((data) => {
+    hypertopic.getView(uri).then(data => {
       let viewpoint = data[this.props.id];
       let name = viewpoint.name;
       let topics = viewpoint;
       delete topics.user;
       delete topics.name;
       delete topics.upper;
-      this.setState({name, topics});
+      this.setState({ name, topics });
     });
   }
 }
@@ -511,8 +556,14 @@ class TopicPath extends Component {
   render() {
     let topics = this._getTopics();
     for (let i = 1; i < topics.length; ++i) {
-      let key="separator-"+i;
-      topics.splice(i, 0, <span key={key} className="TopicSeparator">&gt;</span>);
+      let key = 'separator-' + i;
+      topics.splice(
+        i,
+        0,
+        <span key={key} className="TopicSeparator">
+          &gt;
+        </span>
+      );
       ++i;
     }
     const topicId = this.state.path[this.state.path.length - 1]
@@ -521,8 +572,12 @@ class TopicPath extends Component {
     return (
       <div className="TopicPath">
         {topics}
-        <button type="button" className="btn btn-xs ml-3 float-right DeleteTopicButton"
-          onClick={this.props.removeTopic} id={topicId}>
+        <button
+          type="button"
+          className="btn btn-xs ml-3 float-right DeleteTopicButton"
+          onClick={this.props.removeTopic}
+          id={topicId}
+        >
           <span className="oi oi-x"> </span>
         </button>
       </div>
@@ -536,7 +591,7 @@ class TopicPath extends Component {
       topic = this._getTopic(topic.broader[0].id);
       path.unshift(topic);
     }
-    this.setState({path});
+    this.setState({ path });
   }
 
   _getTopic(id) {
@@ -546,15 +601,16 @@ class TopicPath extends Component {
   }
 
   _getTopics() {
-    return this.state.path.map( t => {
-      let name = (t.name)? t.name : 'Sans nom';
+    return this.state.path.map(t => {
+      let name = t.name ? t.name : 'Sans nom';
       let uri = '../../?t=' + t.id;
       return (
-        <Link key={t.id} className="Topic" to={uri}>{name}</Link>
+        <Link key={t.id} className="Topic" to={uri}>
+          {name}
+        </Link>
       );
     });
   }
-
 }
 
 export default Item;

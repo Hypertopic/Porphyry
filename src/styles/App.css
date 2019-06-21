@@ -15,7 +15,8 @@
   min-height: 55px;
 }
 
-h1 a, h1 a:hover {
+h1 a,
+h1 a:hover {
   color: ivory;
   text-decoration: none;
 }
@@ -52,14 +53,16 @@ h1 a, h1 a:hover {
   min-height: 100vh;
 }
 
-.Subject, .Description {
+.Subject,
+.Description {
   background: #fff;
 }
 
-.Subject h2, .Description h2 {
+.Subject h2,
+.Description h2 {
   color: ivory;
   margin: 0;
-  padding: .5rem;
+  padding: 0.5rem;
 }
 
 .Subject h2 {
@@ -97,21 +100,23 @@ h1 a, h1 a:hover {
   list-style-type: none;
 }
 
-.Topic a, a.Topic, .ArticleTitle a {
+.Topic a,
+a.Topic,
+.ArticleTitle a {
   color: black;
 }
 
 .Topic .oi {
   color: darkgrey;
-  font-size: .9em;
+  font-size: 0.9em;
   text-align: center;
   width: 1.5em;
 }
 
 .Topic .oi.leaf:before {
   content: '\E094';
-  font-size: .6em;
-  vertical-align: .3em;
+  font-size: 0.6em;
+  vertical-align: 0.3em;
 }
 
 .Closed > ul {
@@ -123,6 +128,12 @@ h1 a, h1 a:hover {
   font-weight: bold;
   padding: 1px;
   border-radius: 3px;
+}
+
+.Cloud-Selected {
+  font-weight: bold;
+  padding: 1px;
+  background-color: rgba(238, 170, 51, 0.6);
 }
 
 .Items {
@@ -159,10 +170,12 @@ h1 a, h1 a:hover {
   font-weight: bold;
 }
 
-.TopicPath > .DeleteTopicButton, .Attribute > .DeleteTopicButton {
+.TopicPath > .DeleteTopicButton,
+.Attribute > .DeleteTopicButton {
   visibility: hidden;
 }
-.TopicPath:hover > .DeleteTopicButton, .Attribute:hover > .DeleteTopicButton {
+.TopicPath:hover > .DeleteTopicButton,
+.Attribute:hover > .DeleteTopicButton {
   visibility: visible;
 }
 
@@ -175,8 +188,10 @@ h1 a, h1 a:hover {
   opacity: 0.8;
 }
 
-.TopicPath > .Topic:hover, .TopicPath > .Topic:last-of-type:hover,
-.Topics .Topic > a:hover, .ArticleTitle:hover a {
+.TopicPath > .Topic:hover,
+.TopicPath > .Topic:last-of-type:hover,
+.Topics .Topic > a:hover,
+.ArticleTitle:hover a {
   opacity: 1;
 }
 
@@ -184,29 +199,32 @@ h1 a, h1 a:hover {
   padding: 0 5px;
 }
 
-.TopicPath > .Topic:last-of-type, .ArticleTitle a {
+.TopicPath > .Topic:last-of-type,
+.ArticleTitle a {
   opacity: 0.8;
   font-weight: bold;
 }
 
-.TopicTag, .TopicTag[href], .TopicTag[href]:hover {
+.TopicTag,
+.TopicTag[href],
+.TopicTag[href]:hover {
   background-color: #f8f9fa;
   color: #212529;
   display: inline-block;
-  margin: 0 .3em;
+  margin: 0 0.3em;
 }
 
 .TopicTag > .badge-pill {
   border-radius: 100%;
   display: inline-block;
   font-size: 50%;
-  opacity: .9;
-  padding: .4em .5em .5em;
+  opacity: 0.9;
+  padding: 0.4em 0.5em 0.5em;
   vertical-align: top;
 }
 
 .TopicTag > .badge-pill.oi-x {
-  padding-top: .3em;
+  padding-top: 0.3em;
 }
 
 .TopicTag > .badge-pill:hover {
@@ -258,10 +276,10 @@ h1 a, h1 a:hover {
 
 .Return {
   position: fixed;
-  width:60px;
-  height:60px;
-  bottom:40px;
-  right:40px;
+  width: 60px;
+  height: 60px;
+  bottom: 40px;
+  right: 40px;
 }
 
 ul.Outliner,
@@ -274,23 +292,23 @@ ul.Outliner,
   cursor: pointer;
   position: absolute;
   left: 0px;
-  min-width:25px;
+  min-width: 25px;
   min-height: 20px;
 }
 
 .outliner-node div.after-handle,
 .outliner-node li.first-handle {
-  height:25px;
-  border-style:dashed;
+  height: 25px;
+  border-style: dashed;
   border-width: 1px;
-  border-color:black;
+  border-color: black;
   background-color: lightgrey;
-  display:none;
+  display: none;
 }
 
 .outliner-node.dragged-after > div.after-handle,
 .outliner-node.dragged-into > ul > li.first-handle {
-  display:inline;
+  display: inline;
 }
 
 .outliner-node.has-children.closed > .caret:before {
@@ -320,21 +338,27 @@ ul.Outliner,
 .Outliner input {
   border: none;
   background: transparent;
-  width:100%;
+  width: 100%;
 }
 
 .id {
   display: none;
   font-size: 0.8em;
-  color:#111;
-  padding:1em;
+  color: #111;
+  padding: 1em;
 }
 
-.wrap:hover button{display: inherit;margin-right: 10px;z-index: 999}
-.wrap button{display:none;}
+.wrap:hover button {
+  display: inherit;
+  margin-right: 10px;
+  z-index: 999;
+}
+.wrap button {
+  display: none;
+}
 
 .Article {
-  border-bottom: 1px solid #DDD;
+  border-bottom: 1px solid #ddd;
   color: black;
   display: block;
   margin: 1em;
@@ -359,19 +383,40 @@ ul.Outliner,
 }
 
 .btn-xs {
-  border-radius: .2rem;
-  font-size: .6rem;
+  border-radius: 0.2rem;
+  font-size: 0.6rem;
   line-height: 1.5;
-  padding: .15rem .3rem;
+  padding: 0.15rem 0.3rem;
 }
 
 .btn-light {
   border-color: #dddddd;
 }
 
-.btn.add, .input-group-append .btn {
+.btn.add,
+.input-group-append .btn {
   border: 1px solid #ced4da;
 }
 .btn:not(.btn-xs) .oi {
   vertical-align: middle;
+}
+
+.tableFragment {
+  display: table;
+}
+
+.tableFragment > div {
+  display: table-column;
+}
+.textSelected {
+  background-color: #fecccc;
+}
+.buttonView {
+  background-color: Transparent;
+  background-repeat: no-repeat;
+  border: none;
+  cursor: pointer;
+  overflow: hidden;
+  outline: none;
+  color: ivory;
 }
