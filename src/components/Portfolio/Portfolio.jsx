@@ -20,8 +20,9 @@ class Portfolio extends Component {
       corpora: [],
       items: [],
       selectedItems: [],
-      topicsItems: new Map()
+      topicsItems: new Map(),
     };
+
     this.user = conf.user || window.location.hostname.split('.', 1)[0];
     this._updateSelection();
   }
@@ -29,13 +30,16 @@ class Portfolio extends Component {
   render() {
     let viewpoints = this._getViewpoints();
     let corpora = this._getCorpora();
+    let status = this._getStatus();
 
     return (
       <div className="App container-fluid">
         <Header />
         <div className="Status row h5 text-center">
-          <Authenticated/>
-          <Status selectionJSON={this.selectionJSON} viewpoints={this.state.viewpoints}/>
+          <ul>
+            {status}
+            <li><Authenticated portfolio={this.user} viewpoints={this.state.viewpoints} corpora={this.state.corpora}/></li>
+          </ul>
         </div>
         <div className="container-fluid">
           <div className="App-content row">
@@ -90,6 +94,30 @@ class Portfolio extends Component {
       if (v[id]) return v[id];
     }
     return null;
+  }
+
+  _getStatus() {
+    let topics = this.selection.map(t => {
+      let topic = this._getTopic(t);
+      if (!topic) {
+          return 'Thème inconnu';
+      }
+      let uri = '?' + queryString.stringify({
+        t: this._toggleTopic(this.selection, t)
+      });
+      return <li><span className="badge badge-pill badge-light TopicTag">
+        {topic.name} <Link to={uri} className="badge badge-pill badge-dark oi oi-x" title="Déselectionner"> </Link>
+      </span></li>;
+    });
+    return topics.length ? topics : 'Tous les items';
+  }
+
+  _toggleTopic(array, item) {
+    let s = new Set(array);
+    if (!s.delete(item)) {
+      s.add(item);
+    }
+    return [...s];
   }
 
   _updateSelection() {

@@ -14,7 +14,7 @@ Scénario:
 
  Soit "vitraux" le portfolio ouvert
  Soit "BSS 007" l'item affiché
- Quand on choisit la rubrique "Figuration du donateur"
+ Quand on choisit la rubrique "Figuration du donateur" contenue dans la rubrique "Donateur"
  Alors le titre affiché est "VITRAUX"
  Et l'item "BSS 007" est affiché
  Et l'item "BSS 018" est affiché

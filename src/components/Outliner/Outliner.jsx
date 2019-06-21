@@ -30,10 +30,12 @@ class Outliner extends React.Component {
       <div className="App container-fluid">
         <Header />
         <div className="Status row h5">
-          <Authenticated/>
-          <Link to="/" className="badge badge-pill badge-light TopicTag">
+          <ul>
+          <li><Link to="/" className="badge badge-pill badge-light TopicTag">
             <span className="badge badge-pill badge-dark oi oi-chevron-left"> </span> Retour à l'accueil
-          </Link>
+          </Link></li>
+          <li><Authenticated/></li>
+          </ul>
         </div>
         <div className="container-fluid">
           <div className="App-content row">

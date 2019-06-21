@@ -1,0 +1,1 @@
+sudo sed -i '/^127.0.0.1	localhost/ s/$/ vitraux.local dupp-vitraux.local/' /etc/hosts

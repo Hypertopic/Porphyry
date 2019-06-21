@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import conf from '../../config/config.json';
+import Duplicator from '../Duplication/Duplicator'
+import { Dropdown, DropdownButton, ButtonGroup, Button, Form } from 'react-bootstrap';
 
 const SESSION_URI = conf.services[0] + '/_session';
 
@@ -18,24 +20,39 @@ class Authenticated extends Component {
 
   render() {
     if (this.state.user) {
+      if(this.props.portfolio){
+        return (
+          <div className="Authenticated">
+            <DropdownButton variant="secondary" alignRight as={ButtonGroup} title={this.state.user} id="bg-nested-dropdown">
+              <Dropdown.Item eventKey="1" onClick={this.handleLogout}>Se déconnecter</Dropdown.Item>
+              <Duplicator portfolio={this.props.portfolio} userConnected={this.state.user} viewpoints={this.props.viewpoints} corpora={this.props.corpora}/>
+            </DropdownButton>
+          </div>
+        );
+      }
+
       return (
-        <div className="Authenticated"> {this.state.user}
-          <a href="#logout" onClick={this.handleLogout}>Se déconnecter</a>
+        <div className="Authenticated">
+          <DropdownButton variant="secondary" alignRight as={ButtonGroup} title={this.state.user} id="bg-nested-dropdown">
+            <Dropdown.Item eventKey="1" onClick={this.handleLogout}>Se déconnecter</Dropdown.Item>
+          </DropdownButton>
         </div>
       );
     }
     if (this.state.ask) {
       return(
-        <form className="Authenticated" onSubmit={this.handleLogin}>
-          <input placeholder="nom d'utilisateur" ref={(x) => this.login = x} />
-          <input placeholder="mot de passe" ref={(x) => this.password = x} type="password" />
-          <input type="submit" value="Se connecter" />
-        </form>
+        <Form className="FormConnect" onSubmit={this.handleLogin}>
+          <Form.Control type="text" ref={(x) => this.login = x} placeholder="Nom d'utilisateur" />
+          <Form.Control type="password" ref={(x) => this.password = x} placeholder="Mot de passe" />
+          <Button variant="secondary" type="submit">
+            Confirmer
+          </Button>
+        </Form>
       );
     }
     return (
       <div className="Authenticated">
-        <a href="#login" onClick={this.handleAsk}>Se connecter...</a>
+        <Button href="#login" onClick={this.handleAsk} variant="secondary">Se connecter</Button>
       </div>
     );
   }
@@ -82,7 +99,9 @@ class Authenticated extends Component {
 
   _closeSession() {
     fetch(SESSION_URI, {method:'DELETE', credentials:'include'})
-      .then(() => this.setState({user: ''}));
+      .then(() => { 
+        this.setState({user: ''})
+    });
   }
 
   componentDidMount() {
