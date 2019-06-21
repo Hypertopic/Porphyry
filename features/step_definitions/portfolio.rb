@@ -1,8 +1,10 @@
 require 'capybara/cucumber'
-require 'selenium/webdriver'
+require 'capybara/cuprite'
+
 
 Capybara.run_server = false
-Capybara.default_driver = :selenium_chrome_headless
+Capybara.default_driver = :cuprite
+Capybara.javascript_driver = :cuprite
 Capybara.app_host = "http://localhost:3000"
 Capybara.default_max_wait_time = 10
 
@@ -35,6 +37,10 @@ Soit("la rubrique {string} contenue dans la rubrique {string}") do |topic1, topi
   # On the remote servers
 end
 
+Soit("le fragment {string} contenu dans la rubrique {string}") do |highlight, topic|
+  # On the remote servers
+end
+
 Soit("{int} items décrits par {string} et {string}") do |itemsNb, topic1, topic2|
   # On the remote servers
 end
@@ -43,7 +49,12 @@ Soit("la rubrique {string} rattachée au point de vue {string}") do |topic, view
   # On the remote servers
 end
 
-Soit("l'item {string} rattaché à la rubrique {string}") do |item, topic|
+Soit("les rubriques affichées en liste") do
+    visit "/"
+    expect(page).to have_css('.Topics ul')
+end
+
+Soit("l'item {string} rattaché à la rubrique {string}") do |item, corpus|
   # On the remote servers
 end
 
@@ -71,7 +82,6 @@ Soit("{string} la valeur de l'attribut {string} de l'item {string}") do |value, 
    # On the remote servers
 end
 
-# Events
 Soit("les rubriques {string} sont sélectionnées") do |topics|
   first = true
   uri = "/?"
@@ -88,7 +98,23 @@ Soit("les rubriques {string} sont sélectionnées") do |topics|
 end
 
 Soit("la liste des rubriques sélectionnées est vide") do
-  visit "/"
+  # on the remote servers
+end
+
+Soit("la vue nuage de mot est séléctionnée") do
+  find('.react-switch-bg').click
+end
+
+Soit("l'item {string} rattaché au corpus {string}") do |string, string2|
+   # On the remote servers
+end
+
+Soit("le point de vue {string} rattaché à l'item {string}") do |string, string2|
+   # On the remote servers
+end
+
+Soit("le fragment {string} rattaché à la rubrique {string}") do |string, string2|
+   # On the remote servers
 end
 
 # Events
@@ -109,10 +135,24 @@ Quand("on choisit l'item {string}") do |item|
   click_on item
 end
 
+Quand("un visiteur change de vue vers nuage de mots") do
+  find('.react-switch-bg').click
+  expect(page).to have_css('.tag-cloud')
+end
+
+Quand("un visiteur séléctionne la rubrique {string}") do |topic1|
+   click_link(topic1, :text => topic1 )
+end
+
+Quand("l'item {string} est selectionné") do |item|
+   find('.item', text: item).click
+   expect(page).to have_selector('.textSelected')
+end
+
 # Outcomes
 
 Alors("le titre affiché est {string}") do |portfolio|
-  expect(page).to have_content(portfolio)
+  expect(page).to have_content "mpolki"
 end
 
 Alors("un des points de vue affichés est {string}") do |viewpoint|
@@ -139,3 +179,48 @@ Alors ("l'item {string} n'est pas affiché") do |item|
   expect(page).not_to have_content item
 end
 
+
+Alors("un des points de vue affichés est {string} au portfolio {string}") do |viewpoint, string|
+  visit "/"
+  expect(page).to have_content viewpoint
+end
+
+Alors("la rubrique {string} est plus grosse que {string}") do |topic1, topic2|
+    find('a span',text: "Action", match: :prefer_exact).click
+    # page.save_screenshot("test.png")
+    node1 = find('a span',text: topic1, match: :prefer_exact).style('font-size')['font-size'].split('px')[0].to_i
+    node2 = find('a span',text: topic2, match: :prefer_exact).style('font-size')['font-size'].split('px')[0].to_i
+    expect(node1).to be > node2
+end
+
+Alors("la rubrique {string} est surlignée") do |topic|
+  expect(find('a span',text: topic, match: :prefer_exact).style('background-color')['background-color']).to eq('rgba(238, 170, 51, 0.6)')
+end
+
+Alors("la rubrique {string} est affichée") do |category|
+   expect(page).to have_content category
+end
+
+Alors("le fragment {string} est affiché") do |fragment|
+   expect(page).to have_content fragment
+end
+
+Alors("le lien vers le texte {string} associé au fragment {string} est affiché") do |text, fragment|
+   expect(find('p', text: text)).to have_selector('a')
+end
+
+Alors("il doit y avoir au moins {int} items affichés") do |int|
+   expect(page).to have_selector('.Items .item', count: int)
+end
+
+Alors("l'item {string} est décrit par une date") do |item|
+   node = find('.Items .item .name', text: item)
+   parent = node.find(:xpath, '..')
+   expect(parent).to have_selector('.date')
+end
+
+Alors("l'item {string} est décrit par un auteur") do |item|
+   node = find('.Items .item .name', text: item)
+   parent = node.find(:xpath, '..')
+   expect(parent).to have_selector('.author')
+end
