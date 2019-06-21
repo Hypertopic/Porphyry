@@ -7,6 +7,7 @@ Capybara.javascript_driver = :cuprite
 Capybara.app_host = "http://vitraux.local:3000"
 Capybara.default_max_wait_time = 10
 
+
 def getUUID(itemName)
   uuid = nil
   case itemName
@@ -22,7 +23,20 @@ def getUUID(itemName)
   return uuid
 end
 
+
+def getPassword(username)
+  password = nil
+  case username
+  when "alice"
+    password = "whiterabbit"
+  end
+  return password
+end
 # Conditions
+
+Soit("l'item {string} existant") do |item|
+  # On the remote servers
+end
 
 Soit("le point de vue {string} rattaché au portfolio {string}") do |viewpoint, portfolio|
   # On the remote servers
@@ -71,7 +85,7 @@ Soit("{string} le portfolio ouvert") do |portfolio|
 end
 
 Soit("{string} une des rubriques développées") do |topic|
-  find_link(topic).sibling('.oi').click
+  find_button(topic).sibling('.oi').click
 end
 
 
@@ -82,21 +96,33 @@ end
 # Events
 Soit("les rubriques {string} sont sélectionnées") do |topics|
   first = true
-  uri = "/?"
+  uri = "/?t={\"type\":\"intersection\",\"data\":["
   topics.split("|").each do |topic|
     uuid = getUUID(topic)
     if (first)
-      uri += "t=" + uuid
+      uri += "{\"type\":\"intersection\",\"selection\":[\"" + uuid + "\""
       first = false
     else
-      uri += "&t=" + uuid
+      uri += ",\"" + uuid + "\""
     end
   end
+  uri+= "],\"exclusion\":[]}]}"
   visit uri
 end
 
+Soit("la rubrique {string} est visible et sélectionnée") do |topic|
+    click_on topic
+end
 Soit("la liste des rubriques sélectionnées est vide") do
   visit "/"
+end
+
+Soit ("l'utilisateur {string} connecté") do |username|
+  click_link('Se connecter...')
+  find('input[placeholder="nom d\'utilisateur"]').set username
+  find("input[placeholder='mot de passe']").set getPassword(username)
+  click_on('Se connecter')
+  expect(page).to have_content(username)
 end
 
 # Events
@@ -138,6 +164,20 @@ Quand("on créé une copie du portfolio appelée {string} avec le corpus {string
     in_modal.check(viewpoint)
     in_modal.click_on('Valider')
     in_modal.click_on('Confirmer')
+Quand("l'utilisateur exclue la rubrique {string}") do |topic|
+  click_on topic
+end
+
+Quand ("l'utilisateur crée un item {string} dans le corpus {string}") do |name, corpus|
+  find_button(:id => corpus).click
+  expect(page).to have_content("undefined")
+  find_by_id("new-attribute").set "name:#{name}"
+  find_button(class: ['btn', 'btn-sm', 'ValidateButton']).click
+end
+
+Quand ("l'utilisateur sélectionne {string} entre la rubrique {string} et la rubrique {string}") do |union, topic1, topic2|
+  within('.Status') do
+    find(:xpath, "//span[contains(text(), topic1)]/following-sibling::button", text: union, match: :first).click
   end
 end
 
@@ -156,7 +196,7 @@ Alors("un des corpus affichés est {string}") do |corpus|
 end
 
 Alors("il doit y avoir au moins {int} items sélectionnés décrits par {string}") do |itemsNb, topic|
-  expect(find_link(topic).sibling('.badge').text.scan(/\d+/)[0].to_i).to be >= itemsNb
+  expect(find_button(topic).sibling('.badge').text.scan(/\d+/)[0].to_i).to be >= itemsNb
 end
 
 Alors("les rubriques surlignées sont au nombre de {int}") do |topicNb|

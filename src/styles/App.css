@@ -158,6 +158,16 @@ h1 a, h1 a:hover {
   padding: 1px;
   border-radius: 3px;
 }
+.Excluded {
+  background-color: rgba(238, 51, 51, 0.6);
+  font-weight: bold;
+  text-decoration: line-through !important;
+  padding: 1px;
+  border-radius: 3px;
+}
+.removeUnderlineOnFocus:focus {
+  text-decoration: none;
+}
 
 .Items {
   display: flex;
@@ -314,6 +324,11 @@ div.autosuggest {
 
 .creationButton {
   margin-bottom: 1rem;
+}
+
+.creationItemButton{
+  padding: 1px;
+  border-radius: 15px;
 }
 
 .Return {
