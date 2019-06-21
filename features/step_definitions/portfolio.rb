@@ -7,6 +7,7 @@ Capybara.javascript_driver = :cuprite
 Capybara.app_host = "http://localhost:3000"
 Capybara.default_max_wait_time = 10
 
+
 def getUUID(itemName)
   uuid = nil
   case itemName
@@ -22,7 +23,20 @@ def getUUID(itemName)
   return uuid
 end
 
+
+def getPassword(username)
+  password = nil
+  case username
+  when "alice"
+    password = "whiterabbit"
+  end
+  return password
+end
 # Conditions
+
+Soit("l'item {string} existant") do |item|
+  # On the remote servers
+end
 
 Soit("le point de vue {string} rattaché au portfolio {string}") do |viewpoint, portfolio|
   # On the remote servers
@@ -96,6 +110,14 @@ Soit("la liste des rubriques sélectionnées est vide") do
   visit "/"
 end
 
+Soit ("l'utilisateur {string} connecté") do |username|
+  click_link('Se connecter...')
+  find('input[placeholder="nom d\'utilisateur"]').set username
+  find("input[placeholder='mot de passe']").set getPassword(username)
+  click_on('Se connecter')
+  expect(page).to have_content(username)
+end
+
 # Events
 
 Quand("un visiteur ouvre la page d'accueil du site") do
@@ -123,6 +145,14 @@ Quand ("l'utilisateur sélectionne {string} entre la rubrique {string} et la rub
     find(:xpath, "//span[contains(text(), topic1)]/following-sibling::button", text: union, match: :first).click
   end
 end
+
+Quand ("l'utilisateur crée un item {string} dans le corpus {string}") do |name, corpus|
+  find_button(:id => corpus).click
+  expect(page).to have_content("undefined")
+  find_by_id("new-attribute").set "name:#{name}"
+  find_button(class: ['btn', 'btn-sm', 'ValidateButton']).click
+end
+
 # Outcomes
 
 Alors("le titre affiché est {string}") do |portfolio|
