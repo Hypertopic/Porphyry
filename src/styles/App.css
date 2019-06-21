@@ -295,6 +295,11 @@ div.autosuggest {
   margin-bottom: 1rem;
 }
 
+.creationItemButton{
+  padding: 1px;
+  border-radius: 15px;
+}
+
 .Return {
   position: fixed;
   width:60px;
