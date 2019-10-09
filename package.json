@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "bootstrap": "^4.1.1",
-    "hypertopic": "^3.1.4",
+    "hypertopic": "^3.1.6",
     "js-tree": "^2.0.1",
     "json-groupby": "^1.0.2",
     "open-iconic": "^1.1.1",
