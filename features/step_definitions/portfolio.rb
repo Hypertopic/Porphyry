@@ -1,14 +1,14 @@
-def getUUID(itemName)
+def getUUID(name)
   uuid = nil
-  case itemName
-    when "Ateliers du Carmel du Mans"
-      uuid = "0edea8e39068ed49a8f555a660d7cc68"
-    when "David Tremlett"
-      uuid = "7123a482ef397d4cb464ea3ec37655e0"
-    when "1868"
-      uuid = "29e7a2c6a601c040985ade144901cb1f"
-    when "Figuration du donateur"
-      uuid = "fe94b684b6a42c4889c1e0d7458b9526"
+  case name
+    when "Abram/Abraham"
+      uuid = "f1520229979b11428f94a004f880c022"
+    when "XIXe s."
+      uuid = "addd464d06159c4eb0b9666cffb2042c"
+    when "1518"
+      uuid = "fed64e22e60941409ad45c167fc396b8"
+    when "vers 1520"
+      uuid = "e01a7cb572461a43a22aa8f771235cb6"
   end
   return uuid
 end
@@ -22,29 +22,14 @@ def getPassword(username)
   end
   return password
 end
-# Conditions
 
-Soit("l'item {string} existant") do |item|
-  # On the remote servers
-end
+# Conditions
 
 Soit("le point de vue {string} rattaché au portfolio {string}") do |viewpoint, portfolio|
   # On the remote servers
 end
 
 Soit("le corpus {string} rattaché au portfolio {string}") do |viewpoint, portfolio|
-  # On the remote servers
-end
-
-Soit("la rubrique {string} contenue dans la rubrique {string}") do |topic1, topic2|
-  # On the remote servers
-end
-
-Soit("{int} items décrits par {string} et {string}") do |itemsNb, topic1, topic2|
-  # On the remote servers
-end
-
-Soit("la rubrique {string} rattachée au point de vue {string}") do |topic, viewpoint|
   # On the remote servers
 end
 
@@ -71,33 +56,30 @@ Soit("{string} une des rubriques développées") do |topic|
   find_button(topic).sibling('.oi').click
 end
 
-
-Soit("{string} la valeur de l'attribut {string} de l'item {string}") do |value, attribute ,item|
-   # On the remote servers
+Soit("{string} un des items affichés") do |itemName|
+  expect(page).to have_content itemName 
 end
 
-# Events
-Soit("les rubriques {string} sont sélectionnées") do |topics|
+Soit("{string} un des items cachés") do |itemName|
+  expect(page).not_to have_content itemName 
+end
+
+Soit("{string} les rubriques sélectionnées") do |topics|
+  topic_format = '{"type":"intersection","selection":["%s"],"exclusion":[]}'
+  query_format = '{"type":"intersection","data":[%s]}'
+  formatted_topics = ''
   first = true
-  uri = "/?t={\"type\":\"intersection\",\"data\":["
   topics.split("|").each do |topic|
-    uuid = getUUID(topic)
     if (first)
-      uri += "{\"type\":\"intersection\",\"selection\":[\"" + uuid + "\""
       first = false
     else
-      uri += ",\"" + uuid + "\""
+      formatted_topics += ','
     end
+    formatted_topics += topic_format % getUUID(topic)
   end
-  uri+= "],\"exclusion\":[]}]}"
+  uri = '/?t=' + query_format % formatted_topics
+  puts uri
   visit uri
-end
-
-Soit("la rubrique {string} est visible et sélectionnée") do |topic|
-    click_on topic
-end
-Soit("la liste des rubriques sélectionnées est vide") do
-  visit "/"
 end
 
 Soit ("l'utilisateur {string} connecté") do |username|
@@ -122,14 +104,6 @@ Quand("on sélectionne la rubrique {string}") do |topic|
   click_on topic
 end
 
-Quand("on choisit l'item {string}") do |item|
-  click_on item
-end
-
-Quand("l'utilisateur exclue la rubrique {string}") do |topic|
-  click_on topic
-end
-
 Quand ("l'utilisateur crée un item {string} dans le corpus {string}") do |name, corpus|
   find_button(:id => corpus).click
   expect(page).to have_content("undefined")
@@ -139,7 +113,7 @@ end
 
 Quand ("l'utilisateur sélectionne {string} entre la rubrique {string} et la rubrique {string}") do |union, topic1, topic2|
   within('.Status') do
-    find(:xpath, "//span[contains(text(), topic1)]/following-sibling::button", text: union, match: :first).click
+    find(:xpath, "//span[contains(., #{topic1})]/following-sibling::button", text: union, match: :first).click
   end
 end
 
@@ -171,4 +145,8 @@ end
 
 Alors ("l'item {string} n'est pas affiché") do |item|
   expect(page).not_to have_content item
+end
+
+Alors("la rubrique {string} est sélectionnée") do |topic|
+  expect(find(".TopicTag")).to have_content(topic)
 end
