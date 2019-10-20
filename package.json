@@ -16,7 +16,7 @@
     "sort-by": "^1.2.0"
   },
   "devDependencies": {
-    "react-scripts": "^3.0.1",
+    "react-scripts": "^3.2.0",
     "serve": "^11.0.2"
   },
   "scripts": {
