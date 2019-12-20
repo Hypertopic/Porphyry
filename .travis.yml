@@ -1,22 +1,20 @@
 language: node_js
 node_js: lts/*
 
-addons:
-  chrome: stable
-  apt:
-    packages:
-    - xsel
+services:
+  - docker
 
 cache:
   directories:
-    - ~/.rvm/gems
     - node_modules
 
 install:
   - npm install
-  - bundle install
+
+before_script:
+  - docker pull benel/cucumber-capybara
 
 script:
   - npm run build
   - npm run preprod
-  - npm run test
+  - docker run --rm -v "$(pwd)":/app -t --net="host" --env APP_HOST="http://`hostname`:3000" benel/cucumber-capybara --retry 1
