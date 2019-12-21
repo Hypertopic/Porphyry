@@ -65,20 +65,14 @@ Soit("{string} un des items cachés") do |itemName|
 end
 
 Soit("{string} les rubriques sélectionnées") do |topics|
-  topic_format = '{"type":"intersection","selection":["%s"],"exclusion":[]}'
+  topic_format = '{"type":"intersection","selection":%s,"exclusion":[]}'
   query_format = '{"type":"intersection","data":[%s]}'
-  formatted_topics = ''
-  first = true
-  topics.split("|").each do |topic|
-    if (first)
-      first = false
-    else
-      formatted_topics += ','
-    end
-    formatted_topics += topic_format % getUUID(topic)
+  selection = topics.split('|').map {|topic| getUUID(topic)}
+  json = topic_format % [*selection.shift].to_s
+  if selection.any?
+    json += ',' + topic_format % selection.to_s
   end
-  uri = '/?t=' + query_format % formatted_topics
-  puts uri
+  uri = '/?t=' + query_format % json
   visit uri
 end
 
