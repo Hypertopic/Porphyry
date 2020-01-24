@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import by from 'sort-by';
 import queryString from 'query-string';
 import Hypertopic from 'hypertopic';
-import conf from '../../config/config.json';
+import conf from '../../config/config.js';
 import Viewpoint from '../Viewpoint/Viewpoint.jsx';
 import Corpora from '../Corpora/Corpora.jsx';
 import Header from '../Header/Header.jsx';
@@ -22,7 +22,6 @@ class Portfolio extends Component {
       selectedItems: [],
       topicsItems: new Map()
     };
-    this.user = conf.user || window.location.hostname.split('.', 1)[0];
     this._updateSelection();
   }
 
@@ -32,9 +31,9 @@ class Portfolio extends Component {
 
     return (
       <div className="App container-fluid">
-        <Header />
+        <Header conf={conf} />
         <div className="Status row h5 text-center">
-          <Authenticated/>
+          <Authenticated conf={conf} />
           <Status selectionJSON={this.selectionJSON} viewpoints={this.state.viewpoints}/>
         </div>
         <div className="container-fluid">
@@ -143,11 +142,12 @@ class Portfolio extends Component {
     this.setState({selectedItems, topicsItems});
   }
 
-  _fetchAll() {
-    const hypertopic = new Hypertopic(conf.services);
-    return hypertopic.getView(`/user/${this.user}`)
+  async _fetchAll() {
+    let SETTINGS = await conf;
+    let hypertopic = new Hypertopic(SETTINGS.services);
+    return hypertopic.getView(`/user/${SETTINGS.user}`)
       .then(data => {
-        let user = data[this.user] || {};
+        let user = data[SETTINGS.user] || {};
         user = {
           viewpoint: user.viewpoint || [],
           corpus: user.corpus || []
@@ -208,7 +208,7 @@ class Portfolio extends Component {
   _getCorpora() {
     let ids = this.state.corpora.map(c => c.id);
     return (
-      <Corpora ids={ids} from={this.state.items.length} items={this.state.selectedItems} />
+      <Corpora ids={ids} from={this.state.items.length} items={this.state.selectedItems} conf={conf} />
     );
   }
 }

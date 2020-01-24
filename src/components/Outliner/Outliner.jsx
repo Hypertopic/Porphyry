@@ -1,14 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Hypertopic from 'hypertopic';
-import conf from '../../config/config.json';
+import conf from '../../config/config.js';
 import Header from '../Header/Header.jsx';
 import Authenticated from '../Authenticated/Authenticated.jsx';
 import TopicTree from './TopicTree.js';
 
 import '../../styles/App.css';
-
-const db = new Hypertopic(conf.services);
 
 const _log = (x) => console.log(JSON.stringify(x, null, 2));
 const _error = (x) => console.error(x.message);
@@ -20,7 +18,6 @@ class Outliner extends React.Component {
     this.state = { };
     this.changing=false;
     this.topicTree=new TopicTree({});
-    this.user = conf.user || window.location.hostname.split('.', 1)[0];
   }
 
   render() {
@@ -28,9 +25,9 @@ class Outliner extends React.Component {
     let topic={name:this.state.title};
     return (
       <div className="App container-fluid">
-        <Header />
+        <Header conf={conf} />
         <div className="Status row h5">
-          <Authenticated/>
+          <Authenticated conf={conf} />
           <Link to="/" className="badge badge-pill badge-light TopicTag">
             <span className="badge badge-pill badge-dark oi oi-chevron-left"> </span> Retour à l'accueil
           </Link>
@@ -74,13 +71,13 @@ class Outliner extends React.Component {
     }
   }
 
-  _newVP(e) {
+  async _newVP(e) {
     e.preventDefault();
     let title = e.target.newTitle.value;
-    if (!title) {
-      return;
-    }
-    db.post({ _id: this.props.match.params.id, viewpoint_name: title, topics: {}, users: [this.user] })
+    if (!title) return;
+    let SETTINGS = await conf;
+    new Hypertopic(SETTINGS.services)
+      .post({_id: this.props.match.params.id, viewpoint_name: title, topics: {}, users: [SETTINGS.user]})
       .then(_log)
       .then(_ => this.setState({ title }))
       .then(_ => this._fetchData())
@@ -224,8 +221,9 @@ class Outliner extends React.Component {
     clearInterval(this._timer);
   }
 
-  applyChange() {
+  async applyChange() {
     if (!this.changing) {
+      let db = new Hypertopic((await conf).services);
       this.changing=db.get({ _id: this.props.match.params.id })
         .then(data => {
           data.topics ={};
@@ -250,13 +248,14 @@ class Outliner extends React.Component {
     return this.changing;
   }
 
-  _fetchData() {
+  async _fetchData() {
     if (!this.changing) {
-    return db.get({ _id: this.props.match.params.id })
-      .then(x => {
-        this.setState({ topics: x.topics, title: x.viewpoint_name });
-        this.topicTree=new TopicTree(x.topics);
-      });
+      new Hypertopic((await conf).services)
+        .get({ _id: this.props.match.params.id })
+        .then(x => {
+          this.setState({ topics: x.topics, title: x.viewpoint_name });
+          this.topicTree = new TopicTree(x.topics);
+        });
     } else {
       return true;
     }
@@ -269,7 +268,6 @@ class Node extends React.Component {
   constructor() {
     super();
     this.state = { edit: false, active: false, open: true };
-    this.user = conf.user || window.location.hostname.split('.', 1)[0];
   }
 
   render = () => {

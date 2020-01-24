@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "bootstrap": "^4.1.1",
-    "hypertopic": "^3.1.6",
+    "hypertopic": "^3.1.7",
     "js-tree": "^2.0.1",
     "json-groupby": "^1.0.2",
     "open-iconic": "^1.1.1",
@@ -13,10 +13,11 @@
     "react-autosuggest": "^9.3.4",
     "react-dom": "^16.4.0",
     "react-router-dom": "^4.1.1",
-    "sort-by": "^1.2.0"
+    "sort-by": "^1.2.0",
+    "yaml": "^1.7.2"
   },
   "devDependencies": {
-    "react-scripts": "^3.2.0",
+    "react-scripts": "^3.3.0",
     "serve": "^11.0.2"
   },
   "scripts": {

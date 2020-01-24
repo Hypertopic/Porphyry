@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import conf from '../../config/config.json';
 
 class Header extends Component {
-  constructor() {
-    super();
-    this.user = conf.user || window.location.hostname.split('.', 1)[0];
+
+  constructor(props) {
+    super(props);
+    this.state = {user: ''};
+    props.conf.then(x => {this.setState({user: x.user})});
   }
 
   render() {
@@ -15,10 +16,11 @@ class Header extends Component {
         <div className="col-lg-2 col-md-3 col-sm-4">
           <input className="form-control" type="text" placeholder="Rechercher..."/>
         </div>
-        <h1 className="text-center col-lg-8 col-md-6 col-sm-8"><Link to="/">{this.user}</Link></h1>
+        <h1 className="text-center col-lg-8 col-md-6 col-sm-8"><Link to="/">{this.state.user}</Link></h1>
       </header>
     );
   }
+
 }
 
 export default Header;

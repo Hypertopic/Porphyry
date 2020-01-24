@@ -3,24 +3,20 @@ import { Link } from 'react-router-dom';
 import Hypertopic from 'hypertopic';
 import groupBy from 'json-groupby';
 import Autosuggest from 'react-autosuggest';
-import conf from '../../config/config.json';
-import getConfig from '../../config/config.js';
+import conf from '../../config/config.js';
 import Header from '../Header/Header.jsx';
 import Authenticated from '../Authenticated/Authenticated.jsx';
 import TopicTree from '../Outliner/TopicTree.js';
 
 import '../../styles/App.css';
 
-let hypertopic = new Hypertopic(conf.services);
-
-// Get the configured item display mode
-let itemView = getConfig('itemView', {
+let itemView = {
   mode: 'picture',
   name: 'name',
   image: 'resource',
   linkTo: 'resource',
   hiddenProps: ['topic', 'resource', 'thumbnail']
-});
+};
 
 function getString(obj) {
   if (Array.isArray(obj)) {
@@ -43,7 +39,6 @@ class Item extends Component {
     this._getOrCreateItem = this._getOrCreateItem.bind(this);
     this._submitAttribute = this._submitAttribute.bind(this);
     this._deleteAttribute = this._deleteAttribute.bind(this);
-    this.user=conf.user || window.location.hostname.split('.', 1)[0];
   }
 
   render() {
@@ -52,9 +47,9 @@ class Item extends Component {
     let viewpoints = this._getViewpoints();
     return (
       <div className="App container-fluid">
-        <Header />
+        <Header conf={conf} />
         <div className="Status row h5">
-          <Authenticated/>
+          <Authenticated conf={conf} />
           <Link to="/" className="badge badge-pill badge-light TopicTag">
             <span className="badge badge-pill badge-dark oi oi-chevron-left"> </span> Retour à l'accueil
           </Link>
@@ -124,7 +119,8 @@ class Item extends Component {
     clearInterval(this._timer);
   }
 
-  _getOrCreateItem() {
+  async _getOrCreateItem() {
+    let hypertopic = new Hypertopic((await conf).services);
     return hypertopic.get({_id: this.props.match.params.item})
     .catch(e => {
       return {
@@ -134,9 +130,11 @@ class Item extends Component {
     });
   }
 
-  _fetchItem() {
+  async _fetchItem() {
     let uri = this.props.match.url;
     let params = this.props.match.params;
+    let SETTINGS = await conf;
+    let hypertopic = new Hypertopic(SETTINGS.services);
     return hypertopic.getView(uri).then((data) => {
       let item = data[params.corpus][params.item];
       let itemTopics = (item.topic) ? groupBy(item.topic, ['viewpoint']) : {};
@@ -146,7 +144,7 @@ class Item extends Component {
       }
       item.topic=topics;
       this.setState({item});
-    }).then(() => hypertopic.getView(`/user/${this.user}`))
+    }).then(() => hypertopic.getView(`/user/${SETTINGS.user}`))
       .then((data) => {
       let user = data[this.user] || {};
       if (user.viewpoint) {
@@ -228,8 +226,9 @@ class Item extends Component {
     );
   }
 
-  _setAttribute(key, value) {
+  async _setAttribute(key, value) {
     if (key!=='' && value!=='') {
+      let hypertopic = new Hypertopic((await conf).services);
       let attribute = {[key]: [value]};
       return this._getOrCreateItem()
         .then(x => Object.assign(x, attribute))
@@ -260,7 +259,8 @@ class Item extends Component {
     return false;
   }
 
-  _deleteAttribute(key) {
+  async _deleteAttribute(key) {
+    let hypertopic = new Hypertopic((await conf).services);
     const _error = (x) => console.error(x.message);
     this._getOrCreateItem()
       .then(x => {
@@ -277,7 +277,8 @@ class Item extends Component {
       .catch(_error);
   }
 
-  _assignTopic(topicToAssign, viewpointId) {
+  async _assignTopic(topicToAssign, viewpointId) {
+    let hypertopic = new Hypertopic((await conf).services);
     return this._getOrCreateItem()
       .then(data => {
         data.topics=data.topics || {};
@@ -298,7 +299,8 @@ class Item extends Component {
   }
 
 
-  _removeTopic(topicToDelete) {
+  async _removeTopic(topicToDelete) {
+    let hypertopic = new Hypertopic((await conf).services);
     if (window.confirm('Voulez-vous réellement que l\'item affiché ne soit plus décrit à l\'aide de cette rubrique ?')) {
       return this._getOrCreateItem()
         .then(data => {
@@ -688,9 +690,9 @@ class Viewpoint extends Component {
     this._fetchViewpoint();
   }
 
-  _fetchViewpoint() {
-    let uri = '/viewpoint/' + this.props.id;
-    hypertopic.getView(uri).then((data) => {
+  async _fetchViewpoint() {
+    let hypertopic = new Hypertopic((await conf).services);
+    hypertopic.getView(`/viewpoint/${this.props.id}`).then((data) => {
       let viewpoint = data[this.props.id];
       let name = viewpoint.name;
       let topics = viewpoint;
@@ -701,8 +703,9 @@ class Viewpoint extends Component {
     });
   }
 
-  createTopic(name,parent) {
+  async createTopic(name,parent) {
     var newId;
+    let hypertopic = new Hypertopic((await conf).services);
     return hypertopic.get({ _id: this.props.id })
       .then(x => {
         var topicTree=new TopicTree(x.topics);

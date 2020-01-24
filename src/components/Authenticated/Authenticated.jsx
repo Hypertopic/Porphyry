@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
-import conf from '../../config/config.json';
-
-const SESSION_URI = conf.services[0] + '/_session';
 
 class Authenticated extends Component {
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       user: '',
       ask: false
@@ -40,6 +37,14 @@ class Authenticated extends Component {
     );
   }
 
+  requestSession(options) {
+    return this.props.conf.then(x => {
+      options = options || {};
+      options.credentials = 'include';
+      return fetch(x.services[0] + '/_session',  options)
+    });
+  }
+
   handleAsk(e) {
     e.preventDefault();
     this.setState({ask: true});
@@ -57,7 +62,7 @@ class Authenticated extends Component {
   }
 
   _fetchSession() {
-    fetch(SESSION_URI, {credentials: 'include'})
+    this.requestSession()
       .then(x => x.json())
       .then(x => this.setState({user: x.name || x.userCtx.name}))
       .catch(() => this.setState({user: ''}));
@@ -65,13 +70,12 @@ class Authenticated extends Component {
 
   _openSession() {
     let user = this.login.value;
-    fetch(SESSION_URI, {
+    this.requestSession({
       method:'POST',
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
-      body:`name=${user}&password=${this.password.value}`,
-      credentials:'include'
+      body:`name=${user}&password=${this.password.value}`
     })
       .then(x => {
         if (!x.ok) throw new Error('Bad credentials!');
@@ -81,7 +85,7 @@ class Authenticated extends Component {
   }
 
   _closeSession() {
-    fetch(SESSION_URI, {method:'DELETE', credentials:'include'})
+    this.requestSession({method:'DELETE'})
       .then(() => this.setState({user: ''}));
   }
 
