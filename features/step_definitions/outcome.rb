@@ -10,14 +10,6 @@ Alors("un des corpus affichés est {string}") do |corpus|
   expect(page).to have_content corpus
 end
 
-Alors("il doit y avoir au moins {int} items sélectionnés décrits par {string}") do |itemsNb, topic|
-  expect(find_button(topic).sibling('.badge').text.scan(/\d+/)[0].to_i).to be >= itemsNb
-end
-
-Alors("les rubriques surlignées sont au nombre de {int}") do |topicNb|
-  expect(page).to have_selector('.Selected', :count => topicNb)
-end
-
 Alors ("l'item {string} est affiché") do |item|
   expect(page).to have_content item
 end

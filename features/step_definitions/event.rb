@@ -27,12 +27,3 @@ Quand("on choisit la rubrique {string}") do |topic|
   click_on topic
 end
 
-Quand("on ajoute un attribut {string} et la valeur {string}") do |attribut, value|
-  find_button('Ajouter un attribut').click
-    fill_in "#key", with: attribut
-
-    fill_in "#value", with: value
-
-  find_button('Valider').click
-end
-
