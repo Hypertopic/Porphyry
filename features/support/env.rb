@@ -21,3 +21,28 @@ def getURI(name)
   end
   return uri
 end
+
+def getUUID(name)
+  uuid = nil
+  case name
+    when "Abram/Abraham"
+      uuid = "f1520229979b11428f94a004f880c022"
+    when "XIXe s."
+      uuid = "addd464d06159c4eb0b9666cffb2042c"
+    when "1518"
+      uuid = "fed64e22e60941409ad45c167fc396b8"
+    when "vers 1520"
+      uuid = "e01a7cb572461a43a22aa8f771235cb6"
+  end
+  return uuid
+end
+
+def getPassword(username)
+  password = nil
+  case username
+  when "alice"
+    password = "whiterabbit"
+  end
+  return password
+end
+

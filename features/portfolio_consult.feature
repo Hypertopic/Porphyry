@@ -2,12 +2,6 @@
 
 Fonctionnalité: Consulter un portfolio
 
-Contexte:
-Soit le point de vue "Histoire de l'art" rattaché au portfolio "vitraux"
-Soit le point de vue "Histoire des religions" rattaché au portfolio "vitraux"
-Soit le corpus "Vitraux - Bénel" rattaché au portfolio "vitraux"
-Soit le corpus "Vitraux - Recensement" rattaché au portfolio "vitraux"
-
 Scénario: Consulter le portfolio spécifié dans la configuration
 
 Soit "vitraux" le portfolio spécifié dans la configuration
