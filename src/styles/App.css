@@ -354,6 +354,7 @@ ul.Outliner,
 .Outliner li {
   list-style-type: none;
   min-height: 2em;
+  text-align: left;
 }
 
 .Outliner li.dragged {
