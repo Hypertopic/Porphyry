@@ -784,7 +784,7 @@ class TopicPath extends Component {
   _getTopics() {
     return this.state.path.map( t => {
       let name = (t.name)? t.name : 'Sans nom';
-      let uri = '../../?t=' + t.id;
+      let uri = `../../?t={"type":"intersection","data":[{"type":"intersection","selection":["${t.id}"],"exclusion":[]}]}`;
       return (
         <Link title={t.id} key={t.id} className="Topic" to={uri}>{name}</Link>
       );
