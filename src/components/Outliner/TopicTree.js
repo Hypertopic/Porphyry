@@ -74,8 +74,7 @@ class TopicTree {
     let children=[];
     for (var topID in this.topics) {
       let topic=this.topics[topID];
-      if ( (id==="root" && topic.broader.length===0)
-       || (id && topic.broader.indexOf(id)!==-1) ) {
+      if ((id==="root" && topic.broader.length===0) || (id && topic.broader.indexOf(id)!==-1)) {
         children.push(topID);
       }
     }

@@ -3,22 +3,22 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "bootstrap": "^4.1.1",
+    "bootstrap": "^4.4.1",
     "hypertopic": "^3.1.7",
-    "js-tree": "^2.0.1",
+    "js-tree": "^2.0.2",
     "json-groupby": "^1.0.2",
     "open-iconic": "^1.1.1",
     "query-string": "^4.3.4",
-    "react": "^16.4.0",
+    "react": "^16.12.0",
     "react-autosuggest": "^9.3.4",
-    "react-dom": "^16.4.0",
+    "react-dom": "^16.12.0",
     "react-router-dom": "^4.1.1",
     "sort-by": "^1.2.0",
     "yaml": "^1.7.2"
   },
   "devDependencies": {
     "react-scripts": "^3.3.0",
-    "serve": "^11.0.2"
+    "serve": "^11.3.0"
   },
   "scripts": {
     "start": "env EXTEND_ESLINT=true react-scripts start",
@@ -30,6 +30,11 @@
   "eslintConfig": {
     "extends": ["react-app"],
     "rules": {
+      "no-multi-spaces": 2,
+      "no-trailing-spaces": 2,
+      "no-spaced-func": 2,
+      "space-before-blocks": 2,
+      "space-in-parens": [2, "never"],
       "indent": [2, 2, {"SwitchCase": 1}],
       "no-mixed-spaces-and-tabs": 2
     }

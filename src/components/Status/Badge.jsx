@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 class Badge extends Component {
-  constructor(){
+  constructor() {
     super();
     this.handleDeletion = this.handleDeletion.bind(this);
     this.handleChangeState = this.handleChangeState.bind(this);

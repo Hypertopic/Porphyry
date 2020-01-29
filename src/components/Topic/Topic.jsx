@@ -7,7 +7,7 @@ class Topic extends Component {
     super();
     this.handleCollapse = this.handleCollapse.bind(this);
     this.handleClick = this.handleClick.bind(this);
-    let hasSubtopics =  (props.topics[props.id].narrower||[]).length;
+    let hasSubtopics = (props.topics[props.id].narrower||[]).length;
     this.state = {
       fold: hasSubtopics? 'Closed' : ''
     };
@@ -63,7 +63,7 @@ function updateSelectionJSON(array, item, selection) {
   if (selection === undefined)
     return;
   let found = selection.data.filter(s => {
-    let allTopics = [...(s.selection || [] ), ...(s.exclusion || [])];
+    let allTopics = [...(s.selection || []), ...(s.exclusion || [])];
     if (allTopics.length === 0 || array[allTopics[0]] === undefined) {
       return false;
     }
@@ -72,10 +72,9 @@ function updateSelectionJSON(array, item, selection) {
 
   });
 
-  if(found.length === 0) {
+  if (found.length === 0) {
     selection.data.push({type:'intersection', selection: [item], exclusion: []})
-  }
-  else  {
+  } else {
     if(!found[0].hasOwnProperty('selection'))
       found[0].selection = [];
     if(!found[0].hasOwnProperty('exclusion'))

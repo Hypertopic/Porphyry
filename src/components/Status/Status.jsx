@@ -43,7 +43,7 @@ class Status extends Component {
     return null;
   }
 
-  _changeItemState = (item, toDelete)  => {
+  _changeItemState = (item, toDelete) => {
     let found = this.props.selectionJSON.data.find(s => (s.selection || []).includes(item) || (s.exclusion || []).includes(item));
     switchPlace(found, item, toDelete);
     if((!Array.isArray(found.selection) || !found.selection.length) && (!Array.isArray(found.exclusion) || !found.exclusion.length))
@@ -51,7 +51,7 @@ class Status extends Component {
     this.props.history.push("/?t=" + JSON.stringify(this.props.selectionJSON));
   };
   _changeUnionState = (topic) => {
-    if (topic.type=== "intersection"){
+    if (topic.type=== "intersection") {
       topic.type="union"
     }
     else {

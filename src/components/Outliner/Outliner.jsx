@@ -130,7 +130,7 @@ class Outliner extends React.Component {
       case 'Delete':
       case 'Backspace':
         if (!e.altKey && !e.ctrlKey && !e.shiftKey) {
-          if (e.target.tagName==="BODY" || e.target.value==='' ) {
+          if (e.target.tagName==="BODY" || e.target.value==='') {
             let previousTopic=this.topicTree.getPreviousTopic(this.state.activeNode);
             changed=this.topicTree.deleteTopic(this.state.activeNode);
             if (changed) this.activeNode(this.topicTree.getNextTopic(previousTopic));
