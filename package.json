@@ -24,7 +24,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "preprod": "serve -s build -p 3000 &",
-    "test": "cucumber --format summary",
+    "test": "cucumber --format summary --retry 1",
     "eject": "react-scripts eject"
   },
   "browserslist": {
