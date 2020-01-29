@@ -61,8 +61,7 @@ class TopicTree {
     let topic = this.getTopic(id);
     if (topic) {
       topic.broader = topic.broader || [];
-      if (topic.broader.length) return topic.broader[0];
-      else return "root";
+      return (topic.broader.length) ? topic.broader[0] : "root";
     }
     return false;
   }
@@ -102,41 +101,28 @@ class TopicTree {
 
   getLastChild(id) {
     let children = this.getChildren(id);
-    if (children.length) {
-      return this.getLastChild(children[children.length - 1]);
-    } else {
-      return id;
-    }
+    return (children.length)
+      ? this.getLastChild(children[children.length - 1])
+      : id;
   }
 
   getPreviousTopic(id) {
     //find previous sibling last child, or parent
     let previousSibling = this.getPreviousSibling(id);
-    if (previousSibling) {
-      return this.getLastChild(previousSibling);
-    } else {
-      let parent = this.getParent(id);
-      if (parent !== false && parent !== id) {
-        return parent;
-      } else {
-        return id;
-      }
-    }
+    if (previousSibling) return this.getLastChild(previousSibling);
+    let parent = this.getParent(id);
+    return (parent !== false && parent !== id) ? parent : id;
   }
 
   getNextTopic(id) {
     //find next children or sibling
     let children = this.getChildren(id);
-    if (children.length) {
-      return children[0];
-    } else {
-      var p = id, n;
-      while (p && p !== "root" && !(n = this.getNextSibling(p))) {
-        p = this.getParent(p);
-      }
-      if (n) return n;
-      else return id;
+    if (children.length) return children[0];
+    var p = id, n;
+    while (p && p !== "root" && !(n = this.getNextSibling(p))) {
+      p = this.getParent(p);
     }
+    return n || id;
   }
 
   setParent(id, parent) {
@@ -165,10 +151,9 @@ class TopicTree {
       siblings.move(pos, newPos + 1);
       this.setOrder(siblings);
       return true;
-    } else {
-      //maybe accept to also change parent if
-      // previousTopic is not a sibling?
     }
+    //maybe accept to also change parent if
+    // previousTopic is not a sibling?
     return false;
   }
 

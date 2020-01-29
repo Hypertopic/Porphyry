@@ -64,11 +64,9 @@ class Outliner extends React.Component {
   }
 
   _getStatus() {
-    if (this.state.title !== undefined) {
-      return "Modification du point de vue";
-    } else {
-      return "Création du point de vue";
-    }
+    return (this.state.title !== undefined)
+      ? "Modification du point de vue"
+      : "Création du point de vue";
   }
 
   async _newVP(e) {
@@ -371,19 +369,12 @@ class Node extends React.Component {
       if (draggedTopic === this.props.id || topicTree.isAncestor(draggedTopic, this.props.id)) {
         //can't be dropped into itself or its descendant
         return;
-      } else if (e.currentTarget.className === "wrap") { //child
-        this.setState({isDraggedInto: true});
-        e.stopPropagation();
-        e.preventDefault();
-        return false;
-      } else if (e.currentTarget.className === "caret") {
-        this.setState({isDraggedAfter: true});
-        e.stopPropagation();
-        e.preventDefault();
-        return false;
-      } else {
-
       }
+      let key = (e.currentTarget.className === "wrap") ? 'isDraggedInto' : 'isDraggedAfter';
+      this.setState({[key]: true});
+      e.stopPropagation();
+      e.preventDefault();
+      return false;
     };
     let onDragLeave = (e) => {
       this.setState({isDraggedAfter: false, isDraggedInto: false});
@@ -397,15 +388,11 @@ class Node extends React.Component {
       if (droppedTopic === this.props.id || topicTree.isAncestor(droppedTopic, this.props.id)) {
         //can't be dropped into itself or its descendant
         return;
-      } else if (e.currentTarget.className === "wrap") { //child
-        this.props.change(droppedTopic, {parent: this.props.id});
-        e.stopPropagation();
-        e.preventDefault();
-      } else if (e.currentTarget.className === "caret") {
-        this.props.change(droppedTopic, {moveAfter: this.props.id});
-        e.stopPropagation();
-        e.preventDefault();
       }
+      let key = (e.currentTarget.className === "wrap") ? 'parent' : 'moveAfter';
+      this.props.change(droppedTopic, {[key]: this.props.id});
+      e.stopPropagation();
+      e.preventDefault();
     };
 
     return (
