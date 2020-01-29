@@ -5,7 +5,7 @@ function isInteger(int) {
 /*eslint no-extend-native: ["error", { "exceptions": ["Array"] }]*/
 Array.prototype.move = function(from, to) {
   if (!isInteger(from) || !isInteger(to)) {
-    console.error("bad parameters for Array.move");
+    console.error('bad parameters for Array.move');
     return;
   }
   if (from < to) to--;
@@ -15,7 +15,7 @@ Array.prototype.move = function(from, to) {
 class TopicTree {
 
   constructor(topics, rootName) {
-    this.rootName = rootName || "anonymous-root";
+    this.rootName = rootName || 'anonymous-root';
     this.topics = topics;
   }
 
@@ -33,8 +33,8 @@ class TopicTree {
   }
 
   getTopic(id) {
-    var topic = {id: "root", name: this.rootName};
-    if (id && id !== "root") {
+    var topic = {id: 'root', name: this.rootName};
+    if (id && id !== 'root') {
       topic = this.topics[id] || {id, broader: []};
     }
     return topic;
@@ -50,7 +50,7 @@ class TopicTree {
 
   isAncestor(id1, id2) {
     var parent = id2;
-    while (parent !== "root") {
+    while (parent !== 'root') {
       if (parent === id1) return true;
       parent = this.getParent(parent);
     }
@@ -61,7 +61,7 @@ class TopicTree {
     let topic = this.getTopic(id);
     if (topic) {
       topic.broader = topic.broader || [];
-      return (topic.broader.length) ? topic.broader[0] : "root";
+      return (topic.broader.length) ? topic.broader[0] : 'root';
     }
     return false;
   }
@@ -70,7 +70,7 @@ class TopicTree {
     let children = [];
     for (var topID in this.topics) {
       let topic = this.topics[topID];
-      if ((id === "root" && topic.broader.length === 0) || (id && topic.broader.indexOf(id) !== -1)) {
+      if ((id === 'root' && topic.broader.length === 0) || (id && topic.broader.indexOf(id) !== -1)) {
         children.push(topID);
       }
     }
@@ -119,7 +119,7 @@ class TopicTree {
     let children = this.getChildren(id);
     if (children.length) return children[0];
     var p = id, n;
-    while (p && p !== "root" && !(n = this.getNextSibling(p))) {
+    while (p && p !== 'root' && !(n = this.getNextSibling(p))) {
       p = this.getParent(p);
     }
     return n || id;
@@ -128,11 +128,7 @@ class TopicTree {
   setParent(id, parent) {
     let topic = this.getTopic(id);
     if (topic && parent !== false) {
-      if (parent === "root") {
-        topic.broader = [];
-      } else {
-        topic.broader = [parent];
-      }
+      topic.broader = (parent === 'root') ? [] : [parent];
     }
     return topic;
   }

@@ -17,7 +17,7 @@ class Topic extends Component {
     let subtopics = this._getSubtopics();
     let isSelected = this.props.selection.includes(this.props.id);
     let isExcluded = this.props.exclusion.includes(this.props.id);
-    let topicClasses = (isSelected ? 'Selected' : '') + " " + (isExcluded ? 'Excluded' : '');
+    let topicClasses = (isSelected ? 'Selected' : '') + ' ' + (isExcluded ? 'Excluded' : '');
     let topic = 'Topic ' + this.state.fold;
     let items = this.props.topicsItems.get(this.props.id);
     let count = (items) ? items.size : '';
@@ -26,7 +26,7 @@ class Topic extends Component {
     return (
       <li className={topic}>
         <span className={bullet.className} title={bullet.title} aria-hidden="true" onClick={this.handleCollapse} />
-        <button className={topicClasses + " btn btn-link p-0 border-0 removeUnderlineOnFocus text-dark"} onClick={this.handleClick}>{this.props.name}</button>
+        <button className={topicClasses + ' btn btn-link p-0 border-0 removeUnderlineOnFocus text-dark'} onClick={this.handleClick}>{this.props.name}</button>
         <span className="badge badge-pill badge-secondary ml-1">{count}</span>
         <ul>
           {subtopics}
@@ -55,7 +55,7 @@ class Topic extends Component {
   handleClick(e) {
     e.preventDefault();
     updateSelectionJSON(this.props.topics, this.props.id, this.props.selectionJSON);
-    this.props.history.push("/?t=" + JSON.stringify(this.props.selectionJSON));
+    this.props.history.push('/?t=' + JSON.stringify(this.props.selectionJSON));
   }
 }
 

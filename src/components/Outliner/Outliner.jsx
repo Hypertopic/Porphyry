@@ -65,8 +65,8 @@ class Outliner extends React.Component {
 
   _getStatus() {
     return (this.state.title !== undefined)
-      ? "Modification du point de vue"
-      : "Création du point de vue";
+      ? 'Modification du point de vue'
+      : 'Création du point de vue';
   }
 
   async _newVP(e) {
@@ -94,7 +94,7 @@ class Outliner extends React.Component {
       isNew = topic.new || false;
     }
     switch (e.key) {
-      case "Enter":
+      case 'Enter':
         topic = this.topicTree.newSibling(this.state.activeNode);
         this.activeNode(topic.id);
         topic.new = true;
@@ -106,7 +106,7 @@ class Outliner extends React.Component {
           return previousState;
         });
         return;
-      case "Tab":
+      case 'Tab':
         if (!e.altKey && !e.ctrlKey) {
           if (e.shiftKey) {
             changed = this.topicTree.promote(this.state.activeNode);
@@ -128,7 +128,7 @@ class Outliner extends React.Component {
       case 'Delete':
       case 'Backspace':
         if (!e.altKey && !e.ctrlKey && !e.shiftKey) {
-          if (e.target.tagName === "BODY" || e.target.value === '') {
+          if (e.target.tagName === 'BODY' || e.target.value === '') {
             let previousTopic = this.topicTree.getPreviousTopic(this.state.activeNode);
             changed = this.topicTree.deleteTopic(this.state.activeNode);
             if (changed) this.activeNode(this.topicTree.getNextTopic(previousTopic));
@@ -155,7 +155,7 @@ class Outliner extends React.Component {
       let topics = previousState.topics;
       if (topics) {
         let topic;
-        if (id === "root") {
+        if (id === 'root') {
           if (change.name && change.name !== previousState.title) {
             toApply = true;
             this.topicTree.setRootName(change.name);
@@ -172,13 +172,13 @@ class Outliner extends React.Component {
         if (topic) {
           for (let key in change) {
             switch (key) {
-              case "parent":
+              case 'parent':
                 if (this.topicTree.getTopic(change.parent)) {
                   toApply = this.topicTree.setParent(id, change.parent)
                     && this.topicTree.moveAfter(id);
                 }
                 break;
-              case "moveAfter":
+              case 'moveAfter':
                 if (this.topicTree.getTopic(change.moveAfter)) {
                   var newParent = this.topicTree.getParent(change.moveAfter);
                   if (newParent) {
@@ -187,7 +187,7 @@ class Outliner extends React.Component {
                   toApply = toApply && this.topicTree.moveAfter(id, change.moveAfter);
                 }
                 break;
-              case "startDrag":
+              case 'startDrag':
                 if (change.startDrag === true) previousState.draggedTopic = id;
                 else if (previousState.draggedTopic === id) {
                   delete previousState.draggedTopic;
@@ -212,7 +212,7 @@ class Outliner extends React.Component {
 
   componentDidMount() {
     this._fetchData();
-    document.addEventListener("keydown", this.handleKeyAction.bind(this));
+    document.addEventListener('keydown', this.handleKeyAction.bind(this));
   }
 
   componentWillUnmount() {
@@ -291,11 +291,11 @@ class Node extends React.Component {
     };
     let handleInput = (e) => {
       switch (e.key) {
-        case "Enter":
+        case 'Enter':
           commitEdit(e);
           e.stopPropagation();
           break;
-        case "Escape":
+        case 'Escape':
           switchEdit(e);
           e.stopPropagation();
           break;
@@ -315,7 +315,7 @@ class Node extends React.Component {
       for (var topID in this.props.topics) {
         let topic = this.props.topics[topID];
         if ((this.props.id && topic.broader.indexOf(this.props.id) !== -1)
-          || (this.props.id === "root" && topic.broader.length === 0)) {
+          || (this.props.id === 'root' && topic.broader.length === 0)) {
           children.push(
             <Node key={topID} me={topic} id={topID} parent={this.props.id} topics={this.props.topics} activeNode={this.props.activeNode} draggedTopic={this.props.draggedTopic}
               activate={this.props.activate} change={this.props.change} delete={this.props.delete}/>
@@ -323,54 +323,54 @@ class Node extends React.Component {
         }
       }
     }
-    var classes = ["outliner-node"];
+    var classes = ['outliner-node'];
     if (this.props.activeNode === this.props.id) {
-      classes.push("active");
+      classes.push('active');
     }
     if (this.state.isDragged || this.state.isDraggedOver) {
-      classes.push("dragged");
+      classes.push('dragged');
     }
     if (this.props.draggedTopic && this.state.isDraggedInto) {
-      classes.push("dragged-into");
+      classes.push('dragged-into');
     }
     if (this.props.draggedTopic && this.state.isDraggedAfter) {
-      classes.push("dragged-after");
+      classes.push('dragged-after');
     }
     if (this.props.id && children.length) {
-      classes.push("has-children");
+      classes.push('has-children');
     }
-    if (this.state.open) classes.push("open");
-    else classes.push("closed");
+    if (this.state.open) classes.push('open');
+    else classes.push('closed');
     function setEdit(e) {
       if (!this.state.edit) switchEdit(e);
     }
-    var draggable = this.props.id !== "root";
+    var draggable = this.props.id !== 'root';
     function onDragStart(e) {
       e.stopPropagation();
-      e.dataTransfer.effectAllowed = "move";
-      e.dataTransfer.setData("dragContent", this.props.id);
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('dragContent', this.props.id);
       activeMe(e);
       this.setState({isDragged: true});
       this.props.change(this.props.id, {startDrag: true});
     }
     function onDragStop(e) {
       e.stopPropagation();
-      console.log("dragStop " + this.props.me.name);
+      console.log('dragStop ' + this.props.me.name);
       this.setState({isDragged: false});
       this.props.change(this.props.id, {startDrag: false});
     }
 
     let onDrag = (e) => {
-      var draggedTopic = e.dataTransfer.getData("dragContent") || this.props.draggedTopic;
-      if (!draggedTopic) {console.error("no dragged topic"); return}
-      if (!this.props.topics[draggedTopic]) {console.error("unknown dragged topic " + draggedTopic); return}
+      var draggedTopic = e.dataTransfer.getData('dragContent') || this.props.draggedTopic;
+      if (!draggedTopic) {console.error('no dragged topic'); return}
+      if (!this.props.topics[draggedTopic]) {console.error('unknown dragged topic ' + draggedTopic); return}
       let topicTree = new TopicTree(this.props.topics);
 
       if (draggedTopic === this.props.id || topicTree.isAncestor(draggedTopic, this.props.id)) {
         //can't be dropped into itself or its descendant
         return;
       }
-      let key = (e.currentTarget.className === "wrap") ? 'isDraggedInto' : 'isDraggedAfter';
+      let key = (e.currentTarget.className === 'wrap') ? 'isDraggedInto' : 'isDraggedAfter';
       this.setState({[key]: true});
       e.stopPropagation();
       e.preventDefault();
@@ -384,19 +384,19 @@ class Node extends React.Component {
     let onDrop = (e) => {
       this.setState({isDraggedAfter: false, isDraggedInto: false});
       let topicTree = new TopicTree(this.props.topics);
-      var droppedTopic = e.dataTransfer.getData("dragContent");
+      var droppedTopic = e.dataTransfer.getData('dragContent');
       if (droppedTopic === this.props.id || topicTree.isAncestor(droppedTopic, this.props.id)) {
         //can't be dropped into itself or its descendant
         return;
       }
-      let key = (e.currentTarget.className === "wrap") ? 'parent' : 'moveAfter';
+      let key = (e.currentTarget.className === 'wrap') ? 'parent' : 'moveAfter';
       this.props.change(droppedTopic, {[key]: this.props.id});
       e.stopPropagation();
       e.preventDefault();
     };
 
     return (
-      <li className={classes.join(" ")}
+      <li className={classes.join(' ')}
         draggable={draggable} onDragStart={onDragStart.bind(this)} onDragEnd={onDragStop.bind(this)}
       >
         <span className="caret" onClick={switchOpen} onDragOver={onDrag}
