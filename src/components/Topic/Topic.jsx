@@ -73,7 +73,7 @@ function updateSelectionJSON(array, item, selection) {
   });
 
   if (found.length === 0) {
-    selection.data.push({type:'intersection', selection: [item], exclusion: []});
+    selection.data.push({type: 'intersection', selection: [item], exclusion: []});
   } else {
     if(!found[0].hasOwnProperty('selection'))
       found[0].selection = [];

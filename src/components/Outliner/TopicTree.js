@@ -33,12 +33,9 @@ class TopicTree {
   }
 
   getTopic(id) {
-    var topic={id:"root",name:this.rootName};
+    var topic = {id: "root", name: this.rootName};
     if (id && id!=="root") {
-      topic=this.topics[id] || {
-        id:id,
-        broader:[]
-      };
+      topic = this.topics[id] || {id, broader: []};
     }
     return topic;
   }

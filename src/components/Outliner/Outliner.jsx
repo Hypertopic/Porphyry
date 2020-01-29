@@ -22,7 +22,7 @@ class Outliner extends React.Component {
 
   render() {
     let status = this._getStatus();
-    let topic={name:this.state.title};
+    let topic = {name: this.state.title};
     return (
       <div className="App container-fluid">
         <Header conf={conf} />
@@ -84,8 +84,8 @@ class Outliner extends React.Component {
       .catch(_error);
   }
 
-  activeNode(id) {
-    this.setState({activeNode:id});
+  activeNode(activeNode) {
+    this.setState({activeNode});
   }
 
   handleKeyAction(e) {
@@ -141,7 +141,7 @@ class Outliner extends React.Component {
     }
     if (changed) {
       e.preventDefault();
-      this.setState({topics:this.topicTree.topics},() => {
+      this.setState({topics: this.topicTree.topics}, () => {
         if (!isNew) this.applyChange();
       });
     }
@@ -273,21 +273,21 @@ class Node extends React.Component {
   render = () => {
     let change=this.props.change;
     let switchOpen = () => {
-      this.setState({open:!this.state.open});
+      this.setState({open: !this.state.open});
     };
     var isNew=this.props.me.new;
     let switchEdit = (e) => {
       e.stopPropagation();
       this.setState((previousState) => {
         if (previousState.edit && isNew) {
-          change(this.props.id,{delete:true});
+          change(this.props.id,{delete: true});
         }
-        return {edit:!previousState.edit};
+        return {edit: !previousState.edit};
       });
     };
     let commitEdit = (e) => {
       let newName=e.target.value;
-      change(this.props.id,{name:newName,new:false});
+      change(this.props.id, {name: newName, new: false});
       isNew=false;
       switchEdit(e);
     };
@@ -354,14 +354,14 @@ class Node extends React.Component {
       e.dataTransfer.effectAllowed="move";
       e.dataTransfer.setData("dragContent",this.props.id);
       activeMe(e);
-      this.setState({isDragged:true});
-      this.props.change(this.props.id,{startDrag:true});
+      this.setState({isDragged: true});
+      this.props.change(this.props.id,{startDrag: true});
     }
     function onDragStop(e) {
       e.stopPropagation();
       console.log("dragStop "+this.props.me.name);
-      this.setState({isDragged:false});
-      this.props.change(this.props.id,{startDrag:false});
+      this.setState({isDragged: false});
+      this.props.change(this.props.id,{startDrag: false});
     }
 
     let onDrag=(e) => {
@@ -374,12 +374,12 @@ class Node extends React.Component {
         //can't be dropped into itself or its descendant
         return;
       } else if (e.currentTarget.className==="wrap") { //child
-        this.setState({isDraggedInto:true});
+        this.setState({isDraggedInto: true});
         e.stopPropagation();
         e.preventDefault();
         return false;
       } else if (e.currentTarget.className==="caret") {
-        this.setState({isDraggedAfter:true});
+        this.setState({isDraggedAfter: true});
         e.stopPropagation();
         e.preventDefault();
         return false;
@@ -388,23 +388,23 @@ class Node extends React.Component {
       }
     };
     let onDragLeave=(e) => {
-      this.setState({isDraggedAfter:false,isDraggedInto:false});
+      this.setState({isDraggedAfter: false, isDraggedInto: false});
       e.preventDefault();
       e.stopPropagation();
     };
     let onDrop=(e) => {
-      this.setState({isDraggedAfter:false,isDraggedInto:false});
+      this.setState({isDraggedAfter: false, isDraggedInto: false});
       let topicTree=new TopicTree(this.props.topics);
       var droppedTopic=e.dataTransfer.getData("dragContent");
       if (droppedTopic===this.props.id || topicTree.isAncestor(droppedTopic,this.props.id)) {
         //can't be dropped into itself or its descendant
         return;
       } else if (e.currentTarget.className==="wrap") { //child
-        this.props.change(droppedTopic,{parent:this.props.id});
+        this.props.change(droppedTopic,{parent: this.props.id});
         e.stopPropagation();
         e.preventDefault();
       } else if (e.currentTarget.className==="caret") {
-        this.props.change(droppedTopic,{moveAfter:this.props.id});
+        this.props.change(droppedTopic,{moveAfter: this.props.id});
         e.stopPropagation();
         e.preventDefault();
       }
@@ -435,7 +435,7 @@ class Node extends React.Component {
 
   componentDidMount() {
     if (!this.props.me.name || this.props.me.isNew) {
-      this.setState({edit:true});
+      this.setState({edit: true});
     }
   }
 
