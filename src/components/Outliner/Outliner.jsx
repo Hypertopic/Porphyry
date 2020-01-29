@@ -38,8 +38,8 @@ class Outliner extends React.Component {
               <div className="Description">
                 <h2 className="h4 font-weight-bold text-center">{status}</h2>
                 <div className="p-3">
-                  {this.state.title ?
-                    <ul className="Outliner">
+                  {this.state.title
+                    ? <ul className="Outliner">
                       <Node topics={this.state.topics} me={topic} activeNode={this.state.activeNode} draggedTopic={this.state.draggedTopic}
                         change={this.editTopic.bind(this)} activate={this.activeNode.bind(this)} id="root"/>
                     </ul>
@@ -176,8 +176,8 @@ class Outliner extends React.Component {
             switch(key) {
               case "parent":
                 if (this.topicTree.getTopic(change.parent)) {
-                  toApply=this.topicTree.setParent(id,change.parent) &&
-                      this.topicTree.moveAfter(id);
+                  toApply=this.topicTree.setParent(id,change.parent)
+                    && this.topicTree.moveAfter(id);
                 }
                 break;
               case "moveAfter":

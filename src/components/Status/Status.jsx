@@ -21,9 +21,9 @@ class Status extends Component {
         .sort(filter)
         .map(
           t =>
-            (t.topic === null)?
-              "Thème inconnu":
-              <Badge exclusion={t.excluded} id={t.id} name={t.topic.name} _changeItemState={this._changeItemState}/>
+            (t.topic === null)
+              ? "Thème inconnu"
+              : <Badge exclusion={t.excluded} id={t.id} name={t.topic.name} _changeItemState={this._changeItemState}/>
         );
       status.push(topicsHTML.map((e, i) => i < topicsHTML.length - 1 ? [e, <Button topics={topics} selectionJSON={this.props.selectionJSON} _changeUnionState={this._changeUnionState}/>] : [e]).reduce((a, b) => a.concat(b))
       );

@@ -67,8 +67,8 @@ function updateSelectionJSON(array, item, selection) {
     if (allTopics.length === 0 || array[allTopics[0]] === undefined) {
       return false;
     }
-    return (!array[allTopics[0]].hasOwnProperty('broader') && !array[item].hasOwnProperty('broader')) ||
-      (array[allTopics[0]].hasOwnProperty('broader') && array[allTopics[0]].broader[0].id) === (array[item].hasOwnProperty('broader') && array[item].broader[0].id);
+    return (!array[allTopics[0]].hasOwnProperty('broader') && !array[item].hasOwnProperty('broader'))
+      || (array[allTopics[0]].hasOwnProperty('broader') && array[allTopics[0]].broader[0].id) === (array[item].hasOwnProperty('broader') && array[item].broader[0].id);
 
   });
 

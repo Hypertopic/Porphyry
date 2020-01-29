@@ -30,6 +30,11 @@
   "eslintConfig": {
     "extends": ["react-app"],
     "rules": {
+      "operator-linebreak": [2, "before", {"overrides": {
+        "=": "after"
+      }}],
+      "linebreak-style": 2,
+      "no-multiple-empty-lines": [2, {"max": 1}],
       "no-multi-spaces": 2,
       "no-trailing-spaces": 2,
       "no-spaced-func": 2,
