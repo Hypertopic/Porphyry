@@ -20,7 +20,7 @@ class Badge extends Component {
           onClick={this.handleDeletion}>
         </button>
       </span>
-    )
+    );
   }
 
   handleDeletion() {

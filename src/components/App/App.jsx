@@ -15,7 +15,7 @@ class App extends React.Component {
           <Route path="/" component={Portfolio} />
         </Switch>
       </Router>
-    )
+    );
   }
 
 }

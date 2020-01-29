@@ -38,7 +38,7 @@ class TopicTree {
       topic=this.topics[id] || {
         id:id,
         broader:[]
-      }
+      };
     }
     return topic;
   }
@@ -146,7 +146,7 @@ class TopicTree {
     let topic=this.getTopic(id);
     if (topic && parent!==false) {
       if (parent==="root") {
-        topic.broader=[]
+        topic.broader = [];
       } else {
         topic.broader=[parent];
       }
