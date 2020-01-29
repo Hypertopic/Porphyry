@@ -13,7 +13,7 @@ Array.prototype.move = function(from, to) {
 };
 
 class TopicTree {
-  constructor(topics,rootName) {
+  constructor(topics, rootName) {
     rootName=rootName||"anonymous-root";
     this.topics=topics;
     this.rootName=rootName;
@@ -40,15 +40,15 @@ class TopicTree {
     return topic;
   }
 
-  isParent(id1,id2) {
+  isParent(id1, id2) {
     return this.getParent(id2)===id1;
   }
 
-  isSibling(id1,id2) {
+  isSibling(id1, id2) {
     return this.getSiblings(id1).indexOf(id2)!==-1;
   }
 
-  isAncestor(id1,id2) {
+  isAncestor(id1, id2) {
     var parent=id2;
     while (parent!=="root") {
       if (parent===id1) return true;
@@ -130,7 +130,7 @@ class TopicTree {
     if (children.length) {
       return children[0];
     } else {
-      var p=id,n;
+      var p = id, n;
       while (p && p!=="root" && !(n=this.getNextSibling(p))) {
         p=this.getParent(p);
       }
@@ -139,7 +139,7 @@ class TopicTree {
     }
   }
 
-  setParent(id,parent) {
+  setParent(id, parent) {
     let topic=this.getTopic(id);
     if (topic && parent!==false) {
       if (parent==="root") {
@@ -151,7 +151,7 @@ class TopicTree {
     return topic;
   }
 
-  moveAfter(id,previousTopic) {
+  moveAfter(id, previousTopic) {
     if (!id) return;
     var siblings=this.getSiblings(id);
     let pos=siblings.indexOf(id);
@@ -162,7 +162,7 @@ class TopicTree {
         newPos=siblings.indexOf(previousTopic);
         if (newPos===-1) return false;
       }
-      siblings.move(pos,newPos+1);
+      siblings.move(pos, newPos+1);
       this.setOrder(siblings);
       return true;
     } else {
@@ -190,8 +190,8 @@ class TopicTree {
     let topic=this.getTopic(newId);
     this.topics[newId]=topic;
     let children=this.getChildren(parent);
-    this.setParent(newId,parent);
-    children.splice(0,0,newId);
+    this.setParent(newId, parent);
+    children.splice(0, 0, newId);
     this.setOrder(children);
     return topic;
   }
@@ -201,7 +201,7 @@ class TopicTree {
     let siblings=this.getSiblings(sibling);
     let topic=this.newChildren(parent);
     let pos=siblings.indexOf(sibling);
-    siblings.splice(pos+1,0,topic.id);
+    siblings.splice(pos+1, 0, topic.id);
     this.setOrder(siblings);
     return topic;
   }
@@ -213,8 +213,8 @@ class TopicTree {
       let siblings=this.getSiblings(id);
       var pos=siblings.indexOf(id);
       children.forEach(children => {
-        this.setParent(children,parent);
-        siblings.splice(pos++,0,children);
+        this.setParent(children, parent);
+        siblings.splice(pos++, 0, children);
       });
       delete this.topics[id];
       this.setOrder(siblings);
@@ -229,10 +229,10 @@ class TopicTree {
     if (this.getTopic(parent)) {
       let newParent=this.getParent(parent);
       var newSiblings=this.getChildren(newParent);
-      if (this.setParent(id,newParent)) {
+      if (this.setParent(id, newParent)) {
         let pos=newSiblings.indexOf(parent);
         if (pos !== -1) {
-          newSiblings.splice(pos+1,0,id);
+          newSiblings.splice(pos+1, 0, id);
           return this.setOrder(newSiblings);
         }
       }
@@ -246,7 +246,7 @@ class TopicTree {
     if (previousSibling) {
       var newParent=previousSibling;
       var children=this.getChildren(newParent);
-      if (this.setParent(id,newParent)) {
+      if (this.setParent(id, newParent)) {
         children.push(id);
         return this.setOrder(children);
       }

@@ -148,7 +148,7 @@ class Outliner extends React.Component {
     return;
   };
 
-  editTopic(id,change) {
+  editTopic(id, change) {
     if (!this.setState) {
       return;
     }
@@ -176,7 +176,7 @@ class Outliner extends React.Component {
             switch(key) {
               case "parent":
                 if (this.topicTree.getTopic(change.parent)) {
-                  toApply=this.topicTree.setParent(id,change.parent)
+                  toApply = this.topicTree.setParent(id, change.parent)
                     && this.topicTree.moveAfter(id);
                 }
                 break;
@@ -184,9 +184,9 @@ class Outliner extends React.Component {
                 if (this.topicTree.getTopic(change.moveAfter)) {
                   var newParent=this.topicTree.getParent(change.moveAfter);
                   if (newParent) {
-                    toApply=this.topicTree.setParent(id,newParent);
+                    toApply = this.topicTree.setParent(id, newParent);
                   }
-                  toApply=toApply && this.topicTree.moveAfter(id,change.moveAfter);
+                  toApply = toApply && this.topicTree.moveAfter(id, change.moveAfter);
                 }
                 break;
               case "startDrag":
@@ -207,7 +207,7 @@ class Outliner extends React.Component {
         return previousState;
       }
       return {};
-    },function() {
+    }, function() {
       if (toApply) this.applyChange();
     });
   }
@@ -280,7 +280,7 @@ class Node extends React.Component {
       e.stopPropagation();
       this.setState((previousState) => {
         if (previousState.edit && isNew) {
-          change(this.props.id,{delete: true});
+          change(this.props.id, {delete: true});
         }
         return {edit: !previousState.edit};
       });
@@ -352,16 +352,16 @@ class Node extends React.Component {
     function onDragStart(e) {
       e.stopPropagation();
       e.dataTransfer.effectAllowed="move";
-      e.dataTransfer.setData("dragContent",this.props.id);
+      e.dataTransfer.setData("dragContent", this.props.id);
       activeMe(e);
       this.setState({isDragged: true});
-      this.props.change(this.props.id,{startDrag: true});
+      this.props.change(this.props.id, {startDrag: true});
     }
     function onDragStop(e) {
       e.stopPropagation();
       console.log("dragStop "+this.props.me.name);
       this.setState({isDragged: false});
-      this.props.change(this.props.id,{startDrag: false});
+      this.props.change(this.props.id, {startDrag: false});
     }
 
     let onDrag=(e) => {
@@ -370,7 +370,7 @@ class Node extends React.Component {
       if (!this.props.topics[draggedTopic]) {console.error("unknown dragged topic "+draggedTopic); return}
       let topicTree=new TopicTree(this.props.topics);
 
-      if (draggedTopic===this.props.id || topicTree.isAncestor(draggedTopic,this.props.id)) {
+      if (draggedTopic===this.props.id || topicTree.isAncestor(draggedTopic, this.props.id)) {
         //can't be dropped into itself or its descendant
         return;
       } else if (e.currentTarget.className==="wrap") { //child
@@ -396,15 +396,15 @@ class Node extends React.Component {
       this.setState({isDraggedAfter: false, isDraggedInto: false});
       let topicTree=new TopicTree(this.props.topics);
       var droppedTopic=e.dataTransfer.getData("dragContent");
-      if (droppedTopic===this.props.id || topicTree.isAncestor(droppedTopic,this.props.id)) {
+      if (droppedTopic===this.props.id || topicTree.isAncestor(droppedTopic, this.props.id)) {
         //can't be dropped into itself or its descendant
         return;
       } else if (e.currentTarget.className==="wrap") { //child
-        this.props.change(droppedTopic,{parent: this.props.id});
+        this.props.change(droppedTopic, {parent: this.props.id});
         e.stopPropagation();
         e.preventDefault();
       } else if (e.currentTarget.className==="caret") {
-        this.props.change(droppedTopic,{moveAfter: this.props.id});
+        this.props.change(droppedTopic, {moveAfter: this.props.id});
         e.stopPropagation();
         e.preventDefault();
       }
