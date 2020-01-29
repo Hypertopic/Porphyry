@@ -171,7 +171,7 @@ class Outliner extends React.Component {
         }
         if (topic) {
           for (let key in change) {
-            switch(key) {
+            switch (key) {
               case "parent":
                 if (this.topicTree.getTopic(change.parent)) {
                   toApply = this.topicTree.setParent(id, change.parent)
@@ -290,7 +290,7 @@ class Node extends React.Component {
       switchEdit(e);
     };
     let handleInput = (e) => {
-      switch(e.key) {
+      switch (e.key) {
         case "Enter":
           commitEdit(e);
           e.stopPropagation();

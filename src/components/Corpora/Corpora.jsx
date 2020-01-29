@@ -17,7 +17,7 @@ class Corpora extends Component {
     let listIds = this.props.ids.map((item) =>
       <div>{item} <ItemCreator corpus={item} conf={this.props.conf} /></div>
     );
-    return(
+    return (
       <div className="col-md-8 p-4">
         <div className="Subject">
           <h2 className="h4 font-weight-bold text-center">

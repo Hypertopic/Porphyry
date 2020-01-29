@@ -75,22 +75,22 @@ function updateSelectionJSON(array, item, selection) {
   if (found.length === 0) {
     selection.data.push({type: 'intersection', selection: [item], exclusion: []});
   } else {
-    if(!found[0].hasOwnProperty('selection'))
+    if (!found[0].hasOwnProperty('selection'))
       found[0].selection = [];
-    if(!found[0].hasOwnProperty('exclusion'))
+    if (!found[0].hasOwnProperty('exclusion'))
       found[0].exclusion = [];
     switchPlace(found[0], item);
-    if((!Array.isArray(found[0].selection) || !found[0].selection.length) && (!Array.isArray(found[0].exclusion) || !found[0].exclusion.length))
+    if ((!Array.isArray(found[0].selection) || !found[0].selection.length) && (!Array.isArray(found[0].exclusion) || !found[0].exclusion.length))
       selection.data.splice(selection.data.indexOf(found[0]), 1);
   }
 }
 
 function switchPlace(object, item) {
   let index;
-  if((index = object.selection.indexOf(item)) > -1) {
+  if ((index = object.selection.indexOf(item)) > -1) {
     object.selection.splice(index, 1);
     object.exclusion.push(item);
-  } else if((index = object.exclusion.indexOf(item)) > -1) {
+  } else if ((index = object.exclusion.indexOf(item)) > -1) {
     object.exclusion.splice(index, 1);
 
   }

@@ -5,14 +5,14 @@ import { withRouter } from 'react-router-dom';
 
 class Status extends Component {
   render() {
-    if(this.props.selectionJSON.data.length === 0)
+    if (this.props.selectionJSON.data.length === 0)
       return "Tous les items";
 
     let status = [];
 
     this.props.selectionJSON.data.forEach((topics, index) => {
       status.push("(");
-      if(((topics.selection || []).length + (topics.exclusion || []).length) > 1) {
+      if (((topics.selection || []).length + (topics.exclusion || []).length) > 1) {
         status.push();
       }
       let topicsHTML = [
@@ -29,7 +29,7 @@ class Status extends Component {
       );
       status.push(")");
 
-      if(this.props.selectionJSON.data.length > 1 && index < (this.props.selectionJSON.data.length - 1)) {
+      if (this.props.selectionJSON.data.length > 1 && index < (this.props.selectionJSON.data.length - 1)) {
         status.push(<Button topics={this.props.selectionJSON} selectionJSON={this.props.selectionJSON} _changeUnionState={this._changeUnionState}/>);
       }
     });
@@ -46,7 +46,7 @@ class Status extends Component {
   _changeItemState = (item, toDelete) => {
     let found = this.props.selectionJSON.data.find(s => (s.selection || []).includes(item) || (s.exclusion || []).includes(item));
     switchPlace(found, item, toDelete);
-    if((!Array.isArray(found.selection) || !found.selection.length) && (!Array.isArray(found.exclusion) || !found.exclusion.length))
+    if ((!Array.isArray(found.selection) || !found.selection.length) && (!Array.isArray(found.exclusion) || !found.exclusion.length))
       this.props.selectionJSON.data.splice(this.props.selectionJSON.data.indexOf(found), 1);
     this.props.history.push("/?t=" + JSON.stringify(this.props.selectionJSON));
   };
@@ -63,11 +63,11 @@ class Status extends Component {
 
 function switchPlace(object, item, toDelete) {
   let index;
-  if((index = object.selection.indexOf(item)) > -1) {
+  if ((index = object.selection.indexOf(item)) > -1) {
     object.selection.splice(index, 1);
     if (!toDelete)
       object.exclusion.push(item);
-  } else if((index = object.exclusion.indexOf(item)) > -1) {
+  } else if ((index = object.exclusion.indexOf(item)) > -1) {
     object.exclusion.splice(index, 1);
     if (!toDelete)
       object.selection.push(item);
