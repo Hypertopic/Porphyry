@@ -39,7 +39,11 @@ class Topic extends Component {
     const topic = this.props.topics[this.props.id];
     return (topic.narrower||[]).sort(by('name')).map(t =>
       <Topic key={t.id} id={t.id} name={t.name} topics={this.props.topics}
-             selection={this.props.selection} exclusion={this.props.exclusion} selectionJSON={this.props.selectionJSON} topicsItems={this.props.topicsItems} history={this.props.history}/>
+        selection={this.props.selection} exclusion={this.props.exclusion}
+        selectionJSON={this.props.selectionJSON}
+        topicsItems={this.props.topicsItems}
+        history={this.props.history}
+      />
     );
   }
 

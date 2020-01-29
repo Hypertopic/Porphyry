@@ -320,10 +320,10 @@ class Node extends React.Component {
         let topic=this.props.topics[topID];
         if ((this.props.id && topic.broader.indexOf(this.props.id)!==-1)
           || (this.props.id==="root" && topic.broader.length===0)) {
-            children.push(
-              <Node key={topID} me={topic} id={topID} parent={this.props.id} topics={this.props.topics} activeNode={this.props.activeNode} draggedTopic={this.props.draggedTopic}
-                activate={this.props.activate} change={this.props.change} delete={this.props.delete}/>
-            );
+          children.push(
+            <Node key={topID} me={topic} id={topID} parent={this.props.id} topics={this.props.topics} activeNode={this.props.activeNode} draggedTopic={this.props.draggedTopic}
+              activate={this.props.activate} change={this.props.change} delete={this.props.delete}/>
+          );
         }
       }
     }
@@ -413,23 +413,24 @@ class Node extends React.Component {
     return (
       <li className={classes.join(" ")}
         draggable={draggable} onDragStart={onDragStart.bind(this)} onDragEnd={onDragStop.bind(this)}
-        >
+      >
         <span className="caret" onClick={switchOpen} onDragOver={onDrag}
-                onDragLeave={onDragLeave}
-                onDrop={onDrop}> </span>
+          onDragLeave={onDragLeave}
+          onDrop={onDrop}> </span>
         <span className="wrap"
-                onDragOver={onDrag} onDrop={onDrop}
-                onDragLeave={onDragLeave}
-                onClick={activeMe} onDoubleClick={setEdit.bind(this)}>
+          onDragOver={onDrag} onDrop={onDrop}
+          onDragLeave={onDragLeave}
+          onClick={activeMe} onDoubleClick={setEdit.bind(this)}>
           {thisNode}
           <span className="id">{this.props.id}</span>
         </span>
         <ul>
-        <li className="first-handle"/>
-        {children}
+          <li className="first-handle" />
+          {children}
         </ul>
         <div className="after-handle"/>
-      </li>);
+      </li>
+    );
   };
 
   componentDidMount() {

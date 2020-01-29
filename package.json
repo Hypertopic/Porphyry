@@ -21,11 +21,18 @@
     "serve": "^11.0.2"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "env EXTEND_ESLINT=true react-scripts start",
     "build": "react-scripts build",
     "preprod": "serve -s build -p 3000 &",
     "test": "cucumber --format summary --retry 1",
     "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": ["react-app"],
+    "rules": {
+      "indent": [2, 2, {"SwitchCase": 1}],
+      "no-mixed-spaces-and-tabs": 2
+    }
   },
   "browserslist": {
     "production": [

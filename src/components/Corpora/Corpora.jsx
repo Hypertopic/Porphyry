@@ -34,8 +34,7 @@ class Corpora extends Component {
 
   _getItems() {
     return this.props.items.map(item =>
-        <Item key={item.id} item={item}
-          id={item.corpus+'/'+item.id} />
+      <Item key={item.id} item={item} id={item.corpus+'/'+item.id} />
     );
   }
 
@@ -43,12 +42,12 @@ class Corpora extends Component {
 
 function Item(props) {
   switch (listView.mode) {
-  case 'article':
-    return Article(props.item);
-  case 'picture':
-    return Picture(props.item);
-  default:
-    return Picture(props.item);
+    case 'article':
+      return Article(props.item);
+    case 'picture':
+      return Picture(props.item);
+    default:
+      return Picture(props.item);
   }
 }
 

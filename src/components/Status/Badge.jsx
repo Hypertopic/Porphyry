@@ -9,17 +9,17 @@ class Badge extends Component {
 
   render() {
     return (
-      <span
-        className={"badge badge-pill badge-light TopicTag " + (this.props.exclusion? "text-danger": "")}>
-                {this.props.name}
-        <button className= {"badge badge-pill badge-dark oi ml-1 border-0 " + (this.props.exclusion? "oi-plus":"oi-minus")}
-                title={this.props.exclusion? "Inclure":"Exclure"}
-                onClick={this.handleChangeState}> </button>
-                <button className="badge badge-pill badge-dark oi oi-x border-0"
-                        title="Déselectionner"
-                        onClick={this.handleDeletion}>
-                </button>
-            </span>
+      <span className={"badge badge-pill badge-light TopicTag " + (this.props.exclusion? "text-danger": "")}>
+        {this.props.name}
+        <button className={"badge badge-pill badge-dark oi ml-1 border-0 " + (this.props.exclusion? "oi-plus":"oi-minus")}
+          title={this.props.exclusion? "Inclure":"Exclure"}
+          onClick={this.handleChangeState}
+        > </button>
+        <button className="badge badge-pill badge-dark oi oi-x border-0"
+          title="Déselectionner"
+          onClick={this.handleDeletion}>
+        </button>
+      </span>
     )
   }
 
