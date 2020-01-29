@@ -34,7 +34,7 @@ class Corpora extends Component {
 
   _getItems() {
     return this.props.items.map(item =>
-      <Item key={item.id} item={item} id={item.corpus+'/'+item.id} />
+      <Item key={item.id} item={item} id={item.corpus + '/' + item.id} />
     );
   }
 

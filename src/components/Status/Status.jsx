@@ -51,7 +51,7 @@ class Status extends Component {
     this.props.history.push("/?t=" + JSON.stringify(this.props.selectionJSON));
   };
   _changeUnionState = (topic) => {
-    if (topic.type=== "intersection") {
+    if (topic.type === "intersection") {
       topic.type = "union";
     }
     else {
@@ -67,8 +67,7 @@ function switchPlace(object, item, toDelete) {
     object.selection.splice(index, 1);
     if (!toDelete)
       object.exclusion.push(item);
-  }
-  else if((index =object.exclusion.indexOf(item)) > -1) {
+  } else if((index = object.exclusion.indexOf(item)) > -1) {
     object.exclusion.splice(index, 1);
     if (!toDelete)
       object.selection.push(item);
@@ -84,7 +83,7 @@ function filter(first, second) {
   if (first.topic !== null && second.topic === null)
     return -1;
 
-  return ((first.topic.name[0] > second.topic.name[0])?1:-1);
+  return ((first.topic.name[0] > second.topic.name[0]) ? 1 : -1);
 }
 
 export default withRouter(Status);

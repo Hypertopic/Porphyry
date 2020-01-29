@@ -25,7 +25,7 @@ class Viewpoint extends Component {
   }
 
   _getTopics() {
-    return (this.props.viewpoint.upper||[]).sort(by('name')).map((t) =>
+    return (this.props.viewpoint.upper || []).sort(by('name')).map((t) =>
       <Topic key={t.id} id={t.id} name={t.name} topics={this.props.viewpoint}
         selection={this.props.selection} selectionJSON={this.props.selectionJSON}
         exclusion={ this.props.exclusion} topicsItems={this.props.topicsItems}

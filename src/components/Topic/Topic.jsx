@@ -7,9 +7,9 @@ class Topic extends Component {
     super();
     this.handleCollapse = this.handleCollapse.bind(this);
     this.handleClick = this.handleClick.bind(this);
-    let hasSubtopics = (props.topics[props.id].narrower||[]).length;
+    let hasSubtopics = (props.topics[props.id].narrower || []).length;
     this.state = {
-      fold: hasSubtopics? 'Closed' : ''
+      fold: hasSubtopics ? 'Closed' : ''
     };
   }
 
@@ -17,7 +17,7 @@ class Topic extends Component {
     let subtopics = this._getSubtopics();
     let isSelected = this.props.selection.includes(this.props.id);
     let isExcluded = this.props.exclusion.includes(this.props.id);
-    let topicClasses = (isSelected? 'Selected' : '') + " " + (isExcluded? 'Excluded' : '');
+    let topicClasses = (isSelected ? 'Selected' : '') + " " + (isExcluded ? 'Excluded' : '');
     let topic = 'Topic ' + this.state.fold;
     let items = this.props.topicsItems.get(this.props.id);
     let count = (items) ? items.size : '';
@@ -37,7 +37,7 @@ class Topic extends Component {
 
   _getSubtopics() {
     const topic = this.props.topics[this.props.id];
-    return (topic.narrower||[]).sort(by('name')).map(t =>
+    return (topic.narrower || []).sort(by('name')).map(t =>
       <Topic key={t.id} id={t.id} name={t.name} topics={this.props.topics}
         selection={this.props.selection} exclusion={this.props.exclusion}
         selectionJSON={this.props.selectionJSON}
@@ -90,8 +90,7 @@ function switchPlace(object, item) {
   if((index = object.selection.indexOf(item)) > -1) {
     object.selection.splice(index, 1);
     object.exclusion.push(item);
-  }
-  else if((index =object.exclusion.indexOf(item)) > -1) {
+  } else if((index = object.exclusion.indexOf(item)) > -1) {
     object.exclusion.splice(index, 1);
 
   }

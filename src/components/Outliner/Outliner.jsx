@@ -16,8 +16,8 @@ class Outliner extends React.Component {
   constructor() {
     super();
     this.state = { };
-    this.changing=false;
-    this.topicTree=new TopicTree({});
+    this.changing = false;
+    this.topicTree = new TopicTree({});
   }
 
   render() {
@@ -89,31 +89,31 @@ class Outliner extends React.Component {
   }
 
   handleKeyAction(e) {
-    var changed=false;
-    var isNew=false;
+    var changed = false;
+    var isNew = false;
     if (this.state.activeNode) {
-      var topic=this.topicTree.getTopic(this.state.activeNode);
-      isNew=topic.new || false;
+      var topic = this.topicTree.getTopic(this.state.activeNode);
+      isNew = topic.new || false;
     }
     switch (e.key) {
       case "Enter":
-        topic=this.topicTree.newSibling(this.state.activeNode);
+        topic = this.topicTree.newSibling(this.state.activeNode);
         this.activeNode(topic.id);
-        topic.new=true;
+        topic.new = true;
         e.preventDefault();
         this.setState(function(previousState) {
           // previousState.temptopics=previousState.temptopics || [];
           // previousState.temptopics.push(topic.id);
-          previousState.topics=this.topicTree.topics;
+          previousState.topics = this.topicTree.topics;
           return previousState;
         });
         return;
       case "Tab":
         if (!e.altKey && !e.ctrlKey) {
           if (e.shiftKey) {
-            changed=this.topicTree.promote(this.state.activeNode);
+            changed = this.topicTree.promote(this.state.activeNode);
           } else {
-            changed=this.topicTree.demote(this.state.activeNode);
+            changed = this.topicTree.demote(this.state.activeNode);
           }
         }
         break;
@@ -130,9 +130,9 @@ class Outliner extends React.Component {
       case 'Delete':
       case 'Backspace':
         if (!e.altKey && !e.ctrlKey && !e.shiftKey) {
-          if (e.target.tagName==="BODY" || e.target.value==='') {
-            let previousTopic=this.topicTree.getPreviousTopic(this.state.activeNode);
-            changed=this.topicTree.deleteTopic(this.state.activeNode);
+          if (e.target.tagName === "BODY" || e.target.value === '') {
+            let previousTopic = this.topicTree.getPreviousTopic(this.state.activeNode);
+            changed = this.topicTree.deleteTopic(this.state.activeNode);
             if (changed) this.activeNode(this.topicTree.getNextTopic(previousTopic));
           }
         }
@@ -152,23 +152,23 @@ class Outliner extends React.Component {
     if (!this.setState) {
       return;
     }
-    var toApply=false;
+    var toApply = false;
     return this.setState(previousState => {
-      let topics=previousState.topics;
+      let topics = previousState.topics;
       if (topics) {
         let topic;
-        if (id==="root") {
-          if (change.name && change.name!==previousState.title) {
-            toApply=true;
+        if (id === "root") {
+          if (change.name && change.name !== previousState.title) {
+            toApply = true;
             this.topicTree.setRootName(change.name);
             return {title: change.name};
           }
         } else if (topics[id]) {
           if (change.delete) {
-            if (!topics[id].new) toApply=true;
+            if (!topics[id].new) toApply = true;
             delete topics[id];
           } else {
-            topic=topics[id];
+            topic = topics[id];
           }
         }
         if (topic) {
@@ -182,7 +182,7 @@ class Outliner extends React.Component {
                 break;
               case "moveAfter":
                 if (this.topicTree.getTopic(change.moveAfter)) {
-                  var newParent=this.topicTree.getParent(change.moveAfter);
+                  var newParent = this.topicTree.getParent(change.moveAfter);
                   if (newParent) {
                     toApply = this.topicTree.setParent(id, newParent);
                   }
@@ -190,15 +190,15 @@ class Outliner extends React.Component {
                 }
                 break;
               case "startDrag":
-                if (change.startDrag===true) previousState.draggedTopic=id;
-                else if (previousState.draggedTopic===id) {
+                if (change.startDrag === true) previousState.draggedTopic = id;
+                else if (previousState.draggedTopic === id) {
                   delete previousState.draggedTopic;
                 }
                 break;
               default:
-                if (topic[key]!==change[key]) {
-                  topic[key]=change[key];
-                  if (!topics[id].new) toApply=true;
+                if (topic[key] !== change[key]) {
+                  topic[key] = change[key];
+                  if (!topics[id].new) toApply = true;
                 }
             }
           }
@@ -224,12 +224,12 @@ class Outliner extends React.Component {
   async applyChange() {
     if (!this.changing) {
       let db = new Hypertopic((await conf).services);
-      this.changing=db.get({ _id: this.props.match.params.id })
+      this.changing = db.get({ _id: this.props.match.params.id })
         .then(data => {
-          data.topics ={};
+          data.topics = {};
           for (var id in this.state.topics) {
             if (!this.state.topics[id].new) {
-              data.topics[id]=this.state.topics[id];
+              data.topics[id] = this.state.topics[id];
             }
           }
           data.viewpoint_name = this.state.title;
@@ -237,11 +237,11 @@ class Outliner extends React.Component {
         })
         .then(db.post)
         .then(() => {
-          this.changing=false;
+          this.changing = false;
         })
         .catch(_ => {
           _error(_);
-          this.changing=false;
+          this.changing = false;
           this._fetchData();
         });
     }
@@ -271,11 +271,11 @@ class Node extends React.Component {
   }
 
   render = () => {
-    let change=this.props.change;
+    let change = this.props.change;
     let switchOpen = () => {
       this.setState({open: !this.state.open});
     };
-    var isNew=this.props.me.new;
+    var isNew = this.props.me.new;
     let switchEdit = (e) => {
       e.stopPropagation();
       this.setState((previousState) => {
@@ -286,9 +286,9 @@ class Node extends React.Component {
       });
     };
     let commitEdit = (e) => {
-      let newName=e.target.value;
+      let newName = e.target.value;
       change(this.props.id, {name: newName, new: false});
-      isNew=false;
+      isNew = false;
       switchEdit(e);
     };
     let handleInput = (e) => {
@@ -308,18 +308,16 @@ class Node extends React.Component {
       e.stopPropagation();
       this.props.activate(this.props.id);
     };
-    let thisNode;
-    if (this.state.edit) {
-      thisNode=<input autoFocus type='text' defaultValue={this.props.me.name} onKeyPress={handleInput} onKeyDown={handleInput} onBlur={commitEdit}/>;
-    } else {
-      thisNode=<span className="node" onDoubleClick={switchEdit}>{this.props.me.name}</span>;
-    }
-    let children=[];
+    let thisNode = (this.state.edit)
+      ? <input autoFocus type='text' defaultValue={this.props.me.name} onKeyPress={handleInput} onKeyDown={handleInput} onBlur={commitEdit}/>
+      : <span className="node" onDoubleClick={switchEdit}>{this.props.me.name}</span>
+    ;
+    let children = [];
     if (this.props.topics) {
       for (var topID in this.props.topics) {
-        let topic=this.props.topics[topID];
-        if ((this.props.id && topic.broader.indexOf(this.props.id)!==-1)
-          || (this.props.id==="root" && topic.broader.length===0)) {
+        let topic = this.props.topics[topID];
+        if ((this.props.id && topic.broader.indexOf(this.props.id) !== -1)
+          || (this.props.id === "root" && topic.broader.length === 0)) {
           children.push(
             <Node key={topID} me={topic} id={topID} parent={this.props.id} topics={this.props.topics} activeNode={this.props.activeNode} draggedTopic={this.props.draggedTopic}
               activate={this.props.activate} change={this.props.change} delete={this.props.delete}/>
@@ -327,8 +325,8 @@ class Node extends React.Component {
         }
       }
     }
-    var classes=["outliner-node"];
-    if (this.props.activeNode===this.props.id) {
+    var classes = ["outliner-node"];
+    if (this.props.activeNode === this.props.id) {
       classes.push("active");
     }
     if (this.state.isDragged || this.state.isDraggedOver) {
@@ -348,10 +346,10 @@ class Node extends React.Component {
     function setEdit(e) {
       if (!this.state.edit) switchEdit(e);
     }
-    var draggable=this.props.id!=="root";
+    var draggable = this.props.id !== "root";
     function onDragStart(e) {
       e.stopPropagation();
-      e.dataTransfer.effectAllowed="move";
+      e.dataTransfer.effectAllowed = "move";
       e.dataTransfer.setData("dragContent", this.props.id);
       activeMe(e);
       this.setState({isDragged: true});
@@ -359,26 +357,26 @@ class Node extends React.Component {
     }
     function onDragStop(e) {
       e.stopPropagation();
-      console.log("dragStop "+this.props.me.name);
+      console.log("dragStop " + this.props.me.name);
       this.setState({isDragged: false});
       this.props.change(this.props.id, {startDrag: false});
     }
 
-    let onDrag=(e) => {
-      var draggedTopic=e.dataTransfer.getData("dragContent") || this.props.draggedTopic;
+    let onDrag = (e) => {
+      var draggedTopic = e.dataTransfer.getData("dragContent") || this.props.draggedTopic;
       if (!draggedTopic) {console.error("no dragged topic"); return}
-      if (!this.props.topics[draggedTopic]) {console.error("unknown dragged topic "+draggedTopic); return}
-      let topicTree=new TopicTree(this.props.topics);
+      if (!this.props.topics[draggedTopic]) {console.error("unknown dragged topic " + draggedTopic); return}
+      let topicTree = new TopicTree(this.props.topics);
 
-      if (draggedTopic===this.props.id || topicTree.isAncestor(draggedTopic, this.props.id)) {
+      if (draggedTopic === this.props.id || topicTree.isAncestor(draggedTopic, this.props.id)) {
         //can't be dropped into itself or its descendant
         return;
-      } else if (e.currentTarget.className==="wrap") { //child
+      } else if (e.currentTarget.className === "wrap") { //child
         this.setState({isDraggedInto: true});
         e.stopPropagation();
         e.preventDefault();
         return false;
-      } else if (e.currentTarget.className==="caret") {
+      } else if (e.currentTarget.className === "caret") {
         this.setState({isDraggedAfter: true});
         e.stopPropagation();
         e.preventDefault();
@@ -387,23 +385,23 @@ class Node extends React.Component {
 
       }
     };
-    let onDragLeave=(e) => {
+    let onDragLeave = (e) => {
       this.setState({isDraggedAfter: false, isDraggedInto: false});
       e.preventDefault();
       e.stopPropagation();
     };
-    let onDrop=(e) => {
+    let onDrop = (e) => {
       this.setState({isDraggedAfter: false, isDraggedInto: false});
-      let topicTree=new TopicTree(this.props.topics);
-      var droppedTopic=e.dataTransfer.getData("dragContent");
-      if (droppedTopic===this.props.id || topicTree.isAncestor(droppedTopic, this.props.id)) {
+      let topicTree = new TopicTree(this.props.topics);
+      var droppedTopic = e.dataTransfer.getData("dragContent");
+      if (droppedTopic === this.props.id || topicTree.isAncestor(droppedTopic, this.props.id)) {
         //can't be dropped into itself or its descendant
         return;
-      } else if (e.currentTarget.className==="wrap") { //child
+      } else if (e.currentTarget.className === "wrap") { //child
         this.props.change(droppedTopic, {parent: this.props.id});
         e.stopPropagation();
         e.preventDefault();
-      } else if (e.currentTarget.className==="caret") {
+      } else if (e.currentTarget.className === "caret") {
         this.props.change(droppedTopic, {moveAfter: this.props.id});
         e.stopPropagation();
         e.preventDefault();
