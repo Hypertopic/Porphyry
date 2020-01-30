@@ -51,12 +51,7 @@ class Status extends Component {
     this.props.history.push('/?t=' + JSON.stringify(this.props.selectionJSON));
   };
   _changeUnionState = (topic) => {
-    if (topic.type === 'intersection') {
-      topic.type = 'union';
-    }
-    else {
-      topic.type = 'intersection';
-    }
+    topic.type = (topic.type === 'intersection') ? 'union' : 'intersection';
     this.props.history.push('/?t=' + JSON.stringify(this.props.selectionJSON));
   };
 }

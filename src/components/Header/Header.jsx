@@ -6,7 +6,7 @@ class Header extends Component {
   constructor(props) {
     super(props);
     this.state = {user: ''};
-    props.conf.then(x => {this.setState({user: x.user})});
+    props.conf.then(x => this.setState({user: x.user}));
   }
 
   render() {

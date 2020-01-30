@@ -92,10 +92,9 @@ function switchPlace(object, item) {
     object.exclusion.push(item);
   } else if ((index = object.exclusion.indexOf(item)) > -1) {
     object.exclusion.splice(index, 1);
-
-  }
-  else
+  } else {
     object.selection.push(item);
+  }
 }
 
 function fold(x) {

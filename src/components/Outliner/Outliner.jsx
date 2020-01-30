@@ -362,8 +362,14 @@ class Node extends React.Component {
 
     let onDrag = (e) => {
       var draggedTopic = e.dataTransfer.getData('dragContent') || this.props.draggedTopic;
-      if (!draggedTopic) {console.error('no dragged topic'); return}
-      if (!this.props.topics[draggedTopic]) {console.error('unknown dragged topic ' + draggedTopic); return}
+      if (!draggedTopic) {
+        console.error('no dragged topic');
+        return;
+      }
+      if (!this.props.topics[draggedTopic]) {
+        console.error('unknown dragged topic ' + draggedTopic);
+        return;
+      }
       let topicTree = new TopicTree(this.props.topics);
 
       if (draggedTopic === this.props.id || topicTree.isAncestor(draggedTopic, this.props.id)) {
