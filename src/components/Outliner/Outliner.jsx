@@ -307,7 +307,7 @@ class Node extends React.Component {
       this.props.activate(this.props.id);
     };
     let thisNode = (this.state.edit)
-      ? <input autoFocus type='text' defaultValue={this.props.me.name} onKeyPress={handleInput} onKeyDown={handleInput} onBlur={commitEdit}/>
+      ? <input autoFocus type="text" defaultValue={this.props.me.name} onKeyPress={handleInput} onKeyDown={handleInput} onBlur={commitEdit}/>
       : <span className="node" onDoubleClick={switchEdit}>{this.props.me.name}</span>
     ;
     let children = [];
