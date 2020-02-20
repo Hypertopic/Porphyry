@@ -19,6 +19,8 @@ Home page: <https://github.com/Hypertopic/Porphyry>
   docker run -p 3000:80 benel/porphyry
   ```
 
+  Porphyry is now available at <http://localhost:3000/>
+
 * With data stored on your own Argos server
 
   1. [Install and start Argos server](https://github.com/Hypertopic/Argos/blob/v4/README.md)
@@ -30,7 +32,6 @@ Home page: <https://github.com/Hypertopic/Porphyry>
         "corpus_name": "My own items",
         "users": ["MY_PORTFOLIO"]
       }
-
       ```
 
   3. Create the `_users` database in [CouchDB administration interface](http://localhost:5984/_utils/#/_all_dbs) and then a user (change values as needed):
@@ -45,9 +46,12 @@ Home page: <https://github.com/Hypertopic/Porphyry>
       }
       ```
 
-  4. Launch Porphyry with appropriate settings:
+  4. Create an administrator in [CouchDB administration interface](http://localhost:5984/_utils/#createAdmin/nonode@nohost)
+
+  5. Launch Porphyry with appropriate settings:
 
   ```
   docker run -p 3000:80 -v "$(pwd)"/public/config_bare.yml:/usr/share/nginx/html/config.yml benel/porphyry
   ```
 
+  Porphyry is now available at <http://localhost:3000/>
