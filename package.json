@@ -30,6 +30,7 @@
   "eslintConfig": {
     "extends": ["react-app"],
     "rules": {
+      "object-shorthand": 2,
       "brace-style": 2,
       "jsx-quotes": 2,
       "quotes": [2, "single"],
