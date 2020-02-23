@@ -51,7 +51,7 @@ Home page: <https://github.com/Hypertopic/Porphyry>
   5. Launch Porphyry with appropriate settings:
 
   ```
-  docker run -p 3000:80 -v "$(pwd)"/public/config_bare.yml:/usr/share/nginx/html/config.yml benel/porphyry
+  docker run -p 3000:80 -v "$(pwd)"/conf/porphyry.yml:/usr/share/nginx/html/config.yml benel/porphyry
   ```
 
   Porphyry is now available at <http://localhost:3000/>
