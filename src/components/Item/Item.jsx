@@ -129,7 +129,7 @@ class Item extends Component {
       this.setState({item});
     }).then(() => hypertopic.getView(`/user/${SETTINGS.user}`))
       .then((data) => {
-      let user = data[this.user] || {};
+      let user = data[SETTINGS.user] || {};
       if (user.viewpoint) {
         let topic=this.state.item.topic;
         for (let vp of user.viewpoint) {
