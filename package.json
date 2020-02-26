@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "bootstrap": "^4.4.1",
+    "disqus-react": "^1.0.7",
     "hypertopic": "^3.1.7",
     "js-tree": "^2.0.2",
     "json-groupby": "^1.0.2",

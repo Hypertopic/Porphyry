@@ -55,3 +55,10 @@ Home page: <https://github.com/Hypertopic/Porphyry>
   ```
 
   Porphyry is now available at <http://localhost:3000/>
+
+* Enable comments
+
+  1. [Sign up to Disqus](https://disqus.com/profile/signup/),
+  2. Choose `Install Disqus on my site`,
+  3. Set your Website data and **create site**. Remember its `short name`.
+  4. Edit `conf/porphyry.yml` and paste the short name as the value of `disqus` setting.

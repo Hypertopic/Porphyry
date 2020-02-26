@@ -7,6 +7,7 @@ import conf from '../../config/config.js';
 import Header from '../Header/Header.jsx';
 import Authenticated from '../Authenticated/Authenticated.jsx';
 import TopicTree from '../Outliner/TopicTree.js';
+import { DiscussionEmbed } from 'disqus-react';
 
 import '../../styles/App.css';
 
@@ -45,6 +46,7 @@ class Item extends Component {
     let name = getString(this.state.item[itemView.name]);
     let attributes = this._getAttributes();
     let viewpoints = this._getViewpoints();
+    let comments = this._getComments();
     return (
       <div className="App container-fluid">
         <Header conf={conf} />
@@ -75,11 +77,26 @@ class Item extends Component {
                 <h2 className="h4 font-weight-bold text-center">{name}</h2>
                 <ShowItem item={this.state.item} />
               </div>
+              {comments}
             </div>
           </div>
         </div>
       </div>
     );
+  }
+
+  _getComments() {
+    let shortName = this.state.disqus;
+    if (shortName) {
+      let conf = {
+        title: this.state.item.name,
+        identifier: this.state.item.id
+      };
+      return (
+        <DiscussionEmbed config={conf} shortname={shortName} />
+      );
+    }
+    return null;
   }
 
   _getAttributes() {
@@ -117,6 +134,7 @@ class Item extends Component {
     let uri = this.props.match.url;
     let params = this.props.match.params;
     let SETTINGS = await conf;
+    this.setState({disqus: SETTINGS.disqus});
     let hypertopic = new Hypertopic(SETTINGS.services);
     return hypertopic.getView(uri).then((data) => {
       let item = data[params.corpus][params.item];
