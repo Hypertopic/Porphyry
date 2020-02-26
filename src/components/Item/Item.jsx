@@ -99,24 +99,7 @@ class Item extends Component {
   }
 
   componentDidMount() {
-    let start=new Date().getTime();
-    let self=this;
-    this._fetchItem().then(() => {
-      let end=new Date().getTime();
-      let elapsedTime=end-start;
-
-      let intervalTime=Math.max(10000,elapsedTime*5);
-      self._timer = setInterval(
-        () => {
-          self._fetchItem();
-        },
-        intervalTime
-      );
-    });
-  }
-
-  componentWillUnmount() {
-    clearInterval(this._timer);
+    this._fetchItem();
   }
 
   async _getOrCreateItem() {
