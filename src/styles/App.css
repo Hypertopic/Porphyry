@@ -103,7 +103,7 @@ h1 a, h1 a:hover {
   list-style-type: none;
 }
 
-.Topic a, a.Topic, .ArticleTitle a {
+.Topic a, a.Topic {
   color: black;
 }
 
@@ -149,6 +149,12 @@ h1 a, h1 a:hover {
 
 .Item {
   margin: 5px;
+  color: black;
+  text-align: center;
+}
+
+.Item a {
+  text-decoration: none;
   color: black;
 }
 
@@ -209,7 +215,7 @@ div:hover > .EditButton {
 }
 
 .TopicPath > .Topic:hover, .TopicPath > .Topic:last-of-type:hover,
-.Topics .Topic > a:hover, .ArticleTitle:hover a {
+.Topics .Topic > a:hover {
   opacity: 1;
 }
 
@@ -217,7 +223,7 @@ div:hover > .EditButton {
   padding: 0 5px;
 }
 
-.TopicPath > .Topic:last-of-type, .ArticleTitle a {
+.TopicPath > .Topic:last-of-type {
   opacity: 0.8;
   font-weight: bold;
 }
@@ -380,19 +386,6 @@ ul.Outliner,
 
 .wrap:hover button{display: inherit;margin-right: 10px;z-index: 999}
 .wrap button{display:none;}
-
-.Article {
-  border-bottom: 1px solid #DDD;
-  color: black;
-  display: block;
-  margin: 1em;
-  text-align: left;
-  width: 100%;
-}
-
-.ArticleTitle {
-  font-weight: bold;
-}
 
 .wrap {
   min-height: 34px;

@@ -2,12 +2,6 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import ItemCreator from '../Item/ItemCreator.jsx';
 
-let listView = {
-  mode: 'picture',
-  name: 'name',
-  image: 'thumbnail'
-};
-
 class Corpora extends Component {
 
   render() {
@@ -34,55 +28,29 @@ class Corpora extends Component {
 
   _getItems() {
     return this.props.items.map(item =>
-      <Item key={item.id} item={item} id={item.corpus + '/' + item.id} />
+      <Item key={item.id} item={item} />
     );
   }
 
 }
 
 function Item(props) {
-  switch (listView.mode) {
-    case 'article':
-      return Article(props.item);
-    case 'picture':
-      return Picture(props.item);
-    default:
-      return Picture(props.item);
-  }
-}
-
-function getString(obj) {
-  if (Array.isArray(obj)) {
-    return obj.map(val => getString(val)).join(', ');
-  }
-  return String(obj);
-}
-
-function Article(item) {
-  let propList = (listView.props || []).map(key => {
-    return <li>{key} : <strong>{getString(item[key])}</strong></li>;
-  });
-
-  let uri = `/item/${item.corpus}/${item.id}`;
-  let name = getString(item[listView.name]);
-  return (
-    <div className="Article">
-      <div className="ArticleTitle"><Link to={uri}>{name}</Link></div>
-      <ul>{propList}</ul>
+  let uri = `/item/${props.item.corpus}/${props.item.id}`;
+  let thumbnail = props.item.thumbnail;
+  let name = [props.item.name].join(', '); //Name can be an array
+  if (thumbnail) return (
+    <div className="Item">
+      <Link to={uri}>
+        <img src={thumbnail} alt={name}/>
+      </Link>
+      <div className="text-center">{name}</div>
     </div>
   );
-}
-
-function Picture(item) {
-  let uri = `/item/${item.corpus}/${item.id}`;
-  let img = getString(item[listView.image]);
-  let name = getString(item[listView.name]);
   return (
     <div className="Item">
       <Link to={uri}>
-        <img src={img} alt={name}/>
+        {name}
       </Link>
-      <div className="text-center">{name}</div>
     </div>
   );
 }

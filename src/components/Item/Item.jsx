@@ -11,13 +11,7 @@ import { DiscussionEmbed } from 'disqus-react';
 
 import '../../styles/App.css';
 
-let itemView = {
-  mode: 'picture',
-  name: 'name',
-  image: 'resource',
-  linkTo: 'resource',
-  hiddenProps: ['topic', 'resource', 'thumbnail']
-};
+const HIDDEN = ['topic', 'resource', 'thumbnail'];
 
 function getString(obj) {
   if (Array.isArray(obj)) {
@@ -43,7 +37,7 @@ class Item extends Component {
   }
 
   render() {
-    let name = getString(this.state.item[itemView.name]);
+    let name = getString(this.state.item.name);
     let attributes = this._getAttributes();
     let viewpoints = this._getViewpoints();
     let comments = this._getComments();
@@ -75,7 +69,7 @@ class Item extends Component {
             <div className="col-md-8 p-4">
               <div className="Subject">
                 <h2 className="h4 font-weight-bold text-center">{name}</h2>
-                <ShowItem item={this.state.item} />
+                <Resource href={this.state.item.resource} />
               </div>
               {comments}
             </div>
@@ -101,7 +95,7 @@ class Item extends Component {
 
   _getAttributes() {
     return Object.entries(this.state.item)
-      .filter(x => !itemView.hiddenProps.includes(x[0]))
+      .filter(x => !HIDDEN.includes(x[0]))
       .map(x => (
         <Attribute  key={x[0]} myKey={x[0]} value={x[1][0]}
           setAttribute={this._setAttribute.bind(this)} deleteAttribute={this._deleteAttribute}/>
@@ -163,7 +157,7 @@ class Item extends Component {
 
     function isValidValue(attribute) {
       let [key,value]=attribute.split(":").map(t => t.trim());
-      return key && value && !itemView.hiddenProps.includes(key);
+      return key && value && !HIDDEN.includes(key);
     }
 
     let attributeInputChange=(e) => {
@@ -412,39 +406,14 @@ class Attribute extends Component {
     }
 }
 
-function ShowItem(props) {
-  switch (itemView.mode) {
-  case 'article':
-    return Article(props.item);
-  case 'picture':
-    return Picture(props.item);
-  default:
-    return Picture(props.item);
-  }
-}
-
-function Article(item) {
-  let text = getString(item[itemView.text]);
-  let link = getString(item[itemView.linkTo]);
-  return (
-    <div className="p-4">
-      <p>{text}</p>
-      <a href={link} target="_blank" rel="noopener noreferrer">Télécharger</a>
-    </div>
-  );
-}
-
-function Picture(item) {
-  let img = getString(item[itemView.image]);
-  let name = getString(item[itemView.name]);
-  let link = getString(item[itemView.linkTo]);
-  return (
+function Resource(props) {
+  return (props.href)?
     <div className="p-3">
-      <a target="_blank" href={link} className="cursor-zoom" rel="noopener noreferrer">
-        <img src={img} alt={name}/>
+      <a target="_blank" href={props.href} className="cursor-zoom" rel="noopener noreferrer">
+        <img src={props.href} alt="Resource" />
       </a>
     </div>
-  );
+  : "";
 }
 
 class Viewpoint extends Component {

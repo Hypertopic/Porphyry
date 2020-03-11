@@ -179,7 +179,7 @@ class Portfolio extends Component {
             if (!['id','name','user'].includes(itemId)) {
               let item = data[corpus.id][itemId];
               if (!item.name || !item.name.length) {
-                console.log(itemId, "has no name or thumbnail!", item);
+                console.log(itemId, "has no name!", item);
               } else {
                 item.id = itemId;
                 item.corpus = corpus.id;
