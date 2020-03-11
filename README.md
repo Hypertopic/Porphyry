@@ -34,21 +34,7 @@ Home page: <https://github.com/Hypertopic/Porphyry>
       }
       ```
 
-  3. Create the `_users` database in [CouchDB administration interface](http://localhost:5984/_utils/#/_all_dbs) and then a user (change values as needed):
-
-      ```yaml
-      {
-        "_id": "org.couchdb.user:alice",
-        "name": "alice",
-        "password": "wonderland",
-        "roles": [],
-        "type": "user"
-      }
-      ```
-
-  4. Create an administrator in [CouchDB administration interface](http://localhost:5984/_utils/#createAdmin/nonode@nohost)
-
-  5. Launch Porphyry with appropriate settings:
+  3. Launch Porphyry with appropriate settings:
 
   ```
   docker run -p 3000:80 -v "$(pwd)"/conf/porphyry.yml:/usr/share/nginx/html/config.yml benel/porphyry
