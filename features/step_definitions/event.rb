@@ -11,10 +11,10 @@ Quand("on sélectionne la rubrique {string}") do |topic|
 end
 
 Quand ("l'utilisateur crée un item {string} dans le corpus {string}") do |name, corpus|
-  find_button(:id => corpus).click
+  click_on corpus
   expect(page).to have_content("undefined")
-  find_by_id("new-attribute").set "name:#{name}"
-  find_button(class: ['btn', 'btn-sm', 'ValidateButton']).click
+  fill_in 'new-attribute', with: "name:#{name}"
+  click_on 'validateButton-undefined'
 end
 
 Quand ("l'utilisateur sélectionne {string} entre la rubrique {string} et la rubrique {string}") do |union, topic1, topic2|
@@ -27,3 +27,7 @@ Quand("on choisit la rubrique {string}") do |topic|
   click_on topic
 end
 
+Quand("l'utilisateur indique {string} comme valeur de l'attribut {string}") do |value, attribute|
+  fill_in 'new-attribute', with: "#{attribute}:#{value}"
+  click_on 'validateButton-undefined'
+end
