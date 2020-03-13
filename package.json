@@ -18,12 +18,11 @@
     "yaml": "^1.8.2"
   },
   "devDependencies": {
-    "cross-env": "^7.0.2",
     "react-scripts": "^3.4.0",
     "serve": "^11.3.0"
   },
   "scripts": {
-    "start": "cross-env EXTEND_ESLINT=true react-scripts start",
+    "start": "env EXTEND_ESLINT=true react-scripts start",
     "build": "react-scripts build",
     "preprod": "serve -s build -p 3000 &",
     "test": "cucumber --format summary --retry 1",
