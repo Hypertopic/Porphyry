@@ -48,3 +48,7 @@ end
 Soit("{string} l'item affiché") do |item|
   visit getURI(item)
 end
+
+Soit("un item en cours de création") do
+  visit '/item/Vitraux - Bénel/' + getUUID('')
+end

@@ -27,3 +27,7 @@ Quand("on choisit la rubrique {string}") do |topic|
   click_on topic
 end
 
+Quand("l'utilisateur indique {string} comme valeur de l'attribut {string}") do |value, attribute|
+  find_by_id('new-attribute').set "#{attribute}:#{value}"
+  find_button(class: ['btn', 'btn-sm', 'ValidateButton']).click
+end

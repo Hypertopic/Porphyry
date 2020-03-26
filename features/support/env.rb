@@ -23,7 +23,6 @@ def getURI(name)
 end
 
 def getUUID(name)
-  uuid = nil
   case name
     when "Abram/Abraham"
       uuid = "f1520229979b11428f94a004f880c022"
@@ -34,6 +33,8 @@ def getUUID(name)
     when "vers 1520"
       uuid = "e01a7cb572461a43a22aa8f771235cb6"
   end
+  range = [*'0'..'9',*'A'..'F']
+  uuid = Array.new(36){ range.sample }.join
   return uuid
 end
 
