@@ -11,7 +11,7 @@ Scénario:
 
 Fonctionnalité: Ajouter une ressource à un item (contenant un lien)
 
-scénario:
+Scénario:
   Soit un item en cours de création
   Et l'utilisateur "alice" connecté
   Quand l'utilisateur indique "http://www.cite-vitrail.fr/" comme valeur de l'attribut "link"
