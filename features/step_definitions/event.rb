@@ -13,7 +13,7 @@ end
 Quand ("l'utilisateur crée un item {string} dans le corpus {string}") do |name, corpus|
   click_on corpus
   expect(page).to have_content("undefined")
-  fill_in 'new-attribute', with: "name:#{name}"
+  fill_in placeholder: 'Ajouter un attribut et une valeur...', with: "name:#{name}"
   click_on 'validateButton-undefined'
 end
 
@@ -28,6 +28,16 @@ Quand("on choisit la rubrique {string}") do |topic|
 end
 
 Quand("l'utilisateur indique {string} comme valeur de l'attribut {string}") do |value, attribute|
-  fill_in 'new-attribute', with: "#{attribute}:#{value}"
-  click_on 'validateButton-undefined'
+  within '.Attributes' do
+    fill_in placeholder: 'Ajouter un attribut et une valeur...', with: "#{attribute}:#{value}"
+    click_on class: 'ValidateButton'
+  end
+end
+
+Quand("l‘utilisateur indique comme rubrique {string} du point de vue {string}") do |topic, viewpoint|
+  within '.Viewpoint', text: viewpoint do
+    fill_in placeholder: 'Ajouter une rubrique...', with: topic
+    click_on class: 'ValidateButton'
+    click_on class: 'ValidateButton'
+  end
 end

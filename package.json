@@ -6,15 +6,18 @@
     "bootstrap": "^4.4.1",
     "disqus-react": "^1.0.7",
     "hypertopic": "^3.1.7",
+    "jquery": "^1.9.1",
     "js-tree": "^2.0.2",
     "json-groupby": "^1.0.2",
     "open-iconic": "^1.1.1",
+    "popper.js": "^1.16.1",
     "query-string": "^6.11.1",
     "react": "^16.13.0",
     "react-autosuggest": "^9.4.3",
     "react-dom": "^16.13.0",
     "react-router-dom": "^5.1.2",
     "sort-by": "^1.2.0",
+    "typescript": "^3.8.3",
     "yaml": "^1.8.2"
   },
   "devDependencies": {
@@ -61,7 +64,6 @@
           }
         }
       ],
-      "linebreak-style": 2,
       "no-multiple-empty-lines": [
         2,
         {
