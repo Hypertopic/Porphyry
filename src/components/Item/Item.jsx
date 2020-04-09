@@ -245,7 +245,7 @@ class Item extends Component {
     e.preventDefault();
     let key_value = this.state.attributeInputValue;
     if (key_value) {
-      let [key,value]=key_value.split(":").map(t => t.trim());
+      let [key,value]=key_value.match(/([^:]*):(.*)/).splice(1).map(t => t.trim());
       if (key && value) this._setAttribute(key, value);
       else return false;
     }
