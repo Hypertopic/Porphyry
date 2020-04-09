@@ -30,6 +30,13 @@ end
 Quand("l'utilisateur indique {string} comme valeur de l'attribut {string}") do |value, attribute|
   within '.Attributes' do
     fill_in placeholder: 'Ajouter un attribut et une valeur...', with: "#{attribute}:#{value}"
-    click_on class: 'ValidateButton' 
+    click_on class: 'ValidateButton'
+  end
+end
+
+Quand("l'utilisateur indique {string} comme valeur de rubrique du point de vue {string}") do |topic, viewpoint|
+  within '.Viewpoint', text: viewpoint do
+    fill_in placeholder: 'Ajouter une nouvelle rubrique..', with: topic
+    click_on class: 'ValidateButton'
   end
 end
