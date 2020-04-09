@@ -1,0 +1,1496 @@
+[33mcommit d9576e9e7240316d1c5a2e68e825d3fbb5aa3385[m[33m ([m[1;36mHEAD -> [m[1;32mv7[m[33m, [m[1;31morigin/v7[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Wed Apr 8 23:12:54 2020 +0200
+
+    REFACTORING: DOM hierarchy refactored for easier testing.
+
+[33mcommit d5599c5512140df07d4be7a19619ff8715c03c86[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Fri Apr 3 20:55:03 2020 +0200
+
+    REFACTORING: Acceptance tests made more readable.
+
+[33mcommit e36118faba36f930ebb7e9a26a51f7e0ddf410b9[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Fri Mar 27 05:18:01 2020 +0100
+
+    PROCESS: Updated dependencies.
+
+[33mcommit 4b5970cf629b6d39c5d876abc7f7204789cf724e[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Fri Mar 27 05:01:48 2020 +0100
+
+    PROCESS: Fixed tests (broken by commit 0ece0c80).
+
+[33mcommit 0ece0c80bb429eff7bdc3db638d7c56b8e4d5c8e[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Thu Mar 26 07:02:50 2020 +0100
+
+    TEST: Set an item's attribute (see #31).
+
+[33mcommit 31007a63ea962ab933e80d2af8a2fa3cabeca821[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Fri Mar 13 14:49:02 2020 +0100
+
+    PROCESS: Developing on Windows might be an option.
+
+[33mcommit f9e96aaa7bf0fa45959d7998c3d1b11b8eaf5d82[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Fri Mar 13 14:15:53 2020 +0100
+
+    Revert "PROCESS: Developing on Windows might be an option."
+    
+    This reverts commit f180fe6f91cb545de6d9181f1b2a131d34025999.
+    
+    The intent of this commit was to be able to run `npm start` on Windows.
+    However it was not working either since `cross-env` was unaccessible as any
+    locally installed node packages on Windows.
+    A better solution is then to use a POSIX-like shell.
+
+[33mcommit f180fe6f91cb545de6d9181f1b2a131d34025999[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Thu Mar 12 18:46:04 2020 +0100
+
+    PROCESS: Developing on Windows might be an option.
+
+[33mcommit 654c15589957aa6c1f88f62634c61fb4ca7dddfa[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Wed Mar 11 22:52:10 2020 +0100
+
+    DOC: Argos configuration moved to Argos documentation.
+
+[33mcommit 6ebeaf4bee3360a429d1f6822452db0a1b2a030d[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Wed Mar 11 18:30:00 2020 +0100
+
+    FIX: Updated dependencies.
+
+[33mcommit fef2e61a98d6e6d7319f42db97e2178c40246b7e[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Wed Mar 11 18:05:14 2020 +0100
+
+    FIX: Items may not have any thumbnail or resource.
+    
+    Code from non-functional feature #94 was removed.
+
+[33mcommit 37292339a81864df15b55d0215fa345089ef7a56[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Wed Mar 11 07:55:07 2020 +0100
+
+    REFACTORING: Non functional widget removed.
+    
+    Removed until feature #154 is implemented.
+
+[33mcommit 0a6eb8f56e22b2bec06f19342f73b4c5744944da[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Wed Feb 26 17:37:56 2020 +0100
+
+    FEATURE: Comment (or share with friends) an item (closes #47).
+
+[33mcommit 53e686fb03f8855eeb4749faa2d6f4d1155ee345[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Wed Feb 26 16:54:27 2020 +0100
+
+    FIX: Should display unused viewpoints in item page (#135).
+    
+    Regression caused by c489e057.
+
+[33mcommit 64152660d82bbdf0dad487173cf7d3c1e1921fcb[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Wed Feb 26 16:32:07 2020 +0100
+
+    FIX: Changes should not prevent commenting.
+    
+    Polling is turned off in item page until feature #52 is implemented.
+
+[33mcommit 76e6058d4e1fdea76ab25a963481c0b3ca9adad7[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Wed Feb 26 15:44:52 2020 +0100
+
+    FIX: Every setting should be loaded.
+
+[33mcommit 22b8c86f6a4c7f9578eb61a9f93b4e31f9ef9e4c[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Sun Feb 23 14:54:20 2020 +0100
+
+    PROCESS: Configuration files for docker stored in the same folder.
+
+[33mcommit eae92ca7895c08babf9eed41a385a50a7ca05b05[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Sun Feb 23 14:35:09 2020 +0100
+
+    PROCESS: Fix Error 404 in dockerized version.
+
+[33mcommit 8a037ecc16bd167ce2ee2f248b9f96200ad3ac8a[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Sat Feb 22 20:28:18 2020 +0100
+
+    FIX: React warning caused by 3f13a3c2.
+
+[33mcommit 725d8d45343bc207ba9cf2e8d34013cdabdac9aa[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Sat Feb 22 20:06:58 2020 +0100
+
+    PROCESS: Updated dependencies.
+
+[33mcommit 68f9b21716ab3e04ed7c3923b73acfcc7aafb34e[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Sat Feb 22 20:05:24 2020 +0100
+
+    PROCESS: Normalized form for package.json.
+    
+    To prevent unrelated edits from `npm` command.
+
+[33mcommit decf2f6dfe1473904fb94f843af18c0b310fd7e5[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Thu Feb 20 18:44:39 2020 +0100
+
+    DOC: Complete walkthrough to get a working Porphyry instance.
+
+[33mcommit 376d84b522551987fe3b27b4779d22abc022c372[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Thu Feb 20 18:01:01 2020 +0100
+
+    PROCESS: Style checking for object members.
+
+[33mcommit 516438d5e24639a1813f70fa297cd7bb996580c3[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Thu Feb 20 17:59:42 2020 +0100
+
+    DOC: Run Porphyry as a container.
+
+[33mcommit e32461fe9748c8ca8dd35cf21a6838e95f715a62[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Thu Jan 30 14:31:33 2020 +0100
+
+    PROCESS: Style checking for inline HTML quotes.
+
+[33mcommit b9568111487b72fe4ca10ab01004f2e208fab310[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Thu Jan 30 13:47:17 2020 +0100
+
+    PROCESS: Style checking for curly braces.
+
+[33mcommit aec29c2f45ae16b16b3f629e0d8c8d69ac060fe3[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Thu Jan 30 00:16:10 2020 +0100
+
+    PROCESS: Style checking for quotes.
+
+[33mcommit ddfc13d2d3bf6b6766e4c482f86ec71ce07a0546[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Wed Jan 29 23:52:13 2020 +0100
+
+    PROCESS: Style checking for spacing around keywords.
+
+[33mcommit 407e8fe093809f1aa2f14d6f1051dfbc782aec99[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Wed Jan 29 23:38:38 2020 +0100
+
+    PROCESS: Style checking for `else` after `return`.
+
+[33mcommit bc079bca231bc5e940aced276e504058f77d4346[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Wed Jan 29 22:53:25 2020 +0100
+
+    PROCESS: Style checking for spacing around infix operators.
+
+[33mcommit 2463fb291e28d1d24d3038f1c7f06864d50f9c8c[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Wed Jan 29 22:13:29 2020 +0100
+
+    PROCESS: Style checking for spacing around a comma.
+
+[33mcommit 44f632537d26e3c2eac992472895afddac8fd8e3[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Wed Jan 29 22:12:03 2020 +0100
+
+    PROCESS: Style checking for spacing between keys and values.
+
+[33mcommit b80933d438298ada27164c1d00981655db3fc3c8[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Wed Jan 29 21:37:37 2020 +0100
+
+    PROCESS: Style checking for semicolons.
+
+[33mcommit 46ec64ad565a7475f8ac1e3fca7f3f4ebb4c7a07[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Wed Jan 29 21:20:18 2020 +0100
+
+    PROCESS: Style checking for new lines.
+
+[33mcommit 96576908218f5a41ffbe678e464d673b38e5dc29[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Wed Jan 29 19:54:47 2020 +0100
+
+    PROCESS: Style checking for extra spaces.
+
+[33mcommit 9663e553f7f65874b2a7826c4d65446e0d110b23[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Wed Jan 29 19:32:34 2020 +0100
+
+    PROCESS: Style checking for indentation.
+
+[33mcommit 4781a6665288ec69626f3cb55a67f7d892d84c7b[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Wed Jan 29 16:24:12 2020 +0100
+
+    PROCESS: Retry tests on failure.
+    
+    Needed to distinguish always-failed tests from flaky tests.
+
+[33mcommit 64b67538e31d20734017b42040070cc27577996f[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Wed Jan 29 16:20:41 2020 +0100
+
+    FIX: Favicon should be Porphyry logo.
+
+[33mcommit c489e05729ab1fb44c167c5ca41c83643722bb26[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Fri Jan 24 16:56:53 2020 +0100
+
+    PROCESS: Settings are no more included in build.
+    
+    Dockerization (e0953db9a2333e8bbd749c9d) would be useless without it.
+
+[33mcommit 5b180a2714bb2dca1306c93bc6e94618f9421a3a[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Fri Jan 24 16:43:04 2020 +0100
+
+    FIX: The outliner should be left aligned.
+    
+    This regression appeared only on the production version.
+
+[33mcommit f85abd7cb06e981b47557a2eef7fbad6544d700e[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Fri Jan 24 14:48:21 2020 +0100
+
+    PROCESS: Unused acceptance test steps removed.
+
+[33mcommit e25f0cc835db74f3801d056de53f7cd5b763c53e[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Fri Jan 24 14:43:40 2020 +0100
+
+    PROCESS: Acceptance tests refactored.
+
+[33mcommit 64f17f51de4f8eddefea342d9b610573ebdb9c9e[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Fri Jan 24 14:14:36 2020 +0100
+
+    FIX: Get similar items according to an item's topic (#40)
+    
+    Regression caused by 073c20977a59779f5697f21c6b65d25f0cf9a616.
+
+[33mcommit aa92adf5abbd4d719fa1a10606e6b5e7f8be909e[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Fri Jan 24 13:35:23 2020 +0100
+
+    FIX: Updated dependencies.
+
+[33mcommit ca80cf7ab75e49cd5b45111551e21b621e8a9169[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Sat Dec 21 21:17:49 2019 +0100
+
+    TEST: Fixed URI for `(topicA) and (topicB and topicC)` in the tests.
+
+[33mcommit 4cfa775c101e23c668de9e249af3725c1ea2f3bc[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Sat Oct 19 16:39:53 2019 +0200
+
+    PROCESS: Acceptance tests refactored.
+
+[33mcommit b7dff6c33ab3ded7539b8030cdce85a42ae73207[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Fri Dec 20 21:15:36 2019 +0100
+
+    PROCESS: Acceptance testing is now dockerized.
+
+[33mcommit 60442eab0599c0289cd26d45de593af73cbec9ec[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Fri Dec 20 17:22:51 2019 +0100
+
+    PROCESS: Tests settings mutualized.
+
+[33mcommit e0953db9a2333e8bbd749c9d428bca29d73e5a35[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Sun Oct 20 19:01:30 2019 +0200
+
+    PROCESS: Portability improved owing to Docker
+
+[33mcommit ad88378b3f1a239ecd1b533feeb33fcbe4487b87[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Wed Oct 9 12:21:06 2019 +0200
+
+    FIX: Vulnerabilities in dependencies.
+
+[33mcommit bebe38d117566fdca489d8855a56aacf4c85e3cb[m
+Merge: e0253dc 1de4004
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Fri Jun 21 07:28:13 2019 +0200
+
+    Merge remote-tracking branch 'refs/remotes/jbb/Boolean_Algebra' into v7
+
+[33mcommit e0253dc7c3428c000e2f024e13cd1f1e75fbbca6[m
+Merge: 839d284 3f13a3c
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Fri Jun 21 06:13:05 2019 +0200
+
+    Merge remote-tracking branch 'refs/remotes/jbb/itemCreation' into v7
+
+[33mcommit 1de400495e593194748724e442e9626ee30c24e8[m
+Author: nhuc <nhuchon@hotmail.fr>
+Date:   Thu Jun 20 16:07:24 2019 +0200
+
+    TEST: Search using basic boolean algebra #194
+    
+    Co-authored-by: jbaptisteblot <admin@jeanba88.com>
+    Co-authored-by: Timothée BAYART <timotheebayart@gmail.com>
+
+[33mcommit 073c20977a59779f5697f21c6b65d25f0cf9a616[m
+Author: nhuc <nhuchon@hotmail.fr>
+Date:   Thu Jun 20 16:06:43 2019 +0200
+
+    FEATURE: Search using basic boolean algebra (close #194)
+    
+    Co-authored-by: LeafStark <695549485@qq.com>
+    Co-authored-by: jbaptisteblot <admin@jeanba88.com>
+    Co-authored-by: lvauchez <louis.vauchez@hotmail.fr>
+
+[33mcommit 839d284beb0cc4f85d10d05aba1a932a4da0351f[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Thu Jun 20 15:50:56 2019 +0200
+
+    PROCESS: Use same dependencies versions everywhere.
+
+[33mcommit 3f13a3c27a0bd1de2c4d4c12810987060c8a51e6[m
+Author: lvauchez <louis.vauchez@hotmail.fr>
+Date:   Thu Jun 20 16:01:54 2019 +0200
+
+    FEATURE: Create an item (closes #192)
+    
+    Co-authored-by: maxiloud <maxime.trinquard@utt.fr>
+    Co-authored-by: Jadestanzie <jade.venault@utt.fr>
+    Co-authored-by: nhuchon <nhuchon@hotmail.fr>
+
+[33mcommit 31c57426a929d3c1fc2c833a06444877811da1ef[m
+Author: lvauchez <louis.vauchez@hotmail.fr>
+Date:   Thu Jun 20 15:56:01 2019 +0200
+
+    TEST: Create an item (#192)
+    
+    Co-authored-by: maxiloud <maxime.trinquard@utt.fr>
+    Co-authored-by: Jadestanzie <jade.venault@utt.fr>
+    Co-authored-by: nhuchon <nhuchon@hotmail.fr>
+
+[33mcommit f4a91247aa7273f516f452ae47effc02bc5bb13b[m
+Merge: 4d8fae0 d691f3f
+Author: jbaptisteblot <admin@jeanba88.com>
+Date:   Wed Jun 19 21:31:58 2019 +0200
+
+    Merge remote-tracking branch 'origin/v7' into not_described
+
+[33mcommit 4d8fae0befb74b9b3cd6c0a4eefdcb82e50a6aa4[m
+Author: jbaptisteblot <admin@jeanba88.com>
+Date:   Wed Jun 19 21:21:52 2019 +0200
+
+    TEST: Show items NOT described with a given topic #120
+    
+    Co-authored-by: LeafStark <695549485@qq.com>
+    Co-authored-by: Timothée BAYART <timotheebayart@gmail.com>
+    Co-authored-by: aclairet <adrien.clairet@utt.fr>
+    Co-authored-by: vcarrara <victor.carrara@utt.fr>
+    Co-authored-by: acomteutt <alexis.comte@utt.fr>
+
+[33mcommit d691f3fde2d23e3fa2bdf273e994e200516ca8cc[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Thu Jun 13 14:23:29 2019 +0200
+
+    PROCESS: Development tools updated.
+
+[33mcommit e1388f7113fd4313dda057f29d17bf3248ead871[m
+Author: jbaptisteblot <admin@jeanba88.com>
+Date:   Fri Jun 7 14:48:46 2019 +0200
+
+    FEATURE: Search items NOT described with a given topic (closes #120)
+    
+    Co-authored-by: LeafStark <695549485@qq.com>
+    Co-authored-by: Timothée BAYART <timotheebayart@gmail.com>
+    Co-authored-by: aclairet <adrien.clairet@utt.fr>
+    Co-authored-by: vcarrara <victor.carrara@utt.fr>
+    Co-authored-by: acomteutt <alexis.comte@utt.fr>
+
+[33mcommit 09c292fb45b70ff85ed2e67c50a0d8668a677e06[m
+Merge: 77f001d ee325bb
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Tue May 28 16:30:23 2019 +0200
+
+    Merge remote-tracking branch 'refs/remotes/franck/item_new_topic' into v7
+
+[33mcommit ee325bb55c163b24a406b88df313890baeed2589[m
+Merge: c1520c9 bedf3d5
+Author: Franck Eyraud <franck+github@yrnm.net>
+Date:   Wed May 22 16:54:12 2019 +0200
+
+    Merge branch 'set_attributes' into item_new_topic
+
+[33mcommit bedf3d56ea9cef9f3454d55601445de3c73d86c4[m
+Author: Franck Eyraud <franck+github@yrnm.net>
+Date:   Wed May 22 16:43:04 2019 +0200
+
+    FIX: Attribute remove and edit buttons should be visible.
+    
+    Fixes reloaded #134 (Chrome and Safari)
+
+[33mcommit c1520c9e4a59b01911cf4bfb1128d1d0a3ac1514[m
+Merge: d11b7fb 8e3accd
+Author: Franck Eyraud <franck+github@yrnm.net>
+Date:   Tue May 14 17:37:32 2019 +0200
+
+    Merge branch 'set_attributes' into item_new_topic
+
+[33mcommit d11b7fb744151b14d6eddfec4a742ce6adf84783[m
+Author: Franck Eyraud <franck+github@yrnm.net>
+Date:   Tue May 14 17:32:49 2019 +0200
+
+    FIX: Exception after creating a new topic without parent.
+
+[33mcommit 66e4d49f3d3079957bf065880f9019ef6925eca8[m
+Author: Franck Eyraud <franck+github@yrnm.net>
+Date:   Mon May 13 12:37:21 2019 +0200
+
+    FIX: Topic validate button disappears too quickly (#33).
+    
+    On MacOSX.
+
+[33mcommit 8e3accdf18705e018f4b4c0acd3db01c29cbd1d1[m
+Author: Franck Eyraud <franck+github@yrnm.net>
+Date:   Fri May 10 12:30:07 2019 +0200
+
+    FIX: Group the Edit and Delete buttons together (#29).
+
+[33mcommit cf1d472485f36bdfe0a4e8587a2698f397a33ece[m
+Author: Franck Eyraud <franck+github@yrnm.net>
+Date:   Mon Apr 8 09:34:43 2019 +0200
+
+    FIX: Can cancel a temporary new topic creation.
+
+[33mcommit 2a3feb0181316f7a3e8f150b0bd99c0e0c9e5426[m
+Author: Franck Eyraud <franck+github@yrnm.net>
+Date:   Sun Apr 7 18:24:28 2019 +0200
+
+    FIX: Reduce console log content.
+
+[33mcommit 9817fb3c6a79b2b2d380e2cf3e75846379a95cbe[m
+Author: Franck Eyraud <franck+github@yrnm.net>
+Date:   Sun Apr 7 18:24:08 2019 +0200
+
+    FIX: Can add a topic without parent.
+
+[33mcommit 18474e880368053a106966ce2547557588ba786a[m
+Author: Franck Eyraud <franck+github@yrnm.net>
+Date:   Sat Apr 6 12:59:16 2019 +0200
+
+    FEATURE: Assign a NEW topic to an item (#33).
+
+[33mcommit 77d9cb65f67ee4883a0645b2be03a3c1e8b06c6e[m
+Author: Franck Eyraud <franck+github@yrnm.net>
+Date:   Sat Apr 6 12:58:17 2019 +0200
+
+    FIX: Some code improvements.
+
+[33mcommit fddbc0f27af63c358811caf0ab676b18c8fe50ee[m
+Author: Franck Eyraud <franck+github@yrnm.net>
+Date:   Mon Apr 1 18:46:57 2019 +0200
+
+    FIX: Too fast to remove button.
+    
+    Issue occurred on MacOSX Safari & Firefox, not on Chrome, not on Linux.
+
+[33mcommit 1abe71edc586530f7f3d1f5196a181b603d1a085[m
+Author: Franck Eyraud <franck+github@yrnm.net>
+Date:   Mon Apr 1 09:36:28 2019 +0200
+
+    FIX: Edit attribute value in place (#29).
+
+[33mcommit ad91099c02cc3936fc7ef66b74482b6faf2b193d[m
+Author: Franck Eyraud <franck+github@yrnm.net>
+Date:   Sat Mar 30 11:46:13 2019 +0100
+
+    FIX: Coherent input sizes (#140).
+
+[33mcommit 57b5c5747baa14b215f88b3d77fe02511c397b61[m
+Author: Franck Eyraud <franck+github@yrnm.net>
+Date:   Sat Mar 30 11:24:29 2019 +0100
+
+    Revert "FIX: Move attribute delete button."
+    
+    This reverts commit 2bbed1161de47dfbc06656d788cff129ce207a10.
+
+[33mcommit 36093a78232a0fa382ddd3374a496827178ec687[m
+Author: Franck Eyraud <franck+github@yrnm.net>
+Date:   Sat Mar 16 11:51:50 2019 +0100
+
+    FIX: Show validation buttons only when input has focus.
+
+[33mcommit 0cd7f6001ceef53aca2208ced936de785ab740ca[m
+Author: Franck Eyraud <franck+github@yrnm.net>
+Date:   Sat Mar 16 10:44:22 2019 +0100
+
+    FIX: Similar Buttons for attributes and rubrics.
+    
+    And no form reset button.
+
+[33mcommit 77f001ddbf74290e29a2d759cd72f1c3f6951729[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Thu Mar 14 16:18:43 2019 +0100
+
+    PROCESS: Test compatibility with Chrome 73.
+
+[33mcommit 4e181333274b2dc5488efe0384d99a91f56c630a[m
+Merge: fad06bd 745c4a5
+Author: Franck Eyraud <franck+github@yrnm.net>
+Date:   Thu Mar 14 12:51:39 2019 +0100
+
+    Merge branch 'v7' into set_attributes
+
+[33mcommit fad06bd2ed1a7745c1813042ae03470d912c85a2[m
+Author: Franck Eyraud <franck+github@yrnm.net>
+Date:   Wed Mar 13 18:43:27 2019 +0100
+
+    FIX: Avoid unwanted spaces in attributes (#29).
+
+[33mcommit 41ff3c1f96f5cb7cb4c582c526e493b74e82ae99[m
+Author: Franck Eyraud <franck+github@yrnm.net>
+Date:   Wed Mar 13 18:42:48 2019 +0100
+
+    FIX: Two states placeholder #151.
+
+[33mcommit adfcac182ff141632e2bbc75d7410998485f7839[m
+Author: Franck Eyraud <franck+github@yrnm.net>
+Date:   Wed Mar 13 18:19:53 2019 +0100
+
+    FIX: Isolate item in the state.
+
+[33mcommit f556ab8240e3013e318491872b621cfb772fcf12[m
+Author: Franck Eyraud <franck+github@yrnm.net>
+Date:   Wed Mar 13 16:39:44 2019 +0100
+
+    FIX: Use controlled component #140.
+
+[33mcommit 745c4a54932c8192ee06a8d59f4d3916a6dcfbea[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Wed Mar 6 22:01:57 2019 +0100
+
+    PROCESS: Use the same gems locally and on TravisCI.
+
+[33mcommit 1df52f97f5c4e491db7647c0eba168464635d4bb[m
+Author: Franck Eyraud <franck+github@yrnm.net>
+Date:   Thu Feb 28 18:49:21 2019 +0100
+
+    FIX: Use French term and not English.
+
+[33mcommit 10fef9ab2143a14c8ec8345ba9cc992084e50e0e[m
+Author: Franck Eyraud <franck+github@yrnm.net>
+Date:   Thu Feb 28 18:43:50 2019 +0100
+
+    FEATURE: Edit an item's attribute (#29).
+    
+    First shot
+
+[33mcommit 2bbed1161de47dfbc06656d788cff129ce207a10[m
+Author: Franck Eyraud <franck+github@yrnm.net>
+Date:   Wed Feb 27 17:31:38 2019 +0100
+
+    FIX: Move attribute delete button.
+
+[33mcommit 7e00a52a19e84175cb1c22d2edd397152189a352[m
+Author: Franck Eyraud <franck+github@yrnm.net>
+Date:   Thu Feb 28 17:55:00 2019 +0100
+
+    FIX: Attribute display styles.
+
+[33mcommit 6875dad9d71be73e2c4ea6b35bf1e8ea2fa73bd2[m
+Author: Franck Eyraud <franck+github@yrnm.net>
+Date:   Wed Feb 27 12:32:22 2019 +0100
+
+    FIX: Better UX for setting an item's attribute (#140).
+
+[33mcommit a6b42ef47d891931fb09ff89725a9e492da344d4[m
+Author: Franck Eyraud <franck+github@yrnm.net>
+Date:   Tue Feb 26 12:14:56 2019 +0100
+
+    FIX: See arrow on correct place for the first line.
+
+[33mcommit befc8170a62e99e0b99276571364162b2283f158[m
+Author: Franck Eyraud <franck+github@yrnm.net>
+Date:   Fri Feb 15 12:49:38 2019 +0100
+
+    FIX: Can move topics all around, also changing parent #139.
+
+[33mcommit 4153fce7f84f38b9e4fd28e42bd6f0bc3a6e1c32[m
+Author: Franck Eyraud <franck+github@yrnm.net>
+Date:   Mon Feb 11 11:13:12 2019 +0100
+
+    FIX: Remove useless code and log messages.
+
+[33mcommit 0ec83433eb57382bd85efa957479a370f298e8ce[m
+Author: Franck Eyraud <franck+github@yrnm.net>
+Date:   Mon Feb 11 11:11:38 2019 +0100
+
+    FIX: Have Drag and Drop work with Chrome.
+    
+    Using dataTransfer.getData() in onDragOver event works in Firefox
+    because of standard violations.
+    https://stackoverflow.com/questions/31915653/how-to-get-data-from-datatransfer-getdata-in-event-dragover-or-dragenter
+
+[33mcommit 7ff481f3fbb62760efa962d84317ea79765e21ed[m
+Author: Franck Eyraud <franck+github@yrnm.net>
+Date:   Thu Feb 7 09:41:24 2019 +0100
+
+    FEATURE: Move topics using Drag and Drop (#139).
+    
+    Only between siblings.
+    Using HTML 5
+
+[33mcommit 5494c3b4c84a4dbd0e63e53137f4223c58b82aa0[m
+Author: Franck Eyraud <franck+github@yrnm.net>
+Date:   Thu Feb 7 10:45:40 2019 +0100
+
+    FIX: Do not save a new topic without name.
+
+[33mcommit 003b72ae76720b05712f0997a252f093be464341[m
+Author: Franck Eyraud <franck+github@yrnm.net>
+Date:   Thu Feb 7 10:42:26 2019 +0100
+
+    FIX: Correctly update on server on changes.
+
+[33mcommit 516d2446f93774f42add438673ee192a225cd362[m
+Author: Franck Eyraud <franck+github@yrnm.net>
+Date:   Thu Feb 7 09:50:49 2019 +0100
+
+    FIX: Can create a new viewpoint.
+
+[33mcommit 098ae1d057116bd684302cd350dcfabc52acd5fb[m
+Author: Franck Eyraud <franck+github@yrnm.net>
+Date:   Wed Jan 23 12:01:13 2019 +0100
+
+    FIX: Exception on Safari when making changes.
+    
+    It seems that .catch() method of Promise doesn't return the Promise...
+
+[33mcommit 471f1ac3dd23b417bcd592d4a232f38f1e2e3b96[m
+Author: Franck Eyraud <franck+github@yrnm.net>
+Date:   Tue Jan 22 19:07:50 2019 +0100
+
+    FIX: Can edit viewpoint name (restore #41).
+
+[33mcommit 1caf712456c9467419b83f133c29114e3431441b[m
+Author: Franck Eyraud <franck+github@yrnm.net>
+Date:   Tue Jan 22 17:51:46 2019 +0100
+
+    FIX: Do not save when demoting/promoting a new topic.
+
+[33mcommit f250a91a830cca2a0094491f645dee153e315558[m
+Author: Franck Eyraud <franck+github@yrnm.net>
+Date:   Wed Jan 16 16:51:35 2019 +0100
+
+    FIX: Do not add empty topic until validated.
+
+[33mcommit 8967a3dbf00cf1f968449977d09e359c23ddd821[m
+Author: Franck Eyraud <franck+github@yrnm.net>
+Date:   Tue Jan 22 11:59:25 2019 +0100
+
+    FIX: Make TAB and ESCAPE work on Chrome and Safari.
+
+[33mcommit bd544a0ac645a3a847db0c3a43fe0ef7ce3c169f[m
+Author: Franck Eyraud <franck+github@yrnm.net>
+Date:   Tue Dec 11 18:19:33 2018 +0100
+
+    FIX: Remove attribute button should be available.
+    
+    Closes #134.
+    Happens on Chrome and Safari.
+
+[33mcommit 199ad6b5f166242e943b76bbc11dd49650c3e324[m
+Author: Franck Eyraud <franck+github@yrnm.net>
+Date:   Tue Dec 11 12:20:02 2018 +0100
+
+    FEATURE: Select topic with arrow keys.
+    
+    And also after removing a topic.
+
+[33mcommit 7d23fd61108c5d34c815c8b4c5bc40d767a71094[m
+Author: Franck Eyraud <franck+github@yrnm.net>
+Date:   Tue Dec 11 10:47:15 2018 +0100
+
+    FIX: Can rename viewpoint, and create first topic.
+
+[33mcommit 0cb2d58b7893850e0dc829bc6bed803869580f15[m
+Author: Franck Eyraud <franck+github@yrnm.net>
+Date:   Fri Dec 7 13:08:32 2018 +0100
+
+    FIX: Delete a node with backspace.
+    
+    But not when being edited.
+
+[33mcommit c870184df70759ea555455e5cdb58217f77dca78[m
+Author: Franck Eyraud <franck+github@yrnm.net>
+Date:   Thu Dec 6 18:24:07 2018 +0100
+
+    FIX: Hide input on outliner page.
+
+[33mcommit 69aa154bbc23341e3c6503d71f13f80e337aa554[m
+Author: Franck Eyraud <franck+github@yrnm.net>
+Date:   Thu Dec 6 18:17:04 2018 +0100
+
+    FIX: Ignore key after consumed.
+
+[33mcommit f06af59e8fccf35c2a5c112f904f658a47276787[m
+Author: Franck Eyraud <franck+github@yrnm.net>
+Date:   Thu Dec 6 18:15:33 2018 +0100
+
+    FIX: A single ENTER should both validate the current row and create a new node.
+
+[33mcommit 0af5a69095fc3a7585348e5e501ad57a6252db4c[m
+Author: Franck Eyraud <franck+github@yrnm.net>
+Date:   Thu Dec 6 11:58:20 2018 +0100
+
+    FIX: Tests require no Eslint compilations warning.
+
+[33mcommit 67febc59060d82b2dbde92bed9ccae764227b52d[m
+Author: Franck Eyraud <franck+github@yrnm.net>
+Date:   Sat Dec 1 11:06:11 2018 +0100
+
+    FEATURE: Delete topics by pressing DEL key.
+    
+    Closes #138.
+    
+    In this first stage, non destructive actions : children are conserved
+    and promoted.
+
+[33mcommit 9f8b950c918ae61e0a4dee6109a6f4e4d572ecf1[m
+Author: Franck Eyraud <franck+github@yrnm.net>
+Date:   Tue Nov 27 19:51:13 2018 +0100
+
+    FEATURE: Add a new topic by pressing Enter key.
+    
+    Closes #136.
+
+[33mcommit 61bdd57c976a2e686cc8df036ff8b89669fcf527[m
+Author: Franck Eyraud <franck+github@yrnm.net>
+Date:   Tue Nov 27 18:56:09 2018 +0100
+
+    FEATURE: Promote/demote a topic by pressing (Shift)-Tab.
+    
+    Closes #137.
+
+[33mcommit 08f0079c05d8b801d11e82ed763db1df3aae3bfa[m
+Author: Franck Eyraud <franck+github@yrnm.net>
+Date:   Tue Nov 27 17:16:25 2018 +0100
+
+    FEATURE: Select a node in outliner by clicnking on it.
+    
+    Prepare for next edit features.
+
+[33mcommit 3e047c71eb9f43c8c222111420ae67dfe69139ed[m
+Author: Franck Eyraud <franck+github@yrnm.net>
+Date:   Sat Nov 24 10:07:12 2018 +0100
+
+    FEATURE: Edit a topic name with a click.
+    
+    Doublclick to edit, focus out or enter to apply.
+    Closes #133.
+
+[33mcommit 6eb0b9ac5ffdd54ec6edc4798fac608c227f3bc2[m
+Author: Franck Eyraud <franck+github@yrnm.net>
+Date:   Fri Nov 23 16:52:37 2018 +0100
+
+    REFACTORING: Changed outliner component.
+    
+    Deprecated react-ui-tree which makes things much more complex, imposing
+    to switch back and forth from hypertopic structure to tree structure and
+    more rigid.
+
+[33mcommit 64860ed5c0097f1e63bdaa2763e304ef0a5eeae6[m
+Author: Franck Eyraud <franck+github@yrnm.net>
+Date:   Fri Nov 23 16:49:54 2018 +0100
+
+    PROCESS: Correct extension for .jsx file.
+
+[33mcommit 7e1850983101c77da9bcac0981c9cc9e2003bb02[m
+Author: Franck Eyraud <franck+github@yrnm.net>
+Date:   Fri Nov 23 11:26:43 2018 +0100
+
+    REFACTORING: Remove unused code.
+
+[33mcommit 0588facc16444dc0f5092607cc535812a87af7d3[m
+Merge: 787fa32 2d93953
+Author: Franck Eyraud <franck+github@yrnm.net>
+Date:   Thu Nov 22 18:38:36 2018 +0100
+
+    Merge branch 'issue135'
+
+[33mcommit 787fa3284d28a5154659171bb6987094f9b2f37c[m
+Merge: 4dff1fc 5fe489d
+Author: Franck Eyraud <franck+github@yrnm.net>
+Date:   Thu Nov 22 18:38:25 2018 +0100
+
+    Merge branch 'issue132'
+
+[33mcommit 4dff1fcbd6e69eebb39ca2ffedbf47e0543e7406[m
+Author: Franck Eyraud <franck+github@yrnm.net>
+Date:   Thu Nov 22 18:31:15 2018 +0100
+
+    API: Remove React's warning.
+    
+    In TopicPath component.
+
+[33mcommit 2d939533b0d31a9affe1af60031467983e5d3076[m
+Author: Franck Eyraud <franck+github@yrnm.net>
+Date:   Thu Nov 22 18:12:18 2018 +0100
+
+    FIX: Do not hide a viewpoint when empty.
+
+[33mcommit 54a00dff5dbce6bb59b8be88dbe471ff3d4b675a[m
+Author: Franck Eyraud <franck+github@yrnm.net>
+Date:   Thu Nov 22 16:46:02 2018 +0100
+
+    FIX: Avoid exception after topic deletion.
+    
+    If an item was described by a topic, but the topic was deleted, get an
+    exception.
+
+[33mcommit 5fe489d02abee908f680745e00825c370f9a78f6[m
+Author: Franck Eyraud <franck+github@yrnm.net>
+Date:   Wed Nov 21 12:15:16 2018 +0100
+
+    FIX: Describe a missing item on default server.
+    
+    Closes #132.
+
+[33mcommit a97ac2dad828e09004000ff31507997be6b7c1d2[m
+Author: Franck Eyraud <franck+github@yrnm.net>
+Date:   Wed Nov 21 11:30:12 2018 +0100
+
+    FIX: Correctly render Viewpoint in Item page.
+    
+    To remove React's warning about missing Component's key.
+
+[33mcommit 1fe6e497a6eb4016d92154873d2bb1142b732a34[m
+Author: Franck Eyraud <franck+github@yrnm.net>
+Date:   Wed Oct 31 12:36:09 2018 +0100
+
+    FIX: Should not redraw viewpoints when there is no change (#135).
+
+[33mcommit 69d2610fe745d418383100777e11ac935066c6f2[m
+Author: Franck Eyraud <franck+github@yrnm.net>
+Date:   Wed Oct 31 18:23:54 2018 +0100
+
+    FIX: Should not update screen when update fails on server.
+
+[33mcommit 367357f5917cdf3a76ccd25ffccbf4018b742c44[m
+Author: Franck Eyraud <franck+github@yrnm.net>
+Date:   Wed Oct 31 12:00:28 2018 +0100
+
+    FIX: Increase refresh time when load time is high.
+
+[33mcommit 642fdd11b4d5b558573bb6e8842e0c5a8052ed41[m
+Author: Franck Eyraud <franck+github@yrnm.net>
+Date:   Tue Oct 30 13:14:13 2018 +0100
+
+    FIX: Should display unused viewpoints in item page (#135).
+
+[33mcommit 19636f18e6096aeb2980a31cdbbf8bbfd80e6f70[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Sun Oct 14 14:44:30 2018 +0200
+
+    PROCESS: Test build rather than development version.
+
+[33mcommit a734bd2e4278d1f87a7e2d54bae939f244348542[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Sun Oct 14 16:19:49 2018 +0200
+
+    PROCESS: Avoid chromedriver-helper breaking change.
+    
+    See: flavorjones/chromedriver-helper/issues/66
+
+[33mcommit 0b5d9efb48e0c7cb79369cf7abf307042849cbf4[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Sun Oct 14 16:17:02 2018 +0200
+
+    PROCESS: webpack removed, react-scripts upgraded.
+
+[33mcommit 6f7ee2e94f4636ccc682ba6c16fed96227d4c107[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Fri Oct 12 16:34:55 2018 +0200
+
+    PROCESS: Build process requires webpack.
+
+[33mcommit e00706acd39eda7e4107ef404d2d3a19d9dd48b3[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Mon Oct 8 21:42:05 2018 +0200
+
+    PROCESS: Argos must be set up for authentication.
+
+[33mcommit ac66e4bd4d634555d0e8d5169de5754312552377[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Mon Feb 5 17:18:56 2018 +0100
+
+    FEATURE: Authenticate to edit.
+
+[33mcommit 02273995759ee68665087d341f375fee2ddd1f0b[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Sun Jul 29 18:32:15 2018 +0200
+
+    FIX: Exception when user has no viewpoints or no corpora.
+
+[33mcommit 91786ceb92a427f95dfbd628b560b13d8ceedbd7[m
+Merge: ec24bdf 0c8c5c2
+Author: gnoxr <quester@protonmail.com>
+Date:   Thu Jun 21 20:09:14 2018 +0200
+
+    Merge branch 'v7' of https://github.com/Hypertopic/Porphyry into article-view
+
+[33mcommit 0c8c5c29562bfaa64809a49eee5aa33e6671a829[m
+Author: gnoxr <quester@protonmail.com>
+Date:   Thu Jun 21 17:24:09 2018 +0200
+
+    FIX: update tests for the new design (see #72)
+    
+    Co-Authored By: Heliacerbonne <cerbonne.helia@gmail.com>
+
+[33mcommit 1113b8cb767e848ddffe824bc69bc6197be1cca4[m
+Author: gnoxr <quester@protonmail.com>
+Date:   Thu Jun 21 17:00:05 2018 +0200
+
+    FIX: apply new design to new features (see #72)
+    
+    Co-Authored By: Heliacerbonne <cerbonne.helia@gmail.com>
+
+[33mcommit c376436275f32413430fd1458c11f93788ed788e[m
+Merge: ac12aa1 c06791d
+Author: gnoxr <quester@protonmail.com>
+Date:   Thu Jun 21 11:37:32 2018 +0200
+
+    Merge branch 'design' of https://github.com/Heliacerbonne/Porphyry into affordance
+
+[33mcommit c06791d191261a9ad664ff334c1205dd1d60131e[m
+Merge: 4879bd6 effa0fc
+Author: gnoxr <quester@protonmail.com>
+Date:   Thu Jun 21 11:17:22 2018 +0200
+
+    Merge branch 'v7' of https://github.com/Hypertopic/Porphyry into design
+
+[33mcommit 4879bd67a4d9ffb188a71cb84e70e00c39862553[m
+Author: gnoxr <quester@protonmail.com>
+Date:   Thu Jun 21 10:27:45 2018 +0200
+
+    FIX: pass tests (see #108)
+
+[33mcommit effa0fcaef9a84e838864de136137f3ae3275707[m
+Author: Yuanjia FANG <fyuanjia@gmail.com>
+Date:   Sun Jun 10 17:22:04 2018 +0200
+
+    FEATURE: Unset an item's attribute (see #30).
+
+[33mcommit f0a06e341a2eeb3f332ac425b4c642f5318a2148[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Thu Jun 21 05:30:00 2018 +0200
+
+    PROCESS: Commits titles should be in English.
+
+[33mcommit 0edd16fd50edb56b6cfe6ff276d0ee3207a95044[m
+Author: GnoxR <quester@protonmail.com>
+Date:   Wed Jun 20 07:18:39 2018 +0000
+
+    FEATURE: allow per-portfolio configuration (see #94)
+    
+    Co-authored-by: winwave <letrannhaclong@gmail.com>
+    Co-authored-by: giabao5995 <giabao5995@gmail.com>
+    
+    See #109 for use instructions.
+
+[33mcommit eb1a5d86f53dae8ebec4edb0b19fea9ffafca83e[m
+Merge: 8a16c8b 6c41dc9
+Author: heliacerbonne <cerbonne.helia@gmail.com>
+Date:   Sat Jun 16 19:18:57 2018 +0200
+
+    Merge branch 'v7' of https://github.com/Hypertopic/Porphyry into design
+
+[33mcommit ac12aa1072b0172c4077a7c15e12c26f191466d1[m
+Author: heliacerbonne <cerbonne.helia@gmail.com>
+Date:   Sat Jun 16 15:29:36 2018 +0200
+
+    FIX: use proper label for topic deselection (see #72)
+
+[33mcommit ec24bdfc45a89abfa0ce00af727e2517f346995a[m
+Author: gnoxr <quester@protonmail.com>
+Date:   Fri Jun 15 11:43:34 2018 +0200
+
+    FEATURE: different display modes for the item view with custom attributes (see #94)
+    
+    Co-authored-by: winwave <letrannhaclong@gmail.com>
+    Co-authored-by: giabao5995 <giabao5995@gmail.com>
+
+[33mcommit f2e7c18cad771c456e2e287dd8aa575456d44fde[m
+Author: gnoxr <quester@protonmail.com>
+Date:   Fri Jun 15 11:16:21 2018 +0200
+
+    FEATURE: different display modes for the item list with custom attributes (see #94)
+    
+    Co-authored-by: winwave <letrannhaclong@gmail.com>
+    Co-authored-by: giabao5995 <giabao5995@gmail.com>
+
+[33mcommit 03b54d83fb9f0619c141a34474017a3ab24f7a2a[m
+Author: gnoxr <quester@protonmail.com>
+Date:   Fri Jun 15 10:09:06 2018 +0200
+
+    FEATURE: allow per-portfolio configuration (see #94)
+    
+    Co-authored-by: winwave <letrannhaclong@gmail.com>
+    Co-authored-by: giabao5995 <giabao5995@gmail.com>
+
+[33mcommit 6c41dc972c480358876baf1e16acdd5c2fd208eb[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Thu Jun 14 20:07:20 2018 +0200
+
+    FIX: Assign a topic to a non-Steatite item.
+
+[33mcommit fb27c97bd977d53b3ea874f2e5212cf18a2c90ba[m
+Author: Pinksea <lorraine.debraux@gmail.com>
+Date:   Fri Jun 8 12:39:00 2018 +0200
+
+    FEATURE: Set an item's attribute (closes #31).
+
+[33mcommit 9979d56281f68de67adf510420f0aa315fd4d94f[m
+Author: heliacerbonne <cerbonne.helia@gmail.com>
+Date:   Thu Jun 14 11:11:57 2018 +0200
+
+    FIX: stylize home link in the status bar (close #72)
+
+[33mcommit 7b697ed6a8c74a3b02dede9f7e8387e9bc1c943f[m
+Author: heliacerbonne <cerbonne.helia@gmail.com>
+Date:   Thu Jun 14 10:52:13 2018 +0200
+
+    FEATURE: deselect topics from the status bar (see #72)
+
+[33mcommit 40147908c4ae084476f76a8a98762a1e932b47e1[m
+Author: heliacerbonne <cerbonne.helia@gmail.com>
+Date:   Thu Jun 14 10:05:48 2018 +0200
+
+    FIX: affordance bug fixes (see #72)
+
+[33mcommit df16aba8a1f7eb7c3c7c7eeb5239efd9f9891e52[m
+Merge: 6961976 d4ed22c
+Author: XUZhengyi <zhengyi.xu@utt.fr>
+Date:   Wed Jun 13 15:35:43 2018 +0200
+
+    Merge branch 'v7' into Outliner
+
+[33mcommit 696197635618eeefa13681c8dafc9449cc254d71[m
+Author: xuzhengyi1995 <zhengyi.xu@utt.fr>
+Date:   Wed Jun 13 15:28:57 2018 +0200
+
+    FEATURE: create & modify viewpoints (see #69,#92,#58)
+    
+    Co-Authored-By: ZHANG Yi <yi.zhang2@utt.fr>
+    Co-Authored-By: TRAN Quoc Nhat Han <quoc_nhat_han.tran@utt.fr>
+    Co-Authored-By: Caroline <caroline.dequidt@worldonline.fr>
+
+[33mcommit d4ed22cd11efa089d507b4f9c1f9204a91c0d171[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Wed Jun 13 15:13:59 2018 +0200
+
+    TEST: Check which topics are selected (#53).
+    
+    Co-authored-by: Huynh Gia Bao Mai <hmi@edifixio.com>.
+
+[33mcommit 42d756ad5bd4284bf70f67e999ae53263a1482e0[m
+Author: xuzhengyi1995 <zhengyi.xu@utt.fr>
+Date:   Wed Jun 13 14:35:01 2018 +0200
+
+    Merge branch 'v7' of git://github.com/Hypertopic/Porphyry into Hypertopic-v7
+
+[33mcommit 631047447a3d868048ed298a6d9272c17b6a6871[m
+Author: Aurore Thomas <aurorethomas4@gmail.com>
+Date:   Sun Jun 3 23:07:06 2018 +0200
+
+    TEST: Consult topics and attributes related to an item (see commit 0734b36)
+    
+    
+    Co-authored-by: Valentin Porcellini <valentin.porcellini@gmail.com>
+    Co-authored-by: Axel Mousset <axel@mousset.me>
+
+[33mcommit d9db5d931358ff04aa3f2a6c508fff40325014da[m
+Author: Caroline <caroline.dequidt@worldonline.fr>
+Date:   Thu Apr 19 10:00:56 2018 +0200
+
+    TEST: Get similar items according to an item's topic (see #40).
+    
+    Phrasing improved by @benel.
+
+[33mcommit f36423e15be48d55aa6605cfdbf0bc28aa8f12f9[m
+Author: Adrian KALMAR <adrian.kalmar@hotmail.com>
+Date:   Sat Apr 21 16:08:52 2018 +0200
+
+    TEST: Add a topic to the selection (see #35)
+    
+    Co-authored-by: Pixaria25 <pixelman25@gmail.com>
+    
+    Phrasing and compatibility with fold/unfold feature
+    improved by @benel.
+
+[33mcommit 5fabb71a11c8e2540b0dfdb4ad0350a0cf808cd1[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Tue Jun 12 15:12:36 2018 +0200
+
+    FIX: Messages should use official translations for Hypertopic "building blocks".
+
+[33mcommit 69a56434fcc3c18aa0799c3c820112b4a26ebf38[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Tue Jun 12 14:54:30 2018 +0200
+
+    PROCESS: Updates should only be tested on the test server.
+
+[33mcommit 09366629ad2d60b5f0b173ff59f7ae8935e1eafb[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Tue Jun 12 14:13:38 2018 +0200
+
+    PROCESS: Up to date `react-scripts`.
+    
+    - fix several vulnerabilities (DoS),
+    - require `window` members to be prefixed.
+
+[33mcommit 1c1b4a41cd0e5ad5fecfb61b66dbd954b599ac7a[m
+Author: Corentin Laithier <laithier.corentin@gmail.com>
+Date:   Fri Jun 1 10:41:43 2018 +0200
+
+    FEATURE: Unassign a topic from item (see #34)
+    
+    Co-Authored-By: Florent PERGOUD <florentpergoud@gmail.com>
+    Co-Authored-By: Valentin P <valentin.porcellini@gmail.com>
+    Co-Authored-By: leoschneider <leo.schneider@utt.fr>
+    Co-Authored-By: Audrey Henriette <audrey.henriette@utt.fr>
+    Co-Authored-By: Aurore Thomas <aurorethomas4@gmail.com>
+    Co-Authored-By: David Galante <davidgalante77@gmail.com>
+
+[33mcommit af9723de7ded23537c1ad024fdb2c5c6745cbf83[m
+Author: Corentin Laithier <laithier.corentin@gmail.com>
+Date:   Fri Jun 1 10:15:42 2018 +0200
+
+    REFACTORING: Coding style improved.
+
+[33mcommit 455740dbab60d73bd890b90d6658d5a7f78bc937[m
+Author: Corentin Laithier <laithier.corentin@gmail.com>
+Date:   Fri Jun 1 10:15:42 2018 +0200
+
+    FEATURE: Assign existing topic to an item (see #32)
+    
+    Co-Authored-By: Florent PERGOUD <florentpergoud@gmail.com>
+    Co-Authored-By: Valentin P <valentin.porcellini@gmail.com>
+    Co-Authored-By: leoschneider <leo.schneider@utt.fr>
+    Co-Authored-By: Audrey Henriette <audrey.henriette@utt.fr>
+    Co-Authored-By: Aurore Thomas <aurorethomas4@gmail.com>
+    Co-Authored-By: David Galante <davidgalante77@gmail.com>
+
+[33mcommit 672983c1e44890ee0ded9b9b3b0c75214c01528b[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Mon Jun 11 15:39:36 2018 +0200
+
+    TEST: Refactored test of feature #37.
+    
+    Improved:
+    
+    - phrasing,
+    - test cases,
+    - performance.
+
+[33mcommit b330cc2f9df8e99e2a9b00729084f6e8ee879f8d[m
+Author: Corentin <laithier.corentin@gmail.com>
+Date:   Fri Jun 8 15:30:45 2018 +0200
+
+    TEST: Get the number of selected items assigned to a topic (see #37)
+
+[33mcommit c8291a81a43d16ddda9fab7d96e3aac058557934[m
+Author: heliacerbonne <cerbonne.helia@gmail.com>
+Date:   Thu Jun 7 11:39:33 2018 +0200
+
+    FIX: make the portfolio name link to the index (see #72)
+
+[33mcommit af54730f65fc941c21809e88a2f882d3f47bd9cf[m
+Author: heliacerbonne <cerbonne.helia@gmail.com>
+Date:   Thu Jun 7 11:26:28 2018 +0200
+
+    FIX: stylize topic tree (see #72)
+
+[33mcommit 292d08cadfd629be4e894ea7b676708f508c8fe8[m
+Author: heliacerbonne <cerbonne.helia@gmail.com>
+Date:   Thu Jun 7 11:21:20 2018 +0200
+
+    FEATURE: add open-iconic to the project (see #72)
+
+[33mcommit 9fab352bf46c020b57034a9ecee1301a43913899[m
+Author: heliacerbonne <cerbonne.helia@gmail.com>
+Date:   Thu Jun 7 10:29:53 2018 +0200
+
+    FIX: merge full picture link with the item picture (see #72)
+
+[33mcommit 2f9f35892dc1f396e729fa924ee18a73a4021a29[m
+Author: heliacerbonne <cerbonne.helia@gmail.com>
+Date:   Thu Jun 7 10:18:09 2018 +0200
+
+    FIX: stylize item links (see #72)
+
+[33mcommit 8a16c8b40b90de66aa7f660a8d93aba9fddc7e07[m
+Author: heliacerbonne <cerbonne.helia@gmail.com>
+Date:   Wed May 30 20:31:36 2018 +0200
+
+    FIX: put item counts in pill badges (close #71)
+
+[33mcommit 99629b787a0cd7d8e1fac34d952ea6dece641d00[m
+Author: heliacerbonne <cerbonne.helia@gmail.com>
+Date:   Wed May 30 20:24:33 2018 +0200
+
+    FIX: center item names in the corpus (see #71)
+
+[33mcommit 1ea9dcf73e29660de2e2981221ce47e20d517752[m
+Author: heliacerbonne <cerbonne.helia@gmail.com>
+Date:   Wed May 30 20:22:24 2018 +0200
+
+    FIX: put back the topic color (see #71)
+
+[33mcommit b41650da78f22a03fdac367209d4b12f72942283[m
+Author: heliacerbonne <cerbonne.helia@gmail.com>
+Date:   Sun May 27 21:02:01 2018 +0200
+
+    FIX: add a link to see an item in full view (see #71)
+
+[33mcommit 09adcd5392ba9ca51404f2d96c0ba1e5df7a52e0[m
+Author: heliacerbonne <cerbonne.helia@gmail.com>
+Date:   Sun May 27 20:48:45 2018 +0200
+
+    FIX: add a link to the homepage on item pages (see #71)
+
+[33mcommit f4f64ee3279ff05300fa8de1020ed6f560c8a5b7[m
+Author: heliacerbonne <cerbonne.helia@gmail.com>
+Date:   Sun May 27 20:47:20 2018 +0200
+
+    FIX: update colors and margins (see #71)
+
+[33mcommit 9781b4dc17dfaed26a0ee81b5cddce6b99f1a647[m
+Author: heliacerbonne <cerbonne.helia@gmail.com>
+Date:   Sun May 27 18:44:43 2018 +0200
+
+    FIX: set and stylized level 2 and 3 headings (see #71)
+
+[33mcommit 018cc5353d52c1b7119344e51070ae6e1ed8e748[m
+Author: heliacerbonne <cerbonne.helia@gmail.com>
+Date:   Sun May 27 18:05:43 2018 +0200
+
+    FIX: header layout (see #71)
+
+[33mcommit 4ac33e11bc1c5d5397a22fb97f5dea2f0c286fbf[m
+Author: heliacerbonne <cerbonne.helia@gmail.com>
+Date:   Sun May 13 19:04:20 2018 +0200
+
+    FIX: layout interface blocks (see #71)
+
+[33mcommit 4dc686d9f51c639c55e1c2a317c9ebd08b438e0d[m
+Author: heliacerbonne <cerbonne.helia@gmail.com>
+Date:   Sun May 13 18:51:27 2018 +0200
+
+    FIX: setup text size hierarchy (see #71)
+
+[33mcommit 3e8dd1ce5bc9a6afa0fb0df414bf3bb809bd05da[m
+Author: heliacerbonne <cerbonne.helia@gmail.com>
+Date:   Sun May 13 18:04:58 2018 +0200
+
+    FEATURE: Add Bootstrap to the project (see #71)
+
+[33mcommit 9c700254439a50509d23d6bee4dd47f8f7bd0974[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Tue Oct 3 16:21:57 2017 +0200
+
+    FEATURE: Show/hide subtopics of a topic (closes #57)
+
+[33mcommit 950ae60bc9cbc6505b711f1bdd314caa3cdaf768[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Mon Apr 23 10:01:42 2018 +0200
+
+    FIX: Topic’s items counter should not be highlighted.
+
+[33mcommit dc2edd7a1926b1dba09e58862c2c0167ec0cb5d4[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Fri Apr 20 14:30:37 2018 +0200
+
+    PROCESS: Removed unneeded settings.
+
+[33mcommit d7fbd453821933b285a9b45bc089aafc87622270[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Thu Mar 8 08:08:18 2018 +0100
+
+    PROCESS: Travis now needs Chrome requirement explicitly.
+
+[33mcommit 1fb1425e25bd1402fe5b64d65153c2fd3032f49d[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Fri Feb 9 16:20:56 2018 +0100
+
+    PROCESS: Checklists for issues and pull requests.
+
+[33mcommit 5028b120089f54e76f31906ef08d955cb55f8e4c[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Wed Feb 7 23:05:17 2018 +0100
+
+    PROCESS: Tests on Travis CI.
+
+[33mcommit 2720d708517b069389831ceaef6a6ea0336639c4[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Wed Feb 7 22:15:26 2018 +0100
+
+    TEST: Consult a portfolio (see #55).
+
+[33mcommit 5c3fc6cf6b52afa623cabfec770fadc8cdebdd8f[m
+Author: Florian Esslinger <florian.esslinger@live.Fr>
+Date:   Tue Jan 30 14:58:06 2018 +0100
+
+    FIX: Edit config.json and replace external ressources
+
+[33mcommit 25edbeabbac1147d03f14d011c5f7c85a1c03ba0[m
+Author: Florian Esslinger <florian.esslinger@live.Fr>
+Date:   Tue Jan 30 14:38:02 2018 +0100
+
+    FIX: Update after first topic and remove buttons and files
+
+[33mcommit a093650d5b707d836b3cc36dbd07289ef2f9ca41[m
+Author: Florian Esslinger <32069282+florianess@users.noreply.github.com>
+Date:   Sat Jan 13 01:03:55 2018 +0100
+
+    FEATURE: Create a viewpoint (closes #62)
+
+[33mcommit ad71f840a90ed18a62fa01b30cc6b6e3640d2ca7[m
+Author: Florian Esslinger <32069282+florianess@users.noreply.github.com>
+Date:   Sat Jan 13 01:00:03 2018 +0100
+
+    FIX: Delete topic with childs and edit a topic
+
+[33mcommit 63fe00974872318238811ee863a957f0728ddde5[m
+Author: Florian Esslinger <32069282+florianess@users.noreply.github.com>
+Date:   Sat Jan 13 00:55:54 2018 +0100
+
+    FEATURE: Create a child to a topic and use enter button (closes #43)
+
+[33mcommit c721f344175623eb9abf81e23b85909c4bea236c[m
+Author: Florian Esslinger <32069282+florianess@users.noreply.github.com>
+Date:   Sat Jan 13 00:46:54 2018 +0100
+
+    FEATURE: Edit, delete and add topics (closes #44, closes #59, closes #67)
+
+[33mcommit 9a668f63b0ca9913ce16e7132576ba5c8ee14126[m
+Author: Florian Esslinger <32069282+florianess@users.noreply.github.com>
+Date:   Sat Jan 13 00:32:29 2018 +0100
+
+    FEATURE: Consult a viewpoint (closes #58)
+
+[33mcommit 89f9f5e7f547ab2efa6520311c259e70447d845d[m
+Author: prudywsh <antoineprudhomme5@gmail.com>
+Date:   Thu Oct 12 11:31:33 2017 +0200
+
+    DOC: command to run tests added to readme
+
+[33mcommit c5825852e71035c4172cc77b2b1b49ba4ae39bdd[m
+Author: prudywsh <antoineprudhomme5@gmail.com>
+Date:   Tue Oct 10 15:40:52 2017 +0200
+
+    REFACTORING: folder structure and React files extensions updated
+
+[33mcommit 5d07dccf6925bc224698be95b2e2f425dcdb3569[m
+Author: Aurélien Bénel <aurelien.benel@utt.fr>
+Date:   Fri Sep 29 18:54:41 2017 +0200
+
+    DOC: GNU Affero General Public license
+
+[33mcommit 3176f9d7c6f7c62db3a26a35425c45df8e9f5ba2[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Thu Jul 6 16:52:55 2017 +0200
+
+    REFACTORING: Fetch viewpoints and corpora as soon as the user is fetched.
+
+[33mcommit 799e4dcea70e0f037ce168758c4494398b0bf881[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Wed Jun 21 18:57:52 2017 +0200
+
+    REFACTORING: Graph computations only on updates.
+
+[33mcommit ed7008c6ceb58cb7da22058905e919cec7aac16b[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Wed Jun 21 17:13:13 2017 +0200
+
+    Consult any portfolio (closes #55)
+
+[33mcommit e57342b24115faaf868a59673c8c309b872a5505[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Wed Jun 21 15:06:40 2017 +0200
+
+    FEATURE: Get similar items according to an item's topic (closes #40)
+
+[33mcommit e5fdd117acdfba529b0a06b525957cf5ca2a0e00[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Wed Jun 21 14:46:16 2017 +0200
+
+    FEATURE: Add or remove a topic from the selection (closes #35, closes #36)
+
+[33mcommit 4f240f828450ee360c298b79a57703d7ef2ce160[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Wed Jun 21 13:10:15 2017 +0200
+
+    FEATURE: For every topic, get the number of selected items assigned to it (closes #37)
+
+[33mcommit 550d6d5c24e1e1102e7a2f0ad22ecec5bab8630c[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Wed Jun 21 09:56:21 2017 +0200
+
+    FIX: Width of the grey margin around corpora or item resource.
+
+[33mcommit b8daaa31b2c9cba5cead7df2ac875d781bfaa37d[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Wed Jun 21 07:45:29 2017 +0200
+
+    FEATURE: Consult items that match selected topics (closes #54)
+
+[33mcommit 2cb0b3079a864fc7405f88a18c7017a4a55d3778[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Tue Jun 20 11:56:13 2017 +0200
+
+    FEATURE: Check which topics are selected (closes #53).
+
+[33mcommit 11be999ce4e659ea4e2325f0b54808a7c8a93eeb[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Tue Jun 20 11:44:01 2017 +0200
+
+    REFACTORING: Viewpoints are a part of Portfolio state.
+
+[33mcommit 9a5c9d4a1987d72b562aa17ab4372abbfd1a511c[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Tue Jun 20 11:05:15 2017 +0200
+
+    REFACTORING: Use viewpoint raw data as its state.
+
+[33mcommit ed1996f598888fcf242067ed9ba87759bb4c9915[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Mon Jun 19 17:24:19 2017 +0200
+
+    REFACTORING: Corpora are a part of Portfolio state.
+
+[33mcommit 0734b3684dad151991a396623c1ee755c248d56f[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Sun May 21 16:06:52 2017 +0200
+
+    FEATURE: Consult topics and attributes related to an item.
+
+[33mcommit c55b39cec9a03581bd13881cfed580c95fce9ff5[m
+Author: Aurelien Benel <aurelien.benel@utt.fr>
+Date:   Wed May 17 21:43:36 2017 +0200
+
+    FEATURE: Consult corpora and viewpoints related to a user.
+    
+    Reimplemented from scratch with ReactJS.
