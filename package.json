@@ -61,7 +61,6 @@
           }
         }
       ],
-      "linebreak-style": 2,
       "no-multiple-empty-lines": [
         2,
         {
