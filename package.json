@@ -18,7 +18,7 @@
     "yaml": "^1.8.2"
   },
   "devDependencies": {
-    "react-scripts": "^3.4.0",
+    "react-scripts": "^3.4.1",
     "serve": "^11.3.0"
   },
   "scripts": {
@@ -61,7 +61,6 @@
           }
         }
       ],
-      "linebreak-style": 2,
       "no-multiple-empty-lines": [
         2,
         {

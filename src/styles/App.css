@@ -158,7 +158,7 @@ h1 a, h1 a:hover {
   color: black;
 }
 
-.Attributes {
+.Attributes > div {
   display: table;
   width: 100%;
 }

@@ -56,12 +56,14 @@ class Item extends Component {
               <div className="Description">
                 <h2 className="h4 font-weight-bold text-center">Description</h2>
                 <div className="p-3">
-                  <h3 className="h4">Attributs du document</h3>
-                  <hr/>
                   <div className="Attributes">
-                    {attributes}
+                    <h3 className="h4">Attributs du document</h3>
+                    <hr/>
+                    <div>
+                      {attributes}
+                    </div>
+                    {this._getAttributeCreationForm()}
                   </div>
-                  {this._getAttributeCreationForm()}
                   {viewpoints}
                 </div>
               </div>
@@ -585,7 +587,7 @@ class Viewpoint extends Component {
     }
     const canValidateTopic=this.state.currentSelection || this.state.newTopic || this.state.topicInputvalue.length > 2;
     return (
-      <div>
+      <div className="Viewpoint">
         <h3 className="h4">{this.state.name}</h3>
         <hr/>
         <div className="Topics">

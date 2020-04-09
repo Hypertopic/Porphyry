@@ -32,9 +32,10 @@ def getUUID(name)
       uuid = "fed64e22e60941409ad45c167fc396b8"
     when "vers 1520"
       uuid = "e01a7cb572461a43a22aa8f771235cb6"
+    else
+      range = [*'0'..'9',*'A'..'F']
+      uuid = Array.new(36){ range.sample }.join
   end
-  range = [*'0'..'9',*'A'..'F']
-  uuid = Array.new(36){ range.sample }.join
   return uuid
 end
 
