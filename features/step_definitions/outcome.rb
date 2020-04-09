@@ -32,5 +32,5 @@ Alors("la valeur de l'attribut {string} est {string}") do |attribute, value|
 end
 
 Alors("une des rubriques de l'item est {string}") do |topic|
-  expect(page).to have_content topic
+  expect(page).to have_css '.Topic', text: topic
 end
