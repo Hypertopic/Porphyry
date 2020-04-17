@@ -11,6 +11,6 @@ Scénario: créée à l'occasion
 Scénario: créée précédemment
   Soit un item en cours de création
   Et l'utilisateur "alice" connecté
-  Quand l'utilisateur indique "simon" pour la catégorie "Simon / Pierre" du point de vue "Histoire des religions"
+  Quand l'utilisateur indique "pierre" pour la catégorie "Simon / Pierre" du point de vue "Histoire des religions"
   Alors une des rubriques de l'item est "Simon / Pierre"
 

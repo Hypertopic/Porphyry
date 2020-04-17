@@ -422,6 +422,7 @@ class Viewpoint extends Component {
   constructor(props) {
     super();
     this.state = {
+      topics: {},
       topicInputvalue: '',
       suggestions: [],
       currentSelection: '',
@@ -446,46 +447,18 @@ class Viewpoint extends Component {
     );
   }
 
-  getSuggestions = value => {
-    const inputValue = value.trim().toLowerCase();
-    const inputLength = inputValue.length;
-    const ressourceId = window.location.href.substr(
-      window.location.href.lastIndexOf('/') + 1
-    );
+  getPath = (id) => {
+    let topic = this.state.topics[id];
+    let broader = topic && topic.broader && topic.broader[0] && topic.broader[0].id;
+    return ((broader)? this.getPath(broader) : '') + topic.name[0] + ' > ';
+  }
 
-    let filteredTopics = [];
-    if (inputLength !== 0) {
-      for (let id in this.state.topics) {
-        const topic = this.state.topics[id];
-        let alreadyAssigned = false;
-        if (topic.item) {
-          topic.item.forEach(item => {
-            if (item.id === ressourceId) {
-              alreadyAssigned = true;
-            }
-          });
-        }
-
-        if (
-          !alreadyAssigned &&
-          topic.name &&
-          topic.name[0] &&
-          topic.name[0].toLowerCase().slice(0, inputLength) === inputValue
-        ) {
-          let fullName = topic.name[0];
-          let currentTopic = topic;
-          while (currentTopic.broader) {
-            currentTopic = this.state.topics[currentTopic.broader[0].id];
-            fullName = `${currentTopic.name} > ${fullName}`;
-          }
-          filteredTopics.push({
-            name: fullName,
-            id: id
-          });
-        }
-      }
-    }
-    return filteredTopics;
+  getSuggestions = query => {
+    let pattern = new RegExp(query, "i");
+    let alreadyAssigned = this.props.topics.map(x => x.id);
+    return Object.keys(this.state.topics)
+      .map(x => ({id: x, name: this.getPath(x).slice(0, -3)}))
+      .filter(x => pattern.test(x.name) && !alreadyAssigned.includes(x.id));
   };
 
   onTopicInputFocus = (event) => {
@@ -650,7 +623,6 @@ class Viewpoint extends Component {
   }
 
   _getPaths() {
-    if (!this.state.topics) return [];
     return this.props.topics.map(t => (
       <TopicPath
         key={t.id}
@@ -743,7 +715,7 @@ class TopicPath extends Component {
     );
   }
 
-  componentDidMount() {
+  _updatePath() {
     let topic = this._getTopic(this.props.id);
     let path = [topic];
     while (topic.broader && topic.broader.length) {
@@ -751,6 +723,16 @@ class TopicPath extends Component {
       path.unshift(topic);
     }
     this.setState({path});
+  }
+
+  componentDidMount() {
+    this._updatePath();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.topics !== prevProps.topics) {
+      this._updatePath();
+    }
   }
 
   _getTopic(id) {
