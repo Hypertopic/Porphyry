@@ -432,14 +432,19 @@ class Viewpoint extends Component {
 
   getSuggestionValue = suggestion => suggestion.name;
 
-  renderSuggestion = suggestion => {
+  renderSuggestion(suggestion, {query}) {
+    let value = suggestion.name;
+    let start = value.search(new RegExp(query, "i"));
+    let end = start + query.length;
     return (
       // eslint-disable-next-line
       <a className="SuggestionItem" id={suggestion.id}>
-        {suggestion.name}
+        {value.slice(0, start)}
+        <b>{value.slice(start, end)}</b>
+        {value.slice(end)}
       </a>
     );
-  };
+  }
 
   getSuggestions = value => {
     const inputValue = value.trim().toLowerCase();
@@ -467,9 +472,7 @@ class Viewpoint extends Component {
           topic.name[0] &&
           topic.name[0].toLowerCase().slice(0, inputLength) === inputValue
         ) {
-          let fullName =
-            topic.name[0].slice(0, inputLength).toUpperCase() +
-            topic.name[0].slice(inputLength);
+          let fullName = topic.name[0];
           let currentTopic = topic;
           while (currentTopic.broader) {
             currentTopic = this.state.topics[currentTopic.broader[0].id];

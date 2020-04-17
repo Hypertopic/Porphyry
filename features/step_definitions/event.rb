@@ -34,10 +34,18 @@ Quand("l'utilisateur indique {string} comme valeur de l'attribut {string}") do |
   end
 end
 
-Quand("l‘utilisateur indique comme rubrique {string} du point de vue {string}") do |topic, viewpoint|
+Quand("l'utilisateur indique {string} comme nouvelle rubrique du point de vue {string}") do |topic, viewpoint|
   within '.Viewpoint', text: viewpoint do
     fill_in placeholder: 'Ajouter une rubrique...', with: topic
     click_on class: 'ValidateButton'
+    click_on class: 'ValidateButton'
+  end
+end
+
+Quand("l'utilisateur indique {string} pour la catégorie {string} du point de vue {string}") do |pattern, topic, viewpoint|
+  within '.Viewpoint', text: viewpoint do
+    find('input').send_keys pattern
+    click_link(topic, href: nil)
     click_on class: 'ValidateButton'
   end
 end

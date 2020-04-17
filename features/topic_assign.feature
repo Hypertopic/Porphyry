@@ -1,9 +1,16 @@
 #language: fr
 
-Fonctionnalité: Décrire un item à l’aide de rubriques
+Fonctionnalité: Décrire un item à l’aide d'une rubrique
 
-Scénario:
+Scénario: créée à l'occasion
   Soit un item en cours de création
   Et l'utilisateur "alice" connecté
-  Quand l‘utilisateur indique comme rubrique "Monture en chef d'œuvre" du point de vue "Histoire de l'art"
+  Quand l'utilisateur indique "Monture en chef d'œuvre" comme nouvelle rubrique du point de vue "Histoire de l'art"
   Alors une des rubriques de l'item est "Monture en chef d'œuvre"
+
+Scénario: créée précédemment
+  Soit un item en cours de création
+  Et l'utilisateur "alice" connecté
+  Quand l'utilisateur indique "simon" pour la catégorie "Simon / Pierre" du point de vue "Histoire des religions"
+  Alors une des rubriques de l'item est "Simon / Pierre"
+
