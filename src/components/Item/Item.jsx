@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Hypertopic from 'hypertopic';
 import groupBy from 'json-groupby';
-import Autosuggest from 'react-autosuggest';
+import InputWithSuggestions from '../InputWithSuggestions/InputWithSuggestions.jsx';
 import conf from '../../config/config.js';
 import Header from '../Header/Header.jsx';
 import Authenticated from '../Authenticated/Authenticated.jsx';
@@ -424,27 +424,8 @@ class Viewpoint extends Component {
     this.state = {
       topics: {},
       topicInputvalue: '',
-      suggestions: [],
       currentSelection: '',
-      currentPreSelection: ''
     };
-    this.renderSuggestion = this.renderSuggestion.bind(this);
-  }
-
-  getSuggestionValue = suggestion => suggestion.name;
-
-  renderSuggestion(suggestion, {query}) {
-    let value = suggestion.name;
-    let start = value.search(new RegExp(query, "i"));
-    let end = start + query.length;
-    return (
-      // eslint-disable-next-line
-      <a className="SuggestionItem" id={suggestion.id}>
-        {value.slice(0, start)}
-        <b>{value.slice(start, end)}</b>
-        {value.slice(end)}
-      </a>
-    );
   }
 
   getPath = (id) => {
@@ -452,14 +433,6 @@ class Viewpoint extends Component {
     let broader = topic && topic.broader && topic.broader[0] && topic.broader[0].id;
     return ((broader)? this.getPath(broader) : '') + topic.name[0] + ' > ';
   }
-
-  getSuggestions = query => {
-    let pattern = new RegExp(query, "i");
-    let alreadyAssigned = this.props.topics.map(x => x.id);
-    return Object.keys(this.state.topics)
-      .map(x => ({id: x, name: this.getPath(x).slice(0, -3)}))
-      .filter(x => pattern.test(x.name) && !alreadyAssigned.includes(x.id));
-  };
 
   onTopicInputFocus = (event) => {
     if (this.blurTimeout) {
@@ -490,36 +463,14 @@ class Viewpoint extends Component {
     });
   };
 
-  onSuggestionsFetchRequested = ({ value }) => {
-    this.setState({
-      suggestions: this.getSuggestions(value)
-    });
-  };
-
-  onSuggestionsClearRequested = () => {
-    this.setState({
-      suggestions: []
-    });
-  };
-
   onSuggestionSelected = (event, { suggestion }) => {
     this.setState({ currentSelection: suggestion });
-  };
-
-  onSuggestionHighlighted = ({ suggestion }) => {
-    if (suggestion && suggestion.id) {
-      this.setState({ currentPreSelection: suggestion.id });
-    } else {
-      this.setState({ currentPreSelection: '' });
-    }
   };
 
   clearInput = () => {
     this.setState({
       topicInputvalue: '',
       currentSelection: '',
-      currentPreSelection: '',
-      suggestions: [],
       newTopic:""
     });
   };
@@ -532,22 +483,13 @@ class Viewpoint extends Component {
 
   render() {
     const paths = this._getPaths();
-    const { topicInputvalue, suggestions } = this.state;
     const inputProps = {
       placeholder: this.state.newTopic ? 'Choisir une rubrique parent...' : 'Ajouter une rubrique...',
-      value: topicInputvalue,
+      value: this.state.topicInputvalue,
       onFocus: this.onTopicInputFocus,
       onBlur: this.onTopicInputBlur,
       onChange: this.onTopicInputChange,
       onKeyDown: this.onTopicInputKeyDown,
-    };
-    const theme = {
-      container: 'autosuggest',
-      input: 'form-control',
-      suggestionsContainer: 'dropdown open',
-      suggestionsList: `dropdown-menu ${suggestions.length ? 'show' : ''}`,
-      suggestion: 'dropdown-item',
-      suggestionHighlighted: 'active'
     };
     var classes=["TopicAdding","input-group"];
     if (!this.state.hasFocus) {
@@ -562,6 +504,10 @@ class Viewpoint extends Component {
       </button></div>;
     }
     const canValidateTopic=this.state.currentSelection || this.state.newTopic || this.state.topicInputvalue.length > 2;
+    let alreadyAssigned = this.props.topics.map(x => x.id);
+    let candidates = Object.keys(this.state.topics)
+      .map(x => ({id: x, name: this.getPath(x).slice(0, -3)}))
+      .filter(x => !alreadyAssigned.includes(x.id));
     return (
       <div className="Viewpoint">
         <h3 className="h4">{this.state.name}</h3>
@@ -569,18 +515,10 @@ class Viewpoint extends Component {
         <div className="Topics">
           {paths}
           <div className={classes.join(" ")}>
-            <Autosuggest
-              theme={theme}
-              className="TopicSuggest"
-              suggestions={suggestions}
-              onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-              onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-              onSuggestionHighlighted={this.onSuggestionHighlighted}
+            <InputWithSuggestions candidates={candidates}
               onSuggestionSelected={this.onSuggestionSelected}
-              getSuggestionValue={this.getSuggestionValue}
-              renderSuggestion={this.renderSuggestion}
               inputProps={inputProps}
-              id={`input-${this.state.name}`}
+              id={this.props.id}
             />
             <div className="input-group-append">
               <button type="button" className="btn btn-sm ValidateButton btn" onClick={() => {
