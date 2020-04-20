@@ -21,19 +21,13 @@ function getString(obj) {
 }
 
 class Item extends Component {
+
   constructor() {
     super();
     this.state = {
       attributeInputValue:"",
       item:{topic:[]}
     };
-    // These bindings are necessary to make `this` work in the callback
-    this._assignTopic = this._assignTopic.bind(this);
-    this._removeTopic = this._removeTopic.bind(this);
-    this._fetchItem = this._fetchItem.bind(this);
-    this._getOrCreateItem = this._getOrCreateItem.bind(this);
-    this._submitAttribute = this._submitAttribute.bind(this);
-    this._deleteAttribute = this._deleteAttribute.bind(this);
   }
 
   render() {
@@ -99,8 +93,8 @@ class Item extends Component {
     return Object.entries(this.state.item)
       .filter(x => !HIDDEN.includes(x[0]))
       .map(x => (
-        <Attribute  key={x[0]} myKey={x[0]} value={x[1][0]}
-          setAttribute={this._setAttribute.bind(this)} deleteAttribute={this._deleteAttribute}/>
+        <Attribute  key={x[0]} name={x[0]} value={x[1][0]}
+          setAttribute={this._setAttribute} deleteAttribute={this._deleteAttribute}/>
       ));
   }
 
@@ -115,7 +109,7 @@ class Item extends Component {
     this._fetchItem();
   }
 
-  async _getOrCreateItem() {
+  _getOrCreateItem = async () => {
     let hypertopic = new Hypertopic((await conf).services);
     return hypertopic.get({_id: this.props.match.params.item})
     .catch(e => {
@@ -124,9 +118,9 @@ class Item extends Component {
         item_corpus: this.props.match.params.corpus
       };
     });
-  }
+  };
 
-  async _fetchItem() {
+  _fetchItem = async () => {
     let uri = this.props.match.url;
     let params = this.props.match.params;
     let SETTINGS = await conf;
@@ -152,7 +146,7 @@ class Item extends Component {
         this.setState({topic});
       }
     });
-  }
+  };
 
   _getAttributeCreationForm() {
     var classes=["AttributeForm","input-group"];
@@ -223,7 +217,7 @@ class Item extends Component {
     );
   }
 
-  async _setAttribute(key, value) {
+  _setAttribute = async (key, value) => {
     if (key!=='' && value!=='') {
       let hypertopic = new Hypertopic((await conf).services);
       let attribute = {[key]: [value]};
@@ -241,7 +235,7 @@ class Item extends Component {
     }
   }
 
-  _submitAttribute(e) {
+  _submitAttribute = (e) => {
     e.preventDefault();
     let key_value = this.state.attributeInputValue;
     if (key_value) {
@@ -254,9 +248,9 @@ class Item extends Component {
     });
     this.attributeInput.focus();
     return false;
-  }
+  };
 
-  async _deleteAttribute(key) {
+  _deleteAttribute = async (key) => {
     let hypertopic = new Hypertopic((await conf).services);
     const _error = (x) => console.error(x.message);
     this._getOrCreateItem()
@@ -272,9 +266,9 @@ class Item extends Component {
         });
       })
       .catch(_error);
-  }
+  };
 
-  async _assignTopic(topicToAssign, viewpointId) {
+  _assignTopic = async (topicToAssign, viewpointId) => {
     let hypertopic = new Hypertopic((await conf).services);
     return this._getOrCreateItem()
       .then(data => {
@@ -293,10 +287,10 @@ class Item extends Component {
         })
       })
       .catch(error => console.error(error));
-  }
+  };
 
 
-  async _removeTopic(topicToDelete) {
+  _removeTopic = async (topicToDelete) => {
     let hypertopic = new Hypertopic((await conf).services);
     if (window.confirm('Voulez-vous réellement que l\'item affiché ne soit plus décrit à l\'aide de cette rubrique ?')) {
       return this._getOrCreateItem()
@@ -315,7 +309,7 @@ class Item extends Component {
         })
         .catch(error => console.error(error));
     }
-  }
+  };
 }
 
 function Resource(props) {
@@ -327,7 +321,5 @@ function Resource(props) {
     </div>
   : "";
 }
-
-
 
 export default Item;

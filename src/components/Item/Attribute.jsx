@@ -30,19 +30,20 @@ class Attribute extends React.Component {
   }
 
   submitValue = (e) => {
-    this.props.setAttribute(this.props.myKey, this.state.editedValue).then(
+    this.props.setAttribute(this.props.name, this.state.editedValue).then(
       _ => this.setState({edit: false})
     );
   }
 
   getButtons = () => {
+    let deleteAttribute = () => this.props.deleteAttribute(this.props.name);
     if (!this.state.edit) return (
       <div className="buttons">
         <button onClick={this.setEdit} className="btn btn-xs EditButton">
           <span className="oi oi-pencil"> </span>
         </button>
         <button className="btn btn-xs DeleteButton"
-          onClick={this.props.deleteAttribute.bind(this, this.props.myKey)}>
+          onClick={deleteAttribute}>
           <span className="oi oi-x"> </span>
         </button>
       </div>
@@ -51,7 +52,7 @@ class Attribute extends React.Component {
       <button type="button" className="btn btn-sm ValidateButton btn"
         onClick={this.submitValue}
         disabled={!this.state.editedValue}
-        id={`validateButton-${this.props.myKey}`}>
+        id={`validateButton-${this.props.name}`}>
         <span className="oi oi-check"> </span>
       </button>
     );
@@ -78,7 +79,7 @@ class Attribute extends React.Component {
     return (
       <div className="Attribute">
         <div className="Key">
-          {this.props.myKey}
+          {this.props.name}
         </div>
         {attributeValue}
         {buttons}
