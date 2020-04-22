@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Hypertopic from 'hypertopic';
 import groupBy from 'json-groupby';
-import Autosuggest from 'react-autosuggest';
 import conf from '../../config/config.js';
+import Viewpoint from './Viewpoint.jsx';
+import Attribute from './Attribute.jsx';
 import Header from '../Header/Header.jsx';
 import Authenticated from '../Authenticated/Authenticated.jsx';
-import TopicTree from '../Outliner/TopicTree.js';
 import { DiscussionEmbed } from 'disqus-react';
 
 import '../../styles/App.css';
@@ -21,19 +21,13 @@ function getString(obj) {
 }
 
 class Item extends Component {
+
   constructor() {
     super();
     this.state = {
       attributeInputValue:"",
       item:{topic:[]}
     };
-    // These bindings are necessary to make `this` work in the callback
-    this._assignTopic = this._assignTopic.bind(this);
-    this._removeTopic = this._removeTopic.bind(this);
-    this._fetchItem = this._fetchItem.bind(this);
-    this._getOrCreateItem = this._getOrCreateItem.bind(this);
-    this._submitAttribute = this._submitAttribute.bind(this);
-    this._deleteAttribute = this._deleteAttribute.bind(this);
   }
 
   render() {
@@ -99,8 +93,8 @@ class Item extends Component {
     return Object.entries(this.state.item)
       .filter(x => !HIDDEN.includes(x[0]))
       .map(x => (
-        <Attribute  key={x[0]} myKey={x[0]} value={x[1][0]}
-          setAttribute={this._setAttribute.bind(this)} deleteAttribute={this._deleteAttribute}/>
+        <Attribute  key={x[0]} name={x[0]} value={x[1][0]}
+          setAttribute={this._setAttribute} deleteAttribute={this._deleteAttribute}/>
       ));
   }
 
@@ -115,7 +109,7 @@ class Item extends Component {
     this._fetchItem();
   }
 
-  async _getOrCreateItem() {
+  _getOrCreateItem = async () => {
     let hypertopic = new Hypertopic((await conf).services);
     return hypertopic.get({_id: this.props.match.params.item})
     .catch(e => {
@@ -124,9 +118,9 @@ class Item extends Component {
         item_corpus: this.props.match.params.corpus
       };
     });
-  }
+  };
 
-  async _fetchItem() {
+  _fetchItem = async () => {
     let uri = this.props.match.url;
     let params = this.props.match.params;
     let SETTINGS = await conf;
@@ -152,7 +146,7 @@ class Item extends Component {
         this.setState({topic});
       }
     });
-  }
+  };
 
   _getAttributeCreationForm() {
     var classes=["AttributeForm","input-group"];
@@ -223,7 +217,7 @@ class Item extends Component {
     );
   }
 
-  async _setAttribute(key, value) {
+  _setAttribute = async (key, value) => {
     if (key!=='' && value!=='') {
       let hypertopic = new Hypertopic((await conf).services);
       let attribute = {[key]: [value]};
@@ -241,7 +235,7 @@ class Item extends Component {
     }
   }
 
-  _submitAttribute(e) {
+  _submitAttribute = (e) => {
     e.preventDefault();
     let key_value = this.state.attributeInputValue;
     if (key_value) {
@@ -254,9 +248,9 @@ class Item extends Component {
     });
     this.attributeInput.focus();
     return false;
-  }
+  };
 
-  async _deleteAttribute(key) {
+  _deleteAttribute = async (key) => {
     let hypertopic = new Hypertopic((await conf).services);
     const _error = (x) => console.error(x.message);
     this._getOrCreateItem()
@@ -272,9 +266,9 @@ class Item extends Component {
         });
       })
       .catch(_error);
-  }
+  };
 
-  async _assignTopic(topicToAssign, viewpointId) {
+  _assignTopic = async (topicToAssign, viewpointId) => {
     let hypertopic = new Hypertopic((await conf).services);
     return this._getOrCreateItem()
       .then(data => {
@@ -293,10 +287,10 @@ class Item extends Component {
         })
       })
       .catch(error => console.error(error));
-  }
+  };
 
 
-  async _removeTopic(topicToDelete) {
+  _removeTopic = async (topicToDelete) => {
     let hypertopic = new Hypertopic((await conf).services);
     if (window.confirm('Voulez-vous réellement que l\'item affiché ne soit plus décrit à l\'aide de cette rubrique ?')) {
       return this._getOrCreateItem()
@@ -315,97 +309,7 @@ class Item extends Component {
         })
         .catch(error => console.error(error));
     }
-  }
-}
-
-class Attribute extends Component {
-
-  constructor() {
-    super();
-    this.state = {
-      editedValue:""
-    };
-  }
-
-  onKeyDown = (event) => {
-    if (event.key==="Escape") {
-      this.setState({edit:false});
-    }
-    if (event.key==="Enter") {
-      this.submitValue(event);
-    }
   };
-
-  handleChange = (e) => {
-    this.setState({editedValue:e.target.value});
-  };
-
-  handleFocus = (e) => {
-  }
-
-  handleBlur = (e) => {
-  }
-
-  setEdit = (e) => {
-    this.setState({edit:true,editedValue:this.props.value});
-  }
-
-  submitValue = (e) => {
-    this.props.setAttribute(this.props.myKey,this.state.editedValue).then(
-      _ => this.setState({edit:false})
-    );
-  }
-
-  render() {
-    var valueCtl,deleteButton,editButton;
-    let valid=this.state.editedValue;
-    if (!this.state.edit) {
-      valueCtl=(
-        <div className="Value">
-          {this.props.value}
-        </div>
-      );
-      editButton=(
-        <button onClick={this.setEdit} className="btn btn-xs EditButton">
-          <span className="oi oi-pencil"> </span>
-        </button>
-      );
-      deleteButton=(
-        <button onClick={this.props.deleteAttribute.bind(this,this.props.myKey)} className="btn btn-xs DeleteButton">
-          <span className="oi oi-x"> </span>
-        </button>
-      );
-    } else {
-      valueCtl=(
-        <div className="Value edit">
-          <input value={this.state.editedValue} placeholder="valeur obbligatoire"
-            autoFocus
-            onChange={this.handleChange} onKeyDown={this.onKeyDown}
-            onFocus={this.handleFocus} onBlur={this.handleBlur}
-          />
-          <button type="button" className="btn btn-sm ValidateButton btn"
-            onClick={this.submitValue}
-            onFocus={this.handleFocus} onBlur={this.handleBlur}
-            disabled={!valid}
-            id={`validateButton-${this.props.myKey}`}>
-            <span className="oi oi-check"> </span>
-          </button>
-        </div>
-      );
-    }
-    return (
-      <div className="Attribute">
-        <div className="Key">
-          {this.props.myKey}
-        </div>
-        {valueCtl}
-        <div className="buttons">
-          {editButton}
-          {deleteButton}
-        </div>
-      </div>
-    );
-    }
 }
 
 function Resource(props) {
@@ -416,341 +320,6 @@ function Resource(props) {
       </a>
     </div>
   : "";
-}
-
-class Viewpoint extends Component {
-  constructor(props) {
-    super();
-    this.state = {
-      topics: {},
-      topicInputvalue: '',
-      suggestions: [],
-      currentSelection: '',
-      currentPreSelection: ''
-    };
-    this.renderSuggestion = this.renderSuggestion.bind(this);
-  }
-
-  getSuggestionValue = suggestion => suggestion.name;
-
-  renderSuggestion(suggestion, {query}) {
-    let value = suggestion.name;
-    let start = value.search(new RegExp(query, "i"));
-    let end = start + query.length;
-    return (
-      // eslint-disable-next-line
-      <a className="SuggestionItem" id={suggestion.id}>
-        {value.slice(0, start)}
-        <b>{value.slice(start, end)}</b>
-        {value.slice(end)}
-      </a>
-    );
-  }
-
-  getPath = (id) => {
-    let topic = this.state.topics[id];
-    let broader = topic && topic.broader && topic.broader[0] && topic.broader[0].id;
-    return ((broader)? this.getPath(broader) : '') + topic.name[0] + ' > ';
-  }
-
-  getSuggestions = query => {
-    let pattern = new RegExp(query, "i");
-    let alreadyAssigned = this.props.topics.map(x => x.id);
-    return Object.keys(this.state.topics)
-      .map(x => ({id: x, name: this.getPath(x).slice(0, -3)}))
-      .filter(x => pattern.test(x.name) && !alreadyAssigned.includes(x.id));
-  };
-
-  onTopicInputFocus = (event) => {
-    if (this.blurTimeout) {
-      this.blurTimeout=clearTimeout(this.blurTimeout);
-    }
-    this.setState({hasFocus:true});
-  }
-
-  onTopicInputBlur = (event) => {
-    this.blurTimeout=setTimeout(() => {
-      this.setState({hasFocus:false});
-    },200);
-  }
-
-  onTopicInputkeyDown = (event) => {
-    if (event.key==="Escape") {
-      this.clearInput();
-    }
-  };
-
-  onTopicInputChange = (event, { newValue }) => {
-    if (this.state.currentSelection) {
-      newValue="";
-    }
-    this.setState({
-      topicInputvalue: newValue,
-      currentSelection:""
-    });
-  };
-
-  onSuggestionsFetchRequested = ({ value }) => {
-    this.setState({
-      suggestions: this.getSuggestions(value)
-    });
-  };
-
-  onSuggestionsClearRequested = () => {
-    this.setState({
-      suggestions: []
-    });
-  };
-
-  onSuggestionSelected = (event, { suggestion }) => {
-    this.setState({ currentSelection: suggestion });
-  };
-
-  onSuggestionHighlighted = ({ suggestion }) => {
-    if (suggestion && suggestion.id) {
-      this.setState({ currentPreSelection: suggestion.id });
-    } else {
-      this.setState({ currentPreSelection: '' });
-    }
-  };
-
-  clearInput = () => {
-    this.setState({
-      topicInputvalue: '',
-      currentSelection: '',
-      currentPreSelection: '',
-      suggestions: [],
-      newTopic:""
-    });
-  };
-
-  updatingTopicList = (topicToAssign, viewpointId) => {
-    return this.props
-      .assignTopic(topicToAssign, viewpointId)
-      .catch(error => console.error(error));
-  };
-
-  render() {
-    const paths = this._getPaths();
-    const { topicInputvalue, suggestions } = this.state;
-    const inputProps = {
-      placeholder: this.state.newTopic ? 'Choisir une rubrique parent...' : 'Ajouter une rubrique...',
-      value: topicInputvalue,
-      onFocus: this.onTopicInputFocus,
-      onBlur: this.onTopicInputBlur,
-      onChange: this.onTopicInputChange,
-      onKeyDown: this.onTopicInputKeyDown,
-    };
-    const theme = {
-      container: 'autosuggest',
-      input: 'form-control',
-      suggestionsContainer: 'dropdown open',
-      suggestionsList: `dropdown-menu ${suggestions.length ? 'show' : ''}`,
-      suggestion: 'dropdown-item',
-      suggestionHighlighted: 'active'
-    };
-    var classes=["TopicAdding","input-group"];
-    if (!this.state.hasFocus) {
-      classes.push("inactive");
-    }
-    var newTopic;
-    if (this.state.newTopic) {
-      newTopic=<div className="newTopic">Ajouter nouveau : &gt; {this.state.newTopic}
-      <button type="button" className="btn btn-xs ml-3 float-right DeleteButton"
-        onClick={_ => this.setState({newTopic:""})} id="deleteButton-newTopic">
-        <span className="oi oi-x"> </span>
-      </button></div>;
-    }
-    const canValidateTopic=this.state.currentSelection || this.state.newTopic || this.state.topicInputvalue.length > 2;
-    return (
-      <div className="Viewpoint">
-        <h3 className="h4">{this.state.name}</h3>
-        <hr/>
-        <div className="Topics">
-          {paths}
-          <div className={classes.join(" ")}>
-            <Autosuggest
-              theme={theme}
-              className="TopicSuggest"
-              suggestions={suggestions}
-              onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-              onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-              onSuggestionHighlighted={this.onSuggestionHighlighted}
-              onSuggestionSelected={this.onSuggestionSelected}
-              getSuggestionValue={this.getSuggestionValue}
-              renderSuggestion={this.renderSuggestion}
-              inputProps={inputProps}
-              id={`input-${this.state.name}`}
-            />
-            <div className="input-group-append">
-              <button type="button" className="btn btn-sm ValidateButton btn" onClick={() => {
-                  if (this.state.newTopic && (this.state.currentSelection || !this.state.topicInputvalue)) {
-                    var parentId;
-                    if (this.state.currentSelection) parentId=this.state.currentSelection.id
-                    this.createTopic(this.state.newTopic,parentId)
-                      .then(newId => {
-                        this.updatingTopicList(
-                          newId,
-                          this.props.id
-                        )
-                      })
-                      .then(this.clearInput);
-                  } else {
-                    if (this.state.currentSelection) {
-                      this.updatingTopicList(
-                        this.state.currentSelection.id,
-                        this.props.id
-                      ).then(this.clearInput);
-                    } else {
-                      this.setState({
-                        newTopic:this.state.topicInputvalue,
-                        topicInputvalue:""
-                      });
-                    }
-                  }
-                }}
-                onFocus={this.onTopicInputFocus} onBlur={this.onTopicInputBlur}
-                disabled={!canValidateTopic}
-                id={`validateButton-${this.state.name}`}>
-                <span className="oi oi-check"> </span>
-              </button>
-            </div>
-            {newTopic}
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  _getPaths() {
-    return this.props.topics.map(t => (
-      <TopicPath
-        key={t.id}
-        id={t.id}
-        topics={this.state.topics}
-        removeTopic={() => this.props.removeTopic(t)}
-      />
-    ));
-  }
-
-  componentDidMount() {
-    this._fetchViewpoint();
-  }
-
-  async _fetchViewpoint() {
-    let hypertopic = new Hypertopic((await conf).services);
-    hypertopic.getView(`/viewpoint/${this.props.id}`).then((data) => {
-      let viewpoint = data[this.props.id];
-      let name = viewpoint.name;
-      let topics = viewpoint;
-      delete topics.user;
-      delete topics.name;
-      delete topics.upper;
-      this.setState({name, topics});
-    });
-  }
-
-  async createTopic(name,parent) {
-    var newId;
-    let hypertopic = new Hypertopic((await conf).services);
-    return hypertopic.get({ _id: this.props.id })
-      .then(x => {
-        var topicTree=new TopicTree(x.topics);
-        var newParent=parent || 'root';
-        var newTopic=topicTree.newChildren(newParent);
-        newTopic.name=name;
-        newId=newTopic.id;
-        delete newTopic.id;
-        x.topics=topicTree.topics;
-        return x;
-      })
-      .then(hypertopic.post)
-      .then(_ => {
-        this.setState(previousState => {
-          let newTopic={
-            id:newId,
-            name:[name]
-          };
-          if (parent) {
-            newTopic.broader=[{
-              id:parent,
-              name:previousState.topics[parent].name
-            }];
-          }
-          previousState.topics[newId]=newTopic;
-          return previousState;
-        })
-      })
-      .then(_ => {return newId});
-  }
-
-}
-
-class TopicPath extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      path: []
-    };
-  }
-
-  render() {
-    let topics = this._getTopics();
-    for (let i = 1; i < topics.length; ++i) {
-      let key="separator-"+i;
-      topics.splice(i, 0, <span key={key} className="TopicSeparator">&gt;</span>);
-      ++i;
-    }
-    const topicId = this.state.path[this.state.path.length - 1]
-      ? `${this.state.path[this.state.path.length - 1].id}`
-      : '';
-    return (
-      <div className="TopicPath">
-        {topics}
-        <button type="button" className="btn btn-xs ml-3 float-right DeleteButton"
-          onClick={this.props.removeTopic} id={`deleteButton-${topicId}`}>
-          <span className="oi oi-x"> </span>
-        </button>
-      </div>
-    );
-  }
-
-  _updatePath() {
-    let topic = this._getTopic(this.props.id);
-    let path = [topic];
-    while (topic.broader && topic.broader.length) {
-      topic = this._getTopic(topic.broader[0].id);
-      path.unshift(topic);
-    }
-    this.setState({path});
-  }
-
-  componentDidMount() {
-    this._updatePath();
-  }
-
-  componentDidUpdate(prevProps) {
-    if (this.props.topics !== prevProps.topics) {
-      this._updatePath();
-    }
-  }
-
-  _getTopic(id) {
-    let topic = this.props.topics[id] || {};
-    topic.id = id;
-    return topic;
-  }
-
-  _getTopics() {
-    return this.state.path.map( t => {
-      let name = (t.name)? t.name : 'Sans nom';
-      let uri = `../../?t={"type":"intersection","data":[{"type":"intersection","selection":["${t.id}"],"exclusion":[]}]}`;
-      return (
-        <Link title={t.id} key={t.id} className="Topic" to={uri}>{name}</Link>
-      );
-    });
-  }
-
 }
 
 export default Item;
