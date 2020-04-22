@@ -1,9 +1,9 @@
 import React from 'react';
 import Hypertopic from 'hypertopic';
-import conf from '../../config/config.js';
+import conf from '../../config.js';
 import TopicPath from './TopicPath.jsx';
-import TopicTree from '../Outliner/TopicTree.js';
-import InputWithSuggestions from '../InputWithSuggestions/InputWithSuggestions.jsx';
+import TopicTree from '../../TopicTree.js';
+import InputWithSuggestions from '../InputWithSuggestions.jsx';
 
 class Viewpoint extends React.Component {
   constructor(props) {

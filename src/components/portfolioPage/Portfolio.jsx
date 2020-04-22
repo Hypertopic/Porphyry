@@ -2,15 +2,13 @@ import React, { Component } from 'react';
 import by from 'sort-by';
 import queryString from 'query-string';
 import Hypertopic from 'hypertopic';
-import conf from '../../config/config.js';
-import Viewpoint from '../Viewpoint/Viewpoint.jsx';
-import Corpora from '../Corpora/Corpora.jsx';
-import Header from '../Header/Header.jsx';
-import Status from '../Status/Status.jsx';
-import ViewpointCreator from '../Viewpoint/ViewpointCreator.jsx';
-import Authenticated from '../Authenticated/Authenticated.jsx';
-
-import '../../styles/App.css';
+import conf from '../../config.js';
+import Viewpoint from './Viewpoint.jsx';
+import Corpora from './Corpora.jsx';
+import Header from '../Header.jsx';
+import Status from './Status.jsx';
+import ViewpointCreator from './ViewpointCreator.jsx';
+import Authenticated from '../Authenticated.jsx';
 
 class Portfolio extends Component {
   constructor() {

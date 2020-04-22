@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import by from 'sort-by';
-import Topic from '../Topic/Topic.jsx';
+import Topic from './Topic.jsx';
 
 class Viewpoint extends Component {
   render() {

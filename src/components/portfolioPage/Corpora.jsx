@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import ItemCreator from '../Item/ItemCreator.jsx';
+import ItemCreator from './ItemCreator.jsx';
 
 class Corpora extends Component {
 

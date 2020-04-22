@@ -1,12 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Hypertopic from 'hypertopic';
-import conf from '../../config/config.js';
-import Header from '../Header/Header.jsx';
-import Authenticated from '../Authenticated/Authenticated.jsx';
-import TopicTree from './TopicTree.js';
-
-import '../../styles/App.css';
+import conf from '../../config.js';
+import Header from '../Header.jsx';
+import Authenticated from '../Authenticated.jsx';
+import TopicTree from '../../TopicTree.js';
 
 const _log = (x) => console.log(JSON.stringify(x, null, 2));
 const _error = (x) => console.error(x.message);

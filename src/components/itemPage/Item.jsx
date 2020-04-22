@@ -2,14 +2,12 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Hypertopic from 'hypertopic';
 import groupBy from 'json-groupby';
-import conf from '../../config/config.js';
+import conf from '../../config.js';
 import Viewpoint from './Viewpoint.jsx';
 import Attribute from './Attribute.jsx';
-import Header from '../Header/Header.jsx';
-import Authenticated from '../Authenticated/Authenticated.jsx';
+import Header from '../Header.jsx';
+import Authenticated from '../Authenticated.jsx';
 import { DiscussionEmbed } from 'disqus-react';
-
-import '../../styles/App.css';
 
 const HIDDEN = ['topic', 'resource', 'thumbnail'];
 
