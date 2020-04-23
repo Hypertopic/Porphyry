@@ -32,7 +32,6 @@ class Item extends Component {
     let name = getString(this.state.item.name);
     let attributes = this._getAttributes();
     let viewpoints = this._getViewpoints();
-    let comments = this._getComments();
     return (
       <div className="App container-fluid">
         <Header conf={conf} />
@@ -65,7 +64,7 @@ class Item extends Component {
                 <h2 className="h4 font-weight-bold text-center">{name}</h2>
                 <Resource href={this.state.item.resource} />
               </div>
-              {comments}
+              <Comments appId={this.state.disqus} item={this.state.item} />
             </div>
           </div>
         </div>
@@ -73,19 +72,7 @@ class Item extends Component {
     );
   }
 
-  _getComments() {
-    let shortName = this.state.disqus;
-    if (shortName) {
-      let conf = {
-        title: this.state.item.name,
-        identifier: this.state.item.id
-      };
-      return (
-        <DiscussionEmbed config={conf} shortname={shortName} />
-      );
-    }
-    return null;
-  }
+
 
   _getAttributes() {
     return Object.entries(this.state.item)
@@ -310,6 +297,16 @@ class Item extends Component {
   };
 }
 
+function Comments(props) {
+  let config = {
+    identifier: props.item.id,
+    title: props.item.name
+  };
+  return (props.appId)
+    ? <DiscussionEmbed config={config} shortname={props.appId} />
+    : null;
+}
+
 function Resource(props) {
   return (props.href)?
     <div className="p-3">
@@ -317,7 +314,7 @@ function Resource(props) {
         <img src={props.href} alt="Resource" />
       </a>
     </div>
-  : "";
+    : null;
 }
 
 export default Item;
