@@ -5,9 +5,10 @@
   "dependencies": {
     "bootstrap": "^4.4.1",
     "disqus-react": "^1.0.7",
-    "hypertopic": "^3.1.8",
+    "hypertopic": "^3.2.0",
     "js-tree": "^2.0.2",
     "json-groupby": "^1.0.2",
+    "memoize-one": "^5.1.1",
     "open-iconic": "^1.1.1",
     "query-string": "^6.11.1",
     "react": "^16.13.0",

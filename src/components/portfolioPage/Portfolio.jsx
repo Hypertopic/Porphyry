@@ -7,8 +7,8 @@ import Viewpoint from './Viewpoint.jsx';
 import Corpora from './Corpora.jsx';
 import Header from '../Header.jsx';
 import Status from './Status.jsx';
+import SearchBar from './SearchBar.jsx';
 import ViewpointCreator from './ViewpointCreator.jsx';
-import Authenticated from '../Authenticated.jsx';
 
 class Portfolio extends Component {
   constructor() {
@@ -26,13 +26,16 @@ class Portfolio extends Component {
   render() {
     let viewpoints = this._getViewpoints();
     let corpora = this._getCorpora();
-
     return (
       <div className="App container-fluid">
         <Header conf={conf} />
-        <div className="Status row h5 text-center">
-          <Authenticated conf={conf} />
-          <Status selectionJSON={this.selectionJSON} viewpoints={this.state.viewpoints}/>
+        <div className="Status row align-items-center h5">
+          <div className="Search col-md-3">
+            <SearchBar viewpoints={this.state.viewpoints} />
+          </div>
+          <div className="col-md-6">
+            <Status selectionJSON={this.selectionJSON} viewpoints={this.state.viewpoints}/>
+          </div>
         </div>
         <div className="container-fluid">
           <div className="App-content row">
@@ -177,7 +180,7 @@ class Portfolio extends Component {
             if (!['id','name','user'].includes(itemId)) {
               let item = data[corpus.id][itemId];
               if (!item.name || !item.name.length) {
-                console.log(itemId, "has no name!", item);
+                console.log(`/item/${corpus.id}/${itemId} has no name!`);
               } else {
                 item.id = itemId;
                 item.corpus = corpus.id;

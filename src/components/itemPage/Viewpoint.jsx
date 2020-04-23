@@ -1,6 +1,7 @@
 import React from 'react';
 import Hypertopic from 'hypertopic';
 import conf from '../../config.js';
+import {Topics} from '../../model.js';
 import TopicPath from './TopicPath.jsx';
 import TopicTree from '../../TopicTree.js';
 import InputWithSuggestions from '../InputWithSuggestions.jsx';
@@ -13,12 +14,6 @@ class Viewpoint extends React.Component {
       topicInputvalue: '',
       currentSelection: '',
     };
-  }
-
-  getPath = (id) => {
-    let topic = this.state.topics[id];
-    let broader = topic && topic.broader && topic.broader[0] && topic.broader[0].id;
-    return ((broader)? this.getPath(broader) : '') + topic.name[0] + ' > ';
   }
 
   onTopicInputFocus = (event) => {
@@ -92,8 +87,7 @@ class Viewpoint extends React.Component {
     }
     const canValidateTopic=this.state.currentSelection || this.state.newTopic || this.state.topicInputvalue.length > 2;
     let alreadyAssigned = this.props.topics.map(x => x.id);
-    let candidates = Object.keys(this.state.topics)
-      .map(x => ({id: x, name: this.getPath(x).slice(0, -3)}))
+    let candidates = new Topics(this.state.topics).getAllPaths()
       .filter(x => !alreadyAssigned.includes(x.id));
     return (
       <div className="Viewpoint">

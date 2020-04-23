@@ -6,10 +6,9 @@ import conf from '../../config.js';
 import Viewpoint from './Viewpoint.jsx';
 import Attribute from './Attribute.jsx';
 import Header from '../Header.jsx';
-import Authenticated from '../Authenticated.jsx';
 import { DiscussionEmbed } from 'disqus-react';
 
-const HIDDEN = ['topic', 'resource', 'thumbnail'];
+const HIDDEN = ['topic', 'resource', 'thumbnail', 'couchapp'];
 
 function getString(obj) {
   if (Array.isArray(obj)) {
@@ -32,12 +31,10 @@ class Item extends Component {
     let name = getString(this.state.item.name);
     let attributes = this._getAttributes();
     let viewpoints = this._getViewpoints();
-    let comments = this._getComments();
     return (
       <div className="App container-fluid">
         <Header conf={conf} />
         <div className="Status row h5">
-          <Authenticated conf={conf} />
           <Link to="/" className="badge badge-pill badge-light TopicTag">
             <span className="badge badge-pill badge-dark oi oi-chevron-left"> </span> Retour à l'accueil
           </Link>
@@ -65,7 +62,7 @@ class Item extends Component {
                 <h2 className="h4 font-weight-bold text-center">{name}</h2>
                 <Resource href={this.state.item.resource} />
               </div>
-              {comments}
+              <Comments appId={this.state.disqus} item={this.state.item} />
             </div>
           </div>
         </div>
@@ -73,19 +70,7 @@ class Item extends Component {
     );
   }
 
-  _getComments() {
-    let shortName = this.state.disqus;
-    if (shortName) {
-      let conf = {
-        title: this.state.item.name,
-        identifier: this.state.item.id
-      };
-      return (
-        <DiscussionEmbed config={conf} shortname={shortName} />
-      );
-    }
-    return null;
-  }
+
 
   _getAttributes() {
     return Object.entries(this.state.item)
@@ -107,17 +92,6 @@ class Item extends Component {
     this._fetchItem();
   }
 
-  _getOrCreateItem = async () => {
-    let hypertopic = new Hypertopic((await conf).services);
-    return hypertopic.get({_id: this.props.match.params.item})
-    .catch(e => {
-      return {
-        _id: this.props.match.params.item,
-        item_corpus: this.props.match.params.corpus
-      };
-    });
-  };
-
   _fetchItem = async () => {
     let uri = this.props.match.url;
     let params = this.props.match.params;
@@ -133,7 +107,8 @@ class Item extends Component {
       }
       item.topic=topics;
       this.setState({item});
-    }).then(() => hypertopic.getView(`/user/${SETTINGS.user}`))
+    }).catch(e => console.error(e.message))
+      .then(() => hypertopic.getView(`/user/${SETTINGS.user}`))
       .then((data) => {
       let user = data[SETTINGS.user] || {};
       if (user.viewpoint) {
@@ -217,11 +192,12 @@ class Item extends Component {
 
   _setAttribute = async (key, value) => {
     if (key!=='' && value!=='') {
-      let hypertopic = new Hypertopic((await conf).services);
-      let attribute = {[key]: [value]};
-      return this._getOrCreateItem()
-        .then(x => Object.assign(x, attribute))
-        .then(hypertopic.post)
+      return new Hypertopic((await conf).services)
+        .item({
+          _id: this.props.match.params.item,
+          item_corpus: this.props.match.params.corpus
+        })
+        .setAttributes({[key]: [value]})
         .then(_ => this.setState(previousState => {
           previousState.item[key]=[value];
           return previousState
@@ -249,14 +225,13 @@ class Item extends Component {
   };
 
   _deleteAttribute = async (key) => {
-    let hypertopic = new Hypertopic((await conf).services);
     const _error = (x) => console.error(x.message);
-    this._getOrCreateItem()
-      .then(x => {
-        delete x[key];
-        return x;
+    new Hypertopic((await conf).services)
+      .item({
+        _id: this.props.match.params.item,
+        item_corpus: this.props.match.params.corpus
       })
-      .then(hypertopic.post)
+      .unsetAttribute(key)
       .then(_ => {
         this.setState(previousState => {
           delete previousState.item[key];
@@ -267,14 +242,12 @@ class Item extends Component {
   };
 
   _assignTopic = async (topicToAssign, viewpointId) => {
-    let hypertopic = new Hypertopic((await conf).services);
-    return this._getOrCreateItem()
-      .then(data => {
-        data.topics=data.topics || {};
-        data.topics[topicToAssign] = { viewpoint: viewpointId };
-        return data;
+    return new Hypertopic((await conf).services)
+      .item({
+        _id: this.props.match.params.item,
+        item_corpus: this.props.match.params.corpus
       })
-      .then(hypertopic.post)
+      .setTopic(topicToAssign, viewpointId)
       .then(data => {
         this.setState(newState => {
           newState.topic[viewpointId].push({
@@ -289,15 +262,13 @@ class Item extends Component {
 
 
   _removeTopic = async (topicToDelete) => {
-    let hypertopic = new Hypertopic((await conf).services);
     if (window.confirm('Voulez-vous réellement que l\'item affiché ne soit plus décrit à l\'aide de cette rubrique ?')) {
-      return this._getOrCreateItem()
-        .then(data => {
-          data.topics=data.topics || {};
-          delete data.topics[topicToDelete.id];
-          return data;
+      return new Hypertopic((await conf).services)
+        .item({
+          _id: this.props.match.params.item,
+          item_corpus: this.props.match.params.corpus
         })
-        .then(hypertopic.post)
+        .unsetTopic(topicToDelete.id)
         .then((res)=> {
           let newState = this.state;
           newState.topic[topicToDelete.viewpoint] = newState.topic[
@@ -310,6 +281,16 @@ class Item extends Component {
   };
 }
 
+function Comments(props) {
+  let config = {
+    identifier: props.item.id,
+    title: props.item.name
+  };
+  return (props.appId)
+    ? <DiscussionEmbed config={config} shortname={props.appId} />
+    : null;
+}
+
 function Resource(props) {
   return (props.href)?
     <div className="p-3">
@@ -317,7 +298,7 @@ function Resource(props) {
         <img src={props.href} alt="Resource" />
       </a>
     </div>
-  : "";
+    : null;
 }
 
 export default Item;

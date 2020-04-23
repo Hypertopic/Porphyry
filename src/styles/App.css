@@ -23,13 +23,7 @@ h1 a, h1 a:hover {
 .Status {
   background-color: rgb(60, 50, 50);
   color: ivory;
-  display: block;
   padding: 4px;
-}
-
-.Authenticated {
-  position: absolute;
-  right: 0;
 }
 
 .Authenticated a {
@@ -38,13 +32,15 @@ h1 a, h1 a:hover {
 }
 
 .Authenticated input:not([type='submit']) {
-  background: dimgrey;
-  color: white;
   border: 0;
   margin: 1px;
 }
 
-.Authenticated input::placeholder {
+.Search input {
+  background: dimgrey;
+}
+
+.Search ::placeholder {
   color: lightgrey;
 }
 
