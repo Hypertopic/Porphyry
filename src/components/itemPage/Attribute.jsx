@@ -2,90 +2,98 @@ import React from 'react';
 
 class Attribute extends React.Component {
 
-  constructor() {
-    super();
-    this.state = {
-      editedValue: ''
-    };
+  constructor(props) {
+    super(props);
+    this.state = {edited: false};
   }
 
-  onKeyDown = (event) => {
+  handleKeyDown = (event) => {
     if (event.key === 'Escape') {
-      this.setState({edit: false});
+      this.setState({edited: false});
     }
     if (event.key === 'Enter') {
-      this.submitValue(event);
+      this.handleSubmit();
     }
   };
 
-  handleChange = (e) => {
-    this.setState({editedValue: e.target.value});
+  handleChange = (event) => {
+    this.setState({editedValue: event.target.value});
   };
 
-  setEdit = (e) => {
+  handleClickEdit = () => {
     this.setState({
-      edit: true,
+      edited: true,
       editedValue: this.props.value
     });
   }
 
-  submitValue = (e) => {
-    this.props.setAttribute(this.props.name, this.state.editedValue).then(
-      _ => this.setState({edit: false})
-    );
+  handleSubmit = () => {
+    this.props.setAttribute(this.props.name, this.state.editedValue);
+    this.setState({edited: false});
   }
 
-  getButtons = () => {
-    let deleteAttribute = () => this.props.deleteAttribute(this.props.name);
-    if (!this.state.edit) return (
-      <div className="buttons">
-        <button onClick={this.setEdit} className="btn btn-xs EditButton">
-          <span className="oi oi-pencil"> </span>
-        </button>
-        <button className="btn btn-xs DeleteButton"
-          onClick={deleteAttribute}>
-          <span className="oi oi-x"> </span>
-        </button>
-      </div>
-    );
-    return (
-      <button type="button" className="btn btn-sm ValidateButton btn"
-        onClick={this.submitValue}
-        disabled={!this.state.editedValue}
-        id={`validateButton-${this.props.name}`}>
-        <span className="oi oi-check"> </span>
-      </button>
-    );
-  }
-
-  getAttributeValue = () => {
-    if (!this.state.edit) return (
-      <div className="Value">
-        {this.props.value}
-      </div>
-    );
-    return (
-      <div className="Value edit">
-        <input value={this.state.editedValue} placeholder="valeur"
-          autoFocus onChange={this.handleChange} onKeyDown={this.onKeyDown}
-        />
-      </div>
-    );
+  handleClickDelete = () => {
+    this.props.deleteAttribute(this.props.name);
   }
 
   render() {
-    let buttons = this.getButtons();
-    let attributeValue = this.getAttributeValue();
     return (
       <div className="Attribute">
         <div className="Key">
           {this.props.name}
         </div>
-        {attributeValue}
-        {buttons}
+        <AttributeValue value={this.props.value}
+          editedValue={this.state.editedValue}
+          edited={this.state.edited}
+          onChange={this.handleChange}
+          onKeyDown={this.handleKeyDown}
+        />
+        <Buttons name={this.props.name} editedValue={this.state.editedValue}
+          edited={this.state.edited}
+          onDelete={this.handleClickDelete}
+          onEdit={this.handleClickEdit}
+          onSubmit={this.handleSubmit}
+        />
       </div>
     );
   }
+}
+
+function Buttons(props) {
+  if (props.edited) return (
+    <button type="button" className="btn btn-sm ValidateButton btn"
+      onClick={props.onSubmit}
+      disabled={!props.editedValue}
+      id={`validateButton-${props.name}`}>
+      <span className="oi oi-check"> </span>
+    </button>
+  );
+  return (
+    <div className="buttons">
+      <button onClick={props.onEdit} className="btn btn-xs EditButton">
+        <span className="oi oi-pencil"> </span>
+      </button>
+      <button className="btn btn-xs DeleteButton"
+        onClick={props.onDelete}>
+        <span className="oi oi-x"> </span>
+      </button>
+    </div>
+  );
+}
+
+function AttributeValue(props) {
+  if (props.edited) return (
+    <div className="Value edit">
+      <input value={props.editedValue} placeholder="valeur" autoFocus
+        onChange={props.onChange} onKeyDown={props.onKeyDown}
+      />
+    </div>
+  );
+  return (
+    <div className="Value">
+      {props.value}
+    </div>
+  );
 }
 
 export default Attribute;
