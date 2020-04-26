@@ -6,7 +6,6 @@ import conf from '../../config.js';
 import Viewpoint from './Viewpoint.jsx';
 import Attribute from './Attribute.jsx';
 import Header from '../Header.jsx';
-import Authenticated from '../Authenticated.jsx';
 import { DiscussionEmbed } from 'disqus-react';
 
 const HIDDEN = ['topic', 'resource', 'thumbnail'];
@@ -36,7 +35,6 @@ class Item extends Component {
       <div className="App container-fluid">
         <Header conf={conf} />
         <div className="Status row h5">
-          <Authenticated conf={conf} />
           <Link to="/" className="badge badge-pill badge-light TopicTag">
             <span className="badge badge-pill badge-dark oi oi-chevron-left"> </span> Retour à l'accueil
           </Link>

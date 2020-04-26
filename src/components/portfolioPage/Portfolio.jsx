@@ -8,7 +8,6 @@ import Corpora from './Corpora.jsx';
 import Header from '../Header.jsx';
 import Status from './Status.jsx';
 import ViewpointCreator from './ViewpointCreator.jsx';
-import Authenticated from '../Authenticated.jsx';
 
 class Portfolio extends Component {
   constructor() {
@@ -31,7 +30,6 @@ class Portfolio extends Component {
       <div className="App container-fluid">
         <Header conf={conf} />
         <div className="Status row h5 text-center">
-          <Authenticated conf={conf} />
           <Status selectionJSON={this.selectionJSON} viewpoints={this.state.viewpoints}/>
         </div>
         <div className="container-fluid">
