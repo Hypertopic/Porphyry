@@ -94,17 +94,6 @@ class Item extends Component {
     this._fetchItem();
   }
 
-  _getOrCreateItem = async () => {
-    let hypertopic = new Hypertopic((await conf).services);
-    return hypertopic.get({_id: this.props.match.params.item})
-    .catch(e => {
-      return {
-        _id: this.props.match.params.item,
-        item_corpus: this.props.match.params.corpus
-      };
-    });
-  };
-
   _fetchItem = async () => {
     let uri = this.props.match.url;
     let params = this.props.match.params;
@@ -204,11 +193,12 @@ class Item extends Component {
 
   _setAttribute = async (key, value) => {
     if (key!=='' && value!=='') {
-      let hypertopic = new Hypertopic((await conf).services);
-      let attribute = {[key]: [value]};
-      return this._getOrCreateItem()
-        .then(x => Object.assign(x, attribute))
-        .then(hypertopic.post)
+      return new Hypertopic((await conf).services)
+        .item({
+          _id: this.props.match.params.item,
+          item_corpus: this.props.match.params.corpus
+        })
+        .setAttributes({[key]: [value]})
         .then(_ => this.setState(previousState => {
           previousState.item[key]=[value];
           return previousState
@@ -236,14 +226,13 @@ class Item extends Component {
   };
 
   _deleteAttribute = async (key) => {
-    let hypertopic = new Hypertopic((await conf).services);
     const _error = (x) => console.error(x.message);
-    this._getOrCreateItem()
-      .then(x => {
-        delete x[key];
-        return x;
+    new Hypertopic((await conf).services)
+      .item({
+        _id: this.props.match.params.item,
+        item_corpus: this.props.match.params.corpus
       })
-      .then(hypertopic.post)
+      .unsetAttribute(key)
       .then(_ => {
         this.setState(previousState => {
           delete previousState.item[key];
@@ -254,14 +243,12 @@ class Item extends Component {
   };
 
   _assignTopic = async (topicToAssign, viewpointId) => {
-    let hypertopic = new Hypertopic((await conf).services);
-    return this._getOrCreateItem()
-      .then(data => {
-        data.topics=data.topics || {};
-        data.topics[topicToAssign] = { viewpoint: viewpointId };
-        return data;
+    return new Hypertopic((await conf).services)
+      .item({
+        _id: this.props.match.params.item,
+        item_corpus: this.props.match.params.corpus
       })
-      .then(hypertopic.post)
+      .setTopic(topicToAssign, viewpointId)
       .then(data => {
         this.setState(newState => {
           newState.topic[viewpointId].push({
@@ -276,15 +263,13 @@ class Item extends Component {
 
 
   _removeTopic = async (topicToDelete) => {
-    let hypertopic = new Hypertopic((await conf).services);
     if (window.confirm('Voulez-vous réellement que l\'item affiché ne soit plus décrit à l\'aide de cette rubrique ?')) {
-      return this._getOrCreateItem()
-        .then(data => {
-          data.topics=data.topics || {};
-          delete data.topics[topicToDelete.id];
-          return data;
+      return new Hypertopic((await conf).services)
+        .item({
+          _id: this.props.match.params.item,
+          item_corpus: this.props.match.params.corpus
         })
-        .then(hypertopic.post)
+        .unsetTopic(topicToDelete.id)
         .then((res)=> {
           let newState = this.state;
           newState.topic[topicToDelete.viewpoint] = newState.topic[
