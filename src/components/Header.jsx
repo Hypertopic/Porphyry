@@ -15,7 +15,9 @@ class Header extends Component {
       <header className="row align-items-center">
         <div className="col-lg-2 d-none d-lg-block logo"></div>
         <h1 className="col-lg-8"><Link to="/">{this.state.user}</Link></h1>
-        <Authenticated conf={this.props.conf} />
+        <div className="col-lg-2">
+          <Authenticated conf={this.props.conf} />
+        </div>
       </header>
     );
   }
