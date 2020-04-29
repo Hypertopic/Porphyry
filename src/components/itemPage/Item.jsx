@@ -8,7 +8,7 @@ import Attribute from './Attribute.jsx';
 import Header from '../Header.jsx';
 import { DiscussionEmbed } from 'disqus-react';
 
-const HIDDEN = ['topic', 'resource', 'thumbnail'];
+const HIDDEN = ['topic', 'resource', 'thumbnail', 'couchapp'];
 
 function getString(obj) {
   if (Array.isArray(obj)) {

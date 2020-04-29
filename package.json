@@ -26,7 +26,7 @@
     "start": "env EXTEND_ESLINT=true react-scripts start",
     "build": "react-scripts build",
     "preprod": "serve -s build -p 3000 &",
-    "test": "cucumber --format summary --retry 2",
+    "test": "cucumber --format summary --retry 1",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
