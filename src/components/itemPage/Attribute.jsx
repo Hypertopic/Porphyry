@@ -89,11 +89,18 @@ function AttributeValue(props) {
       />
     </div>
   );
-  return (
-    <div className="Value">
-      {props.value}
-    </div>
-  );
+  if (props.value && props.value.startsWith('http'))
+    return (
+        <a href={props.value} className="Value">
+            {props.value}
+        </a>
+    )
+  else
+    return (
+        <div className="Value">
+          {props.value}
+        </div>
+    );
 }
 
 export default Attribute;
