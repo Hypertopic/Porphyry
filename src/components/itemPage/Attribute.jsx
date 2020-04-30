@@ -43,10 +43,11 @@ class Attribute extends React.Component {
           {this.props.name}
         </div>
         <AttributeValue value={this.props.value}
-          editedValue={this.state.editedValue}
-          edited={this.state.edited}
-          onChange={this.handleChange}
-          onKeyDown={this.handleKeyDown}
+                        name = {this.props.name}
+                        editedValue={this.state.editedValue}
+                        edited={this.state.edited}
+                        onChange={this.handleChange}
+                        onKeyDown={this.handleKeyDown}
         />
         <Buttons name={this.props.name} editedValue={this.state.editedValue}
           edited={this.state.edited}
@@ -85,10 +86,13 @@ function AttributeValue(props) {
   if (props.edited) return (
     <div className="Value edit">
       <input value={props.editedValue} placeholder="valeur" autoFocus
-        onChange={props.onChange} onKeyDown={props.onKeyDown}
+             onChange={props.onChange} onKeyDown={props.onKeyDown}
       />
     </div>
-  );
+  )
+  else if(props.name === 'visite'){
+    return (<a className="Value" href = {props.value}>{props.value}</a>);
+  }
   return (
     <div className="Value">
       {props.value}
