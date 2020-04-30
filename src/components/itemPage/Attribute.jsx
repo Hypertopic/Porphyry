@@ -89,7 +89,7 @@ function AttributeValue(props) {
       />
     </div>
   );
-  if (props.value.startsWith("http")) {
+  if ((props.edited) && (props.value.startsWith("http"))) {
     return (
       <div className = "Value">
         <a href={props.value} >{props.value}</a>
