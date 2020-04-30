@@ -42,7 +42,8 @@ class Attribute extends React.Component {
         <div className="Key">
           {this.props.name}
         </div>
-        <AttributeValue value={this.props.value}
+        <AttributeValue
+          value={this.props.value}
           editedValue={this.state.editedValue}
           edited={this.state.edited}
           onChange={this.handleChange}
@@ -89,6 +90,13 @@ function AttributeValue(props) {
       />
     </div>
   );
+
+  if (props.value.startsWith('http')) return (
+    <div className="Value">
+      <a href={props.value}> {props.value} </a>
+    </div>
+  );
+
   return (
     <div className="Value">
       {props.value}
