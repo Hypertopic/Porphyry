@@ -89,8 +89,13 @@ function AttributeValue(props) {
       />
     </div>
   );
+  //l'ajout pour le lien cliquable
+  if {props.value.substring(0, 4)=="http"}
+    return (<a className="Value" href = {props.value}>{props.value}</a>);
+  }
   return (
     <div className="Value">
+
       {props.value}
     </div>
   );
