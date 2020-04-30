@@ -82,7 +82,7 @@ function Buttons(props) {
 }
 
 function AttributeValue(props) {
-  if (props.edited) return (
+  if (props.edited && props.editedValue.startsWith('http')) return (
     <div className="Value edit">
       <input value={props.editedValue} placeholder="valeur" autoFocus
         onChange={props.onChange} onKeyDown={props.onKeyDown}
