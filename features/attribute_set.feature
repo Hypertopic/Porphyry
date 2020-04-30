@@ -15,3 +15,4 @@ Scénario: ayant pour valeur des URI
   Et l'utilisateur "alice" connecté
   Quand l'utilisateur indique "https://www.aube-champagne.com/fr/poi/hotel-de-vauluisant-musee-de-vauluisant/#cdt-information" comme valeur de l'attribut "visite"
   Alors la valeur de l'attribut "visite" est "https://www.aube-champagne.com/fr/poi/hotel-de-vauluisant-musee-de-vauluisant/#cdt-information"
+  Et "https://www.aube-champagne.com/fr/poi/hotel-de-vauluisant-musee-de-vauluisant/#cdt-information" mène à une page intitulée "Musée de Vauluisant"
