@@ -42,7 +42,7 @@ class Attribute extends React.Component {
         <div className="Key">
           {this.props.name}
         </div>
-        <AttributeValue value={this.props.value}
+        <AttributeValue value={this.props.name}
           editedValue={this.state.editedValue}
           edited={this.state.edited}
           onChange={this.handleChange}
