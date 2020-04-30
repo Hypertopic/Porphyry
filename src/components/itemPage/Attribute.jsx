@@ -91,7 +91,10 @@ function AttributeValue(props) {
   );
 
   if (props.value != null && props.value.startsWith('http')) return (
-    <a className="Value" href={props.value}>{props.value}</a>
+    <div className="Value">
+      <a href={props.value}>{props.value}</a>      
+    </div>
+   
   );
 
   return (
