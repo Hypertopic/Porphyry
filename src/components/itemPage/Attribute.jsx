@@ -91,7 +91,7 @@ function AttributeValue(props) {
   );
   return (
     <div className="Value">
-      {props.value}
+      {(props.value.startsWith("http")? <a>{props.value}</a> : props.value)}
     </div>
   );
 }
