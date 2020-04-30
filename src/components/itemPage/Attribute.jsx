@@ -82,18 +82,26 @@ function Buttons(props) {
 }
 
 function AttributeValue(props) {
-  if (props.edited && props.editedValue.startsWith('http')) return (
+  if (props.edited)
+  return (
     <div className="Value edit">
       <input value={props.editedValue} placeholder="valeur" autoFocus
         onChange={props.onChange} onKeyDown={props.onKeyDown}
       />
     </div>
   );
-  return (
-    <div className="Value">
-      {props.value}
-    </div>
-  );
+  if (props.value && props.value.startsWith('http'))
+    return (
+        <a href={props.value} className="Value">
+            {props.value}
+        </a>
+    )
+  else
+    return (
+        <div className="Value">
+          {props.value}
+        </div>
+    );
 }
 
 export default Attribute;
