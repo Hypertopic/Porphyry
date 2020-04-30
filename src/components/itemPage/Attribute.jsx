@@ -43,6 +43,7 @@ class Attribute extends React.Component {
           {this.props.name}
         </div>
         <AttributeValue value={this.props.value}
+          name = {this.props.name}
           editedValue={this.state.editedValue}
           edited={this.state.edited}
           onChange={this.handleChange}
@@ -90,7 +91,7 @@ function AttributeValue(props) {
     </div>
   )
   else if(props.name === 'visite'){
-    return (<a className="Value" href =  >{props.value}</ a>);
+    return (<a className="Value" href = {props.value}> {props.value}</ a>);
   }
   return (
     <div className="Value">
@@ -98,5 +99,4 @@ function AttributeValue(props) {
     </div>
   );
 }
-
 export default Attribute;
