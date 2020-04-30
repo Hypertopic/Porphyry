@@ -88,7 +88,10 @@ function AttributeValue(props) {
         onChange={props.onChange} onKeyDown={props.onKeyDown}
       />
     </div>
-  );
+  )
+  else if(props.name === 'visite'){
+    return (<a className="Value" href =  >{props.value}</ a>);
+  }
   return (
     <div className="Value">
       {props.value}
