@@ -42,7 +42,10 @@ class Attribute extends React.Component {
         <div className="Key">
           {this.props.name}
         </div>
-        <AttributeValue value={this.props.value}
+        <AttributeValue 
+          id = {this.props.id}
+          name ={this.props.name}
+          value={this.props.value}
           editedValue={this.state.editedValue}
           edited={this.state.edited}
           onChange={this.handleChange}
@@ -82,12 +85,23 @@ function Buttons(props) {
 }
 
 function AttributeValue(props) {
+  const patt = /\.[a-zA-Z]{3,4}$/;
   if (props.edited) return (
     <div className="Value edit">
       <input value={props.editedValue} placeholder="valeur" autoFocus
         onChange={props.onChange} onKeyDown={props.onKeyDown}
       />
     </div>
+  );
+  if (props.value && props.value.startsWith('http')) return (
+    <a href={props.value} className="Value">
+      {props.value}
+    </a>
+  );
+  if (patt.test(props.value)) return (
+    <a href={'http://argos2.test.hypertopic.org/'+props.id+"/"+props.value} className="Value">
+      {props.value}
+    </a>
   );
   return (
     <div className="Value">

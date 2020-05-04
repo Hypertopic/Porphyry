@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "antd": "^4.2.0",
     "bootstrap": "^4.4.1",
     "disqus-react": "^1.0.7",
     "hypertopic": "^3.2.0",
@@ -23,7 +24,7 @@
     "serve": "^11.3.0"
   },
   "scripts": {
-    "start": "env EXTEND_ESLINT=true react-scripts start",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "preprod": "serve -s build -p 3000 &",
     "test": "cucumber --format summary --retry 1",

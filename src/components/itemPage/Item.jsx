@@ -7,6 +7,7 @@ import Viewpoint from './Viewpoint.jsx';
 import Attribute from './Attribute.jsx';
 import Header from '../Header.jsx';
 import { DiscussionEmbed } from 'disqus-react';
+import fetch from 'node-fetch';
 
 const HIDDEN = ['topic', 'resource', 'thumbnail', 'couchapp'];
 
@@ -15,6 +16,120 @@ function getString(obj) {
     return obj.map(val => getString(val)).join(', ');
   }
   return String(obj);
+}
+
+class FileInput extends React.Component {
+  constructor(props) {
+    super(props);
+    this._submitResource = this._submitResource.bind(this);
+    this._setResourceAttribute = this._setResourceAttribute.bind(this);
+    this.state = {
+      item : props.item,
+      withFile: false
+    };
+    this.fileInput = React.createRef();
+  }
+  
+  _setResourceAttribute = async (key, value) => {
+    if (key!=='' && value!=='') {
+      return new Hypertopic((await conf).services)
+        .item({
+          _id: this.state.item.params.item,
+          item_corpus: this.state.item.params.corpus
+        })
+        .setAttributes({[key]: [value]})
+        .then(_ => this.setState(previousState => {
+          previousState.item[key]=[value];
+          return previousState
+        }))
+        .catch((x) => console.error(x.message));
+    } else {
+      console.error('Créez un attribut non vide');
+      return new Promise().fail();
+    }
+  }
+
+  _postResource = async(file) => {
+    let file_name = file.name, file_type = file.type;
+    const toBase64 = file => new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = error => reject(error);
+    });
+    let file_base64 = await toBase64(file);
+    console.log(file_base64);
+    let etag = "";
+    console.log("URL : " + (await conf).services + '/' + this.state.item.params.item + '/' + file_name);
+    fetch((await conf).services + '/' + this.state.item.params.item, 
+    {
+      method: 'HEAD',
+    })
+    .then(function (x) {
+      console.log(x.statusText);
+      if (x.ok) {
+        etag = x.headers.get('etag');
+        console.log("ETag : " + etag);
+      } else {
+        throw new Error(x.statusText);
+      }
+    })
+    .catch((x) => console.error(x.message)) 
+
+    return fetch((await conf).services + '/' + this.state.item.params.item + '/' + file_name, 
+    {
+
+      method: 'PUT',
+      headers: {
+        'Content-Type': file_type,
+        'If-Match' : etag
+      },
+      body: file_base64,
+    })
+    .then(function (x) {
+      console.log(x.statusText);
+      if (x.ok) {
+        return x;
+      } else {
+        throw new Error(x.statusText);
+      }
+    })
+    .catch((x) => console.error(x.message)) 
+    .then((x) => console.log(JSON.stringify(x, null, 2)));
+  }
+
+  _getResource = async(file_name) => {
+    let services = (await conf).services;
+    window.open(services + '/' + this.state.item.params.item + '/' + file_name); 
+  }
+
+  _submitResource(e) {
+    e.preventDefault();
+    let file = this.fileInput.current.files[0];
+    console.log(file);
+    if (file && file.size < 5000000) { // 5mo de taille maximale
+      this.setState({withFile: true});
+      this._setResourceAttribute(file.name.substring(0, file.name.lastIndexOf('.')) || file.name,file.name);//le nom hors extension
+      this._postResource(file);
+    }
+    else {
+      return false;
+    }
+  }
+
+  render() {
+    return (
+      <form className="AttributeForm input-group flexColumn" onSubmit={this._submitResource}>
+        <div className="buttonUpload form-control">
+          <p>Ajouter une ressource</p>
+          <label>
+            <input type="file" ref={this.fileInput}/>
+          </label>
+          <button type="submit" className='btn btn-primary'>Valider</button>
+        </div>
+      </form>
+    );
+  }
 }
 
 class Item extends Component {
@@ -29,7 +144,7 @@ class Item extends Component {
 
   render() {
     let name = getString(this.state.item.name);
-    let attributes = this._getAttributes();
+    let attributes = this._getAttributes(this.props);
     let viewpoints = this._getViewpoints();
     return (
       <div className="App container-fluid">
@@ -52,6 +167,7 @@ class Item extends Component {
                       {attributes}
                     </div>
                     {this._getAttributeCreationForm()}
+                    <FileInput item={this.props.match}/>
                   </div>
                   {viewpoints}
                 </div>
@@ -72,12 +188,12 @@ class Item extends Component {
 
 
 
-  _getAttributes() {
+  _getAttributes(props) {
     return Object.entries(this.state.item)
       .filter(x => !HIDDEN.includes(x[0]))
       .map(x => (
         <Attribute  key={x[0]} name={x[0]} value={x[1][0]}
-          setAttribute={this._setAttribute} deleteAttribute={this._deleteAttribute}/>
+          setAttribute={this._setAttribute} deleteAttribute={this._deleteAttribute} id={props.match.params.item}/>
       ));
   }
 
@@ -222,7 +338,7 @@ class Item extends Component {
     });
     this.attributeInput.focus();
     return false;
-  };
+  }
 
   _deleteAttribute = async (key) => {
     const _error = (x) => console.error(x.message);
@@ -239,14 +355,16 @@ class Item extends Component {
         });
       })
       .catch(_error);
-  };
+  }
 
   _assignTopic = async (topicToAssign, viewpointId) => {
     return new Hypertopic((await conf).services)
-      .item({
+      .item(
+      {
         _id: this.props.match.params.item,
         item_corpus: this.props.match.params.corpus
-      })
+      }
+      )
       .setTopic(topicToAssign, viewpointId)
       .then(data => {
         this.setState(newState => {
@@ -258,7 +376,7 @@ class Item extends Component {
         })
       })
       .catch(error => console.error(error));
-  };
+  }
 
 
   _removeTopic = async (topicToDelete) => {

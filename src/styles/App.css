@@ -427,3 +427,14 @@ ul.Outliner,
   bottom: 0;
   background: #e6ecf0;
 }
+
+.flexColumn {
+  flex-direction : column;
+}
+
+.buttonUpload {
+  padding : 5px;
+  border: 1px solid #ced4da;
+  border-radius : 5px;
+  background-color: #e2e5e9;
+}
