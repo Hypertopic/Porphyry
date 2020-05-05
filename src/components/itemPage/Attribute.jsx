@@ -89,7 +89,11 @@ function AttributeValue(props) {
       />
     </div>
   );
-  return (
+  if (props.value && props.value.startsWith('HTTP')) return (
+    <div href={props.value} className="Value">
+      {props.value}
+    </div>
+  ) else return (
     <div className="Value">
       {props.value}
     </div>
