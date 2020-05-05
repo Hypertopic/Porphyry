@@ -93,7 +93,7 @@ function AttributeValue(props) {
     <div href={props.value} className="Value">
       {props.value}
     </div>
-  ) else return (
+  ) return (
     <div className="Value">
       {props.value}
     </div>
