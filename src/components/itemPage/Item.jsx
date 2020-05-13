@@ -126,7 +126,7 @@ class Item extends Component {
 
     function isValidValue(attribute) {
       let [key,value]=attribute.split(":").map(t => t.trim());
-      return key && value && !HIDDEN.includes(key);
+      return key && value;
     }
 
     let attributeInputChange=(e) => {
