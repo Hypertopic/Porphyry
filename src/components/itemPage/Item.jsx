@@ -281,7 +281,7 @@ class Item extends Component {
   };
 }
 
-function Comments(props) {
+const Comments = React.memo((props) => {
   let config = {
     identifier: props.item.id,
     title: props.item.name
@@ -289,7 +289,7 @@ function Comments(props) {
   return (props.appId)
     ? <DiscussionEmbed config={config} shortname={props.appId} />
     : null;
-}
+});
 
 function Resource(props) {
   return (props.href)?
