@@ -121,13 +121,14 @@ class Item extends Component {
     });
   };
 
+  _parseAttributeInput() {
+    return (this.state.attributeInputValue.match(/([^:]*):(.*)/) || [])
+      .splice(1)
+      .map(t => t.trim());
+  }
+
   _getAttributeCreationForm() {
     var classes=["AttributeForm","input-group"];
-
-    function isValidValue(attribute) {
-      let [key,value]=attribute.split(":").map(t => t.trim());
-      return key && value;
-    }
 
     let attributeInputChange=(e) => {
       this.setState({ attributeInputValue:e.target.value });
@@ -156,11 +157,13 @@ class Item extends Component {
 
     if (!this.state.attributeInputFocus) {
       classes.push("inactive");
-    } else if (isValidValue(this.state.attributeInputValue)) {
-      valid=true;
-      let editedAttribute=this.state.attributeInputValue.split(":").map(t => t.trim())[0];
-      if (this.state.item[editedAttribute]) {
-        classes.push("modify")
+    } else {
+      let [key, value] = this._parseAttributeInput();
+      if (key && value) {
+        valid = true;
+        if (this.state.item[key]) {
+          classes.push("modify")
+        }
       }
     }
 
@@ -211,12 +214,9 @@ class Item extends Component {
 
   _submitAttribute = (e) => {
     e.preventDefault();
-    let key_value = this.state.attributeInputValue;
-    if (key_value) {
-      let [key,value]=key_value.match(/([^:]*):(.*)/).splice(1).map(t => t.trim());
-      if (key && value) this._setAttribute(key, value);
-      else return false;
-    }
+    let [key, value] = this._parseAttributeInput();
+    if (!key || !value) return false;
+    this._setAttribute(key, value);
     this.setState({
       attributeInputValue: ""
     });
