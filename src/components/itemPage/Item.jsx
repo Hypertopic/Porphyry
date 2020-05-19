@@ -9,7 +9,7 @@ import Resource from './Resource.jsx';
 import Header from '../Header.jsx';
 import { DiscussionEmbed } from 'disqus-react';
 
-const HIDDEN = ['topic', 'resource', 'thumbnail', 'couchapp'];
+const HIDDEN = ['topic', 'resource', 'thumbnail', 'item'];
 
 function getString(obj) {
   if (Array.isArray(obj)) {
