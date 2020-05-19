@@ -5,6 +5,7 @@ import groupBy from 'json-groupby';
 import conf from '../../config.js';
 import Viewpoint from './Viewpoint.jsx';
 import Attribute from './Attribute.jsx';
+import Resource from './Resource.jsx';
 import Header from '../Header.jsx';
 import { DiscussionEmbed } from 'disqus-react';
 
@@ -290,15 +291,5 @@ const Comments = React.memo((props) => {
     ? <DiscussionEmbed config={config} shortname={props.appId} />
     : null;
 });
-
-function Resource(props) {
-  return (props.href)?
-    <div className="p-3">
-      <a target="_blank" href={props.href} className="cursor-zoom" rel="noopener noreferrer">
-        <img src={props.href} alt="Resource" />
-      </a>
-    </div>
-    : null;
-}
 
 export default Item;
