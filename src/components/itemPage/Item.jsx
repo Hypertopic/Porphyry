@@ -51,7 +51,7 @@ class Item extends Component {
                     <div>
                       {attributes}
                     </div>
-                    {this._getAttributeCreationForm()}
+                    <div className="d-none d-sm-block">{this._getAttributeCreationForm()}</div>
                   </div>
                   {viewpoints}
                 </div>

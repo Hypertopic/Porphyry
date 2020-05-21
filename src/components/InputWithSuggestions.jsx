@@ -20,19 +20,21 @@ class InputWithSuggestions extends Component {
       suggestionHighlighted: 'active'
     };
     return (
-      <Autosuggest
-        theme={theme}
-        className="TopicSuggest"
-        suggestions={this.state.suggestions}
-        onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-        onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-        onSuggestionHighlighted={this.onSuggestionHighlighted}
-        onSuggestionSelected={this.props.onSuggestionSelected}
-        getSuggestionValue={this.getSuggestionValue}
-        renderSuggestion={this.renderSuggestion}
-        inputProps={this.props.inputProps}
-        id={`input-${this.props.id}`}
-      />
+      <div className="d-none d-sm-block">
+        <Autosuggest
+          theme={theme}
+          className="TopicSuggest"
+          suggestions={this.state.suggestions}
+          onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+          onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+          onSuggestionHighlighted={this.onSuggestionHighlighted}
+          onSuggestionSelected={this.props.onSuggestionSelected}
+          getSuggestionValue={this.getSuggestionValue}
+          renderSuggestion={this.renderSuggestion}
+          inputProps={this.props.inputProps}
+          id={`input-${this.props.id}`}
+        />
+      </div>
     );
   }
 
