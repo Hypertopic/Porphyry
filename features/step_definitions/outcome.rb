@@ -39,3 +39,7 @@ Alors("{string} mène à une page intitulée {string}") do |uri, title|
   click_link uri
   expect(page.title).to have_content title
 end
+
+Alors("le dessin {string} est affiché") do |value|
+  expect(page).to have_content value
+end
