@@ -89,8 +89,49 @@ class Item extends Component {
     );
   }
 
+  _get_int_update_seq(update_seq){
+    return parseInt(update_seq.slice(0,update_seq.indexOf("-")));
+  }
+
+  async _get_latest_update_seq() {
+    const response = await fetch('http://if05.local');
+    var myjson = await response.json();
+    return myjson.update_seq;
+  }
+
+  onlistening = async () => {
+    (async () => {
+      this.update_seq = await this._get_latest_update_seq();
+      this.eventSource = new EventSource(`http://if05.local:5984/argos/_changes?filter=argos/item&feed=eventsource&since=${this.update_seq}&corpus=${params.corpus}`);
+    })();
+
+    let uri = this.props.match.url;
+    let params = this.props.match.params;
+
+
+    var self=this;
+    this._fetchItem().then(() => {
+      this.eventSource.onmessage = e => {
+        var data = JSON.parse(e.data);
+        if (self._get_int_update_seq(self.update_seq)<self._get_int_update_seq(data.seq)){
+          if(this.props.match.params.item === data.id){
+            this._fetchItem();
+          }
+        }
+      }
+    });
+  }
+
   componentDidMount() {
-    this._fetchItem();
+    if (typeof this.eventSource === 'undefined'){
+      this.onlistening();
+    }
+  }
+
+  componentWillUnmount() {
+    if (typeof this.eventSource != 'undefined'){
+      this.eventSource.close();
+    }
   }
 
   _fetchItem = async () => {
@@ -103,6 +144,7 @@ class Item extends Component {
       let item = data[params.corpus][params.item];
       let itemTopics = (item.topic) ? groupBy(item.topic, ['viewpoint']) : {};
       let topics=this.state.item.topic || {};
+      topics = (itemTopics.length > 0) ? topics : {};
       for (let id in itemTopics) {
         topics[id]=itemTopics[id];
       }

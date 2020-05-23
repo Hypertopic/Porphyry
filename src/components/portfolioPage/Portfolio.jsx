@@ -55,9 +55,24 @@ class Portfolio extends Component {
     );
   }
 
+  _get_int_update_seq(update_seq){
+    return parseInt(update_seq.slice(0,update_seq.indexOf("-")));
+  }
+
+  async _get_latest_update_seq() {
+    const response = await fetch('http://if05.local');
+    var myjson = await response.json();
+    return myjson.update_seq;
+  }
+
   componentDidMount() {
     let start=new Date().getTime();
     var self=this;
+
+    (async () => {
+      this.update_seq = await this._get_latest_update_seq()
+    })();
+
     this._fetchAll().then(() => {
       let end=new Date().getTime();
       let elapsedTime=end-start;
@@ -66,8 +81,13 @@ class Portfolio extends Component {
       let intervalTime=Math.max(10000,elapsedTime*5);
       console.log("reload every ",intervalTime);
       self._timer = setInterval(
-        () => {
-          self._fetchAll();
+        async () => {
+          var latest_seq = await this._get_latest_update_seq();
+
+          if(self._get_int_update_seq(self.update_seq)<self._get_int_update_seq(latest_seq)){
+            self.update_seq = latest_seq;
+            self._fetchAll();
+          }
         },
         intervalTime
       );
