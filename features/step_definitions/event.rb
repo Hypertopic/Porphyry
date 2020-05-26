@@ -30,7 +30,7 @@ end
 Quand("l'utilisateur indique {string} comme valeur de l'attribut {string}") do |value, attribute|
   within '.Attributes' do
     fill_in placeholder: 'Ajouter un attribut et une valeur...', with: "#{attribute}:#{value}"
-    click_on class: 'ValidateButton' 
+    click_on class: 'ValidateButton'
   end
 end
 
@@ -47,5 +47,16 @@ Quand("l'utilisateur indique {string} pour la catégorie {string} du point de vu
     find('input').send_keys pattern
     click_link(topic, href: nil)
     click_on class: 'ValidateButton'
+  end
+end
+
+Quand("l'utilisateur indique {string} et sélectionne {string}") do |value1,value2|
+  pending "To be implemented"
+  fill_in "Rechercher", with: 'value1', visible: false
+  within("form-control#Rechercher") do
+    fill_in 'Rechercher', :with => @visitor[:value2]
+    find('#Rechercher', visible: true).set value1
+    find('#link', visible: true).click
+    click_on(value2)
   end
 end
