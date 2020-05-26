@@ -49,3 +49,7 @@ Quand("l'utilisateur indique {string} pour la catégorie {string} du point de vu
     click_on class: 'ValidateButton'
   end
 end
+
+Quand("l'utilisateur cherche {string} et sélectionne {string}") do |research, suggestion|
+    find('input').send_keys research
+end
