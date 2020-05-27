@@ -160,7 +160,6 @@ class Portfolio extends Component {
       })
       .then(x =>
         x.viewpoint.map(y => `/viewpoint/${y.id}`)
-          .concat(x.corpus.map(y => `/corpus/${y.id}`))
       )
       .then(hypertopic.getView)
       .then(data => {
@@ -173,6 +172,8 @@ class Portfolio extends Component {
         this.setState({viewpoints});
         return data;
       })
+      .then(() => this.state.corpora.map(y => `/corpus/${y.id}`))
+      .then(hypertopic.getView)
       .then(data => {
         let items = [];
         for (let corpus of this.state.corpora) {
