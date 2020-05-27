@@ -46,3 +46,7 @@ Alors("la liste d'items est affichée dans cet ordre") do |table|
   end
   table.diff!(results)
 end
+
+Alors("l'attribut {string} est sélectionné") do |attribute|
+  expect(find('.TopicTag')).to have_content attribute
+end

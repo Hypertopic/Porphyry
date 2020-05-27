@@ -10,6 +10,10 @@ Quand("on sélectionne la rubrique {string}") do |topic|
   click_on topic
 end
 
+Quand("on choisit l'attribut {string}") do |attribute|
+  click_on attribute
+end
+
 Quand ("l'utilisateur crée un item {string} dans le corpus {string}") do |name, corpus|
   click_on corpus
   expect(page).to have_content("undefined")
