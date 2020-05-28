@@ -143,59 +143,77 @@ class Portfolio extends Component {
     this.setState({selectedItems, topicsItems});
   }
 
-  async _fetchAll() {
-    let SETTINGS = await conf;
-    let hypertopic = new Hypertopic(SETTINGS.services);
-    return hypertopic.getView(`/user/${SETTINGS.user}`)
-      .then(data => {
-        let user = data[SETTINGS.user] || {};
-        user = {
-          viewpoint: user.viewpoint || [],
-          corpus: user.corpus || []
-        };
-        if (!this.state.viewpoints.length && !this.state.corpora.length) { //TODO compare old and new
-          this.setState({viewpoints:user.viewpoint, corpora:user.corpus});
-        }
-        return user;
-      })
-      .then(x =>
-        x.viewpoint.map(y => `/viewpoint/${y.id}`)
-          .concat(x.corpus.map(y => `/corpus/${y.id}`))
-      )
-      .then(hypertopic.getView)
-      .then(data => {
-        let viewpoints = [];
-        for (let v of this.state.viewpoints) {
-          let viewpoint = data[v.id];
-          viewpoint.id = v.id;
-          viewpoints.push(viewpoint);
-        }
-        this.setState({viewpoints});
-        return data;
-      })
-      .then(data => {
-        let items = [];
-        for (let corpus of this.state.corpora) {
-          for (let itemId in data[corpus.id]) {
-            if (!['id','name','user'].includes(itemId)) {
-              let item = data[corpus.id][itemId];
-              if (!item.name || !item.name.length) {
-                console.log(`/item/${corpus.id}/${itemId} has no name!`);
-              } else {
-                item.id = itemId;
-                item.corpus = corpus.id;
-                items.push(item);
-              }
+  async _fetchUser(SETTINGS, hypertopic){
+    return new Promise(resolve => {
+      resolve()
+    })
+    .then(() => hypertopic.getView(`/user/${SETTINGS.user}`))
+    .then(data => {
+      let user = data[SETTINGS.user] || {};
+      user = {
+        viewpoint: user.viewpoint || [],
+        corpus: user.corpus || []
+      };
+      if (!this.state.viewpoints.length && !this.state.corpora.length) { //TODO compare old and new
+        this.setState({viewpoints:user.viewpoint, corpora:user.corpus});
+      }
+      return user;
+    });
+  }
+
+  async _fetchViewpoints(hypertopic, x){
+    return new Promise(resolve => {
+      resolve()
+    })
+    .then(() => x.viewpoint.map(y => `/viewpoint/${y.id}`))
+    .then(hypertopic.getView)
+    .then(data => {
+      let viewpoints = [];
+      for (let v of this.state.viewpoints) {
+        let viewpoint = data[v.id];
+        viewpoint.id = v.id;
+        viewpoints.push(viewpoint);
+      }
+      this.setState({viewpoints});
+      return data;
+    })
+  }
+
+  async _fetchItems(hypertopic){
+    return new Promise(resolve => {
+      resolve()
+    })
+    .then(() => this.state.corpora.map(y => `/corpus/${y.id}`))
+    .then(p => hypertopic.getView(p))
+    .then(data => {
+      let items = [];
+      for (let corpus of this.state.corpora) {
+        for (let itemId in data[corpus.id]) {
+          if (!['id','name','user'].includes(itemId)) {
+            let item = data[corpus.id][itemId];
+            if (!item.name || !item.name.length) {
+              console.log(`/item/${corpus.id}/${itemId} has no name!`);
+            } else {
+              item.id = itemId;
+              item.corpus = corpus.id;
+              items.push(item);
             }
           }
         }
-        this.setState({items:items.sort(by('name'))});
-      })
-      .then(x => {
-        this._updateSelectedItems();
-      });
+      }
+      this.setState({items:items.sort(by('name'))});
+    })
   }
 
+  async _fetchAll() {
+    let SETTINGS = await conf;
+    let hypertopic = new Hypertopic(SETTINGS.services);
+
+    return this._fetchUser(SETTINGS, hypertopic)
+    .then(x => Promise.all([this._fetchViewpoints(hypertopic, x), this._fetchItems(hypertopic)]))
+    .then(() => this._updateSelectedItems());
+  }
+  
   _getViewpoints() {
     return this.state.viewpoints.sort(by('name')).map((v, i) =>
       <div key={v.id}>
