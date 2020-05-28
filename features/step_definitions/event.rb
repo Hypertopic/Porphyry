@@ -50,7 +50,8 @@ Quand("l'utilisateur indique {string} pour la catégorie {string} du point de vu
   end
 end
 
-Quand("{string} est inscrit dans la barre de recherche et on clique sur {string}") do |value1,value2|
+Quand("l'utilisateur indique {string} et sélectionne {string}") do |value1,value2|
+  pending "To be implemented"
   fill_in "Rechercher", with: 'value1', visible: false
   within("form-control#Rechercher") do
     fill_in 'Rechercher', :with => @visitor[:value2]
