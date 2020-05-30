@@ -26,12 +26,13 @@ class Portfolio extends Component {
   render() {
     let viewpoints = this._getViewpoints();
     let corpora = this._getCorpora();
+
     return (
       <div className="App container-fluid">
         <Header conf={conf} />
         <div className="Status row align-items-center h5">
           <div className="Search col-md-3">
-            <SearchBar viewpoints={this.state.viewpoints} />
+            <SearchBar viewpoints={this.state.viewpoints} items={this.state.items} />
           </div>
           <div className="col-md-6">
             <Status selectionJSON={this.selectionJSON} viewpoints={this.state.viewpoints}/>
