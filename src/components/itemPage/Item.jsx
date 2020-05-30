@@ -5,10 +5,11 @@ import groupBy from 'json-groupby';
 import conf from '../../config.js';
 import Viewpoint from './Viewpoint.jsx';
 import Attribute from './Attribute.jsx';
+import Resource from './Resource.jsx';
 import Header from '../Header.jsx';
 import { DiscussionEmbed } from 'disqus-react';
 
-const HIDDEN = ['topic', 'resource', 'thumbnail', 'couchapp'];
+const HIDDEN = ['topic', 'resource', 'thumbnail', 'item'];
 
 function getString(obj) {
   if (Array.isArray(obj)) {
@@ -121,13 +122,14 @@ class Item extends Component {
     });
   };
 
+  _parseAttributeInput() {
+    return (this.state.attributeInputValue.match(/([^:]*):(.*)/) || [])
+      .splice(1)
+      .map(t => t.trim());
+  }
+
   _getAttributeCreationForm() {
     var classes=["AttributeForm","input-group"];
-
-    function isValidValue(attribute) {
-      let [key,value]=attribute.split(":").map(t => t.trim());
-      return key && value && !HIDDEN.includes(key);
-    }
 
     let attributeInputChange=(e) => {
       this.setState({ attributeInputValue:e.target.value });
@@ -156,11 +158,13 @@ class Item extends Component {
 
     if (!this.state.attributeInputFocus) {
       classes.push("inactive");
-    } else if (isValidValue(this.state.attributeInputValue)) {
-      valid=true;
-      let editedAttribute=this.state.attributeInputValue.split(":").map(t => t.trim())[0];
-      if (this.state.item[editedAttribute]) {
-        classes.push("modify")
+    } else {
+      let [key, value] = this._parseAttributeInput();
+      if (key && value) {
+        valid = true;
+        if (this.state.item[key]) {
+          classes.push("modify")
+        }
       }
     }
 
@@ -211,12 +215,9 @@ class Item extends Component {
 
   _submitAttribute = (e) => {
     e.preventDefault();
-    let key_value = this.state.attributeInputValue;
-    if (key_value) {
-      let [key,value]=key_value.match(/([^:]*):(.*)/).splice(1).map(t => t.trim());
-      if (key && value) this._setAttribute(key, value);
-      else return false;
-    }
+    let [key, value] = this._parseAttributeInput();
+    if (!key || !value) return false;
+    this._setAttribute(key, value);
     this.setState({
       attributeInputValue: ""
     });
@@ -281,7 +282,7 @@ class Item extends Component {
   };
 }
 
-function Comments(props) {
+const Comments = React.memo((props) => {
   let config = {
     identifier: props.item.id,
     title: props.item.name
@@ -289,16 +290,6 @@ function Comments(props) {
   return (props.appId)
     ? <DiscussionEmbed config={config} shortname={props.appId} />
     : null;
-}
-
-function Resource(props) {
-  return (props.href)?
-    <div className="p-3">
-      <a target="_blank" href={props.href} className="cursor-zoom" rel="noopener noreferrer">
-        <img src={props.href} alt="Resource" />
-      </a>
-    </div>
-    : null;
-}
+});
 
 export default Item;
