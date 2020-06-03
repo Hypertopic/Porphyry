@@ -16,8 +16,8 @@ class Status extends Component {
         status.push();
       }
       let topicsHTML = [
-        ...topics.selection.map(id => ({excluded: false, id, topic: this._getTopic(id)})),
-        ...topics.exclusion.map(id => ({excluded: true, id, topic: this._getTopic(id)}))]
+        ...topics.selection.map(id => ({excluded: false, id, topic: this._getTopic(id) || {name: `${id.attribute[0].toUpperCase()}${id.attribute.slice(1)}: ${id.value}`}})),
+        ...topics.exclusion.map(id => ({excluded: true, id, topic: this._getTopic(id) || {name: `${id.attribute[0].toUpperCase()}${id.attribute.slice(1)}: ${id.value}`}}))]
         .sort(filter)
         .map(
           t =>

@@ -15,7 +15,15 @@ class SearchBar extends React.Component {
 
           new Items(items).getAttributes()
           .filter(x => !(['id', 'upper', 'user'].includes(x[0])))
-          .map((array, i) => attributesArray.push({id: i, name: `${array[0]} : ${array[1]}`}));
+          .map((array, i) => attributesArray.push(
+            {
+              attributeFilter: {
+                attribute: array[0],
+                value: array[1]
+              },
+            name: `${array[0][0].toUpperCase()}${array[0].slice(1)} : ${array[1]}`
+            }
+          ));
 
           return [
               ... new Topics(
@@ -40,7 +48,7 @@ class SearchBar extends React.Component {
       type: 'intersection',
       data: [{
         type: 'intersection',
-        selection: [suggestion.id],
+        selection: [suggestion.id || suggestion.attributeFilter],
         exclusion: []
       }]
     }));

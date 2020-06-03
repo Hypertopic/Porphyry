@@ -122,7 +122,8 @@ class Portfolio extends Component {
   }
 
   _isSelected(item, list) {
-    let itemHasValue = list.data.map(l => includes(this._getRecursiveItemTopics(item), (l.selection || [] ), (l.exclusion || []), (l.type === 'union')));
+    let itemHasValue = list.data.map(l => includes(this._getRecursiveItemTopics(item), (l.selection || [] ), (l.exclusion || []), (l.type === 'union'), item));
+
     if (list.type === 'union')
       return itemHasValue.reduce((c1,c2) => c1 || c2, false);
     else
@@ -214,10 +215,27 @@ class Portfolio extends Component {
     );
   }
 }
-function includes(array1, array2, array3, union) {
+function includes(array1, array2, array3, union, item) {
   let set1 = new Set(array1);
-  let arrayHasValue = array2.map(e => set1.has(e));
-  let arrayDontHaveValue = array3.map(e => set1.has(e));
+
+  let arrayHasValue = array2.map(e =>
+      {
+        if(typeof e === "string") {
+          return set1.has(e);
+        } else if(typeof e === "object"){
+          return item.hasOwnProperty(`${e.attribute}`) ? item[`${e.attribute}`].length > 0 ? item[`${e.attribute}`][0] === e.value : false : false;
+        }
+      });
+
+    let arrayDontHaveValue = array3.map(e =>
+      {
+        if(typeof e === "string"){
+          return set1.has(e)
+        } else if(typeof e === "object"){
+          return item.hasOwnProperty(`${e.attribute}`) ? item[`${e.attribute}`].length > 0 ? item[`${e.attribute}`][0] === e.value : false : false;
+        }
+      });
+
   if (union)
     return arrayHasValue.reduce((c1,c2) => c1 || c2, false) || ((array3.length > 0)?!arrayDontHaveValue.reduce((c1,c2) => c1 || c2, false):false);
   else
