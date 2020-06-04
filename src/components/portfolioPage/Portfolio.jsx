@@ -18,6 +18,7 @@ class Portfolio extends Component {
       corpora: [],
       items: [],
       selectedItems: [],
+      criteria: "name",
       topicsItems: new Map()
     };
     this._updateSelection();
@@ -189,7 +190,8 @@ class Portfolio extends Component {
             }
           }
         }
-        this.setState({items:items.sort(by('name'))});
+        let sortedItems = this._sortByAttribute(items);
+        this.setState({ items: sortedItems });
       })
       .then(x => {
         this._updateSelectedItems();
@@ -206,10 +208,45 @@ class Portfolio extends Component {
     );
   }
 
+  _sortByAttribute(items) {
+    let select = document.getElementById('attribut');
+    let attribut = 'name';
+    if(select.options[select.selectedIndex] !== undefined) {
+      attribut = select.options[select.selectedIndex].value;
+    }
+    this.setState({criteria: attribut});
+    return items.sort(function (a, b) {
+        if (a[attribut] && b[attribut] && a[attribut][0] && b[attribut][0]) {
+          let res = a[attribut][0].localeCompare(b[attribut][0]);
+          if(res != 0){
+            return res;
+          }else{
+            return a["name"][0].localeCompare(b["name"][0]);
+          }
+        } else if ((!a[attribut] || !a[attribut][0]) && b[attribut] && b[attribut][0]) {
+          return 1;
+        } else if ((!b[attribut] || !b[attribut][0]) && a[attribut] && a[attribut][0]) {
+          return -1;
+        }
+        return a["name"][0].localeCompare(b["name"][0]);
+      });
+  }
+
+  handleSort = () => {
+    this.setState({items : this._sortByAttribute(this.state.items)});
+  }
+
   _getCorpora() {
     let ids = this.state.corpora.map(c => c.id);
     return (
-      <Corpora ids={ids} from={this.state.items.length} items={this.state.selectedItems} conf={conf} />
+      <Corpora
+        ids={ids}
+        from={this.state.items.length}
+        items={this.state.selectedItems}
+        conf={conf}
+        onSort={this.handleSort}
+        sortAttribute={this.state.criteria}
+      />
     );
   }
 }

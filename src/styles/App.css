@@ -414,6 +414,10 @@ ul.Outliner,
   vertical-align: middle;
 }
 
+.selectAttributes {
+  margin-top: 10px;
+}
+
 #disqus_thread {
   position: relative;
 }
