@@ -17,7 +17,7 @@ class InputWithSuggestions extends Component {
       suggestionsContainer: 'dropdown open',
       suggestionsList: `dropdown-menu ${this.state.suggestions.length ? 'show' : ''}`,
       suggestion: 'dropdown-item',
-      suggestionHighlighted: 'active',
+      suggestionHighlighted: 'active'
     };
     return (
         <Autosuggest
