@@ -12,15 +12,14 @@ class InputWithSuggestions extends Component {
 
   render() {
     const theme = {
-      container: 'autosuggest',
+      container: 'd-none d-sm-block',
       input: 'form-control',
       suggestionsContainer: 'dropdown open',
       suggestionsList: `dropdown-menu ${this.state.suggestions.length ? 'show' : ''}`,
       suggestion: 'dropdown-item',
-      suggestionHighlighted: 'active'
+      suggestionHighlighted: 'active',
     };
     return (
-      <div className="d-none d-sm-block">
         <Autosuggest
           theme={theme}
           className="TopicSuggest"
@@ -34,7 +33,6 @@ class InputWithSuggestions extends Component {
           inputProps={this.props.inputProps}
           id={`input-${this.props.id}`}
         />
-      </div>
     );
   }
 
