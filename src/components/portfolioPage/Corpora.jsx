@@ -7,6 +7,8 @@ class Corpora extends Component {
 
   render() {
     let items = this._getItems();
+    let attributes = this._getAttributes();
+    let options = this._getOptions(attributes);
     let count = this.props.items.length;
     let total = this.props.from;
     let listIds = this.props.ids.map((corpus) =>
@@ -20,6 +22,15 @@ class Corpora extends Component {
             <span className="badge badge-pill badge-light ml-4">{count} / {total}</span>
           </h2>
           <GeographicMap items={this.props.items} conf={this.props.conf} />
+          <div className="selectAttributes">
+            <select
+              id="attribut"
+              onChange={this.props.onSort}
+              value={this.props.sortAttribute}
+            >
+              {options}
+            </select>
+          </div>
           <div className="Items m-3">
             {items}
           </div>
@@ -34,6 +45,20 @@ class Corpora extends Component {
     );
   }
 
+  _getAttributes() {
+    let arr = [];
+    let rejectedAttributes = ['couchapp', 'topic', 'corpus', 'id', 'item'];
+    this.props.items.forEach(element => arr = arr.concat(Object.keys(element)));
+    arr = arr.filter((value, index, self) => self.indexOf(value) === index && !rejectedAttributes.includes(value));
+    arr.sort();
+    return arr;
+  }
+
+  _getOptions(arr) {
+    return arr.map((attribute) => (
+      <option value={attribute}> {attribute} </option>
+    ));
+  }
 }
 
 function Item(props) {
