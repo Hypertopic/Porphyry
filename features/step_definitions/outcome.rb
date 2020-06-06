@@ -34,3 +34,11 @@ end
 Alors("une des rubriques de l'item est {string}") do |topic|
   expect(page).to have_css '.Topic', text: topic
 end
+
+Alors ("{string} est l'item affiché") do |item|
+  expect(find('.Subject h2')).to have_content item
+end
+
+Alors("l'item {string} est visible dans la liste des items similaires") do |item|
+  expect(page).to have_content item
+end

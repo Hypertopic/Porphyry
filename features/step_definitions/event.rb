@@ -30,7 +30,7 @@ end
 Quand("l'utilisateur indique {string} comme valeur de l'attribut {string}") do |value, attribute|
   within '.Attributes' do
     fill_in placeholder: 'Ajouter un attribut et une valeur...', with: "#{attribute}:#{value}"
-    click_on class: 'ValidateButton' 
+    click_on class: 'ValidateButton'
   end
 end
 
@@ -46,6 +46,17 @@ Quand("l'utilisateur indique {string} pour la catégorie {string} du point de vu
   within '.Viewpoint', text: viewpoint do
     find('input').send_keys pattern
     click_link(topic, href: nil)
+    click_on class: 'ValidateButton'
+  end
+end
+
+Quand ("l’utilisateur choisit l’item {string} dans la liste des items similaires") do |itemName|
+  click_on itemName
+end
+
+Quand("l'utilisateur indique {string} comme item similaire") do |item|
+  within '.Items' do
+    fill_in placeholder: 'Ajouter un item similaire ...', with: "#{item}"
     click_on class: 'ValidateButton'
   end
 end
