@@ -414,6 +414,11 @@ ul.Outliner,
   vertical-align: middle;
 }
 
+.space {
+  border-top: 10px;
+  padding: 0.3rem!important;
+}
+
 #disqus_thread {
   position: relative;
 }

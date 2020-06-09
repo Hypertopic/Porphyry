@@ -7,6 +7,7 @@ import Viewpoint from './Viewpoint.jsx';
 import Attribute from './Attribute.jsx';
 import Resource from './Resource.jsx';
 import Header from '../Header.jsx';
+import SameNameBlock from './SameNameBlock.jsx';
 import { DiscussionEmbed } from 'disqus-react';
 
 const HIDDEN = ['topic', 'resource', 'thumbnail', 'item'];
@@ -32,6 +33,7 @@ class Item extends Component {
     let name = getString(this.state.item.name);
     let attributes = this._getAttributes();
     let viewpoints = this._getViewpoints();
+    let sameNameBlock = this._getSameNameBlock();
     return (
       <div className="App container-fluid">
         <Header conf={conf} />
@@ -57,6 +59,8 @@ class Item extends Component {
                   {viewpoints}
                 </div>
               </div>
+              <hr className="space" />
+              {sameNameBlock}
             </div>
             <div className="col-md-8 p-4">
               <div className="Subject">
@@ -87,6 +91,17 @@ class Item extends Component {
       <Viewpoint key={v[0]} id={v[0]} topics={v[1]}
         assignTopic={this._assignTopic} removeTopic={this._removeTopic} />
     );
+  }
+
+  _getSameNameBlock() {
+    //before returning the SameNameBlock Component, we ensure that the consulted item name value is defined
+    if (this.state.item.name !== undefined && this.state.item.name !== null) {
+      return (
+        <SameNameBlock ID={this.props.match.params.item} itemName={this.state.item.name} />
+      );
+    } else {
+      //item name has no value
+    }
   }
 
   componentDidMount() {
