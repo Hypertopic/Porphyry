@@ -50,3 +50,7 @@ end
 Alors("l'attribut {string} est sélectionné") do |attribute|
   expect(find('.TopicTag')).to have_content attribute
 end
+
+Alors("la page contient {string}") do |localization|
+  expect(page).to have_content localization
+end

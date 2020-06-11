@@ -64,3 +64,7 @@ Soit("la liste d'items est affichée dans cet ordre là") do |table|
   end
   table.diff!(results)
 end
+
+Soit("la langue du navigateur est {string}") do |language|
+  page.driver.add_headers("Accept-Language" => language)
+end
