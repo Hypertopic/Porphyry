@@ -39,3 +39,7 @@ Alors("{string} mène à une page intitulée {string}") do |uri, title|
   click_link uri
   expect(page.title).to have_content title
 end
+
+Alors ("la carte est affichée") do
+  expect(page).to have_xpath("//img[contains(@src,'https://maps.googleapis.com/maps/api/staticmap?size=640x480&markers=')]")
+end
