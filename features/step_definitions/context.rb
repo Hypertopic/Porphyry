@@ -52,3 +52,7 @@ end
 Soit("un item en cours de création") do
   visit '/item/Vitraux - Bénel/' + getUUID('')
 end
+
+Soit("la langue du navigateur est {string}") do |language|
+  page.driver.add_headers("Accept-Language" => language)
+end

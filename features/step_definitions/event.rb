@@ -30,7 +30,7 @@ end
 Quand("l'utilisateur indique {string} comme valeur de l'attribut {string}") do |value, attribute|
   within '.Attributes' do
     fill_in placeholder: 'Ajouter un attribut et une valeur...', with: "#{attribute}:#{value}"
-    click_on class: 'ValidateButton' 
+    click_on class: 'ValidateButton'
   end
 end
 
