@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import ItemCreator from './ItemCreator.jsx';
+import GeographicMap from './GeographicMap.jsx';
 
 class Corpora extends Component {
 
@@ -18,6 +19,7 @@ class Corpora extends Component {
             {listIds}
             <span className="badge badge-pill badge-light ml-4">{count} / {total}</span>
           </h2>
+          <GeographicMap items={this.props.items} conf={this.props.conf} />
           <div className="Items m-3">
             {items}
           </div>

@@ -53,6 +53,12 @@ Soit("un item en cours de création") do
   visit '/item/Vitraux - Bénel/' + getUUID('')
 end
 
+
 Soit("la liste des items similaires {string} est visible") do |itemName|
   expect(page).to have_content itemName
+end
+
+Soit("l'attribut {string} a pour valeur {string}") do |attribute, value|
+  expect(page).to have_content value
+  expect(page).to have_content attribute
 end

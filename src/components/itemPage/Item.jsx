@@ -5,10 +5,12 @@ import groupBy from 'json-groupby';
 import conf from '../../config.js';
 import Viewpoint from './Viewpoint.jsx';
 import Attribute from './Attribute.jsx';
+import Resource from './Resource.jsx';
 import Header from '../Header.jsx';
+import SameNameBlock from './SameNameBlock.jsx';
 import { DiscussionEmbed } from 'disqus-react';
 
-const HIDDEN = ['topic', 'resource', 'thumbnail', 'couchapp'];
+const HIDDEN = ['topic', 'resource', 'thumbnail', 'item'];
 
 function getString(obj) {
   if (Array.isArray(obj)) {
@@ -31,6 +33,7 @@ class Item extends Component {
     let name = getString(this.state.item.name);
     let attributes = this._getAttributes();
     let viewpoints = this._getViewpoints();
+    let sameNameBlock = this._getSameNameBlock();
     return (
       <div className="App container-fluid">
         <Header conf={conf} />
@@ -56,6 +59,8 @@ class Item extends Component {
                   {viewpoints}
                 </div>
               </div>
+              <hr className="space" />
+              {sameNameBlock}
             </div>
             <div className="col-md-8 p-4">
               <div className="Subject">
@@ -86,6 +91,17 @@ class Item extends Component {
       <Viewpoint key={v[0]} id={v[0]} topics={v[1]}
         assignTopic={this._assignTopic} removeTopic={this._removeTopic} />
     );
+  }
+
+  _getSameNameBlock() {
+    //before returning the SameNameBlock Component, we ensure that the consulted item name value is defined
+    if (this.state.item.name !== undefined && this.state.item.name !== null) {
+      return (
+        <SameNameBlock ID={this.props.match.params.item} itemName={this.state.item.name} />
+      );
+    } else {
+      //item name has no value
+    }
   }
 
   componentDidMount() {
@@ -121,13 +137,14 @@ class Item extends Component {
     });
   };
 
+  _parseAttributeInput() {
+    return (this.state.attributeInputValue.match(/([^:]*):(.*)/) || [])
+      .splice(1)
+      .map(t => t.trim());
+  }
+
   _getAttributeCreationForm() {
     var classes=["AttributeForm","input-group"];
-
-    function isValidValue(attribute) {
-      let [key,value]=attribute.split(":").map(t => t.trim());
-      return key && value && !HIDDEN.includes(key);
-    }
 
     let attributeInputChange=(e) => {
       this.setState({ attributeInputValue:e.target.value });
@@ -156,11 +173,13 @@ class Item extends Component {
 
     if (!this.state.attributeInputFocus) {
       classes.push("inactive");
-    } else if (isValidValue(this.state.attributeInputValue)) {
-      valid=true;
-      let editedAttribute=this.state.attributeInputValue.split(":").map(t => t.trim())[0];
-      if (this.state.item[editedAttribute]) {
-        classes.push("modify")
+    } else {
+      let [key, value] = this._parseAttributeInput();
+      if (key && value) {
+        valid = true;
+        if (this.state.item[key]) {
+          classes.push("modify")
+        }
       }
     }
 
@@ -211,12 +230,9 @@ class Item extends Component {
 
   _submitAttribute = (e) => {
     e.preventDefault();
-    let key_value = this.state.attributeInputValue;
-    if (key_value) {
-      let [key,value]=key_value.match(/([^:]*):(.*)/).splice(1).map(t => t.trim());
-      if (key && value) this._setAttribute(key, value);
-      else return false;
-    }
+    let [key, value] = this._parseAttributeInput();
+    if (!key || !value) return false;
+    this._setAttribute(key, value);
     this.setState({
       attributeInputValue: ""
     });
@@ -281,7 +297,7 @@ class Item extends Component {
   };
 }
 
-function Comments(props) {
+const Comments = React.memo((props) => {
   let config = {
     identifier: props.item.id,
     title: props.item.name
@@ -289,16 +305,6 @@ function Comments(props) {
   return (props.appId)
     ? <DiscussionEmbed config={config} shortname={props.appId} />
     : null;
-}
-
-function Resource(props) {
-  return (props.href)?
-    <div className="p-3">
-      <a target="_blank" href={props.href} className="cursor-zoom" rel="noopener noreferrer">
-        <img src={props.href} alt="Resource" />
-      </a>
-    </div>
-    : null;
-}
+});
 
 export default Item;

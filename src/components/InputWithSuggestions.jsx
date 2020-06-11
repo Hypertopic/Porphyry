@@ -38,9 +38,11 @@ class InputWithSuggestions extends Component {
 
   getSuggestionValue = suggestion => suggestion.name;
 
+  getRegExp = x => new RegExp(x.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&'), 'i');
+
   renderSuggestion = (suggestion, {query}) => {
     let value = suggestion.name;
-    let start = value.search(new RegExp(query, "i"));
+    let start = value.search(this.getRegExp(query));
     let end = start + query.length;
     return (
       // eslint-disable-next-line
@@ -53,7 +55,7 @@ class InputWithSuggestions extends Component {
   };
 
   onSuggestionsFetchRequested = ({ value }) => {
-    let pattern = new RegExp(value, 'i');
+    let pattern = this.getRegExp(value);
     let suggestions = this.props.candidates
       .filter(x => pattern.test(x.name))
       .sort((x, y) => x.name.localeCompare(y.name));

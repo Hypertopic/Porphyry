@@ -50,6 +50,7 @@ Quand("l'utilisateur indique {string} pour la catégorie {string} du point de vu
   end
 end
 
+
 Quand ("l’utilisateur choisit l’item {string} dans la liste des items similaires") do |itemName|
   click_on itemName
 end
@@ -58,5 +59,9 @@ Quand("l'utilisateur indique {string} comme item similaire") do |item|
   within '.Items' do
     fill_in placeholder: 'Ajouter un item similaire ...', with: "#{item}"
     click_on class: 'ValidateButton'
-  end
+end
+
+Quand("l'utilisateur choisit l'item {string} dans le bloc Items ayant le même nom") do |item|
+  click_on item
+
 end
