@@ -49,3 +49,13 @@ Quand("l'utilisateur indique {string} pour la catégorie {string} du point de vu
     click_on class: 'ValidateButton'
   end
 end
+
+Quand("l'utilisateur indique {string} et sélectionne {string}") do |value,attribute|
+  fill_in "Rechercher", with: 'value', visible: false
+  within("form-control#Rechercher") do
+    fill_in 'Rechercher', with: 'attribute'
+    find('#Rechercher', visible: true).set value
+    find('#link', visible: true).click
+    click_on(attribute)
+  end
+end
