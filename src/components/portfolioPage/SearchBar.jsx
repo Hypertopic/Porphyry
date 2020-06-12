@@ -3,6 +3,8 @@ import { withRouter } from 'react-router';
 import memoize from 'memoize-one';
 import {Topics} from '../../model.js';
 import InputWithSuggestions from '../InputWithSuggestions.jsx';
+import { t } from '@lingui/macro';
+import { i18n } from '../../index.js';
 
 class SearchBar extends React.Component {
 
@@ -36,7 +38,7 @@ class SearchBar extends React.Component {
 
   render() {
     const inputProps = {
-      placeholder: 'Rechercher...',
+      placeholder: i18n._(t`Rechercher...`),
       value: this.state.pattern,
       className: 'form-control',
       type: 'search',

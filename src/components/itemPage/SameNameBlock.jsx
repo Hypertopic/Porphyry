@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Hypertopic from 'hypertopic';
 import conf from '../../config.js';
+import { Trans } from '@lingui/macro';
 
 class SameNameBlock extends Component {
 
@@ -16,7 +17,7 @@ class SameNameBlock extends Component {
     if (this.state.sameNameItemsList.length > 0) {
       return (
         <div className="Description">
-          <h2 className="h4 font-weight-bold text-center">Items ayant le même nom</h2>
+          <h2 className="h4 font-weight-bold text-center"><Trans>Items ayant le même nom</Trans></h2>
           <div className="Items m-3">
             {items}
           </div>

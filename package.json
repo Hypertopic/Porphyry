@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@lingui/react": "^2.9.1",
     "bootstrap": "^4.4.1",
     "disqus-react": "^1.0.7",
     "hypertopic": "^3.2.0",
@@ -19,10 +20,19 @@
     "yaml": "^1.8.2"
   },
   "devDependencies": {
+    "@babel/core": "^7.9.6",
+    "@lingui/cli": "^2.9.1",
+    "@lingui/macro": "^2.9.1",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-plugin-macros": "^2.8.0",
+    "babel-preset-react": "^6.24.1",
     "react-scripts": "^3.4.1",
     "serve": "^11.3.0"
   },
   "scripts": {
+    "add-locale": "lingui add-locale",
+    "extract": "lingui extract",
+    "compile": "lingui compile",
     "start": "env EXTEND_ESLINT=true react-scripts start",
     "build": "react-scripts build",
     "preprod": "serve -s build -p 3000 &",

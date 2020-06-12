@@ -9,6 +9,7 @@ import Header from '../Header.jsx';
 import Status from './Status.jsx';
 import SearchBar from './SearchBar.jsx';
 import ViewpointCreator from './ViewpointCreator.jsx';
+import { Trans } from '@lingui/macro';
 
 class Portfolio extends Component {
   constructor() {
@@ -41,7 +42,7 @@ class Portfolio extends Component {
           <div className="App-content row">
             <div className="col-md-4 p-4">
               <div className="Description">
-                <h2 className="h4 font-weight-bold text-center">Points de vue</h2>
+                <h2 className="h4 font-weight-bold text-center"><Trans>Points de vue</Trans></h2>
                 <div className="p-3">
                   <ViewpointCreator />
                   {viewpoints}

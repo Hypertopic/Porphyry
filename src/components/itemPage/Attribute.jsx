@@ -1,4 +1,6 @@
 import React from 'react';
+import { t } from '@lingui/macro';
+import { i18n } from '../../index.js';
 
 class Attribute extends React.Component {
 
@@ -84,7 +86,7 @@ function Buttons(props) {
 function AttributeValue(props) {
   if (props.edited) return (
     <div className="Value edit">
-      <input value={props.editedValue} placeholder="valeur" autoFocus
+      <input value={props.editedValue} placeholder={i18n._(t`valeur`)} autoFocus
         onChange={props.onChange} onKeyDown={props.onKeyDown}
       />
     </div>

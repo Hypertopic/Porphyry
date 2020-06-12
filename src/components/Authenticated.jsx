@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { t, Trans } from '@lingui/macro';
+import { i18n } from '../index.js';
 
 class Authenticated extends Component {
 
@@ -17,22 +19,22 @@ class Authenticated extends Component {
     if (this.state.user) {
       return (
         <div className="Authenticated"> {this.state.user}
-          <a href="#logout" onClick={this.handleLogout}>Se déconnecter</a>
+          <a href="#logout" onClick={this.handleLogout}><Trans>Se déconnecter</Trans></a>
         </div>
       );
     }
     if (this.state.ask) {
       return(
         <form className="Authenticated" onSubmit={this.handleLogin}>
-          <input placeholder="nom d'utilisateur" ref={(x) => this.login = x} />
-          <input placeholder="mot de passe" ref={(x) => this.password = x} type="password" />
-          <input type="submit" value="Se connecter" />
+          <input placeholder={i18n._(t`nom d'utilisateur`)} ref={(x) => this.login = x} />
+          <input placeholder={i18n._(t`mot de passe`)}  ref={(x) => this.password = x} type="password" />
+          <input type="submit" value={i18n._(t`Se connecter`)} />
         </form>
       );
     }
     return (
       <div className="Authenticated">
-        <a href="#login" onClick={this.handleAsk}>Se connecter...</a>
+        <a href="#login" onClick={this.handleAsk}><Trans>Se connecter...</Trans></a>
       </div>
     );
   }
