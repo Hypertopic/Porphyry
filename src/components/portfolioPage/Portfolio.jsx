@@ -9,6 +9,7 @@ import Header from '../Header.jsx';
 import Status from './Status.jsx';
 import SearchBar from './SearchBar.jsx';
 import ViewpointCreator from './ViewpointCreator.jsx';
+import {Items} from '../../model.js';
 
 class Portfolio extends Component {
   constructor() {
@@ -26,15 +27,20 @@ class Portfolio extends Component {
   render() {
     let viewpoints = this._getViewpoints();
     let corpora = this._getCorpora();
+    let attributes = new Items(this.state.items)
+      .getAttributes()
+      .map(([key, value]) => key.concat(' : ', value))
+      .map(x => ({[x]: {name: x}}));
+    let candidates = this.state.viewpoints.concat(attributes);
     return (
       <div className="App container-fluid">
         <Header conf={conf} />
         <div className="Status row align-items-center h5">
           <div className="Search col-md-3">
-            <SearchBar viewpoints={this.state.viewpoints} />
+            <SearchBar viewpoints={this.state.viewpoints} items={this.state.items} />
           </div>
           <div className="col-md-6">
-            <Status selectionJSON={this.selectionJSON} viewpoints={this.state.viewpoints}/>
+            <Status selectionJSON={this.selectionJSON} candidates={candidates} />
           </div>
         </div>
         <div className="container-fluid">
@@ -120,8 +126,15 @@ class Portfolio extends Component {
     return Array.prototype.concat(...this._getItemTopicsPaths(item));
   }
 
+  _getItemAttributes(item) {
+    return new Items(
+      [item]
+    ).getAttributes()
+      .map(([key, value]) => key.concat(' : ', value));
+  }
+
   _isSelected(item, list) {
-    let itemHasValue = list.data.map(l => includes(this._getRecursiveItemTopics(item), (l.selection || [] ), (l.exclusion || []), (l.type === 'union')));
+    let itemHasValue = list.data.map(l => includes(this._getRecursiveItemTopics(item).concat(this._getItemAttributes(item)), (l.selection || [] ), (l.exclusion || []), (l.type === 'union')));
     if (list.type === 'union')
       return itemHasValue.reduce((c1,c2) => c1 || c2, false);
     else
