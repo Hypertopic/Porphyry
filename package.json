@@ -32,9 +32,8 @@
   "scripts": {
     "add-locale": "lingui add-locale",
     "extract": "lingui extract",
-    "compile": "lingui compile",
-    "start": "env EXTEND_ESLINT=true react-scripts start",
-    "build": "react-scripts build",
+    "start": "lingui compile && env EXTEND_ESLINT=true react-scripts start",
+    "build": "lingui compile && react-scripts build",
     "preprod": "serve -s build -p 3000 &",
     "test": "cucumber --format summary --retry 2 --fail-fast",
     "eject": "react-scripts eject"
