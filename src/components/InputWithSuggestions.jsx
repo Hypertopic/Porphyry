@@ -56,7 +56,7 @@ class InputWithSuggestions extends Component {
     let pattern = new RegExp(value, 'i');
     let suggestions = this.props.candidates
       .filter(x => pattern.test(x.name))
-      .sort((x, y) => x.name.localeCompare(y.name));
+      .sort((x, y) => (x.type === y.type) ? x.name.localeCompare(y.name) : -x.type.localeCompare(y.type))
     this.setState({ suggestions });
   };
 

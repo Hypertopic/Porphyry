@@ -16,8 +16,8 @@ class Status extends Component {
         status.push();
       }
       let topicsHTML = [
-        ...topics.selection.map(id => ({excluded: false, id, topic: this._getTopic(id)})),
-        ...topics.exclusion.map(id => ({excluded: true, id, topic: this._getTopic(id)}))]
+        ...topics.selection.map(id => ({excluded: false, id, topic: this._getCandidate(id)})),
+        ...topics.exclusion.map(id => ({excluded: true, id, topic: this._getCandidate(id)}))]
         .sort(filter)
         .map(
           t =>
@@ -36,8 +36,8 @@ class Status extends Component {
     return status;
   }
 
-  _getTopic(id) {
-    for (let v of this.props.viewpoints) {
+  _getCandidate(id) {
+    for (let v of this.props.candidates) {
       if (v[id]) return v[id];
     }
     return null;
