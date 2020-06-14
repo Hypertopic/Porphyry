@@ -39,3 +39,10 @@ Alors("{string} mène à une page intitulée {string}") do |uri, title|
   click_link uri
   expect(page.title).to have_content title
 end
+
+Alors("je vois en ordre la liste") do |table|
+results=[['Items']]+page.all('div.Item div').map do |div|
+[div.text]
+end
+table.diff!(results)
+end
