@@ -16,8 +16,8 @@ class Status extends Component {
         status.push();
       }
       let topicsHTML = [
-        ...topics.selection.map(id => ({excluded: false, id, topic: this._getTopic(id) || {name: `${id.attribute[0].toUpperCase()}${id.attribute.slice(1)}: ${id.value}`}})),
-        ...topics.exclusion.map(id => ({excluded: true, id, topic: this._getTopic(id) || {name: `${id.attribute[0].toUpperCase()}${id.attribute.slice(1)}: ${id.value}`}}))]
+        ...topics.selection.map(id => ({excluded: false, id, topic: this._getTopic(id)})),
+        ...topics.exclusion.map(id => ({excluded: true, id, topic: this._getTopic(id)}))]
         .sort(filter)
         .map(
           t =>
@@ -40,6 +40,8 @@ class Status extends Component {
     for (let v of this.props.viewpoints) {
       if (v[id]) return v[id];
     }
+    if (typeof id === 'object') return {name: `${id.attribute[0].toUpperCase()}${id.attribute.slice(1)}: ${id.value}`}
+
     return null;
   }
 
