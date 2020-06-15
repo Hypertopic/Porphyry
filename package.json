@@ -7,6 +7,7 @@
     "bootstrap": "^4.4.1",
     "compare-func": "^2.0.0",
     "disqus-react": "^1.0.7",
+    "google-map-react": "^1.1.7",
     "hypertopic": "^3.2.0",
     "js-tree": "^2.0.2",
     "json-groupby": "^1.0.2",
@@ -16,6 +17,7 @@
     "react": "^16.13.0",
     "react-autosuggest": "^9.4.3",
     "react-dom": "^16.13.0",
+    "react-geocode": "^0.2.1",
     "react-router-dom": "^5.1.2",
     "yaml": "^1.8.2"
   },
