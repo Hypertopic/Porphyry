@@ -1,3 +1,7 @@
 user: vitraux
 services:
   - http://argos2.test.hypertopic.org
+disqus: porphyry7
+map: AIzaSyAMfReziAc2tNvINlhYFv2bUUBb5IvxHNc
+dynamicmap: AIzaSyDXT5HK6HbF84Agz_eCHNn7fY4RL6WQkMQ
+geocoding: AIzaSyBdWGMJZrJkHwalbiA99n2xV1n34C5ae9I
