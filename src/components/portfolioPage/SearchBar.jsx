@@ -9,34 +9,31 @@ class SearchBar extends React.Component {
   state = {pattern: ''};
 
   candidates = memoize(
-      (viewpoints, items) => {
-
-          let attributesArray = []
-
-          new Items(items).getAttributes()
-          .filter(x => !(['id', 'upper', 'user'].includes(x[0])))
-          .map((array, i) => attributesArray.push(
-            {
-              attributeFilter: {
-                attribute: array[0],
-                value: array[1]
-              },
-            name: `${array[0][0].toUpperCase()}${array[0].slice(1)} : ${array[1]}`
-            }
-          ));
-
-          return [
-              ... new Topics(
-                Object.fromEntries(
-                  viewpoints.map(Object.entries)
-                    .reduce((x, y) => [...x, ...y], [])
-                    .filter(x => !(['name', 'id', 'upper', 'user'].includes(x[0])))
-                )
-              ).getAllPaths(),
-              ...attributesArray
-            ]
+    (viewpoints, items) => {
+      let attributesArray = []
+      new Items(items).getAttributes()
+      .filter(x => !(['id', 'upper', 'user'].includes(x[0])))
+      .map((array, i) => attributesArray.push(
+        {
+          attributeFilter: {
+            attribute: array[0],
+            value: array[1]
+          },
+          name: `${array[0][0].toUpperCase()}${array[0].slice(1)} : ${array[1]}`
         }
-    );
+      ));
+      return [
+        ...new Topics(
+          Object.fromEntries(
+            viewpoints.map(Object.entries)
+            .reduce((x, y) => [...x, ...y], [])
+            .filter(x => !(['name', 'id', 'upper', 'user'].includes(x[0])))
+          )
+        ).getAllPaths(),
+        ...attributesArray
+      ]
+    }
+  );
 
   handleChange = (event) => {
     this.setState({pattern: event.target.value});

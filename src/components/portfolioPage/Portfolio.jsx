@@ -26,7 +26,6 @@ class Portfolio extends Component {
   render() {
     let viewpoints = this._getViewpoints();
     let corpora = this._getCorpora();
-
     return (
       <div className="App container-fluid">
         <Header conf={conf} />
@@ -217,24 +216,25 @@ class Portfolio extends Component {
 }
 function includes(array1, array2, array3, union, item) {
   let set1 = new Set(array1);
+  let arrayHasValue = [
+  ...array2.filter(e => typeof e === "string")
+    .map(e => {
+      return set1.has(e);
+    }),
+  ...array2.filter(a => typeof a === "object")
+    .map(a => {
+      return item.hasOwnProperty(`${a.attribute}`) ? item[`${a.attribute}`].length > 0 ? item[`${a.attribute}`][0] === a.value : false : false;
+    })]
 
-  let arrayHasValue = array2.map(e =>
-      {
-        if(typeof e === "string") {
-          return set1.has(e);
-        } else if(typeof e === "object"){
-          return item.hasOwnProperty(`${e.attribute}`) ? item[`${e.attribute}`].length > 0 ? item[`${e.attribute}`][0] === e.value : false : false;
-        }
-      });
-
-    let arrayDontHaveValue = array3.map(e =>
-      {
-        if(typeof e === "string"){
-          return set1.has(e)
-        } else if(typeof e === "object"){
-          return item.hasOwnProperty(`${e.attribute}`) ? item[`${e.attribute}`].length > 0 ? item[`${e.attribute}`][0] === e.value : false : false;
-        }
-      });
+    let arrayDontHaveValue = [
+    ...array3.filter(e => typeof e === "string")
+      .map(e => {
+        return set1.has(e);
+      }),
+    ...array3.filter(a => typeof a === "object")
+      .map(a => {
+        return item.hasOwnProperty(`${a.attribute}`) ? item[`${a.attribute}`].length > 0 ? item[`${a.attribute}`][0] === a.value : false : false;
+      })]
 
   if (union)
     return arrayHasValue.reduce((c1,c2) => c1 || c2, false) || ((array3.length > 0)?!arrayDontHaveValue.reduce((c1,c2) => c1 || c2, false):false);
