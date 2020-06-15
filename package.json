@@ -23,7 +23,7 @@
     "@lingui/cli": "^2.9.1",
     "@lingui/macro": "^2.9.1",
     "react-scripts": "^3.4.1",
-    "serve": "^11.3.0"
+    "serve": "^11.3.2"
   },
   "scripts": {
     "add-locale": "lingui add-locale",
