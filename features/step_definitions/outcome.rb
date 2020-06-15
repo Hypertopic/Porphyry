@@ -39,3 +39,7 @@ Alors("{string} mène à une page intitulée {string}") do |uri, title|
   click_link uri
   expect(page.title).to have_content title
 end
+
+Alors("l'attribut {string} est sélectionné") do |attribute|
+  expect(find('.TopicTag')).to have_content attribute
+end
