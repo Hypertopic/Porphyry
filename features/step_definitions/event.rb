@@ -53,3 +53,7 @@ end
 Quand("l'utilisateur choisit l'item {string} dans le bloc Items ayant le même nom") do |item|
   click_on item
 end
+
+Quand("l'utilisateur clique sur le marqueur {string}") do |marker|
+  find(:xpath, '//*[@id="gmimap0"]/area', visible: false).trigger("click")
+end

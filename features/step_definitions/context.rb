@@ -57,3 +57,11 @@ Soit("l'attribut {string} a pour valeur {string}") do |attribute, value|
   expect(page).to have_content value
   expect(page).to have_content attribute
 end
+
+Soit("le portfolio affiché") do
+  visit "/"
+end
+
+Soit("la map est visible") do
+  expect(find(:xpath, "/html/body/div/div/div[2]/div/div[2]/div/div[1]/div/div/div/div/div/div[1]/div[3]"))
+end

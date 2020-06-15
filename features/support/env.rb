@@ -1,9 +1,6 @@
 require 'capybara/cucumber'
 require 'capybara/cuprite'
 
-Before do
-  Capybara.current_session.driver.add_headers("Accept-Language" => "fr")
-end
 Capybara.run_server = false
 Capybara.default_driver = :cuprite
 Capybara.javascript_driver = :cuprite
