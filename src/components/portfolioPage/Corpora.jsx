@@ -19,7 +19,7 @@ class Corpora extends Component {
             {listIds}
             <span className="badge badge-pill badge-light ml-4">{count} / {total}</span>
           </h2>
-          <GeographicMap items={this.props.items} conf={this.props.conf} />
+          <GeographicMap items={this.props.items} conf={this.props.conf} _updateItemsFromMarker={this.props._updateItemsFromMarker} initialItems={this.props.initialItems} />
           <div className="Items m-3">
             {items}
           </div>

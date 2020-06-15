@@ -19,7 +19,8 @@ class Portfolio extends Component {
       corpora: [],
       items: [],
       selectedItems: [],
-      topicsItems: new Map()
+      topicsItems: new Map(),
+      itemsFromMarker: []
     };
     this._updateSelection();
   }
@@ -133,6 +134,8 @@ class Portfolio extends Component {
     let selectedItems;
     if(this.selectionJSON.data.length > 0)
       selectedItems = this.state.items.filter(e => this._isSelected(e, this.selectionJSON));
+    else if(this.state.itemsFromMarker.length > 0)
+      selectedItems = this.state.itemsFromMarker;
     else
       selectedItems = this.state.items;
     let topicsItems = new Map();
@@ -193,7 +196,7 @@ class Portfolio extends Component {
           if (!['id','name','user'].includes(itemId)) {
             let item = data[corpus.id][itemId];
             if (!item.name || !item.name.length) {
-              console.log(`/item/${corpus.id}/${itemId} has no name!`);
+              //console.log(`/item/${corpus.id}/${itemId} has no name!`);
             } else {
               item.id = itemId;
               item.corpus = corpus.id;
@@ -204,6 +207,13 @@ class Portfolio extends Component {
       }
       this.setState({items:items.sort(by('name'))});
     })
+  }
+
+  _updateItemsFromMarker = (itemsFromMarker) => {
+    if(itemsFromMarker) {
+      this.setState({itemsFromMarker});
+      this.setState({selectedItems:itemsFromMarker});
+    }
   }
 
   async _fetchAll() {
@@ -228,7 +238,7 @@ class Portfolio extends Component {
   _getCorpora() {
     let ids = this.state.corpora.map(c => c.id);
     return (
-      <Corpora ids={ids} from={this.state.items.length} items={this.state.selectedItems} conf={conf} />
+      <Corpora ids={ids} from={this.state.items.length} items={this.state.selectedItems} conf={conf} _updateItemsFromMarker={this._updateItemsFromMarker} initialItems={this.state.items} />
     );
   }
 }
