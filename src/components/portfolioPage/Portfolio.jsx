@@ -56,37 +56,26 @@ class Portfolio extends Component {
     );
   }
 
-  _fetch_update_seq = async () => {
-    let SERVICE = (await conf).services[0];
-    return fetch(SERVICE)
-      .then(response => response.json())
-      .then(data => {
-        this.update_seq = data.update_seq;
-      });
-  }
+  hasChanged = async () => new Hypertopic((await conf).services)
+    .get({_id: ''})
+    .then(x =>
+      x.update_seq !== this.update_seq && (this.update_seq = x.update_seq)
+    );
 
   componentDidMount() {
     let start = new Date().getTime();
-    var self = this;
-    this._fetch_update_seq().then(() => {
+    this.hasChanged().then(() => {
       this._fetchAll().then(() => {
         let end = new Date().getTime();
         let elapsedTime = end - start;
         console.log('elapsed time ', elapsedTime);
         let intervalTime = Math.max(10000, elapsedTime * 5);
         console.log('reload every ', intervalTime);
-        self._timer = setInterval(
+        this._timer = setInterval(
           async () => {
-            let SERVICE = (await conf).services[0];
-            fetch(SERVICE)
-              .then(response => response.json())
-              .then(data => {
-                let latest_seq = data.update_seq;
-                if (self.update_seq !== latest_seq){
-                  self.update_seq = latest_seq;
-                  self._fetchAll();
-                }
-              });
+            this.hasChanged().then(x => {
+              if (x) this._fetchAll();
+            });
           },
           intervalTime
         );
