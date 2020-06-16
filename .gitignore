@@ -9,3 +9,7 @@ build
 
 # misc
 .DS_Store
+
+# lingui
+src/locales/_build
+src/locales/*/messages.js

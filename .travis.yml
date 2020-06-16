@@ -16,5 +16,5 @@ before_script:
 
 script:
   - npm run build
-  - npm run preprod
+  - npm run preprod &
   - docker run --rm -v "$(pwd)":/app -t --net="host" --env APP_HOST="http://`hostname`:3000" benel/cucumber-capybara --retry 2 --fail-fast

@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@lingui/react": "^2.9.1",
     "bootstrap": "^4.4.1",
     "disqus-react": "^1.0.7",
     "hypertopic": "^3.2.0",
@@ -19,15 +20,28 @@
     "yaml": "^1.8.2"
   },
   "devDependencies": {
+    "@lingui/cli": "^2.9.1",
+    "@lingui/macro": "^2.9.1",
     "react-scripts": "^3.4.1",
-    "serve": "^11.3.0"
+    "serve": "^11.3.2"
   },
   "scripts": {
-    "start": "env EXTEND_ESLINT=true react-scripts start",
-    "build": "react-scripts build",
-    "preprod": "serve -s build -p 3000 &",
+    "add-locale": "lingui add-locale",
+    "extract": "lingui extract",
+    "start": "lingui compile && env EXTEND_ESLINT=true react-scripts start",
+    "clean": "rm -f src/locales/*/messages.js && rm -rf build src/locales/_build",
+    "build": "lingui compile && react-scripts build",
+    "preprod": "serve -s build -p 3000",
     "test": "cucumber --format summary --retry 2 --fail-fast",
     "eject": "react-scripts eject"
+  },
+  "lingui": {
+    "localeDir": "src/locales/",
+    "srcPathDirs": [
+      "src/"
+    ],
+    "format": "po",
+    "sourceLocale": "fr"
   },
   "eslintConfig": {
     "extends": [

@@ -9,6 +9,7 @@ import Header from '../Header.jsx';
 import Status from './Status.jsx';
 import SearchBar from './SearchBar.jsx';
 import ViewpointCreator from './ViewpointCreator.jsx';
+import { Trans } from '@lingui/macro';
 
 class Portfolio extends Component {
   constructor() {
@@ -41,7 +42,7 @@ class Portfolio extends Component {
           <div className="App-content row">
             <div className="col-md-4 p-4">
               <div className="Description">
-                <h2 className="h4 font-weight-bold text-center">Points de vue</h2>
+                <h2 className="h4 font-weight-bold text-center"><Trans>Points de vue</Trans></h2>
                 <div className="p-3">
                   <ViewpointCreator />
                   {viewpoints}
@@ -55,22 +56,30 @@ class Portfolio extends Component {
     );
   }
 
-  componentDidMount() {
-    let start=new Date().getTime();
-    var self=this;
-    this._fetchAll().then(() => {
-      let end=new Date().getTime();
-      let elapsedTime=end-start;
-      console.log("elapsed Time ",elapsedTime);
+  hasChanged = async () => new Hypertopic((await conf).services)
+    .get({_id: ''})
+    .then(x =>
+      x.update_seq !== this.update_seq && (this.update_seq = x.update_seq)
+    );
 
-      let intervalTime=Math.max(10000,elapsedTime*5);
-      console.log("reload every ",intervalTime);
-      self._timer = setInterval(
-        () => {
-          self._fetchAll();
-        },
-        intervalTime
-      );
+  componentDidMount() {
+    let start = new Date().getTime();
+    this.hasChanged().then(() => {
+      this._fetchAll().then(() => {
+        let end = new Date().getTime();
+        let elapsedTime = end - start;
+        console.log('elapsed time ', elapsedTime);
+        let intervalTime = Math.max(10000, elapsedTime * 5);
+        console.log('reload every ', intervalTime);
+        this._timer = setInterval(
+          async () => {
+            this.hasChanged().then(x => {
+              if (x) this._fetchAll();
+            });
+          },
+          intervalTime
+        );
+      });
     });
   }
 
@@ -144,10 +153,7 @@ class Portfolio extends Component {
   }
 
   async _fetchUser(SETTINGS, hypertopic){
-    return new Promise(resolve => {
-      resolve()
-    })
-    .then(() => hypertopic.getView(`/user/${SETTINGS.user}`))
+    return hypertopic.getView(`/user/${SETTINGS.user}`)
     .then(data => {
       let user = data[SETTINGS.user] || {};
       user = {
@@ -161,12 +167,8 @@ class Portfolio extends Component {
     });
   }
 
-  async _fetchViewpoints(hypertopic, x){
-    return new Promise(resolve => {
-      resolve()
-    })
-    .then(() => x.viewpoint.map(y => `/viewpoint/${y.id}`))
-    .then(hypertopic.getView)
+  async _fetchViewpoints(hypertopic, user) {
+    return hypertopic.getView(user.viewpoint.map(x => `/viewpoint/${x.id}`))
     .then(data => {
       let viewpoints = [];
       for (let v of this.state.viewpoints) {
@@ -179,12 +181,8 @@ class Portfolio extends Component {
     })
   }
 
-  async _fetchItems(hypertopic){
-    return new Promise(resolve => {
-      resolve()
-    })
-    .then(() => this.state.corpora.map(y => `/corpus/${y.id}`))
-    .then(p => hypertopic.getView(p))
+  async _fetchItems(hypertopic) {
+    return hypertopic.getView(this.state.corpora.map(x => `/corpus/${x.id}`))
     .then(data => {
       let items = [];
       for (let corpus of this.state.corpora) {
@@ -213,7 +211,7 @@ class Portfolio extends Component {
     .then(x => Promise.all([this._fetchViewpoints(hypertopic, x), this._fetchItems(hypertopic)]))
     .then(() => this._updateSelectedItems());
   }
-  
+
   _getViewpoints() {
     return this.state.viewpoints.sort(by('name')).map((v, i) =>
       <div key={v.id}>

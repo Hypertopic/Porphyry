@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 import Button from './Button.jsx';
 import Badge from './Badge.jsx';
 import { withRouter } from 'react-router-dom';
+import { Trans } from '@lingui/macro';
 
 class Status extends Component {
   render() {
     if (this.props.selectionJSON.data.length === 0)
-      return 'Tous les items';
+      return <Trans>Tous les items</Trans>;
 
     let status = [];
 
@@ -22,7 +23,7 @@ class Status extends Component {
         .map(
           t =>
             (t.topic === null)
-              ? 'Thème inconnu'
+              ? <Trans>Thème inconnu</Trans>
               : <Badge exclusion={t.excluded} id={t.id} name={t.topic.name} _changeItemState={this._changeItemState}/>
         );
       status.push(topicsHTML.map((e, i) => i < topicsHTML.length - 1 ? [e, <Button topics={topics} selectionJSON={this.props.selectionJSON} _changeUnionState={this._changeUnionState}/>] : [e]).reduce((a, b) => a.concat(b))
