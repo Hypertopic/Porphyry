@@ -12,10 +12,19 @@ class Viewpoint extends React.Component {
   constructor(props) {
     super();
     this.state = {
+      update_seq: props.update_seq,
       topics: {},
       topicInputvalue: '',
       currentSelection: '',
     };
+  }
+
+  componentWillReceiveProps({update_seq}) {
+    if (update_seq){
+      this._fetchViewpoint().then(() => {
+        this.setState({...this.state, update_seq});
+      })
+    }
   }
 
   onTopicInputFocus = (event) => {
@@ -150,6 +159,7 @@ class Viewpoint extends React.Component {
         id={t.id}
         topics={this.state.topics}
         removeTopic={() => this.props.removeTopic(t)}
+        update_seq={this.state.update_seq}
       />
     ));
   }
@@ -160,7 +170,7 @@ class Viewpoint extends React.Component {
 
   async _fetchViewpoint() {
     let hypertopic = new Hypertopic((await conf).services);
-    hypertopic.getView(`/viewpoint/${this.props.id}`).then((data) => {
+    return hypertopic.getView(`/viewpoint/${this.props.id}`).then((data) => {
       let viewpoint = data[this.props.id];
       let name = viewpoint.name;
       let topics = viewpoint;
