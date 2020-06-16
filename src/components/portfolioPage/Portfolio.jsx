@@ -56,22 +56,41 @@ class Portfolio extends Component {
     );
   }
 
-  componentDidMount() {
-    let start=new Date().getTime();
-    var self=this;
-    this._fetchAll().then(() => {
-      let end=new Date().getTime();
-      let elapsedTime=end-start;
-      console.log("elapsed Time ",elapsedTime);
+  _fetch_update_seq = async () => {
+    let SERVICE = (await conf).services[0];
+    return fetch(SERVICE)
+      .then(response => response.json())
+      .then(data => {
+        this.update_seq = data.update_seq;
+      });
+  }
 
-      let intervalTime=Math.max(10000,elapsedTime*5);
-      console.log("reload every ",intervalTime);
-      self._timer = setInterval(
-        () => {
-          self._fetchAll();
-        },
-        intervalTime
-      );
+  componentDidMount() {
+    let start = new Date().getTime();
+    var self = this;
+    this._fetch_update_seq().then(() => {
+      this._fetchAll().then(() => {
+        let end = new Date().getTime();
+        let elapsedTime = end - start;
+        console.log('elapsed time ', elapsedTime);
+        let intervalTime = Math.max(10000, elapsedTime * 5);
+        console.log('reload every ', intervalTime);
+        self._timer = setInterval(
+          async () => {
+            let SERVICE = (await conf).services[0];
+            fetch(SERVICE)
+              .then(response => response.json())
+              .then(data => {
+                let latest_seq = data.update_seq;
+                if (self.update_seq !== latest_seq){
+                  self.update_seq = latest_seq;
+                  self._fetchAll();
+                }
+              });
+          },
+          intervalTime
+        );
+      });
     });
   }
 
@@ -214,7 +233,7 @@ class Portfolio extends Component {
     .then(x => Promise.all([this._fetchViewpoints(hypertopic, x), this._fetchItems(hypertopic)]))
     .then(() => this._updateSelectedItems());
   }
-  
+
   _getViewpoints() {
     return this.state.viewpoints.sort(by('name')).map((v, i) =>
       <div key={v.id}>
