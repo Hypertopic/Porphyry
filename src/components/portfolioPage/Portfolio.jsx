@@ -153,10 +153,7 @@ class Portfolio extends Component {
   }
 
   async _fetchUser(SETTINGS, hypertopic){
-    return new Promise(resolve => {
-      resolve()
-    })
-    .then(() => hypertopic.getView(`/user/${SETTINGS.user}`))
+    return hypertopic.getView(`/user/${SETTINGS.user}`)
     .then(data => {
       let user = data[SETTINGS.user] || {};
       user = {
@@ -170,12 +167,8 @@ class Portfolio extends Component {
     });
   }
 
-  async _fetchViewpoints(hypertopic, x){
-    return new Promise(resolve => {
-      resolve()
-    })
-    .then(() => x.viewpoint.map(y => `/viewpoint/${y.id}`))
-    .then(hypertopic.getView)
+  async _fetchViewpoints(hypertopic, user) {
+    return hypertopic.getView(user.viewpoint.map(x => `/viewpoint/${x.id}`))
     .then(data => {
       let viewpoints = [];
       for (let v of this.state.viewpoints) {
@@ -188,12 +181,8 @@ class Portfolio extends Component {
     })
   }
 
-  async _fetchItems(hypertopic){
-    return new Promise(resolve => {
-      resolve()
-    })
-    .then(() => this.state.corpora.map(y => `/corpus/${y.id}`))
-    .then(p => hypertopic.getView(p))
+  async _fetchItems(hypertopic) {
+    return hypertopic.getView(this.state.corpora.map(x => `/corpus/${x.id}`))
     .then(data => {
       let items = [];
       for (let corpus of this.state.corpora) {
