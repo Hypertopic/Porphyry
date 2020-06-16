@@ -41,8 +41,8 @@ Alors("{string} mène à une page intitulée {string}") do |uri, title|
 end
 
 Alors("je vois en ordre la liste") do |table|
-results=[['Items']]+page.all('div.Item div').map do |div|
-[div.text]
-end
+results = page.all('div.Item div').map do |div|
+  [div.text]
+  end
 table.diff!(results)
 end

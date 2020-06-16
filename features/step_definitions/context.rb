@@ -57,3 +57,10 @@ Soit("l'attribut {string} a pour valeur {string}") do |attribute, value|
   expect(page).to have_content value
   expect(page).to have_content attribute
 end
+
+Soit("je vois la liste comme ci-dessous") do
+  liste = page.all('div.Item div').map do |div|
+    [div.text]
+    end
+    puts liste.join("\n")
+end
