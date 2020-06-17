@@ -92,7 +92,7 @@ class Item extends Component {
   _getViewpoints() {
     return Object.entries(this.state.item.topic).map(v =>
       <Viewpoint key={v[0]} id={v[0]} topics={v[1]}
-        assignTopic={this._assignTopic} removeTopic={this._removeTopic} />
+        assignTopic={this._assignTopic} removeTopic={this._removeTopic} update_seq={this.state.update_seq} />
     );
   }
 
@@ -107,8 +107,52 @@ class Item extends Component {
     }
   }
 
+  _fetch_update_seq = async () => {
+    let SERVICE = (await conf).services[0];
+    return fetch(SERVICE)
+      .then(response => response.json())
+      .then(data => {
+        this.setState({update_seq: data.update_seq})
+      });
+  }
+
+  initEventSource = async () => {
+    let SERVICE = (await conf).services[0];
+    return this._fetch_update_seq().then(() => {
+      let params = this.props.match.params;
+      let viewpoints = Object.keys(this.state.item.topic).join(',');
+      this.eventSource = new EventSource(`${SERVICE}/events?since=${this.state.update_seq}&corpus=${params.corpus}&viewpoint=${viewpoints}`);
+    });
+  }
+
   componentDidMount() {
-    this._fetchItem();
+    if (!this.eventSource){
+      this._fetch_update_seq();
+      let self = this;
+      this._fetchItem().then(() => {
+        this.initEventSource().then(() => {
+          if (self.eventSource){
+            this.eventSource.onmessage = e => {
+              let data = JSON.parse(e.data);
+              if (this.state.update_seq !== data.seq){
+                this.setState({update_seq: data.seq})
+                if (this.props.match.params.item === data.id){
+                  this._fetchItem();
+                }
+              }
+            }
+          } else {
+            console.error('eventSource is undefined, updates are impossible');
+          }
+        })
+      });
+    }
+  }
+
+  componentWillUnmount() {
+    if (this.eventSource){
+      this.eventSource.close();
+    }
   }
 
   _fetchItem = async () => {
@@ -121,6 +165,7 @@ class Item extends Component {
       let item = data[params.corpus][params.item];
       let itemTopics = (item.topic) ? groupBy(item.topic, ['viewpoint']) : {};
       let topics=this.state.item.topic || {};
+      topics = (itemTopics.length > 0) ? topics : {};
       for (let id in itemTopics) {
         topics[id]=itemTopics[id];
       }
