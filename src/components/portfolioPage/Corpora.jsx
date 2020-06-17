@@ -2,12 +2,13 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import ItemCreator from './ItemCreator.jsx';
 import GeographicMap from './GeographicMap.jsx';
+import { Items } from '../../model.js';
 
 class Corpora extends Component {
 
   render() {
     let items = this._getItems();
-    let attributes = this._getAttributes();
+    let attributes = new Items(this.props.items).getAttributeKeys();
     let options = this._getOptions(attributes);
     let count = this.props.items.length;
     let total = this.props.from;
@@ -43,15 +44,6 @@ class Corpora extends Component {
     return this.props.items.map(item =>
       <Item key={item.id} item={item} />
     );
-  }
-
-  _getAttributes() {
-    let arr = [];
-    let rejectedAttributes = ['couchapp', 'topic', 'corpus', 'id', 'item'];
-    this.props.items.forEach(element => arr = arr.concat(Object.keys(element)));
-    arr = arr.filter((value, index, self) => self.indexOf(value) === index && !rejectedAttributes.includes(value));
-    arr.sort();
-    return arr;
   }
 
   _getOptions(arr) {

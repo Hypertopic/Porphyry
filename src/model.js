@@ -36,11 +36,15 @@ class Items {
     [...new Set(
       this.items
         .map(
-          x => Object.entries(x).filter(y => !['topic', 'resource', 'thumbnail'].includes(y[0]))
+          x => Object.entries(x).filter(
+            y => !['topic', 'resource', 'thumbnail', 'id', 'item'].includes(y[0])
+          )
         )
         .reduce((x, y) => x.concat(y), [])
         .map(([x, y]) => JSON.stringify([x, y[0]]))
     )].map(JSON.parse);
+
+  getAttributeKeys = () => [...new Set(this.getAttributes().map(x => x[0]))];
 
   getAttributeValues = (key) => this.getAttributes()
     .filter(([k, _]) => k === key)
