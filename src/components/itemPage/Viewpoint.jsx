@@ -12,18 +12,15 @@ class Viewpoint extends React.Component {
   constructor(props) {
     super();
     this.state = {
-      update_seq: props.update_seq,
       topics: {},
       topicInputvalue: '',
       currentSelection: '',
     };
   }
 
-  componentWillReceiveProps({update_seq}) {
-    if (update_seq){
-      this._fetchViewpoint().then(() => {
-        this.setState({...this.state, update_seq});
-      })
+  componentDidUpdate(prevProps) {
+    if (this.props.update_seq !== prevProps.update_seq) {
+      this._fetchViewpoint();
     }
   }
 
@@ -159,7 +156,6 @@ class Viewpoint extends React.Component {
         id={t.id}
         topics={this.state.topics}
         removeTopic={() => this.props.removeTopic(t)}
-        update_seq={this.state.update_seq}
       />
     ));
   }
