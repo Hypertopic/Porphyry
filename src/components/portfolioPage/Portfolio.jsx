@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import by from 'sort-by';
+import by from 'compare-func';
 import queryString from 'query-string';
 import Hypertopic from 'hypertopic';
 import conf from '../../config.js';
