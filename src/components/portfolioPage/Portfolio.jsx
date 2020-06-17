@@ -18,7 +18,6 @@ class Portfolio extends Component {
       corpora: [],
       items: [],
       selectedItems: [],
-      criteria: "name",
       topicsItems: new Map()
     };
     this._updateSelection();
@@ -190,7 +189,7 @@ class Portfolio extends Component {
             }
           }
         }
-        this.setState({items: items.sort(by(`${this.state.criteria}.0`))});
+        this.setState({items});
       })
       .then(x => {
         this._updateSelectedItems();
@@ -207,14 +206,6 @@ class Portfolio extends Component {
     );
   }
 
-  handleSort = (e) => {
-    let criteria = e.target.value;
-    this.setState({
-      criteria,
-      items: this.state.items.sort(by(`${criteria}.0`))
-    });
-  }
-
   _getCorpora() {
     let ids = this.state.corpora.map(c => c.id);
     return (
@@ -223,8 +214,6 @@ class Portfolio extends Component {
         from={this.state.items.length}
         items={this.state.selectedItems}
         conf={conf}
-        onSort={this.handleSort}
-        sortAttribute={this.state.criteria}
       />
     );
   }
