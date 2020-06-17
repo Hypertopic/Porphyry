@@ -1,7 +1,7 @@
 import React from 'react';
 import { withRouter } from 'react-router';
 import memoize from 'memoize-one';
-import {Topics} from '../../model.js';
+import {Topics, Items} from '../../model.js';
 import InputWithSuggestions from '../InputWithSuggestions.jsx';
 import { t } from '@lingui/macro';
 import { i18n } from '../../index.js';
@@ -10,7 +10,11 @@ class SearchBar extends React.Component {
 
   state = {pattern: ''};
 
-  candidates = memoize(
+  candidates() {
+    return this.topicsCandidates(this.props.viewpoints).concat(this.attributesCandidates(this.props.items));
+  }
+
+  topicsCandidates = memoize(
     (viewpoints) => new Topics(
       Object.fromEntries(
         viewpoints.map(Object.entries)
@@ -18,6 +22,15 @@ class SearchBar extends React.Component {
           .filter(x => !(['name', 'id', 'upper', 'user'].includes(x[0])))
       )
     ).getAllPaths()
+      .map(x => ({id: x.id, name: x.name, type: 'topic'}))
+  );
+
+  attributesCandidates = memoize(
+    (items) => new Items(
+      items
+    ).getAttributes()
+      .map(([key, value]) => key.concat(' : ', value))
+      .map(x => ({id: x, name: x, type: 'attribute'}))
   );
 
   handleChange = (event) => {
@@ -45,7 +58,7 @@ class SearchBar extends React.Component {
       onChange: this.handleChange
     };
     return (
-      <InputWithSuggestions candidates={this.candidates(this.props.viewpoints)}
+      <InputWithSuggestions candidates={this.candidates()}
         onSuggestionSelected={this.handleSuggestionSelected}
         inputProps={inputProps}
         id="search"
