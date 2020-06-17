@@ -190,8 +190,7 @@ class Portfolio extends Component {
             }
           }
         }
-        let sortedItems = this._sortByAttribute(items);
-        this.setState({ items: sortedItems });
+        this.setState({items: items.sort(by(`${this.state.criteria}.0`))});
       })
       .then(x => {
         this._updateSelectedItems();
@@ -208,32 +207,12 @@ class Portfolio extends Component {
     );
   }
 
-  _sortByAttribute(items) {
-    let select = document.getElementById('attribut');
-    let attribut = 'name';
-    if(select.options[select.selectedIndex] !== undefined) {
-      attribut = select.options[select.selectedIndex].value;
-    }
-    this.setState({criteria: attribut});
-    return items.sort(function (a, b) {
-        if (a[attribut] && b[attribut] && a[attribut][0] && b[attribut][0]) {
-          let res = a[attribut][0].localeCompare(b[attribut][0]);
-          if(res != 0){
-            return res;
-          }else{
-            return a["name"][0].localeCompare(b["name"][0]);
-          }
-        } else if ((!a[attribut] || !a[attribut][0]) && b[attribut] && b[attribut][0]) {
-          return 1;
-        } else if ((!b[attribut] || !b[attribut][0]) && a[attribut] && a[attribut][0]) {
-          return -1;
-        }
-        return a["name"][0].localeCompare(b["name"][0]);
-      });
-  }
-
-  handleSort = () => {
-    this.setState({items : this._sortByAttribute(this.state.items)});
+  handleSort = (e) => {
+    let criteria = e.target.value;
+    this.setState({
+      criteria,
+      items: this.state.items.sort(by(`${criteria}.0`))
+    });
   }
 
   _getCorpora() {
