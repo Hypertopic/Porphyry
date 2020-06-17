@@ -59,7 +59,7 @@ class Corpora extends Component {
 
   _getOptions(arr) {
     return arr.map((attribute) => (
-      <option value={attribute}> {attribute} </option>
+      <option key={attribute} value={attribute}> {attribute} </option>
     ));
   }
 }
