@@ -419,6 +419,10 @@ ul.Outliner,
   padding: 0.3rem!important;
 }
 
+.selectAttributes {
+  margin-top: 10px;
+}
+
 #disqus_thread {
   position: relative;
 }

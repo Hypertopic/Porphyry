@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import by from 'sort-by';
+import by from 'compare-func';
 import queryString from 'query-string';
 import Hypertopic from 'hypertopic';
 import conf from '../../config.js';
@@ -199,7 +199,7 @@ class Portfolio extends Component {
           }
         }
       }
-      this.setState({items:items.sort(by('name'))});
+      this.setState({items});
     })
   }
 
@@ -225,7 +225,12 @@ class Portfolio extends Component {
   _getCorpora() {
     let ids = this.state.corpora.map(c => c.id);
     return (
-      <Corpora ids={ids} from={this.state.items.length} items={this.state.selectedItems} conf={conf} />
+      <Corpora
+        ids={ids}
+        from={this.state.items.length}
+        items={this.state.selectedItems}
+        conf={conf}
+      />
     );
   }
 }
