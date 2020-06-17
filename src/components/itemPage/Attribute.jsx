@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { t } from '@lingui/macro';
 import { i18n } from '../../index.js';
 
@@ -45,6 +46,7 @@ class Attribute extends React.Component {
           {this.props.name}
         </div>
         <AttributeValue value={this.props.value}
+          name={this.props.name}
           editedValue={this.state.editedValue}
           edited={this.state.edited}
           onChange={this.handleChange}
@@ -96,10 +98,9 @@ function AttributeValue(props) {
       {props.value}
     </a>
   );
+  let uri = `../../?t={"type":"intersection","data":[{"type":"intersection","selection":["${props.name} : ${props.value}"],"exclusion":[]}]}`;
   return (
-    <div className="Value">
-      {props.value}
-    </div>
+    <Link className="Value" to={uri}> {props.value} </Link>
   );
 }
 

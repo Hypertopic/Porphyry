@@ -51,5 +51,7 @@ Quand("l'utilisateur indique {string} pour la catégorie {string} du point de vu
 end
 
 Quand("l'utilisateur choisit l'item {string} dans le bloc Items ayant le même nom") do |item|
-  click_on item
+  within '.Item' do
+    click_on item
+  end
 end
