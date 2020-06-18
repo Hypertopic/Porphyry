@@ -12,7 +12,12 @@ class InputWithSuggestions extends Component {
 
   render() {
     const theme = {
-
+      container: 'container',
+      input: 'form-control',
+      suggestionsContainer: 'dropdown open',
+      suggestionsList: `dropdown-menu ${this.state.suggestions.length ? 'show' : ''}`,
+      suggestion: 'dropdown-item',
+      suggestionHighlighted: 'active'
     };
     return (
       <div className="d-none d-sm-block">
