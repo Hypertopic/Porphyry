@@ -96,11 +96,13 @@ class Viewpoint extends React.Component {
         <div className="Topics">
           {paths}
           <div className={classes.join(" ")}>
+            <div className="d-none d-sm-block">
             <InputWithSuggestions candidates={candidates}
               onSuggestionSelected={this.onSuggestionSelected}
               inputProps={inputProps}
               id={this.props.id}
             />
+            </div>
             <div className="input-group-append">
               <button type="button" className="btn btn-sm ValidateButton btn" onClick={() => {
                   if (this.state.newTopic && (this.state.currentSelection || !this.state.topicInputvalue)) {
