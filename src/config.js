@@ -5,7 +5,7 @@ const SETTINGS = fetch('/config.yml')
   .then(x => yaml.parse(x))
   .then(x => Object.assign({
     user: x.user || window.location.hostname.split('.')[0]
-  }, x));
-
+  }, x))
+;
 export default SETTINGS;
 

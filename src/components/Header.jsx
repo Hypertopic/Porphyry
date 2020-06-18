@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Authenticated from './Authenticated.jsx';
 
+
 class Header extends Component {
 
   constructor(props) {

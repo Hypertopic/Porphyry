@@ -1,4 +1,14 @@
 import React, { Component } from 'react';
+import AccountCreator from './portfolioPage/AccountCreator';
+
+function makeID() {
+  var id = '';
+  for (var i = 0; i < 6; i++) {
+    id += Math.random().toString(15).substring(10);
+  }
+  id = id.slice(0, 32);
+  return id;
+}
 
 class Authenticated extends Component {
 
@@ -33,6 +43,8 @@ class Authenticated extends Component {
     return (
       <div className="Authenticated">
         <a href="#login" onClick={this.handleAsk}>Se connecter...</a>
+        <br/>
+        <AccountCreator />
       </div>
     );
   }
@@ -100,6 +112,8 @@ class Authenticated extends Component {
   componentWillUnmount() {
     clearInterval(this._timer);
   }
+
+
 }
 
 export default Authenticated;

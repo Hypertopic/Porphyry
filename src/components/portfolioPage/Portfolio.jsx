@@ -10,6 +10,7 @@ import Status from './Status.jsx';
 import SearchBar from './SearchBar.jsx';
 import ViewpointCreator from './ViewpointCreator.jsx';
 
+
 class Portfolio extends Component {
   constructor() {
     super();
@@ -158,9 +159,11 @@ class Portfolio extends Component {
         }
         return user;
       })
+
       .then(x =>
         x.viewpoint.map(y => `/viewpoint/${y.id}`)
-          .concat(x.corpus.map(y => `/corpus/${y.id}`))
+          .concat(x.corpus.map(y => `/corpus/${y.id}`)
+          )
       )
       .then(hypertopic.getView)
       .then(data => {
@@ -201,10 +204,12 @@ class Portfolio extends Component {
       <div key={v.id}>
         {i > 0 && <hr/>}
         <Viewpoint viewpoint={v} selection={this.selection} exclusion={this.exclusion} selectionJSON={this.selectionJSON}
-          topicsItems={this.state.topicsItems} />
+                   topicsItems={this.state.topicsItems} />
       </div>
     );
   }
+
+
 
   _getCorpora() {
     let ids = this.state.corpora.map(c => c.id);
