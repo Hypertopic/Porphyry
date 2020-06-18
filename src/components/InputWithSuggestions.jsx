@@ -20,7 +20,6 @@ class InputWithSuggestions extends Component {
       suggestionHighlighted: 'active'
     };
     return (
-      <div className="d-none d-sm-block">
         <Autosuggest
           theme={theme}
           className="TopicSuggest"
@@ -34,7 +33,6 @@ class InputWithSuggestions extends Component {
           inputProps={this.props.inputProps}
           id={`input-${this.props.id}`}
         />
-      </div>  
     );
   }
 
