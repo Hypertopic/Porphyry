@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import by from 'sort-by';
+import by from 'compare-func';
 import queryString from 'query-string';
 import Hypertopic from 'hypertopic';
 import conf from '../../config.js';
@@ -9,6 +9,8 @@ import Header from '../Header.jsx';
 import Status from './Status.jsx';
 import SearchBar from './SearchBar.jsx';
 import ViewpointCreator from './ViewpointCreator.jsx';
+import { Trans } from '@lingui/macro';
+import { Items } from '../../model.js';
 
 class Portfolio extends Component {
   constructor() {
@@ -26,22 +28,27 @@ class Portfolio extends Component {
   render() {
     let viewpoints = this._getViewpoints();
     let corpora = this._getCorpora();
+    let attributes = new Items(this.state.items)
+      .getAttributes()
+      .map(([key, value]) => key.concat(' : ', value))
+      .map(x => ({[x]: {name: x}}));
+    let candidates = this.state.viewpoints.concat(attributes);
     return (
       <div className="App container-fluid">
         <Header conf={conf} />
         <div className="Status row align-items-center h5">
           <div className="Search col-md-3">
-            <SearchBar viewpoints={this.state.viewpoints} />
+            <SearchBar viewpoints={this.state.viewpoints} items={this.state.items} />
           </div>
           <div className="col-md-6">
-            <Status selectionJSON={this.selectionJSON} viewpoints={this.state.viewpoints}/>
+            <Status selectionJSON={this.selectionJSON} candidates={candidates} />
           </div>
         </div>
         <div className="container-fluid">
           <div className="App-content row">
             <div className="col-md-4 p-4">
               <div className="Description">
-                <h2 className="h4 font-weight-bold text-center">Points de vue</h2>
+                <h2 className="h4 font-weight-bold text-center"><Trans>Points de vue</Trans></h2>
                 <div className="p-3">
                   <ViewpointCreator />
                   {viewpoints}
@@ -55,22 +62,30 @@ class Portfolio extends Component {
     );
   }
 
-  componentDidMount() {
-    let start=new Date().getTime();
-    var self=this;
-    this._fetchAll().then(() => {
-      let end=new Date().getTime();
-      let elapsedTime=end-start;
-      console.log("elapsed Time ",elapsedTime);
+  hasChanged = async () => new Hypertopic((await conf).services)
+    .get({_id: ''})
+    .then(x =>
+      x.update_seq !== this.update_seq && (this.update_seq = x.update_seq)
+    );
 
-      let intervalTime=Math.max(10000,elapsedTime*5);
-      console.log("reload every ",intervalTime);
-      self._timer = setInterval(
-        () => {
-          self._fetchAll();
-        },
-        intervalTime
-      );
+  componentDidMount() {
+    let start = new Date().getTime();
+    this.hasChanged().then(() => {
+      this._fetchAll().then(() => {
+        let end = new Date().getTime();
+        let elapsedTime = end - start;
+        console.log('elapsed time ', elapsedTime);
+        let intervalTime = Math.max(10000, elapsedTime * 5);
+        console.log('reload every ', intervalTime);
+        this._timer = setInterval(
+          async () => {
+            this.hasChanged().then(x => {
+              if (x) this._fetchAll();
+            });
+          },
+          intervalTime
+        );
+      });
     });
   }
 
@@ -120,8 +135,15 @@ class Portfolio extends Component {
     return Array.prototype.concat(...this._getItemTopicsPaths(item));
   }
 
+  _getItemAttributes(item) {
+    return new Items(
+      [item]
+    ).getAttributes()
+      .map(([key, value]) => key.concat(' : ', value));
+  }
+
   _isSelected(item, list) {
-    let itemHasValue = list.data.map(l => includes(this._getRecursiveItemTopics(item), (l.selection || [] ), (l.exclusion || []), (l.type === 'union')));
+    let itemHasValue = list.data.map(l => includes(this._getRecursiveItemTopics(item).concat(this._getItemAttributes(item)), (l.selection || [] ), (l.exclusion || []), (l.type === 'union')));
     if (list.type === 'union')
       return itemHasValue.reduce((c1,c2) => c1 || c2, false);
     else
@@ -143,57 +165,64 @@ class Portfolio extends Component {
     this.setState({selectedItems, topicsItems});
   }
 
-  async _fetchAll() {
-    let SETTINGS = await conf;
-    let hypertopic = new Hypertopic(SETTINGS.services);
+  async _fetchUser(SETTINGS, hypertopic){
     return hypertopic.getView(`/user/${SETTINGS.user}`)
-      .then(data => {
-        let user = data[SETTINGS.user] || {};
-        user = {
-          viewpoint: user.viewpoint || [],
-          corpus: user.corpus || []
-        };
-        if (!this.state.viewpoints.length && !this.state.corpora.length) { //TODO compare old and new
-          this.setState({viewpoints:user.viewpoint, corpora:user.corpus});
-        }
-        return user;
-      })
-      .then(x =>
-        x.viewpoint.map(y => `/viewpoint/${y.id}`)
-          .concat(x.corpus.map(y => `/corpus/${y.id}`))
-      )
-      .then(hypertopic.getView)
-      .then(data => {
-        let viewpoints = [];
-        for (let v of this.state.viewpoints) {
-          let viewpoint = data[v.id];
-          viewpoint.id = v.id;
-          viewpoints.push(viewpoint);
-        }
-        this.setState({viewpoints});
-        return data;
-      })
-      .then(data => {
-        let items = [];
-        for (let corpus of this.state.corpora) {
-          for (let itemId in data[corpus.id]) {
-            if (!['id','name','user'].includes(itemId)) {
-              let item = data[corpus.id][itemId];
-              if (!item.name || !item.name.length) {
-                console.log(`/item/${corpus.id}/${itemId} has no name!`);
-              } else {
-                item.id = itemId;
-                item.corpus = corpus.id;
-                items.push(item);
-              }
+    .then(data => {
+      let user = data[SETTINGS.user] || {};
+      user = {
+        viewpoint: user.viewpoint || [],
+        corpus: user.corpus || []
+      };
+      if (!this.state.viewpoints.length && !this.state.corpora.length) { //TODO compare old and new
+        this.setState({viewpoints:user.viewpoint, corpora:user.corpus});
+      }
+      return user;
+    });
+  }
+
+  async _fetchViewpoints(hypertopic, user) {
+    return hypertopic.getView(user.viewpoint.map(x => `/viewpoint/${x.id}`))
+    .then(data => {
+      let viewpoints = [];
+      for (let v of this.state.viewpoints) {
+        let viewpoint = data[v.id];
+        viewpoint.id = v.id;
+        viewpoints.push(viewpoint);
+      }
+      this.setState({viewpoints});
+      return data;
+    })
+  }
+
+  async _fetchItems(hypertopic) {
+    return hypertopic.getView(this.state.corpora.map(x => `/corpus/${x.id}`))
+    .then(data => {
+      let items = [];
+      for (let corpus of this.state.corpora) {
+        for (let itemId in data[corpus.id]) {
+          if (!['id','name','user'].includes(itemId)) {
+            let item = data[corpus.id][itemId];
+            if (!item.name || !item.name.length) {
+              console.log(`/item/${corpus.id}/${itemId} has no name!`);
+            } else {
+              item.id = itemId;
+              item.corpus = corpus.id;
+              items.push(item);
             }
           }
         }
-        this.setState({items:items.sort(by('name'))});
-      })
-      .then(x => {
-        this._updateSelectedItems();
-      });
+      }
+      this.setState({items});
+    })
+  }
+
+  async _fetchAll() {
+    let SETTINGS = await conf;
+    let hypertopic = new Hypertopic(SETTINGS.services);
+
+    return this._fetchUser(SETTINGS, hypertopic)
+    .then(x => Promise.all([this._fetchViewpoints(hypertopic, x), this._fetchItems(hypertopic)]))
+    .then(() => this._updateSelectedItems());
   }
 
   _getViewpoints() {
@@ -209,7 +238,12 @@ class Portfolio extends Component {
   _getCorpora() {
     let ids = this.state.corpora.map(c => c.id);
     return (
-      <Corpora ids={ids} from={this.state.items.length} items={this.state.selectedItems} conf={conf} />
+      <Corpora
+        ids={ids}
+        from={this.state.items.length}
+        items={this.state.selectedItems}
+        conf={conf}
+      />
     );
   }
 }

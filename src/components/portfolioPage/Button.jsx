@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { t } from '@lingui/macro';
+import { i18n } from '../../index.js';
 
 class Button extends Component {
   constructor() {
@@ -8,8 +10,8 @@ class Button extends Component {
   render() {
     let union = (this.props.topics.type === 'union');
     return (<button className="badge badge-pill badge-secondary border-0 m-1 align-middle"
-      title={union ? 'Ou' : 'Et'}
-      onClick={this.handleChangeState}>  {union ? 'Ou' : 'Et'}</button>
+      title={union ? i18n._(t`Ou`) : i18n._(t`Et`)}
+      onClick={this.handleChangeState}>  {union ? i18n._(t`Ou`) : i18n._(t`Et`)}</button>
     );
   }
 

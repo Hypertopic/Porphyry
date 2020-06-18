@@ -1,11 +1,26 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import by from 'compare-func';
+import memoize from 'memoize-one';
 import ItemCreator from './ItemCreator.jsx';
+import GeographicMap from './GeographicMap.jsx';
+import { Items } from '../../model.js';
 
 class Corpora extends Component {
 
+  state = {
+    criteria: 'name'
+  };
+
+  sort = memoize((items, criteria) => items.sort(by(`${criteria}.0`)));
+
   render() {
-    let items = this._getItems();
+    let itemsData = this.sort(this.props.items, this.state.criteria);
+    let items = itemsData.map(x =>
+      <Item key={x.id} item={x} />
+    );
+    let attributes = new Items(this.props.items).getAttributeKeys().sort(by());
+    let options = this._getOptions(attributes);
     let count = this.props.items.length;
     let total = this.props.from;
     let listIds = this.props.ids.map((corpus) =>
@@ -18,6 +33,16 @@ class Corpora extends Component {
             {listIds}
             <span className="badge badge-pill badge-light ml-4">{count} / {total}</span>
           </h2>
+          <GeographicMap items={this.props.items} conf={this.props.conf} />
+          <div className="selectAttributes">
+            <select
+              id="attribut"
+              onChange={this.handleSort}
+              value={this.state.criteria}
+            >
+              {options}
+            </select>
+          </div>
           <div className="Items m-3">
             {items}
           </div>
@@ -26,12 +51,17 @@ class Corpora extends Component {
     );
   }
 
-  _getItems() {
-    return this.props.items.map(item =>
-      <Item key={item.id} item={item} />
-    );
+  handleSort = (e) => {
+    this.setState({
+      criteria: e.target.value
+    });
   }
 
+  _getOptions(arr) {
+    return arr.map((attribute) => (
+      <option key={attribute} value={attribute}> {attribute} </option>
+    ));
+  }
 }
 
 function Item(props) {

@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 import Button from './Button.jsx';
 import Badge from './Badge.jsx';
 import { withRouter } from 'react-router-dom';
+import { Trans } from '@lingui/macro';
 
 class Status extends Component {
   render() {
     if (this.props.selectionJSON.data.length === 0)
-      return 'Tous les items';
+      return <Trans>Tous les items</Trans>;
 
     let status = [];
 
@@ -16,13 +17,13 @@ class Status extends Component {
         status.push();
       }
       let topicsHTML = [
-        ...topics.selection.map(id => ({excluded: false, id, topic: this._getTopic(id)})),
-        ...topics.exclusion.map(id => ({excluded: true, id, topic: this._getTopic(id)}))]
+        ...topics.selection.map(id => ({excluded: false, id, topic: this._getCandidate(id)})),
+        ...topics.exclusion.map(id => ({excluded: true, id, topic: this._getCandidate(id)}))]
         .sort(filter)
         .map(
           t =>
             (t.topic === null)
-              ? 'Thème inconnu'
+              ? <Trans>Thème inconnu</Trans>
               : <Badge exclusion={t.excluded} id={t.id} name={t.topic.name} _changeItemState={this._changeItemState}/>
         );
       status.push(topicsHTML.map((e, i) => i < topicsHTML.length - 1 ? [e, <Button topics={topics} selectionJSON={this.props.selectionJSON} _changeUnionState={this._changeUnionState}/>] : [e]).reduce((a, b) => a.concat(b))
@@ -36,8 +37,8 @@ class Status extends Component {
     return status;
   }
 
-  _getTopic(id) {
-    for (let v of this.props.viewpoints) {
+  _getCandidate(id) {
+    for (let v of this.props.candidates) {
       if (v[id]) return v[id];
     }
     return null;

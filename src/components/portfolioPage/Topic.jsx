@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import by from 'sort-by';
+import by from 'compare-func';
 
 class Topic extends Component {
   constructor(props) {

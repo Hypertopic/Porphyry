@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import by from 'sort-by';
+import by from 'compare-func';
 import Topic from './Topic.jsx';
 
 class Viewpoint extends Component {

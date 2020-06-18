@@ -5,6 +5,8 @@ import conf from '../../config.js';
 import Header from '../Header.jsx';
 import TopicTree from '../../TopicTree.js';
 import Node from './Node.jsx';
+import { t, Trans } from '@lingui/macro';
+import { i18n } from '../../index.js';
 
 const _log = (x) => console.log(JSON.stringify(x, null, 2));
 const _error = (x) => console.error(x.message);
@@ -26,7 +28,8 @@ class Outliner extends React.Component {
         <Header conf={conf} />
         <div className="Status row h5">
           <Link to="/" className="badge badge-pill badge-light TopicTag">
-            <span className="badge badge-pill badge-dark oi oi-chevron-left"> </span> Retour à l'accueil
+            <span className="badge badge-pill badge-dark oi oi-chevron-left"> </span>
+            <Trans>Retour à l'accueil</Trans>
           </Link>
         </div>
         <div className="container-fluid">
@@ -53,7 +56,7 @@ class Outliner extends React.Component {
 
   _getTitle() {
     return (<form className="input-group" onSubmit={(e) => this._newVP(e)}>
-      <input type="text" name="newTitle" className="form-control" placeholder="Nom du point de vue" />
+      <input type="text" name="newTitle" className="form-control" placeholder={i18n._(t`Nom du point de vue`)} />
       <div className="input-group-append">
         <button type="submit" className="btn add btn-sm btn-light"><span className="oi oi-plus"> </span></button>
       </div>
@@ -62,8 +65,8 @@ class Outliner extends React.Component {
 
   _getStatus() {
     return (this.state.title !== undefined)
-      ? 'Modification du point de vue'
-      : 'Création du point de vue';
+      ? <Trans>Modification du point de vue</Trans>
+      : <Trans>Création du point de vue</Trans>;
   }
 
   async _newVP(e) {

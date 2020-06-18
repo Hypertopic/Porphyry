@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
+import { Trans } from '@lingui/macro';
 
 function makeID() {
   var id = '';
@@ -14,7 +15,7 @@ class ViewpointCreator extends Component {
   render() {
     return (<div className="text-center">
       <button className="btn btn-light creationButton" onClick={_ => this._goToNewViewpoint()}>
-        Nouveau point de vue
+        <Trans>Nouveau point de vue</Trans>
       </button>
     </div>);
   }

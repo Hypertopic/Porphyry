@@ -5,6 +5,8 @@ import {Topics} from '../../model.js';
 import TopicPath from './TopicPath.jsx';
 import TopicTree from '../../TopicTree.js';
 import InputWithSuggestions from '../InputWithSuggestions.jsx';
+import { t } from '@lingui/macro';
+import { i18n } from "../../index.js"
 
 class Viewpoint extends React.Component {
   constructor(props) {
@@ -14,6 +16,12 @@ class Viewpoint extends React.Component {
       topicInputvalue: '',
       currentSelection: '',
     };
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.update_seq !== prevProps.update_seq) {
+      this._fetchViewpoint();
+    }
   }
 
   onTopicInputFocus = (event) => {
@@ -66,7 +74,7 @@ class Viewpoint extends React.Component {
   render() {
     const paths = this._getPaths();
     const inputProps = {
-      placeholder: this.state.newTopic ? 'Choisir une rubrique parent...' : 'Ajouter une rubrique...',
+      placeholder: this.state.newTopic ? i18n._(t`Choisir une rubrique parent...`) : i18n._(t`Ajouter une rubrique...`),
       value: this.state.topicInputvalue,
       onFocus: this.onTopicInputFocus,
       onBlur: this.onTopicInputBlur,
@@ -158,7 +166,7 @@ class Viewpoint extends React.Component {
 
   async _fetchViewpoint() {
     let hypertopic = new Hypertopic((await conf).services);
-    hypertopic.getView(`/viewpoint/${this.props.id}`).then((data) => {
+    return hypertopic.getView(`/viewpoint/${this.props.id}`).then((data) => {
       let viewpoint = data[this.props.id];
       let name = viewpoint.name;
       let topics = viewpoint;

@@ -1,4 +1,7 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+import { t } from '@lingui/macro';
+import { i18n } from '../../index.js';
 
 class Attribute extends React.Component {
 
@@ -88,7 +91,7 @@ function AttributeValue(props) {
   const patt = /\.[a-zA-Z]{3,4}$/;
   if (props.edited) return (
     <div className="Value edit">
-      <input value={props.editedValue} placeholder="valeur" autoFocus
+      <input value={props.editedValue} placeholder={i18n._(t`valeur`)} autoFocus
         onChange={props.onChange} onKeyDown={props.onKeyDown}
       />
     </div>
@@ -106,7 +109,11 @@ function AttributeValue(props) {
   return (
     <div className="Value">
       {props.value}
-    </div>
+    </a>
+  );
+  let uri = `../../?t={"type":"intersection","data":[{"type":"intersection","selection":["${props.name} : ${props.value}"],"exclusion":[]}]}`;
+  return (
+    <Link className="Value" to={uri}> {props.value} </Link>
   );
 }
 

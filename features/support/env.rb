@@ -1,6 +1,9 @@
 require 'capybara/cucumber'
 require 'capybara/cuprite'
 
+Before do
+  Capybara.current_session.driver.add_headers("Accept-Language" => "fr")
+end
 Capybara.run_server = false
 Capybara.default_driver = :cuprite
 Capybara.javascript_driver = :cuprite
@@ -18,6 +21,8 @@ def getURI(name)
   case name
     when "SNZ 006"
       uri = "/item/Vitraux%20-%20Bénel/8a1750b17b11944108efaac593f4448e4e9f966b"
+    when "AXN 009"
+      uri = "/item/Vitraux%20-%20Bénel/dff21da25a2bebd654e81536fc5aaa8a63ab6e4f"
   end
   return uri
 end

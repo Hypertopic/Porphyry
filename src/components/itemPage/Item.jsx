@@ -5,11 +5,15 @@ import groupBy from 'json-groupby';
 import conf from '../../config.js';
 import Viewpoint from './Viewpoint.jsx';
 import Attribute from './Attribute.jsx';
+import Resource from './Resource.jsx';
 import Header from '../Header.jsx';
+import SameNameBlock from './SameNameBlock.jsx';
 import { DiscussionEmbed } from 'disqus-react';
 import fetch from 'node-fetch';
+import { t, Trans } from '@lingui/macro';
+import { i18n } from "../../index.js"
 
-const HIDDEN = ['topic', 'resource', 'thumbnail', 'couchapp'];
+const HIDDEN = ['topic', 'resource', 'thumbnail', 'item'];
 
 function getString(obj) {
   if (Array.isArray(obj)) {
@@ -146,22 +150,24 @@ class Item extends Component {
     let name = getString(this.state.item.name);
     let attributes = this._getAttributes(this.props);
     let viewpoints = this._getViewpoints();
+    let sameNameBlock = this._getSameNameBlock();
     return (
       <div className="App container-fluid">
         <Header conf={conf} />
         <div className="Status row h5">
           <Link to="/" className="badge badge-pill badge-light TopicTag">
-            <span className="badge badge-pill badge-dark oi oi-chevron-left"> </span> Retour à l'accueil
+            <span className="badge badge-pill badge-dark oi oi-chevron-left"> </span>
+            <Trans>Retour à l'accueil</Trans>
           </Link>
         </div>
         <div className="container-fluid">
           <div className="App-content row">
             <div className="col-md-4 p-4">
               <div className="Description">
-                <h2 className="h4 font-weight-bold text-center">Description</h2>
+                <h2 className="h4 font-weight-bold text-center"><Trans>Description</Trans></h2>
                 <div className="p-3">
                   <div className="Attributes">
-                    <h3 className="h4">Attributs du document</h3>
+                    <h3 className="h4"><Trans>Attributs du document</Trans></h3>
                     <hr/>
                     <div>
                       {attributes}
@@ -172,6 +178,8 @@ class Item extends Component {
                   {viewpoints}
                 </div>
               </div>
+              <hr className="space" />
+              {sameNameBlock}
             </div>
             <div className="col-md-8 p-4">
               <div className="Subject">
@@ -200,12 +208,67 @@ class Item extends Component {
   _getViewpoints() {
     return Object.entries(this.state.item.topic).map(v =>
       <Viewpoint key={v[0]} id={v[0]} topics={v[1]}
-        assignTopic={this._assignTopic} removeTopic={this._removeTopic} />
+        assignTopic={this._assignTopic} removeTopic={this._removeTopic} update_seq={this.state.update_seq} />
     );
   }
 
+  _getSameNameBlock() {
+    //before returning the SameNameBlock Component, we ensure that the consulted item name value is defined
+    if (this.state.item.name !== undefined && this.state.item.name !== null) {
+      return (
+        <SameNameBlock ID={this.props.match.params.item} itemName={this.state.item.name} />
+      );
+    } else {
+      //item name has no value
+    }
+  }
+
+  _fetch_update_seq = async () => {
+    let SERVICE = (await conf).services[0];
+    return fetch(SERVICE)
+      .then(response => response.json())
+      .then(data => {
+        this.setState({update_seq: data.update_seq})
+      });
+  }
+
+  initEventSource = async () => {
+    let SERVICE = (await conf).services[0];
+    return this._fetch_update_seq().then(() => {
+      let params = this.props.match.params;
+      let viewpoints = Object.keys(this.state.item.topic).join(',');
+      this.eventSource = new EventSource(`${SERVICE}/events?since=${this.state.update_seq}&corpus=${params.corpus}&viewpoint=${viewpoints}`);
+    });
+  }
+
   componentDidMount() {
-    this._fetchItem();
+    if (!this.eventSource){
+      this._fetch_update_seq();
+      let self = this;
+      this._fetchItem().then(() => {
+        this.initEventSource().then(() => {
+          if (self.eventSource){
+            this.eventSource.onmessage = e => {
+              let data = JSON.parse(e.data);
+              if (this.state.update_seq !== data.seq){
+                this.setState({update_seq: data.seq})
+                if (this.props.match.params.item === data.id){
+                  this._fetchItem();
+                }
+              }
+            }
+          } else {
+            console.error('eventSource is undefined, updates are impossible');
+          }
+        })
+      });
+    }
+  }
+
+  componentWillUnmount() {
+    if (this.eventSource){
+      this.eventSource.close();
+    }
   }
 
   _fetchItem = async () => {
@@ -218,6 +281,7 @@ class Item extends Component {
       let item = data[params.corpus][params.item];
       let itemTopics = (item.topic) ? groupBy(item.topic, ['viewpoint']) : {};
       let topics=this.state.item.topic || {};
+      topics = (itemTopics.length > 0) ? topics : {};
       for (let id in itemTopics) {
         topics[id]=itemTopics[id];
       }
@@ -237,13 +301,14 @@ class Item extends Component {
     });
   };
 
+  _parseAttributeInput() {
+    return (this.state.attributeInputValue.match(/([^:]*):(.*)/) || [])
+      .splice(1)
+      .map(t => t.trim());
+  }
+
   _getAttributeCreationForm() {
     var classes=["AttributeForm","input-group"];
-
-    function isValidValue(attribute) {
-      let [key,value]=attribute.split(":").map(t => t.trim());
-      return key && value && !HIDDEN.includes(key);
-    }
 
     let attributeInputChange=(e) => {
       this.setState({ attributeInputValue:e.target.value });
@@ -272,17 +337,19 @@ class Item extends Component {
 
     if (!this.state.attributeInputFocus) {
       classes.push("inactive");
-    } else if (isValidValue(this.state.attributeInputValue)) {
-      valid=true;
-      let editedAttribute=this.state.attributeInputValue.split(":").map(t => t.trim())[0];
-      if (this.state.item[editedAttribute]) {
-        classes.push("modify")
+    } else {
+      let [key, value] = this._parseAttributeInput();
+      if (key && value) {
+        valid = true;
+        if (this.state.item[key]) {
+          classes.push("modify")
+        }
       }
     }
 
-    var placeholder="Ajouter un attribut et une valeur...";
+    var placeholder= t`Ajouter un attribut et une valeur...`;
     if (this.state.attributeInputFocus) {
-      placeholder="attribut : valeur";
+      placeholder= t`attribut : valeur`;
     }
 
     return (
@@ -291,7 +358,7 @@ class Item extends Component {
           <input ref={(input) => this.attributeInput=input} value={this.state.attributeInputValue}
             onChange={attributeInputChange} onKeyDown={attributeInputChangeKeyDown}
             onFocus={attributeInputFocus} onBlur={attributeInputBlur}
-            id="new-attribute" className="form-control" placeholder={placeholder} type="text" />
+            id="new-attribute" className="form-control" placeholder={i18n._(placeholder)} type="text" />
         </div>
         <div className="input-group-append">
           <button type="button" className="btn btn-sm ValidateButton btn"
@@ -327,12 +394,9 @@ class Item extends Component {
 
   _submitAttribute = (e) => {
     e.preventDefault();
-    let key_value = this.state.attributeInputValue;
-    if (key_value) {
-      let [key,value]=key_value.match(/([^:]*):(.*)/).splice(1).map(t => t.trim());
-      if (key && value) this._setAttribute(key, value);
-      else return false;
-    }
+    let [key, value] = this._parseAttributeInput();
+    if (!key || !value) return false;
+    this._setAttribute(key, value);
     this.setState({
       attributeInputValue: ""
     });
@@ -380,7 +444,7 @@ class Item extends Component {
 
 
   _removeTopic = async (topicToDelete) => {
-    if (window.confirm('Voulez-vous réellement que l\'item affiché ne soit plus décrit à l\'aide de cette rubrique ?')) {
+    if (window.confirm(i18n._(t`Voulez-vous réellement que l'item affiché ne soit plus décrit à l'aide de cette rubrique ?`))) {
       return new Hypertopic((await conf).services)
         .item({
           _id: this.props.match.params.item,
@@ -399,7 +463,7 @@ class Item extends Component {
   };
 }
 
-function Comments(props) {
+const Comments = React.memo((props) => {
   let config = {
     identifier: props.item.id,
     title: props.item.name
@@ -407,16 +471,6 @@ function Comments(props) {
   return (props.appId)
     ? <DiscussionEmbed config={config} shortname={props.appId} />
     : null;
-}
-
-function Resource(props) {
-  return (props.href)?
-    <div className="p-3">
-      <a target="_blank" href={props.href} className="cursor-zoom" rel="noopener noreferrer">
-        <img src={props.href} alt="Resource" />
-      </a>
-    </div>
-    : null;
-}
+});
 
 export default Item;
