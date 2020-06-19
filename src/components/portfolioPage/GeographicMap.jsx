@@ -24,7 +24,6 @@ class GeographicMap extends React.PureComponent {
         let api_key = conf.interactiveMap || conf.staticMap;
         if (api_key) {
           let addresses = new Items(this.props.items).getAttributeValues('spatial');
-          addresses.splice(0, 30); // to avoid being blocked
           this._fetchPlaces(api_key, addresses);
           this.setState({ api_key, interactive: !!conf.interactiveMap });
         }
@@ -78,9 +77,10 @@ class GeographicMap extends React.PureComponent {
           lng
         };
       })
+        .catch(x => console.error(x))
     ))
+      .then(x => x.filter(x => !!x))
       .then(places => this.setState({places}))
-      .catch(error => console.error(error));
   }
 
 }
