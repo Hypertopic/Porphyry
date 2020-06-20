@@ -33,12 +33,14 @@ class GeographicMap extends React.PureComponent {
           onClick={() => this.handleClick(place_id)}
       />
       );
+      let center = this.bounds ? this.bounds.getCenter : {lat:0, lng:0};
       return (
         <LoadScript googleMapsApiKey={this.state.api_key} >
           <GoogleMap
             mapContainerStyle={{ width: '100%', height: '400px' }}
-            center={{ lat: 48.2348612, lng: 3.9936278 }}
-            zoom={10}
+            center={center}
+            zoom={2}
+            onLoad={this.handleLoad}
           >
             {markers}
           </GoogleMap>
@@ -53,6 +55,14 @@ class GeographicMap extends React.PureComponent {
         src={`https://maps.googleapis.com/maps/api/staticmap?size=640x480&markers=${markers}&key=${this.state.api_key}`}
       />
     );
+  }
+
+  handleLoad = (map) => {
+    this.bounds = new window.google.maps.LatLngBounds();
+    this.state.places.forEach(({position}) =>
+      this.bounds.extend(new window.google.maps.LatLng(position.lat, position.lng))
+    );
+    map.fitBounds(this.bounds);
   }
 
   handleClick = (place_id) => {
