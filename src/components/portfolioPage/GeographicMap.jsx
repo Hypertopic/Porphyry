@@ -26,10 +26,10 @@ class GeographicMap extends React.PureComponent {
   render() {
     if (!this.state.places.length || !this.state.api_key) return null;
     if (this.state.interactive) {
-      let markers = this.state.places.map(x =>
-        <Marker key={x.place_id}
-          position={{lat: x.lat, lng: x.lng}}
-          onClick={() => this.handleClick(x.place_id)}
+      let markers = this.state.places.map(({position, place_id}) =>
+        <Marker key={place_id}
+          position={position}
+          onClick={() => this.handleClick(place_id)}
       />
       );
       return (
@@ -45,7 +45,7 @@ class GeographicMap extends React.PureComponent {
       );
     }
     let alt = this.state.places.map(x => x.spatial).join(';');
-    let markers = this.state.places.map(x => `${x.lat},${x.lng}`)
+    let markers = this.state.places.map(({position}) => `${position.lat},${position.lng}`)
       .join('|');
     return (
       <img alt={alt}
@@ -62,12 +62,10 @@ class GeographicMap extends React.PureComponent {
 
   fromAddress = (address) => Geocode.fromAddress(address)
     .then(x => {
-      const {lat, lng} = x.results[0].geometry.location;
       return {
         place_id: x.results[0].place_id,
         spatial: address,
-        lat,
-        lng
+        position: x.results[0].geometry.location
       };
     })
     .catch(x => console.error(x))
