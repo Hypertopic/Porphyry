@@ -29,7 +29,7 @@ class Corpora extends Component {
     return (
       <div className="col-md-8 p-4">
         <div className="Subject">
-          <h2 className="h4 font-weight-bold text-center">
+          <h2 className="h4 font-weight-bold text-center d-none d-sm-block">
             {listIds}
             <span className="badge badge-pill badge-light ml-4">{count} / {total}</span>
           </h2>

@@ -23,7 +23,7 @@ class TopicPath extends React.Component {
     return (
       <div className="TopicPath">
         {topics}
-        <button type="button" className="btn btn-xs ml-3 float-right DeleteButton"
+        <button type="button" className="btn btn-xs ml-3 float-right DeleteButton d-none d-sm-block"
           onClick={this.props.removeTopic} id={`deleteButton-${topicId}`}>
           <span className="oi oi-x"> </span>
         </button>

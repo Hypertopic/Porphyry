@@ -52,12 +52,14 @@ class Attribute extends React.Component {
           onChange={this.handleChange}
           onKeyDown={this.handleKeyDown}
         />
-        <Buttons name={this.props.name} editedValue={this.state.editedValue}
-          edited={this.state.edited}
-          onDelete={this.handleClickDelete}
-          onEdit={this.handleClickEdit}
-          onSubmit={this.handleSubmit}
-        />
+        <div className="d-none d-sm-block">
+          <Buttons name={this.props.name} editedValue={this.state.editedValue}
+            edited={this.state.edited}
+            onDelete={this.handleClickDelete}
+            onEdit={this.handleClickEdit}
+            onSubmit={this.handleSubmit}
+          />
+        </div>
       </div>
     );
   }
