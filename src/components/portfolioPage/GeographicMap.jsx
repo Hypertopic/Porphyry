@@ -3,6 +3,7 @@ import { withRouter } from 'react-router-dom';
 import {Items} from '../../model.js';
 import { GoogleMap, Marker, LoadScript } from '@react-google-maps/api';
 import Geocode from 'react-geocode';
+import memoize from 'mem';
 
 class GeographicMap extends React.PureComponent {
 
@@ -60,7 +61,7 @@ class GeographicMap extends React.PureComponent {
     this.props.history.push(uri);
   }
 
-  fromAddress = (address) => Geocode.fromAddress(address)
+  fromAddress = memoize((address) => Geocode.fromAddress(address)
     .then(x => {
       return {
         place_id: x.results[0].place_id,
@@ -69,6 +70,7 @@ class GeographicMap extends React.PureComponent {
       };
     })
     .catch(x => console.error(x))
+  );
 
 
   _fetchPlaces = (key, addresses) => {
