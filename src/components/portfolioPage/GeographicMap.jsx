@@ -27,8 +27,8 @@ class GeographicMap extends React.PureComponent {
   render() {
     if (!this.state.places.length || !this.state.api_key) return null;
     if (this.state.interactive) {
-      let markers = this.state.places.map(({position, place_id}) =>
-        <Marker key={place_id}
+      let markers = this.state.places.map(({position, place_id, spatial}) =>
+        <Marker key={spatial}
           position={position}
           onClick={() => this.handleClick(place_id)}
       />
