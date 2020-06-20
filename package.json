@@ -4,10 +4,10 @@
   "private": true,
   "dependencies": {
     "@lingui/react": "^2.9.1",
+    "@react-google-maps/api": "^1.9.7",
     "bootstrap": "^4.4.1",
     "compare-func": "^2.0.0",
     "disqus-react": "^1.0.7",
-    "google-map-react": "^1.1.7",
     "hypertopic": "^3.2.0",
     "js-tree": "^2.0.2",
     "json-groupby": "^1.0.2",

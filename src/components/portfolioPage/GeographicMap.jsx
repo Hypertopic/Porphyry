@@ -1,7 +1,7 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import {Items} from '../../model.js';
-import GoogleMapReact from 'google-map-react';
+import { GoogleMap, Marker, LoadScript } from '@react-google-maps/api';
 import Geocode from 'react-geocode';
 
 class GeographicMap extends React.PureComponent {
@@ -9,14 +9,6 @@ class GeographicMap extends React.PureComponent {
   state = {
     places: []
   }
-
-  static defaultProps = {
-    center: {
-      lat: 48.2348612,
-      lng: 3.9936278
-    },
-    zoom: 4
-  };
 
   componentDidUpdate(prevProps) {
     if (this.props.items !== prevProps.items) {
@@ -33,17 +25,25 @@ class GeographicMap extends React.PureComponent {
 
   render() {
     if (!this.state.places.length || !this.state.api_key) return null;
-    if (this.state.interactive) return (
-      <div className="Map" style={{ height: '480px', width: '100%' }}>
-        <GoogleMapReact
-          defaultCenter={this.props.center}
-          defaultZoom={this.props.zoom}
-          bootstrapURLKeys={{key: this.state.api_key}}
-          yesIWantToUseGoogleMapApiInternals
-          onGoogleApiLoaded={({ map, maps }) => this._renderMarkers(map, maps)}
-        />
-      </div>
-    );
+    if (this.state.interactive) {
+      let markers = this.state.places.map(x =>
+        <Marker key={x.place_id}
+          position={{lat: x.lat, lng: x.lng}}
+          onClick={() => this.handleClick(x.place_id)}
+      />
+      );
+      return (
+        <LoadScript googleMapsApiKey={this.state.api_key} >
+          <GoogleMap
+            mapContainerStyle={{ width: '100%', height: '400px' }}
+            center={{ lat: 48.2348612, lng: 3.9936278 }}
+            zoom={10}
+          >
+            {markers}
+          </GoogleMap>
+        </LoadScript>
+      );
+    }
     let alt = this.state.places.map(x => x.spatial).join(';');
     let markers = this.state.places.map(x => `${x.lat},${x.lng}`)
       .join('|');
@@ -54,31 +54,28 @@ class GeographicMap extends React.PureComponent {
     );
   }
 
-  _renderMarkers = (map, maps) => this.state.places.map(
-    x => new maps.Marker({
-      position: { lat: x.lat, lng: x.lng},
-      map,
-      title: x.spatial
-    }).addListener('click', () => {
-      let uri = `/?t={"type":"intersection","data":[{"type":"intersection","selection":["spatial : ${x.spatial}"],"exclusion":[]}]}`;
-      this.props.history.push(uri);
+  handleClick = (place_id) => {
+    let place = this.state.places.find(x => x.place_id === place_id);
+    let uri = `/?t={"type":"intersection","data":[{"type":"intersection","selection":["spatial : ${place.spatial}"],"exclusion":[]}]}`;
+    this.props.history.push(uri);
+  }
+
+  fromAddress = (address) => Geocode.fromAddress(address)
+    .then(x => {
+      const {lat, lng} = x.results[0].geometry.location;
+      return {
+        place_id: x.results[0].place_id,
+        spatial: address,
+        lat,
+        lng
+      };
     })
-  );
+    .catch(x => console.error(x))
+
 
   _fetchPlaces = (key, addresses) => {
     Geocode.setApiKey(key);
-    return Promise.all(addresses.map(address =>
-      Geocode.fromAddress(address).then(x => {
-        const { lat, lng } = x.results[0].geometry.location;
-        return {
-          place_id: x.results[0].place_id,
-          spatial: address,
-          lat,
-          lng
-        };
-      })
-        .catch(x => console.error(x))
-    ))
+    return Promise.all(addresses.map(this.fromAddress))
       .then(x => x.filter(x => !!x))
       .then(places => this.setState({places}))
   }
