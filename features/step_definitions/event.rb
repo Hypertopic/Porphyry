@@ -55,3 +55,7 @@ Quand("l'utilisateur choisit l'item {string} dans le bloc Items ayant le même n
     click_on item
   end
 end
+
+Quand("l'utilisateur trie les items par la valeur de l'attribut {string}") do |attribut|
+  select attribut, from: "attribut"
+end

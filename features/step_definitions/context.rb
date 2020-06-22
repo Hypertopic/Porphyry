@@ -57,3 +57,10 @@ Soit("l'attribut {string} a pour valeur {string}") do |attribute, value|
   expect(page).to have_content value
   expect(page).to have_content attribute
 end
+
+Soit("la liste d'items est affichée dans cet ordre là") do |table|
+  results = page.all('div.Item div').map do |div|
+    [div.text]
+  end
+  table.diff!(results)
+end
