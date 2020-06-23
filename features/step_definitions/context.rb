@@ -57,3 +57,8 @@ Soit("l'attribut {string} a pour valeur {string}") do |attribute, value|
   expect(page).to have_content value
   expect(page).to have_content attribute
 end
+
+Soit ("les marqueurs indiquant les lieux {string} et {string} sont affichés") do |alt, alt2|
+  expect(page).to have_xpath("//img[contains(@alt, '#{alt}' )]")
+  expect(page).to have_xpath("//img[contains(@alt, '#{alt2}' )]")
+end
