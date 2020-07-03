@@ -54,6 +54,11 @@ Quand("l'utilisateur indique {string} pour la catégorie {string} du point de vu
   end
 end
 
+Quand("l'utilisateur recherche {string} puis choisit {string}") do |pattern, attribute|
+  find('input[type="search"]').send_keys pattern
+  click_link(attribute, href: nil)
+end
+
 Quand("l'utilisateur choisit l'item {string} dans le bloc Items ayant le même nom") do |item|
   within '.Item' do
     click_on item
