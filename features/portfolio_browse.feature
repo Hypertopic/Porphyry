@@ -10,7 +10,6 @@ Et "SJ 001" un des items affichés
 Et "SM 001 m" un des items affichés
 Et "SM 001 n" un des items affichés
 Et "SM 008 g" un des items affichés
-Et "SM 008 h" un des items cachés
 Et "SNZ 005" un des items affichés
 Et "SNZ 006" un des items affichés
 Et "SR 005" un des items affichés
