@@ -152,7 +152,7 @@ class Portfolio extends Component {
 
   _updateSelectedItems() {
     let selectedItems;
-    if(this.selectionJSON.data.length > 0)
+    if (this.selectionJSON.data.length > 0)
       selectedItems = this.state.items.filter(e => this._isSelected(e, this.selectionJSON));
     else
       selectedItems = this.state.items;
