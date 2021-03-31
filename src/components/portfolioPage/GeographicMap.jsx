@@ -31,7 +31,7 @@ class GeographicMap extends React.PureComponent {
         <Marker key={spatial}
           position={position}
           onClick={() => this.handleClick(place_id)}
-      />
+        />
       );
       let center = this.bounds ? this.bounds.getCenter : {lat: 0, lng: 0};
       return (

@@ -87,11 +87,14 @@ class Viewpoint extends React.Component {
     }
     var newTopic;
     if (this.state.newTopic) {
-      newTopic=<div className="newTopic">Ajouter nouveau : &gt; {this.state.newTopic}
-      <button type="button" className="btn btn-xs ml-3 float-right DeleteButton"
-        onClick={ () => this.setState({newTopic: ''}) } id="deleteButton-newTopic">
-        <span className="oi oi-x"> </span>
-      </button></div>;
+      newTopic = (
+        <div className="newTopic">Ajouter nouveau : &gt; {this.state.newTopic}
+          <button type="button" className="btn btn-xs ml-3 float-right DeleteButton"
+            onClick={ () => this.setState({newTopic: ''}) } id="deleteButton-newTopic">
+            <span className="oi oi-x"> </span>
+          </button>
+        </div>
+      );
     }
     const canValidateTopic=this.state.currentSelection || this.state.newTopic || this.state.topicInputvalue.length > 2;
     let alreadyAssigned = this.props.topics.map(x => x.id);
@@ -105,43 +108,43 @@ class Viewpoint extends React.Component {
           {paths}
           <div className={classes.join(' ')}>
             <div className="d-none d-sm-block">
-            <InputWithSuggestions candidates={candidates}
-              onSuggestionSelected={this.onSuggestionSelected}
-              inputProps={inputProps}
-              id={this.props.id}
-            />
+              <InputWithSuggestions candidates={candidates}
+                onSuggestionSelected={this.onSuggestionSelected}
+                inputProps={inputProps}
+                id={this.props.id}
+              />
             </div>
             <div className="input-group-append">
               <button type="button" className="btn btn-sm ValidateButton btn" onClick={() => {
-                  if (this.state.newTopic && (this.state.currentSelection || !this.state.topicInputvalue)) {
-                    var parentId;
-                    if (this.state.currentSelection)
-                      parentId = this.state.currentSelection.id;
-                    this.createTopic(this.state.newTopic, parentId)
-                      .then(newId => {
-                        this.updatingTopicList(
-                          newId,
-                          this.props.id
-                        );
-                      })
-                      .then(this.clearInput);
-                  } else {
-                    if (this.state.currentSelection) {
+                if (this.state.newTopic && (this.state.currentSelection || !this.state.topicInputvalue)) {
+                  var parentId;
+                  if (this.state.currentSelection)
+                    parentId = this.state.currentSelection.id;
+                  this.createTopic(this.state.newTopic, parentId)
+                    .then(newId => {
                       this.updatingTopicList(
-                        this.state.currentSelection.id,
+                        newId,
                         this.props.id
-                      ).then(this.clearInput);
-                    } else {
-                      this.setState({
-                        newTopic: this.state.topicInputvalue,
-                        topicInputvalue: ''
-                      });
-                    }
+                      );
+                    })
+                    .then(this.clearInput);
+                } else {
+                  if (this.state.currentSelection) {
+                    this.updatingTopicList(
+                      this.state.currentSelection.id,
+                      this.props.id
+                    ).then(this.clearInput);
+                  } else {
+                    this.setState({
+                      newTopic: this.state.topicInputvalue,
+                      topicInputvalue: ''
+                    });
                   }
-                }}
-                onFocus={this.onTopicInputFocus} onBlur={this.onTopicInputBlur}
-                disabled={!canValidateTopic}
-                id={`validateButton-${this.state.name}`}>
+                }
+              }}
+              onFocus={this.onTopicInputFocus} onBlur={this.onTopicInputBlur}
+              disabled={!canValidateTopic}
+              id={`validateButton-${this.state.name}`}>
                 <span className="oi oi-check"> </span>
               </button>
             </div>

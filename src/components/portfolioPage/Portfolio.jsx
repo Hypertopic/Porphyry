@@ -166,53 +166,53 @@ class Portfolio extends Component {
 
   async _fetchUser(SETTINGS, hypertopic) {
     return hypertopic.getView(`/user/${SETTINGS.user}`)
-    .then(data => {
-      let user = data[SETTINGS.user] || {};
-      user = {
-        viewpoint: user.viewpoint || [],
-        corpus: user.corpus || []
-      };
-      if (!this.state.viewpoints.length && !this.state.corpora.length) { //TODO compare old and new
-        this.setState({ viewpoints: user.viewpoint, corpora: user.corpus });
-      }
-      return user;
-    });
+      .then(data => {
+        let user = data[SETTINGS.user] || {};
+        user = {
+          viewpoint: user.viewpoint || [],
+          corpus: user.corpus || []
+        };
+        if (!this.state.viewpoints.length && !this.state.corpora.length) { //TODO compare old and new
+          this.setState({ viewpoints: user.viewpoint, corpora: user.corpus });
+        }
+        return user;
+      });
   }
 
   async _fetchViewpoints(hypertopic, user) {
     return hypertopic.getView(user.viewpoint.map(x => `/viewpoint/${x.id}`))
-    .then(data => {
-      let viewpoints = [];
-      for (let v of this.state.viewpoints) {
-        let viewpoint = data[v.id];
-        viewpoint.id = v.id;
-        viewpoints.push(viewpoint);
-      }
-      this.setState({viewpoints});
-      return data;
-    });
+      .then(data => {
+        let viewpoints = [];
+        for (let v of this.state.viewpoints) {
+          let viewpoint = data[v.id];
+          viewpoint.id = v.id;
+          viewpoints.push(viewpoint);
+        }
+        this.setState({viewpoints});
+        return data;
+      });
   }
 
   async _fetchItems(hypertopic) {
     return hypertopic.getView(this.state.corpora.map(x => `/corpus/${x.id}`))
-    .then(data => {
-      let items = [];
-      for (let corpus of this.state.corpora) {
-        for (let itemId in data[corpus.id]) {
-          if (!['id', 'name', 'user'].includes(itemId)) {
-            let item = data[corpus.id][itemId];
-            if (!item.name || !item.name.length) {
-              console.log(`/item/${corpus.id}/${itemId} has no name!`);
-            } else {
-              item.id = itemId;
-              item.corpus = corpus.id;
-              items.push(item);
+      .then(data => {
+        let items = [];
+        for (let corpus of this.state.corpora) {
+          for (let itemId in data[corpus.id]) {
+            if (!['id', 'name', 'user'].includes(itemId)) {
+              let item = data[corpus.id][itemId];
+              if (!item.name || !item.name.length) {
+                console.log(`/item/${corpus.id}/${itemId} has no name!`);
+              } else {
+                item.id = itemId;
+                item.corpus = corpus.id;
+                items.push(item);
+              }
             }
           }
         }
-      }
-      this.setState({items});
-    });
+        this.setState({items});
+      });
   }
 
   async _fetchAll() {
@@ -220,8 +220,8 @@ class Portfolio extends Component {
     let hypertopic = new Hypertopic(SETTINGS.services);
 
     return this._fetchUser(SETTINGS, hypertopic)
-    .then(x => Promise.all([this._fetchViewpoints(hypertopic, x), this._fetchItems(hypertopic)]))
-    .then(() => this._updateSelectedItems());
+      .then(x => Promise.all([this._fetchViewpoints(hypertopic, x), this._fetchItems(hypertopic)]))
+      .then(() => this._updateSelectedItems());
   }
 
   _getViewpoints() {

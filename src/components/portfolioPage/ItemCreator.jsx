@@ -18,11 +18,11 @@ class ItemCreator extends Component {
   async _newItem() {
     let db = new Hypertopic((await this.props.conf).services);
     db.post({item_corpus: this.props.corpus})
-    .then((data) => {
-      _log(data);
-      this._goToNewItem(data);
-    })
-    .catch(_error);
+      .then((data) => {
+        _log(data);
+        this._goToNewItem(data);
+      })
+      .catch(_error);
   }
 
   _goToNewItem(data) {

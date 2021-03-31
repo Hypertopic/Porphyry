@@ -171,15 +171,15 @@ class Item extends Component {
     }).catch(e => console.error(e.message))
       .then(() => hypertopic.getView(`/user/${SETTINGS.user}`))
       .then((data) => {
-      let user = data[SETTINGS.user] || {};
-      if (user.viewpoint) {
-        let topic=this.state.item.topic;
-        for (let vp of user.viewpoint) {
-          topic[vp.id]=topic[vp.id] || [];
+        let user = data[SETTINGS.user] || {};
+        if (user.viewpoint) {
+          let topic=this.state.item.topic;
+          for (let vp of user.viewpoint) {
+            topic[vp.id]=topic[vp.id] || [];
+          }
+          this.setState({topic});
         }
-        this.setState({topic});
-      }
-    });
+      });
   };
 
   _parseAttributeInput() {
