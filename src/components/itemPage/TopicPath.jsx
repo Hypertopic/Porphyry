@@ -58,7 +58,7 @@ class TopicPath extends React.Component {
   }
 
   _getTopics() {
-    return this.state.path.map( t => {
+    return this.state.path.map(t => {
       let name = t.name || '';
       let uri = `../../?t={"type":"intersection","data":[{"type":"intersection","selection":["${t.id}"],"exclusion":[]}]}`;
       return (

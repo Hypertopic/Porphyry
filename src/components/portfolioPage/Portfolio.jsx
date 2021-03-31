@@ -143,7 +143,7 @@ class Portfolio extends Component {
   }
 
   _isSelected(item, list) {
-    let itemHasValue = list.data.map(l => includes(this._getRecursiveItemTopics(item).concat(this._getItemAttributes(item)), (l.selection || [] ), (l.exclusion || []), (l.type === 'union')));
+    let itemHasValue = list.data.map(l => includes(this._getRecursiveItemTopics(item).concat(this._getItemAttributes(item)), (l.selection || []), (l.exclusion || []), (l.type === 'union')));
     if (list.type === 'union')
       return itemHasValue.reduce((c1, c2) => c1 || c2, false);
     return itemHasValue.reduce((c1, c2) => c1 && c2, true);
