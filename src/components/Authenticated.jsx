@@ -27,7 +27,7 @@ class Authenticated extends Component {
       return (
         <form className="Authenticated" onSubmit={this.handleLogin}>
           <input placeholder={i18n._(t`nom d'utilisateur`)} ref={(x) => this.login = x} />
-          <input placeholder={i18n._(t`mot de passe`)}  ref={(x) => this.password = x} type="password" />
+          <input placeholder={i18n._(t`mot de passe`)} ref={(x) => this.password = x} type="password" />
           <input type="submit" value={i18n._(t`Se connecter`)} />
         </form>
       );
@@ -43,7 +43,7 @@ class Authenticated extends Component {
     return this.props.conf.then(x => {
       options = options || {};
       options.credentials = 'include';
-      return fetch(x.services[0] + '/_session',  options);
+      return fetch(x.services[0] + '/_session', options);
     });
   }
 

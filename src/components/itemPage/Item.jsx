@@ -82,7 +82,7 @@ class Item extends Component {
     return Object.entries(this.state.item)
       .filter(x => !HIDDEN.includes(x[0]))
       .map(x => (
-        <Attribute  key={x[0]} name={x[0]} value={x[1][0]}
+        <Attribute key={x[0]} name={x[0]} value={x[1][0]}
           setAttribute={this._setAttribute} deleteAttribute={this._deleteAttribute}/>
       ));
   }
