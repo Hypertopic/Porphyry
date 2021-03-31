@@ -75,7 +75,7 @@ class Authenticated extends Component {
     this.requestSession({
       method:'POST',
       headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
+        'Content-Type': 'application/x-www-form-urlencoded',
       },
       body:`name=${user}&password=${this.password.value}`
     })

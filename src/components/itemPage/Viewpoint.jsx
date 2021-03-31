@@ -6,7 +6,7 @@ import TopicPath from './TopicPath.jsx';
 import TopicTree from '../../TopicTree.js';
 import InputWithSuggestions from '../InputWithSuggestions.jsx';
 import { t } from '@lingui/macro';
-import { i18n } from "../../index.js"
+import { i18n } from '../../index.js';
 
 class Viewpoint extends React.Component {
   constructor(props) {
@@ -38,18 +38,18 @@ class Viewpoint extends React.Component {
   }
 
   onTopicInputkeyDown = (event) => {
-    if (event.key==="Escape") {
+    if (event.key === 'Escape') {
       this.clearInput();
     }
   };
 
   onTopicInputChange = (event, { newValue }) => {
     if (this.state.currentSelection) {
-      newValue="";
+      newValue = '';
     }
     this.setState({
       topicInputvalue: newValue,
-      currentSelection:""
+      currentSelection: ''
     });
   };
 
@@ -61,7 +61,7 @@ class Viewpoint extends React.Component {
     this.setState({
       topicInputvalue: '',
       currentSelection: '',
-      newTopic:""
+      newTopic: ''
     });
   };
 
@@ -81,15 +81,15 @@ class Viewpoint extends React.Component {
       onChange: this.onTopicInputChange,
       onKeyDown: this.onTopicInputKeyDown,
     };
-    var classes=["TopicAdding","input-group"];
+    let classes = ['TopicAdding', 'input-group'];
     if (!this.state.hasFocus) {
-      classes.push("inactive");
+      classes.push('inactive');
     }
     var newTopic;
     if (this.state.newTopic) {
       newTopic=<div className="newTopic">Ajouter nouveau : &gt; {this.state.newTopic}
       <button type="button" className="btn btn-xs ml-3 float-right DeleteButton"
-        onClick={_ => this.setState({newTopic:""})} id="deleteButton-newTopic">
+        onClick={ () => this.setState({newTopic: ''}) } id="deleteButton-newTopic">
         <span className="oi oi-x"> </span>
       </button></div>;
     }
@@ -103,7 +103,7 @@ class Viewpoint extends React.Component {
         <hr/>
         <div className="Topics">
           {paths}
-          <div className={classes.join(" ")}>
+          <div className={classes.join(' ')}>
             <div className="d-none d-sm-block">
             <InputWithSuggestions candidates={candidates}
               onSuggestionSelected={this.onSuggestionSelected}
@@ -133,7 +133,7 @@ class Viewpoint extends React.Component {
                     } else {
                       this.setState({
                         newTopic:this.state.topicInputvalue,
-                        topicInputvalue:""
+                        topicInputvalue: ''
                       });
                     }
                   }

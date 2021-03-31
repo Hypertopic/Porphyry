@@ -10,7 +10,7 @@ import Header from '../Header.jsx';
 import SameNameBlock from './SameNameBlock.jsx';
 import { DiscussionEmbed } from 'disqus-react';
 import { t, Trans } from '@lingui/macro';
-import { i18n } from "../../index.js"
+import { i18n } from '../../index.js'
 
 const HIDDEN = ['topic', 'resource', 'thumbnail', 'item'];
 
@@ -26,7 +26,7 @@ class Item extends Component {
   constructor() {
     super();
     this.state = {
-      attributeInputValue:"",
+      attributeInputValue: '',
       item:{topic:[]}
     };
   }
@@ -192,15 +192,15 @@ class Item extends Component {
   }
 
   _getAttributeCreationForm() {
-    var classes=["AttributeForm","input-group"];
+    let classes = ['AttributeForm', 'input-group'];
 
     let attributeInputChange=(e) => {
       this.setState({ attributeInputValue:e.target.value });
     }
 
     let attributeInputChangeKeyDown=(e) => {
-      if (e.key==="Escape") {
-        this.setState({ attributeInputValue:"" });
+      if (e.key === 'Escape') {
+        this.setState({ attributeInputValue: '' });
       }
     }
 
@@ -220,13 +220,13 @@ class Item extends Component {
     var valid=false;
 
     if (!this.state.attributeInputFocus) {
-      classes.push("inactive");
+      classes.push('inactive');
     } else {
       let [key, value] = this._parseAttributeInput();
       if (key && value) {
         valid = true;
         if (this.state.item[key]) {
-          classes.push("modify")
+          classes.push('modify')
         }
       }
     }
@@ -237,7 +237,7 @@ class Item extends Component {
     }
 
     return (
-      <form onSubmit={this._submitAttribute} className={classes.join(" ")}>
+      <form onSubmit={this._submitAttribute} className={classes.join(' ')}>
         <div className="attributeInput">
           <input ref={(input) => this.attributeInput=input} value={this.state.attributeInputValue}
             onChange={attributeInputChange} onKeyDown={attributeInputChangeKeyDown}
@@ -281,9 +281,7 @@ class Item extends Component {
     let [key, value] = this._parseAttributeInput();
     if (!key || !value) return false;
     this._setAttribute(key, value);
-    this.setState({
-      attributeInputValue: ""
-    });
+    this.setState({ attributeInputValue: '' });
     this.attributeInput.focus();
     return false;
   };
