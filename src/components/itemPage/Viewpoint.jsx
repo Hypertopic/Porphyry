@@ -210,7 +210,7 @@ class Viewpoint extends React.Component {
           return previousState;
         })
       })
-      .then(_ => {return newId});
+      .then(() => newId);
   }
 
 }
