@@ -102,9 +102,8 @@ class Item extends Component {
       return (
         <SameNameBlock ID={this.props.match.params.item} itemName={this.state.item.name} />
       );
-    } else {
-      //item name has no value
     }
+    //item name has no value
   }
 
   _fetch_update_seq = async () => {
@@ -270,10 +269,9 @@ class Item extends Component {
           return previousState
         }))
         .catch((x) => console.error(x.message));
-    } else {
-      console.error('Créez un attribut non vide');
-      return new Promise().fail();
     }
+    console.error('Créez un attribut non vide');
+    return new Promise().fail();
   }
 
   _submitAttribute = (e) => {

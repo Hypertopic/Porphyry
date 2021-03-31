@@ -146,8 +146,7 @@ class Portfolio extends Component {
     let itemHasValue = list.data.map(l => includes(this._getRecursiveItemTopics(item).concat(this._getItemAttributes(item)), (l.selection || [] ), (l.exclusion || []), (l.type === 'union')));
     if (list.type === 'union')
       return itemHasValue.reduce((c1,c2) => c1 || c2, false);
-    else
-      return itemHasValue.reduce((c1,c2) => c1 && c2, true);
+    return itemHasValue.reduce((c1,c2) => c1 && c2, true);
   }
 
   _updateSelectedItems() {
@@ -253,8 +252,7 @@ function includes(array1, array2, array3, union) {
   let arrayDontHaveValue = array3.map(e => set1.has(e));
   if (union)
     return arrayHasValue.reduce((c1,c2) => c1 || c2, false) || ((array3.length > 0)?!arrayDontHaveValue.reduce((c1,c2) => c1 || c2, false):false);
-  else
-    return arrayHasValue.reduce((c1,c2) => c1 && c2, true) && ((array3.length > 0)?!arrayDontHaveValue.reduce((c1,c2) => c1 && c2, true):true);
+  return arrayHasValue.reduce((c1,c2) => c1 && c2, true) && ((array3.length > 0)?!arrayDontHaveValue.reduce((c1,c2) => c1 && c2, true):true);
 }
 
 function push(map, topicId, itemId) {
