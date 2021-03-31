@@ -25,7 +25,7 @@
   "devDependencies": {
     "@lingui/cli": "^2.9.2",
     "@lingui/macro": "^2.9.2",
-    "react-scripts": "^3.4.4",
+    "react-scripts": "^4.0.3",
     "serve": "^11.3.2"
   },
   "scripts": {
