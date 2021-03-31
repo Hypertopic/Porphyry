@@ -82,7 +82,6 @@ class GeographicMap extends React.PureComponent {
     .catch(x => console.error(x))
   );
 
-
   _fetchPlaces = (key, addresses) => {
     Geocode.setApiKey(key);
     return Promise.all(addresses.map(this.fromAddress))

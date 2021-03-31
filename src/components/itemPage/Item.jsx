@@ -78,8 +78,6 @@ class Item extends Component {
     );
   }
 
-
-
   _getAttributes() {
     return Object.entries(this.state.item)
       .filter(x => !HIDDEN.includes(x[0]))
@@ -319,7 +317,6 @@ class Item extends Component {
       })
       .catch(error => console.error(error));
   };
-
 
   _removeTopic = async (topicToDelete) => {
     if (window.confirm(i18n._(t`Voulez-vous réellement que l'item affiché ne soit plus décrit à l'aide de cette rubrique ?`))) {
