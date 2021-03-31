@@ -27,7 +27,7 @@ class Item extends Component {
     super();
     this.state = {
       attributeInputValue: '',
-      item:{topic:[]}
+      item: {topic: []}
     };
   }
 
@@ -194,8 +194,8 @@ class Item extends Component {
     let classes = ['AttributeForm', 'input-group'];
 
     let attributeInputChange=(e) => {
-      this.setState({ attributeInputValue:e.target.value });
     }
+      this.setState({ attributeInputValue: e.target.value });
 
     let attributeInputChangeKeyDown=(e) => {
       if (e.key === 'Escape') {
@@ -207,12 +207,12 @@ class Item extends Component {
       if (this.blurTimeout) {
         this.blurTimeout=clearTimeout(this.blurTimeout);
       }
-      this.setState({attributeInputFocus:true});
     }
+      this.setState({ attributeInputFocus: true });
 
     let attributeInputBlur=(e) => {
       this.blurTimeout=setTimeout(() => {
-        this.setState({attributeInputFocus:false})
+        this.setState({ attributeInputFocus: false });
       }, 200);
     }
 
@@ -295,7 +295,7 @@ class Item extends Component {
       .then(_ => {
         this.setState(previousState => {
           delete previousState.item[key];
-          return {item:previousState.item};
+          return { item: previousState.item };
         });
       })
       .catch(_error);

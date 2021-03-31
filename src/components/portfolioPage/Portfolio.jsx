@@ -173,7 +173,7 @@ class Portfolio extends Component {
         corpus: user.corpus || []
       };
       if (!this.state.viewpoints.length && !this.state.corpora.length) { //TODO compare old and new
-        this.setState({viewpoints:user.viewpoint, corpora:user.corpus});
+        this.setState({ viewpoints: user.viewpoint, corpora: user.corpus });
       }
       return user;
     });

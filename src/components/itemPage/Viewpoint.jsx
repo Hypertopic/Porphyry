@@ -28,12 +28,12 @@ class Viewpoint extends React.Component {
     if (this.blurTimeout) {
       this.blurTimeout=clearTimeout(this.blurTimeout);
     }
-    this.setState({hasFocus:true});
+    this.setState({ hasFocus: true });
   }
 
   onTopicInputBlur = (event) => {
     this.blurTimeout=setTimeout(() => {
-      this.setState({hasFocus:false});
+      this.setState({ hasFocus: false });
     }, 200);
   }
 
@@ -132,7 +132,7 @@ class Viewpoint extends React.Component {
                       ).then(this.clearInput);
                     } else {
                       this.setState({
-                        newTopic:this.state.topicInputvalue,
+                        newTopic: this.state.topicInputvalue,
                         topicInputvalue: ''
                       });
                     }
@@ -197,13 +197,13 @@ class Viewpoint extends React.Component {
       .then(_ => {
         this.setState(previousState => {
           let newTopic={
-            id:newId,
-            name:[name]
+            id: newId,
+            name: [name]
           };
           if (parent) {
             newTopic.broader=[{
-              id:parent,
-              name:previousState.topics[parent].name
+              id: parent,
+              name: previousState.topics[parent].name
             }];
           }
           previousState.topics[newId]=newTopic;

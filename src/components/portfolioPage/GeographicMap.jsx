@@ -33,7 +33,7 @@ class GeographicMap extends React.PureComponent {
           onClick={() => this.handleClick(place_id)}
       />
       );
-      let center = this.bounds ? this.bounds.getCenter : {lat:0, lng:0};
+      let center = this.bounds ? this.bounds.getCenter : {lat: 0, lng: 0};
       return (
         <LoadScript googleMapsApiKey={this.state.api_key} >
           <GoogleMap

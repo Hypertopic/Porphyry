@@ -73,11 +73,11 @@ class Authenticated extends Component {
   _openSession() {
     let user = this.login.value;
     this.requestSession({
-      method:'POST',
+      method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body:`name=${user}&password=${this.password.value}`
+      body: `name=${user}&password=${this.password.value}`
     })
       .then(x => {
         if (!x.ok) throw new Error('Bad credentials!');
@@ -87,7 +87,7 @@ class Authenticated extends Component {
   }
 
   _closeSession() {
-    this.requestSession({method:'DELETE'})
+    this.requestSession({method: 'DELETE'})
       .then(() => this.setState({user: ''}));
   }
 
