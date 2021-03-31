@@ -145,8 +145,8 @@ class Portfolio extends Component {
   _isSelected(item, list) {
     let itemHasValue = list.data.map(l => includes(this._getRecursiveItemTopics(item).concat(this._getItemAttributes(item)), (l.selection || [] ), (l.exclusion || []), (l.type === 'union')));
     if (list.type === 'union')
-      return itemHasValue.reduce((c1,c2) => c1 || c2, false);
-    return itemHasValue.reduce((c1,c2) => c1 && c2, true);
+      return itemHasValue.reduce((c1, c2) => c1 || c2, false);
+    return itemHasValue.reduce((c1, c2) => c1 && c2, true);
   }
 
   _updateSelectedItems() {
@@ -199,7 +199,7 @@ class Portfolio extends Component {
       let items = [];
       for (let corpus of this.state.corpora) {
         for (let itemId in data[corpus.id]) {
-          if (!['id','name','user'].includes(itemId)) {
+          if (!['id', 'name', 'user'].includes(itemId)) {
             let item = data[corpus.id][itemId];
             if (!item.name || !item.name.length) {
               console.log(`/item/${corpus.id}/${itemId} has no name!`);
@@ -251,8 +251,8 @@ function includes(array1, array2, array3, union) {
   let arrayHasValue = array2.map(e => set1.has(e));
   let arrayDontHaveValue = array3.map(e => set1.has(e));
   if (union)
-    return arrayHasValue.reduce((c1,c2) => c1 || c2, false) || ((array3.length > 0)?!arrayDontHaveValue.reduce((c1,c2) => c1 || c2, false):false);
-  return arrayHasValue.reduce((c1,c2) => c1 && c2, true) && ((array3.length > 0)?!arrayDontHaveValue.reduce((c1,c2) => c1 && c2, true):true);
+    return arrayHasValue.reduce((c1, c2) => c1 || c2, false) || ((array3.length > 0)?!arrayDontHaveValue.reduce((c1, c2) => c1 || c2, false):false);
+  return arrayHasValue.reduce((c1, c2) => c1 && c2, true) && ((array3.length > 0)?!arrayDontHaveValue.reduce((c1, c2) => c1 && c2, true):true);
 }
 
 function push(map, topicId, itemId) {

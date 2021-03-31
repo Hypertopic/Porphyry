@@ -34,7 +34,7 @@ class Viewpoint extends React.Component {
   onTopicInputBlur = (event) => {
     this.blurTimeout=setTimeout(() => {
       this.setState({hasFocus:false});
-    },200);
+    }, 200);
   }
 
   onTopicInputkeyDown = (event) => {
@@ -116,7 +116,7 @@ class Viewpoint extends React.Component {
                   if (this.state.newTopic && (this.state.currentSelection || !this.state.topicInputvalue)) {
                     var parentId;
                     if (this.state.currentSelection) parentId=this.state.currentSelection.id
-                    this.createTopic(this.state.newTopic,parentId)
+                    this.createTopic(this.state.newTopic, parentId)
                       .then(newId => {
                         this.updatingTopicList(
                           newId,
@@ -179,7 +179,7 @@ class Viewpoint extends React.Component {
     });
   }
 
-  async createTopic(name,parent) {
+  async createTopic(name, parent) {
     var newId;
     let hypertopic = new Hypertopic((await conf).services);
     return hypertopic.get({ _id: this.props.id })
