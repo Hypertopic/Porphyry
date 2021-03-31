@@ -116,19 +116,27 @@ class Portfolio extends Component {
         data: []
       };
     }
-    this.selection = (this.selectionJSON.hasOwnProperty('data'))? this.selectionJSON.data.map(s => (s.selection === undefined)?[]:s.selection).flat():[];
-    this.exclusion = (this.selectionJSON.hasOwnProperty('data'))? this.selectionJSON.data.map(s => (s.exclusion === undefined)?[]:s.exclusion).flat():[];
+    this.selection = (this.selectionJSON.hasOwnProperty('data'))
+      ? this.selectionJSON.data.map(s => (s.selection === undefined)
+        ? []
+        : s.selection).flat()
+      : [];
+    this.exclusion = (this.selectionJSON.hasOwnProperty('data'))
+      ? this.selectionJSON.data.map(s => (s.exclusion === undefined)
+        ? []
+        : s.exclusion).flat()
+      : [];
   }
 
   _getTopicPath(topicId) {
     let topic = this._getTopic(topicId);
-    let path = (topic && topic.broader)? this._getTopicPath(topic.broader[0].id) : [];
+    let path = (topic && topic.broader) ? this._getTopicPath(topic.broader[0].id) : [];
     path.push(topicId);
     return path;
   }
 
   _getItemTopicsPaths(item) {
-    return (item.topic||[]).map(t => this._getTopicPath(t.id));
+    return (item.topic || []).map(t => this._getTopicPath(t.id));
   }
 
   _getRecursiveItemTopics(item) {
@@ -251,8 +259,16 @@ function includes(array1, array2, array3, union) {
   let arrayHasValue = array2.map(e => set1.has(e));
   let arrayDontHaveValue = array3.map(e => set1.has(e));
   if (union)
-    return arrayHasValue.reduce((c1, c2) => c1 || c2, false) || ((array3.length > 0)?!arrayDontHaveValue.reduce((c1, c2) => c1 || c2, false):false);
-  return arrayHasValue.reduce((c1, c2) => c1 && c2, true) && ((array3.length > 0)?!arrayDontHaveValue.reduce((c1, c2) => c1 && c2, true):true);
+    return arrayHasValue.reduce((c1, c2) => c1 || c2, false)
+      || ((array3.length > 0)
+        ? !arrayDontHaveValue.reduce((c1, c2) => c1 || c2, false)
+        : false
+      );
+  return arrayHasValue.reduce((c1, c2) => c1 && c2, true)
+    && ((array3.length > 0)
+      ? !arrayDontHaveValue.reduce((c1, c2) => c1 && c2, true)
+      : true
+    );
 }
 
 function push(map, topicId, itemId) {

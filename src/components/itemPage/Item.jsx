@@ -161,21 +161,21 @@ class Item extends Component {
     return hypertopic.getView(uri).then((data) => {
       let item = data[params.corpus][params.item];
       let itemTopics = (item.topic) ? groupBy(item.topic, ['viewpoint']) : {};
-      let topics=this.state.item.topic || {};
+      let topics = this.state.item.topic || {};
       topics = (itemTopics.length > 0) ? topics : {};
       for (let id in itemTopics) {
-        topics[id]=itemTopics[id];
+        topics[id] = itemTopics[id];
       }
-      item.topic=topics;
+      item.topic = topics;
       this.setState({item});
     }).catch(e => console.error(e.message))
       .then(() => hypertopic.getView(`/user/${SETTINGS.user}`))
       .then((data) => {
         let user = data[SETTINGS.user] || {};
         if (user.viewpoint) {
-          let topic=this.state.item.topic;
+          let topic = this.state.item.topic;
           for (let vp of user.viewpoint) {
-            topic[vp.id]=topic[vp.id] || [];
+            topic[vp.id] = topic[vp.id] || [];
           }
           this.setState({topic});
         }
@@ -191,30 +191,30 @@ class Item extends Component {
   _getAttributeCreationForm() {
     let classes = ['AttributeForm', 'input-group'];
 
-    let attributeInputChange=(e) => {
+    let attributeInputChange = (e) => {
       this.setState({ attributeInputValue: e.target.value });
     };
 
-    let attributeInputChangeKeyDown=(e) => {
+    let attributeInputChangeKeyDown = (e) => {
       if (e.key === 'Escape') {
         this.setState({ attributeInputValue: '' });
       }
     };
 
-    let attributeInputFocus=(e) => {
+    let attributeInputFocus = (e) => {
       if (this.blurTimeout) {
-        this.blurTimeout=clearTimeout(this.blurTimeout);
+        this.blurTimeout = clearTimeout(this.blurTimeout);
       }
       this.setState({ attributeInputFocus: true });
     };
 
-    let attributeInputBlur=(e) => {
-      this.blurTimeout=setTimeout(() => {
+    let attributeInputBlur = (e) => {
+      this.blurTimeout = setTimeout(() => {
         this.setState({ attributeInputFocus: false });
       }, 200);
     };
 
-    var valid=false;
+    let valid = false;
 
     if (!this.state.attributeInputFocus) {
       classes.push('inactive');
@@ -228,15 +228,15 @@ class Item extends Component {
       }
     }
 
-    var placeholder= t`Ajouter un attribut et une valeur...`;
+    let placeholder = t`Ajouter un attribut et une valeur...`;
     if (this.state.attributeInputFocus) {
-      placeholder= t`attribut : valeur`;
+      placeholder = t`attribut : valeur`;
     }
 
     return (
       <form onSubmit={this._submitAttribute} className={classes.join(' ')}>
         <div className="attributeInput">
-          <input ref={(input) => this.attributeInput=input} value={this.state.attributeInputValue}
+          <input ref={(input) => this.attributeInput = input} value={this.state.attributeInputValue}
             onChange={attributeInputChange} onKeyDown={attributeInputChangeKeyDown}
             onFocus={attributeInputFocus} onBlur={attributeInputBlur}
             id="new-attribute" className="form-control" placeholder={i18n._(placeholder)} type="text" />
@@ -255,7 +255,7 @@ class Item extends Component {
   }
 
   _setAttribute = async (key, value) => {
-    if (key!=='' && value!=='') {
+    if (key !== '' && value !== '') {
       return new Hypertopic((await conf).services)
         .item({
           _id: this.props.match.params.item,
@@ -263,7 +263,7 @@ class Item extends Component {
         })
         .setAttributes({[key]: [value]})
         .then(_ => this.setState(previousState => {
-          previousState.item[key]=[value];
+          previousState.item[key] = [value];
           return previousState;
         }))
         .catch((x) => console.error(x.message));

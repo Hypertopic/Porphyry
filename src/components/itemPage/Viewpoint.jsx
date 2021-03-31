@@ -26,13 +26,13 @@ class Viewpoint extends React.Component {
 
   onTopicInputFocus = (event) => {
     if (this.blurTimeout) {
-      this.blurTimeout=clearTimeout(this.blurTimeout);
+      this.blurTimeout = clearTimeout(this.blurTimeout);
     }
     this.setState({ hasFocus: true });
   }
 
   onTopicInputBlur = (event) => {
-    this.blurTimeout=setTimeout(() => {
+    this.blurTimeout = setTimeout(() => {
       this.setState({ hasFocus: false });
     }, 200);
   }
@@ -96,7 +96,7 @@ class Viewpoint extends React.Component {
         </div>
       );
     }
-    const canValidateTopic=this.state.currentSelection || this.state.newTopic || this.state.topicInputvalue.length > 2;
+    const canValidateTopic = this.state.currentSelection || this.state.newTopic || this.state.topicInputvalue.length > 2;
     let alreadyAssigned = this.props.topics.map(x => x.id);
     let candidates = new Topics(this.state.topics).getAllPaths()
       .filter(x => !alreadyAssigned.includes(x.id));
@@ -188,29 +188,29 @@ class Viewpoint extends React.Component {
     let hypertopic = new Hypertopic((await conf).services);
     return hypertopic.get({ _id: this.props.id })
       .then(x => {
-        var topicTree=new TopicTree(x.topics);
-        var newParent=parent || 'root';
-        var newTopic=topicTree.newChildren(newParent);
-        newTopic.name=name;
-        newId=newTopic.id;
+        let topicTree = new TopicTree(x.topics);
+        let newParent = parent || 'root';
+        let newTopic = topicTree.newChildren(newParent);
+        newTopic.name = name;
+        newId = newTopic.id;
         delete newTopic.id;
-        x.topics=topicTree.topics;
+        x.topics = topicTree.topics;
         return x;
       })
       .then(hypertopic.post)
       .then(_ => {
         this.setState(previousState => {
-          let newTopic={
+          let newTopic = {
             id: newId,
             name: [name]
           };
           if (parent) {
-            newTopic.broader=[{
+            newTopic.broader = [{
               id: parent,
               name: previousState.topics[parent].name
             }];
           }
-          previousState.topics[newId]=newTopic;
+          previousState.topics[newId] = newTopic;
           return previousState;
         });
       })
