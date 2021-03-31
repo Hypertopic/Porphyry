@@ -115,13 +115,14 @@ class Viewpoint extends React.Component {
               <button type="button" className="btn btn-sm ValidateButton btn" onClick={() => {
                   if (this.state.newTopic && (this.state.currentSelection || !this.state.topicInputvalue)) {
                     var parentId;
-                    if (this.state.currentSelection) parentId=this.state.currentSelection.id
+                    if (this.state.currentSelection)
+                      parentId = this.state.currentSelection.id;
                     this.createTopic(this.state.newTopic, parentId)
                       .then(newId => {
                         this.updatingTopicList(
                           newId,
                           this.props.id
-                        )
+                        );
                       })
                       .then(this.clearInput);
                   } else {
@@ -208,7 +209,7 @@ class Viewpoint extends React.Component {
           }
           previousState.topics[newId]=newTopic;
           return previousState;
-        })
+        });
       })
       .then(() => newId);
   }

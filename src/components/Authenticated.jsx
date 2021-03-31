@@ -9,7 +9,7 @@ class Authenticated extends Component {
     this.state = {
       user: '',
       ask: false
-    }
+    };
     this.handleAsk = this.handleAsk.bind(this);
     this.handleLogin = this.handleLogin.bind(this);
     this.handleLogout = this.handleLogout.bind(this);
@@ -43,7 +43,7 @@ class Authenticated extends Component {
     return this.props.conf.then(x => {
       options = options || {};
       options.credentials = 'include';
-      return fetch(x.services[0] + '/_session',  options)
+      return fetch(x.services[0] + '/_session',  options);
     });
   }
 
@@ -81,7 +81,7 @@ class Authenticated extends Component {
     })
       .then(x => {
         if (!x.ok) throw new Error('Bad credentials!');
-        this.setState({user})
+        this.setState({user});
       })
       .catch(() => this.setState({user: ''}));
   }

@@ -190,7 +190,7 @@ class Portfolio extends Component {
       }
       this.setState({viewpoints});
       return data;
-    })
+    });
   }
 
   async _fetchItems(hypertopic) {
@@ -212,7 +212,7 @@ class Portfolio extends Component {
         }
       }
       this.setState({items});
-    })
+    });
   }
 
   async _fetchAll() {

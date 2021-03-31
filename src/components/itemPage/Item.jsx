@@ -10,7 +10,7 @@ import Header from '../Header.jsx';
 import SameNameBlock from './SameNameBlock.jsx';
 import { DiscussionEmbed } from 'disqus-react';
 import { t, Trans } from '@lingui/macro';
-import { i18n } from '../../index.js'
+import { i18n } from '../../index.js';
 
 const HIDDEN = ['topic', 'resource', 'thumbnail', 'item'];
 
@@ -111,7 +111,7 @@ class Item extends Component {
     return fetch(SERVICE)
       .then(response => response.json())
       .then(data => {
-        this.setState({update_seq: data.update_seq})
+        this.setState({update_seq: data.update_seq});
       });
   }
 
@@ -134,16 +134,16 @@ class Item extends Component {
             this.eventSource.onmessage = e => {
               let data = JSON.parse(e.data);
               if (this.state.update_seq !== data.seq){
-                this.setState({update_seq: data.seq})
+                this.setState({ update_seq: data.seq });
                 if (this.props.match.params.item === data.id){
                   this._fetchItem();
                 }
               }
-            }
+            };
           } else {
             console.error('eventSource is undefined, updates are impossible');
           }
-        })
+        });
       });
     }
   }
@@ -194,27 +194,27 @@ class Item extends Component {
     let classes = ['AttributeForm', 'input-group'];
 
     let attributeInputChange=(e) => {
-    }
       this.setState({ attributeInputValue: e.target.value });
+    };
 
     let attributeInputChangeKeyDown=(e) => {
       if (e.key === 'Escape') {
         this.setState({ attributeInputValue: '' });
       }
-    }
+    };
 
     let attributeInputFocus=(e) => {
       if (this.blurTimeout) {
         this.blurTimeout=clearTimeout(this.blurTimeout);
       }
-    }
       this.setState({ attributeInputFocus: true });
+    };
 
     let attributeInputBlur=(e) => {
       this.blurTimeout=setTimeout(() => {
         this.setState({ attributeInputFocus: false });
       }, 200);
-    }
+    };
 
     var valid=false;
 
@@ -225,7 +225,7 @@ class Item extends Component {
       if (key && value) {
         valid = true;
         if (this.state.item[key]) {
-          classes.push('modify')
+          classes.push('modify');
         }
       }
     }
@@ -266,7 +266,7 @@ class Item extends Component {
         .setAttributes({[key]: [value]})
         .then(_ => this.setState(previousState => {
           previousState.item[key]=[value];
-          return previousState
+          return previousState;
         }))
         .catch((x) => console.error(x.message));
     }
@@ -315,7 +315,7 @@ class Item extends Component {
             id: topicToAssign
           });
           return newState;
-        })
+        });
       })
       .catch(error => console.error(error));
   };
