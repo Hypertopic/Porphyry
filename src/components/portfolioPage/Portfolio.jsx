@@ -164,7 +164,7 @@ class Portfolio extends Component {
     this.setState({selectedItems, topicsItems});
   }
 
-  async _fetchUser(SETTINGS, hypertopic){
+  async _fetchUser(SETTINGS, hypertopic) {
     return hypertopic.getView(`/user/${SETTINGS.user}`)
     .then(data => {
       let user = data[SETTINGS.user] || {};

@@ -123,17 +123,17 @@ class Item extends Component {
   }
 
   componentDidMount() {
-    if (!this.eventSource){
+    if (!this.eventSource) {
       this._fetch_update_seq();
       let self = this;
       this._fetchItem().then(() => {
         this.initEventSource().then(() => {
-          if (self.eventSource){
+          if (self.eventSource) {
             this.eventSource.onmessage = e => {
               let data = JSON.parse(e.data);
-              if (this.state.update_seq !== data.seq){
+              if (this.state.update_seq !== data.seq) {
                 this.setState({ update_seq: data.seq });
-                if (this.props.match.params.item === data.id){
+                if (this.props.match.params.item === data.id) {
                   this._fetchItem();
                 }
               }
@@ -147,7 +147,7 @@ class Item extends Component {
   }
 
   componentWillUnmount() {
-    if (this.eventSource){
+    if (this.eventSource) {
       this.eventSource.close();
     }
   }
