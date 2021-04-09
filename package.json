@@ -34,9 +34,7 @@
     "start": "lingui compile && env EXTEND_ESLINT=true react-scripts start",
     "clean": "rm -f src/locales/*/messages.js && rm -rf build src/locales/_build",
     "build": "lingui compile && react-scripts build",
-    "preprod": "serve -s build -p 3000",
-    "test": "cucumber --format summary --retry 2 --fail-fast",
-    "eject": "react-scripts eject"
+    "preprod": "serve -s build -p 3000"
   },
   "lingui": {
     "localeDir": "src/locales/",
