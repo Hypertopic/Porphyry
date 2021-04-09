@@ -1,14 +1,3 @@
-Soit("{string} le portfolio spécifié dans la configuration") do |portfolio|
-  case portfolio
-  when "vitraux"
-    true #current configuration
-  when "indéfini"
-    pending "alternate configuration"
-  else
-    false
-  end
-end
-
 Soit("{string} le portfolio ouvert") do |portfolio|
   visit "/"
 end

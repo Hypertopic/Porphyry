@@ -1,15 +1,3 @@
-Alors("le titre affiché est {string}") do |portfolio|
-  expect(page).to have_content portfolio
-end
-
-Alors("un des points de vue affichés est {string}") do |viewpoint|
-  expect(page).to have_content viewpoint
-end
-
-Alors("un des corpus affichés est {string}") do |corpus|
-  expect(page).to have_content corpus
-end
-
 Alors ("l'item {string} est affiché") do |item|
   expect(page).to have_content item
 end
