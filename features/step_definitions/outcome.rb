@@ -28,13 +28,6 @@ Alors("{string} mène à une page intitulée {string}") do |uri, title|
   expect(page.title).to have_content title
 end
 
-Alors("la liste d'items est affichée dans cet ordre") do |table|
-  results = page.all('div.Item div').map do |div|
-    [div.text]
-  end
-  table.diff!(results)
-end
-
 Alors("l'attribut {string} est sélectionné") do |attribute|
   expect(find('.TopicTag')).to have_content attribute
 end
