@@ -101,7 +101,7 @@ msgid "Se déconnecter"
 msgstr "Log out"
 
 #: src/components/portfolioPage/Status.jsx:26
-msgid "Thème inconnu"
+msgid "Rubrique inconnue"
 msgstr "Unknown topic"
 
 #: src/components/portfolioPage/Status.jsx:10

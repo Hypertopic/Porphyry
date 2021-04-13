@@ -38,7 +38,7 @@ Quand("l'utilisateur indique {string} comme nouvelle rubrique du point de vue {s
   end
 end
 
-Quand("l'utilisateur indique {string} pour la catégorie {string} du point de vue {string}") do |pattern, topic, viewpoint|
+Quand("l'utilisateur indique {string} pour la rubrique {string} du point de vue {string}") do |pattern, topic, viewpoint|
   within '.Viewpoint', text: viewpoint do
     find('input').send_keys pattern
     click_link(topic, href: nil)

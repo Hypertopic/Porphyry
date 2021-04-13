@@ -101,8 +101,8 @@ msgid "Se déconnecter"
 msgstr "Se déconnecter"
 
 #: src/components/portfolioPage/Status.jsx:26
-msgid "Thème inconnu"
-msgstr "Thème inconnu"
+msgid "Rubrique inconnue"
+msgstr "Rubrique inconnue"
 
 #: src/components/portfolioPage/Status.jsx:10
 msgid "Tous les items"

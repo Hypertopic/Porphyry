@@ -23,7 +23,7 @@ class Status extends Component {
         .map(
           t =>
             (t.topic === null)
-              ? <Trans>Thème inconnu</Trans>
+              ? <Trans>Rubrique inconnue</Trans>
               : <Badge exclusion={t.excluded} id={t.id} name={t.topic.name} _changeItemState={this._changeItemState}/>
         );
       status.push(topicsHTML.map((e, i) => i < topicsHTML.length - 1 ? [e, <Button topics={topics} selectionJSON={this.props.selectionJSON} _changeUnionState={this._changeUnionState}/>] : [e]).reduce((a, b) => a.concat(b))
