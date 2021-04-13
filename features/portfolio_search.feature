@@ -1,8 +1,8 @@
 #language: fr
 
-Fonctionnalité: Sélectionner des items en fonction d'un attribut donné
+Fonctionnalité: Sélectionner des items en cherchant
 
-Scénario: Recherche par attribut
+Scénario: une valeur d'attribut
 
   Soit "vitraux" le portfolio ouvert
   Et "AXN 009" un des items affichés
