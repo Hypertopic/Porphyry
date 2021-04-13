@@ -44,12 +44,3 @@ def getUUID(name)
   return uuid
 end
 
-def getPassword(username)
-  password = nil
-  case username
-  when "alice"
-    password = "whiterabbit"
-  end
-  return password
-end
-

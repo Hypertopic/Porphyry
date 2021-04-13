@@ -26,12 +26,12 @@ Soit("{string} les rubriques sélectionnées") do |topics|
   visit uri
 end
 
-Soit ("l'utilisateur {string} connecté") do |username|
+Soit("l'utilisateur est connecté") do
   click_on 'Se connecter...'
-  fill_in placeholder: "nom d'utilisateur", with: username
-  fill_in placeholder: 'mot de passe', with: getPassword(username)
+  fill_in placeholder: "nom d'utilisateur", with: 'alice'
+  fill_in placeholder: 'mot de passe', with: 'whiterabbit'
   click_on 'Se connecter'
-  expect(page).to have_content username
+  expect(page).to have_content 'alice'
 end
 
 Soit("{string} l'item affiché") do |item|
