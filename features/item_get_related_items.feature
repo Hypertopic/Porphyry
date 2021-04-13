@@ -28,4 +28,4 @@ Scénario: par un de leurs attributs
   Alors l'attribut "spatial : Église Saint-Nizier, Troyes" est sélectionné
   Et l'item "SNZ 005" est affiché
   Et l'item "SNZ 006" est affiché
-  Et l'item "SM 001 n" n'est pas affiché
+  Mais l'item "SM 001 n" n'est pas affiché

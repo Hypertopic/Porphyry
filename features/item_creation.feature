@@ -2,8 +2,6 @@
 
 Fonctionnalité: Créer un item
 
-Contexte:
-
 Scénario:
     Soit "vitraux" le portfolio ouvert
     Et l'utilisateur est connecté
