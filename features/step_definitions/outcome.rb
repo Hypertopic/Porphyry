@@ -2,7 +2,7 @@ Alors ("l'item {string} est affiché") do |item|
   expect(page).to have_content item
 end
 
-Alors ("l'item {string} n'est pas affiché") do |item|
+Alors ("l'item {string} est caché") do |item|
   expect(page).not_to have_content item
 end
 

@@ -9,4 +9,5 @@ Scénario: une valeur d'attribut
   Et "SJ 001" un des items affichés
   Quand l'utilisateur recherche "auxon" puis choisit "spatial : Église Saint-Loup, Auxon"
   Alors l'item "AXN 009" est affiché
-  Mais l'item "SJ 001" n'est pas affiché
+  Mais l'item "SJ 001" est caché
+
