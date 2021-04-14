@@ -13,9 +13,9 @@ Quand ("l'utilisateur crée un item {string} dans le corpus {string}") do |name,
   click_on 'validateButton-undefined'
 end
 
-Quand ("l'utilisateur sélectionne {string} entre la rubrique {string} et la rubrique {string}") do |union, topic1, topic2|
+Quand ("l'utilisateur change l'opérateur entre la rubrique {string} et la rubrique {string}") do |topic1, topic2|
   within('.Status') do
-    find(:xpath, "//span[contains(., #{topic1})]/following-sibling::button", text: union, match: :first).click
+    find(:xpath, "//span[contains(., #{topic1})]/following-sibling::button", match: :first).click
   end
 end
 

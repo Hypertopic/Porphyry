@@ -57,7 +57,7 @@ Scénario: en remplaçant le ET par un OU dans la sélection
   Et "SNZ 005" un des items cachés
   Et "SNZ 006" un des items cachés
   Et "SR 005" un des items cachés
-  Quand l'utilisateur sélectionne "Et" entre la rubrique "1518" et la rubrique "vers 1520"
+  Quand l'utilisateur change l'opérateur entre la rubrique "1518" et la rubrique "vers 1520"
   Alors l'item "SM 008 g" est affiché
   Et l'item "SNZ 006" est affiché
   Mais l'item "PSM 002" est caché
