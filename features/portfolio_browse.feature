@@ -1,8 +1,8 @@
 #language: fr
 
-Fonctionnalité: Feuilleter un portfolio
+Fonctionnalité: Combiner les critères de sélection
 
-Scénario: en ajoutant une rubrique à la sélection
+Scénario: en ajoutant une rubrique
 
   Soit "Abram/Abraham" les rubriques sélectionnées
   Et "PSM 002" un des items affichés
@@ -24,7 +24,7 @@ Scénario: en ajoutant une rubrique à la sélection
   Et l'item "SNZ 005" est caché
   Et l'item "SNZ 006" est caché
 
-Scénario: en excluant une rubrique dans la sélection
+Scénario: en excluant une rubrique
 
   Soit "Abram/Abraham|XIXe s." les rubriques sélectionnées
   Et "SM 001 m" un des items affichés
@@ -46,7 +46,7 @@ Scénario: en excluant une rubrique dans la sélection
   Et l'item "SM 001 n" est caché
   Et l'item "SR 005" est caché
 
-Scénario: en remplaçant le ET par un OU dans la sélection
+Scénario: en remplaçant le ET par un OU
 
   Soit "Abram/Abraham|1518|vers 1520" les rubriques sélectionnées
   Et "PSM 002" un des items cachés
