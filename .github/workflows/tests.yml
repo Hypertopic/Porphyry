@@ -4,6 +4,9 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
+      - name: Add the current IP address, long hostname and short hostname record to /etc/hosts file
+        run: |
+          echo -e "$(ip addr show eth0 | grep "inet\b" | awk '{print $2}' | cut -d/ -f1)\t$(hostname -f) $(hostname -s)" | sudo tee -a /etc/hosts
       - uses: actions/checkout@v2
       - name: Install and run Argos with proxy and test data
         run: |
