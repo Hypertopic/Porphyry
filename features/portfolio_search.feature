@@ -38,3 +38,12 @@ Scénario: un type d'attribut
   Alors l'item "PSM 002" est affiché
   Mais l'item "AXN 009" est caché
 
+Scénario: une rubrique
+
+  Soit "vitraux" le portfolio ouvert
+  Et "SM 001 n" un des items affichés
+  Et "SM 008 g" un des items affichés
+  Quand l'utilisateur recherche "larcher" puis choisit "Artiste > Vincent-Larcher"
+  Alors l'item "SM 001 n" est affiché
+  Mais l'item "SM 008 g" est caché
+
