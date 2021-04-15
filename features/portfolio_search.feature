@@ -11,3 +11,11 @@ Scénario: une valeur d'attribut
   Alors l'item "AXN 009" est affiché
   Mais l'item "SJ 001" est caché
 
+Scénario: valeur d'attribut Denis Krieger
+
+  Soit "vitraux" le portfolio ouvert
+  Et "PSM 002" un des items affichés
+  Et "SR 005" un des items affichés
+  Quand l'utilisateur recherche "creator" puis choisit "creator : Denis Krieger"
+  Alors l'item "PSM 002" est affiché
+  Mais l'item "SR 005" est caché
