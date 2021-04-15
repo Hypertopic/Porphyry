@@ -19,3 +19,12 @@ Scénario: valeur d'attribut Denis Krieger
   Quand l'utilisateur recherche "creator" puis choisit "creator : Denis Krieger"
   Alors l'item "PSM 002" est affiché
   Mais l'item "SR 005" est caché
+
+Scénario: valeur d'attribut Artiste
+
+  Soit "vitraux" le portfolio ouvert
+  Et "SM 001 n" un des items affichés
+  Et "SR 005" un des items affichés
+  Quand l'utilisateur recherche "larcher" puis choisit "Artiste > Vincent-Larcher"
+  Alors l'item "SM 001 n" est affiché
+  Mais l'item "SR 005" est caché
