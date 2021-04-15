@@ -17,3 +17,10 @@ Scénario: un créateur
   Et "PSM 002" un des items affichés
   Quand l'utilisateur recherche "creator" puis choisit "creator : Denis Krieger"
   Alors l'item "PSM 002" est affiché
+
+Scénario: une rubrique
+
+  Soit "vitraux" le portfolio ouvert
+  Et "SM 001 n" un des items affichés
+  Quand l'utilisateur recherche "larcher" puis choisit "Artiste > Vincent-Larcher"
+  Alors l'item "SM 001 n" est affiché
