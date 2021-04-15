@@ -20,3 +20,4 @@ Scénario: une valeur d'attribut
     Quand l'utilisateur recherche "creator" puis choisit "creator : Denis Krieger"
     Alors l'item "PSM 002" est affiché
     Mais l'item "SJ 001" est caché
+    
