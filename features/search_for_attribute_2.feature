@@ -1,6 +1,6 @@
 #language: fr
 
-Fonctionnalité: larcher pour Artiste > Vincent-Larcher 
+Fonctionnalité: larcher pour Artiste >  Vincent-Larcher  
 
 Scénario: une valeur d'attribut
 
