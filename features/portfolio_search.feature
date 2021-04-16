@@ -28,3 +28,28 @@ Fonctionnalité: Sélectionner des items en cherchant
     Quand l'utilisateur recherche "larcher" puis choisit "Artiste > Vincent-Larcher"
     Alors l'item "SM 001 n" est affiché
     Mais l'item "SJ 001" est caché
+
+  Scénario: en sélectionnant négativement des rubriques
+
+    Soit "Artiste|Datation" les rubriques sélectionnées négativement
+    Et "AXN 009" un des items affichés
+    Et "PSM 002" un des items affichés
+    Et "SJ 001" un des items affichés
+    Et "SNZ 005" un des items affichés
+    Et "SNZ 009" un des items affichés
+    Et "SM 001 m" un des items cachés
+    Et "SM 008 g" un des items cachés
+    Et "SNZ 006" un des items cachés
+    Et "SR 005" un des items cachés
+    Quand l'utilisateur change l'opérateur entre la rubrique "Artiste" et la rubrique "Datation"
+    Alors l'item "SM 008 g" est affiché
+    Et "AXN 009" un des items affichés
+    Et "AXN 009" un des items affichés
+    Et "PSM 002" un des items affichés
+    Et "SJ 001" un des items affichés
+    Et "SM001 m" un des items affichés
+    Et "SM 008 g" un des items affichés
+    Et "SNZ 005" un des items affichés
+    Et "SNZ 006" un des items affichés
+    Et "SNZ 009" un des items affichés
+    Et "SR 005" un des items affichés
