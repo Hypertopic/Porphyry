@@ -26,6 +26,8 @@ Soit("{string} les rubriques sélectionnées") do |topics|
   visit uri
 end
 
+
+
 Soit("l'utilisateur est connecté") do
   click_on 'Se connecter...'
   fill_in placeholder: "nom d'utilisateur", with: 'alice'
@@ -49,4 +51,12 @@ end
 
 Soit("la langue du navigateur est {string}") do |language|
   page.driver.add_headers("Accept-Language" => language)
+end
+
+Soit("{string} les rubriques sélectionnées négativement") do |topics|
+  visit '/'
+  topics.split('|').each do |topic|
+     click_on topic
+     click_on topic
+  end
 end
