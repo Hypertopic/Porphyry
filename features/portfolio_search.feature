@@ -11,3 +11,10 @@ Scénario: une valeur d'attribut
   Alors l'item "AXN 009" est affiché
   Mais l'item "SJ 001" est caché
 
+
+Scénario: une rubrique 
+
+  Soit "vitraux" le portfolio ouvert
+  Quand l'utilisateur recherche "larcher" puis choisit "Artiste > Vincent-Larcher"
+  Alors l'item "SM 001 n" est affiché
+
