@@ -66,3 +66,20 @@ Scénario: en remplaçant le ET par un OU
   Et l'item "SM 001 n" est caché
   Et l'item "SNZ 005" est caché
   Et l'item "SR 005" est caché
+
+Scénario: en remplaçant le ET par un OU avec des négations
+
+  Soit "Datation|Personnages|Récits" les rubriques sélectionnées négativement
+  Et "SJ 001" un des items cachés
+  Et "SM 001 m" un des items cachés
+  Et "SM 001 n" un des items cachés
+  Et "SM 008 g" un des items cachés
+  Et "SNZ 006" un des items cachés
+  Et "SR 005" un des items cachés
+  Quand l'utilisateur change l'opérateur entre la rubrique "Datation" et la rubrique "Personnages"
+  Alors l'item "SJ 001" est affiché
+  Et l'item "SNZ 005" est affiché
+  Mais l'item "SM 001 g" est caché
+  Et l'item "SM 001 n" est caché
+  Et l'item "SR 005" est caché
+  Et l'item "SM 001 m" est caché

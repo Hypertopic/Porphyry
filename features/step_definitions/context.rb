@@ -26,6 +26,15 @@ Soit("{string} les rubriques sélectionnées") do |topics|
   visit uri
 end
 
+Soit("{string} les rubriques sélectionnées négativement") do |topics|
+  pending
+  visit "/"
+  topics.split("|").each do |topic|
+      click_on topic
+      click_on topic
+  end
+end
+
 Soit("l'utilisateur est connecté") do
   click_on 'Se connecter...'
   fill_in placeholder: "nom d'utilisateur", with: 'alice'
