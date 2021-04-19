@@ -11,6 +11,7 @@ import SearchBar from './SearchBar.jsx';
 import ViewpointCreator from './ViewpointCreator.jsx';
 import { Trans } from '@lingui/macro';
 import { Items } from '../../model.js';
+import Selection from '../../Selection.js';
 
 class Portfolio extends Component {
   constructor() {
@@ -41,7 +42,7 @@ class Portfolio extends Component {
             <SearchBar viewpoints={this.state.viewpoints} items={this.state.items} />
           </div>
           <div className="col-md-6">
-            <Status selectionJSON={this.selectionJSON} candidates={candidates} />
+            <Status candidates={candidates} query={this.query} />
           </div>
         </div>
         <div className="container-fluid">
@@ -109,23 +110,11 @@ class Portfolio extends Component {
 
   _updateSelection() {
     try {
-      this.selectionJSON = JSON.parse(queryString.parse(window.location.search).t);
+      this.query = new Selection();
+      let json = queryString.parse(window.location.search).t;
+      this.query.setJSON(json);
     } catch (e) {
-      this.selectionJSON = {
-        type: 'intersection',
-        data: []
-      };
     }
-    this.selection = (this.selectionJSON.hasOwnProperty('data'))
-      ? this.selectionJSON.data.map(s => (s.selection === undefined)
-        ? []
-        : s.selection).flat()
-      : [];
-    this.exclusion = (this.selectionJSON.hasOwnProperty('data'))
-      ? this.selectionJSON.data.map(s => (s.exclusion === undefined)
-        ? []
-        : s.exclusion).flat()
-      : [];
   }
 
   _getTopicPath(topicId) {
@@ -150,17 +139,24 @@ class Portfolio extends Component {
       .map(([key, value]) => key.concat(' : ', value));
   }
 
-  _isSelected(item, list) {
-    let itemHasValue = list.data.map(l => includes(this._getRecursiveItemTopics(item).concat(this._getItemAttributes(item)), (l.selection || []), (l.exclusion || []), (l.type === 'union')));
-    if (list.type === 'union')
+  _isSelected(item) {
+    let itemHasValue = this.query.getClauses().map(l =>
+      includes(
+        this._getRecursiveItemTopics(item).concat(this._getItemAttributes(item)),
+        (l.selection || []),
+        (l.exclusion || []),
+        (l.type === 'union')
+      )
+    );
+    if (this.query.getOperator() === 'union')
       return itemHasValue.reduce((c1, c2) => c1 || c2, false);
     return itemHasValue.reduce((c1, c2) => c1 && c2, true);
   }
 
   _updateSelectedItems() {
     let selectedItems;
-    if (this.selectionJSON.data.length > 0)
-      selectedItems = this.state.items.filter(e => this._isSelected(e, this.selectionJSON));
+    if (!this.query.isEmpty())
+      selectedItems = this.state.items.filter(e => this._isSelected(e));
     else
       selectedItems = this.state.items;
     let topicsItems = new Map();
@@ -236,7 +232,8 @@ class Portfolio extends Component {
     return this.state.viewpoints.sort(by('name')).map((v, i) =>
       <div key={v.id}>
         {i > 0 && <hr/>}
-        <Viewpoint viewpoint={v} selection={this.selection} exclusion={this.exclusion} selectionJSON={this.selectionJSON}
+        <Viewpoint viewpoint={v}
+          query={this.query}
           topicsItems={this.state.topicsItems} />
       </div>
     );
