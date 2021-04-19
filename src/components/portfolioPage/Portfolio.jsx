@@ -140,17 +140,8 @@ class Portfolio extends Component {
   }
 
   _isSelected(item) {
-    let itemHasValue = this.query.getClauses().map(l =>
-      includes(
-        this._getRecursiveItemTopics(item).concat(this._getItemAttributes(item)),
-        (l.selection || []),
-        (l.exclusion || []),
-        (l.type === 'union')
-      )
-    );
-    if (this.query.getOperator() === 'union')
-      return itemHasValue.reduce((c1, c2) => c1 || c2, false);
-    return itemHasValue.reduce((c1, c2) => c1 && c2, true);
+    let filter = this.query.toFilter();
+    return filter(this._getRecursiveItemTopics(item).concat(this._getItemAttributes(item)));
   }
 
   _updateSelectedItems() {
@@ -250,22 +241,6 @@ class Portfolio extends Component {
       />
     );
   }
-}
-function includes(array1, array2, array3, union) {
-  let set1 = new Set(array1);
-  let arrayHasValue = array2.map(e => set1.has(e));
-  let arrayDontHaveValue = array3.map(e => set1.has(e));
-  if (union)
-    return arrayHasValue.reduce((c1, c2) => c1 || c2, false)
-      || ((array3.length > 0)
-        ? !arrayDontHaveValue.reduce((c1, c2) => c1 || c2, false)
-        : false
-      );
-  return arrayHasValue.reduce((c1, c2) => c1 && c2, true)
-    && ((array3.length > 0)
-      ? !arrayDontHaveValue.reduce((c1, c2) => c1 && c2, true)
-      : true
-    );
 }
 
 function push(map, topicId, itemId) {
