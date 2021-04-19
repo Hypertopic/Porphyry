@@ -6,19 +6,18 @@ import { Trans } from '@lingui/macro';
 
 class Status extends Component {
   render() {
-    if (this.props.selectionJSON.data.length === 0)
+    let clauses = this.props.query.getClauses();
+    if (clauses.length === 0)
       return <Trans>Tous les items</Trans>;
-
     let status = [];
-
-    this.props.selectionJSON.data.forEach((topics, index) => {
+    clauses.forEach((clause, index) => {
       status.push('(');
-      if (((topics.selection || []).length + (topics.exclusion || []).length) > 1) {
+      if (((clause.selection || []).length + (clause.exclusion || []).length) > 1) {
         status.push();
       }
       let topicsHTML = [
-        ...topics.selection.map(id => ({excluded: false, id, topic: this._getCandidate(id)})),
-        ...topics.exclusion.map(id => ({excluded: true, id, topic: this._getCandidate(id)}))]
+        ...clause.selection.map(id => ({excluded: false, id, topic: this._getCandidate(id)})),
+        ...clause.exclusion.map(id => ({excluded: true, id, topic: this._getCandidate(id)}))]
         .sort(filter)
         .map(
           t =>
@@ -26,12 +25,12 @@ class Status extends Component {
               ? <Trans>Rubrique inconnue</Trans>
               : <Badge exclusion={t.excluded} id={t.id} name={t.topic.name} _changeItemState={this._changeItemState}/>
         );
-      status.push(topicsHTML.map((e, i) => i < topicsHTML.length - 1 ? [e, <Button topics={topics} selectionJSON={this.props.selectionJSON} _changeUnionState={this._changeUnionState}/>] : [e]).reduce((a, b) => a.concat(b))
+      status.push(topicsHTML.map((e, i) => i < topicsHTML.length - 1 ? [e, <Button clause={clause} _changeUnionState={this._changeUnionState}/>] : [e]).reduce((a, b) => a.concat(b))
       );
       status.push(')');
 
-      if (this.props.selectionJSON.data.length > 1 && index < (this.props.selectionJSON.data.length - 1)) {
-        status.push(<Button topics={this.props.selectionJSON} selectionJSON={this.props.selectionJSON} _changeUnionState={this._changeUnionState}/>);
+      if (clauses.length > 1 && index < (clauses.length - 1)) {
+        status.push(<Button clause={this.props.query.getMainClause()} _changeUnionState={this._changeUnionState}/>);
       }
     });
     return status;
@@ -44,31 +43,17 @@ class Status extends Component {
     return null;
   }
 
-  _changeItemState = (item, toDelete) => {
-    let found = this.props.selectionJSON.data.find(s => (s.selection || []).includes(item) || (s.exclusion || []).includes(item));
-    switchPlace(found, item, toDelete);
-    if ((!Array.isArray(found.selection) || !found.selection.length) && (!Array.isArray(found.exclusion) || !found.exclusion.length))
-      this.props.selectionJSON.data.splice(this.props.selectionJSON.data.indexOf(found), 1);
-    this.props.history.push('/?t=' + JSON.stringify(this.props.selectionJSON));
+  _changeItemState = (criterion, toDelete) => {
+    this.props.query.toggleCriterion(criterion, toDelete);
+    this.props.history.push(this.props.query.toURI());
   };
-  _changeUnionState = (topic) => {
-    topic.type = (topic.type === 'intersection') ? 'union' : 'intersection';
-    this.props.history.push('/?t=' + JSON.stringify(this.props.selectionJSON));
+
+  _changeUnionState = (clause) => {
+    this.props.query.toggleOperator(clause);
+    this.props.history.push(this.props.query.toURI());
   };
 }
 
-function switchPlace(object, item, toDelete) {
-  let index;
-  if ((index = object.selection.indexOf(item)) > -1) {
-    object.selection.splice(index, 1);
-    if (!toDelete)
-      object.exclusion.push(item);
-  } else if ((index = object.exclusion.indexOf(item)) > -1) {
-    object.exclusion.splice(index, 1);
-    if (!toDelete)
-      object.selection.push(item);
-  }
-}
 function filter(first, second) {
   if (first.topic === null && second.topic === null)
     return 0;
