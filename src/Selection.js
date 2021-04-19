@@ -1,3 +1,5 @@
+import parse from 'voll';
+
 let switchPlace = (clause, criterion, toDelete, threeState) => {
   let index;
   if ((index = clause.selection.indexOf(criterion)) > -1) {
@@ -12,6 +14,15 @@ let switchPlace = (clause, criterion, toDelete, threeState) => {
     clause.selection.push(criterion);
   }
 };
+
+let clauseToString = (x) => (
+  (x.data)
+    ? x.data.map((y) => `(${clauseToString(y)})`)
+    : [
+      ...x.selection.map((y) => `'${y}'`),
+      ...x.exclusion.map((y) => `NOT('${y}')`)
+    ]
+).join((x.type === 'intersection') ? ' AND ' : ' OR ');
 
 export default class Selection {
 
@@ -29,6 +40,10 @@ export default class Selection {
   toJSON = () => JSON.stringify(this.selectionJSON);
 
   toURI = () => `/?t=${this.toJSON()}`;
+
+  toBooleanString = () => clauseToString(this.selectionJSON);
+
+  toFilter = () => parse(this.toBooleanString());
 
   getSelected = () => this.selectionJSON.data.map(s => s.selection).flat();
 
