@@ -5,7 +5,6 @@ Fonctionnalité: Combiner les critères de sélection
 Scénario: en ajoutant une rubrique
 
   Soit "Abram/Abraham" les rubriques sélectionnées
-  Et "PSM 002" un des items affichés
   Et "SJ 001" un des items affichés
   Et "SM 001 m" un des items affichés
   Et "SM 001 n" un des items affichés
@@ -66,3 +65,24 @@ Scénario: en remplaçant le ET par un OU
   Et l'item "SM 001 n" est caché
   Et l'item "SNZ 005" est caché
   Et l'item "SR 005" est caché
+
+Scénario: [PENDING] Complex boolean query error 
+
+  Soit "Abram/Abraham|Genèse|XIXe s." les rubriques sélectionnées
+  Et "SM 001 n" un des items affichés
+  Et "SR 005" un des items affichés
+  Quand on sélectionne la rubrique "Abram/Abraham"
+  Et quand on sélectionne la rubrique "Genèse"
+  Et quand on sélectionne la rubrique "XIXe s."
+  Et quand l'utilisateur change l'opérateur entre la rubrique "Abram/Abraham" et la rubrique "Genèse"
+  Et quand l'utilisateur change l'opérateur entre la rubrique "Genèse" et la rubrique "XIXe s." 
+  Alors l'item "PSM 002" est affiché
+  Et l'item "SJ 001" est affiché
+  Et l'item "SM 008 g" est affiché
+  Et l'item "SNZ 005" est affiché
+  Et l'item "SNZ 006" est affiché
+  Et l'item "SM 001 m" est affiché
+  Mais l'item "AXN 009" est caché
+  Et l'item "SMV 129" est caché
+  Et l'item "SNZ 009" est caché
+  

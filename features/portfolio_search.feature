@@ -2,12 +2,12 @@
 
 Fonctionnalité: Sélectionner des items en cherchant
 
-Scénario: une valeur d'attribut
+Scénario: une valeur de rubrique
 
   Soit "vitraux" le portfolio ouvert
-  Et "AXN 009" un des items affichés
-  Et "SJ 001" un des items affichés
-  Quand l'utilisateur recherche "auxon" puis choisit "spatial : Église Saint-Loup, Auxon"
-  Alors l'item "AXN 009" est affiché
-  Mais l'item "SJ 001" est caché
+  Et "SM 001" un des items affichés
+  Et "PSM 002" un des items affichés
+  Quand l'utilisateur recherche "larcher" puis choisit "Artiste > Vincent-Larcher"
+  Alors l'item "SM 001" est affiché
+  Mais l'item "PSM 002" est caché
 
