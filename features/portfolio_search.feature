@@ -11,7 +11,7 @@ Scénario: une valeur d'attribut
   Alors l'item "AXN 009" est affiché
   Mais l'item "SJ 001" est caché
 
-Scénario: une valeur d'attribut
+Scénario: une rubrique 
 
   Soit "vitraux" le portfolio ouvert
   Et "SM 001 n" un des items affichés
