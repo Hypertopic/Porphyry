@@ -50,3 +50,10 @@ end
 Soit("la langue du navigateur est {string}") do |language|
   page.driver.add_headers("Accept-Language" => language)
 end
+
+Soit("{string} les rubriques sélectionnées négativement (Pending)") do |topics|
+  visit '/'
+  topics.split('|').each do |topic|
+     click_on topic
+  end
+end
