@@ -1,5 +1,4 @@
 #language: fr
-
 Fonctionnalité: Combiner les critères de sélection
 
 Scénario: en ajoutant une rubrique
