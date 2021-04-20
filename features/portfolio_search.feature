@@ -10,4 +10,12 @@ Scénario: une valeur d'attribut
   Quand l'utilisateur recherche "auxon" puis choisit "spatial : Église Saint-Loup, Auxon"
   Alors l'item "AXN 009" est affiché
   Mais l'item "SJ 001" est caché
+	
+Scénario: une valeur d'attribut d'astiste
 
+  Soit "vitraux" le portfolio ouvert
+  Et "SM 001 n" un des items affichés
+  Et "SNZ 006" un des items affichés
+  Quand l'utilisateur recherche "larcher" puis choisit "Artiste > Vincent-Larcher"
+  Alors l'item "SM 001 n" est affiché
+  Mais l'item "SNZ 006" est caché
