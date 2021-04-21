@@ -66,3 +66,22 @@ Scénario: en remplaçant le ET par un OU
   Et l'item "SM 001 n" est caché
   Et l'item "SNZ 005" est caché
   Et l'item "SR 005" est caché
+
+
+Scénario: en sélectionnant négativement
+
+  Soit "Artiste|Datation" les rubriques sélectionnées négativement
+  Et "PSM 002" un des items affichés
+  Et "AXN 009" un des items affichés
+  Et "SM 001 m" un des items affichés
+  Et "SM 008 g" un des items affichés
+  Et "SNZ 006" un des items affichés
+  Et "SR 005" un des items affichés
+  Quand l'utilisateur change l'opérateur entre la rubrique "Artiste" et la rubrique "Datation"
+  Alors l'item "SJ 001" est affiché
+  Et l'item "SNZ 005" est affiché
+  Et l'item "SNZ 009" est affiché
+  Mais l'item "SR 005" est caché
+  Et l'item "SM 001 m" est caché
+  Et l'item "SNZ 006" est caché
+ 
