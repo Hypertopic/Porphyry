@@ -11,7 +11,7 @@ Scénario: une valeur d'attribut
   Alors l'item "AXN 009" est affiché
   Mais l'item "SJ 001" est caché
 
-Scénario: une valeur d'attribut créateur
+Scénario: select un element negative
 
     Soit "vitraux" le portfolio ouvert
     Et "PSM 002" un des items affichés
