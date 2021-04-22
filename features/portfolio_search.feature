@@ -19,4 +19,13 @@ Scénario: un attribut
   Quand l'utilisateur recherche "creator" puis choisit "creator : Denis Krieger"
   Alors l'item "PSM 002" est affiché
   Mais l'item "SJ 001" est caché
+  
+Scénario: une rubrique
+
+  Soit "vitraux" le portfolio ouvert
+  Et "SM 001 n" un des items affichés
+  Et "SJ 001" un des items affichés
+  Quand l'utilisateur recherche "larcher" puis choisit "Vincent-Larcher"
+  Alors l'item "SM 001 n" est affiché
+  Mais l'item "SJ 001" est caché
 
