@@ -26,7 +26,7 @@ end
 Quand("l'utilisateur indique {string} comme valeur de l'attribut {string}") do |value, attribute|
   within '.Attributes' do
     fill_in placeholder: 'Ajouter un attribut et une valeur...', with: "#{attribute}:#{value}"
-    click_on class: 'ValidateButton' 
+    click_on class: 'ValidateButton'
   end
 end
 
@@ -57,3 +57,9 @@ Quand("l'utilisateur choisit l'item {string} dans le bloc Items ayant le même n
   end
 end
 
+Soit("{string} les rubriques sélectionnées négativement") do |topics|
+  visit '/'
+  topics.split('|').each do |topic|
+     click_on topic
+  end
+end

@@ -66,3 +66,10 @@ Scénario: en remplaçant le ET par un OU
   Et l'item "SM 001 n" est caché
   Et l'item "SNZ 005" est caché
   Et l'item "SR 005" est caché
+    
+  Scénario: composition ET et OU négativement
+
+    Soit "Vincent Larcher" et "XIXe s." et "XVIe s." les rubrique sélectionnées négativement
+    et "SR 005" un des items cachés
+    et "SNZ 006" un des items cachés
+    et "AXN 009" un des items cachés
