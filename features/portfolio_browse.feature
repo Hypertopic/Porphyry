@@ -66,3 +66,12 @@ Scénario: en remplaçant le ET par un OU
   Et l'item "SM 001 n" est caché
   Et l'item "SNZ 005" est caché
   Et l'item "SR 005" est caché
+
+Scénario: Bug Complex boolean query with "and", "or" and "not"
+
+   Soit "Personnages|Récits|Datation" les rubriques sélectionnées négativement
+   Et "PSM 002" un des items affichés
+   Et "SNZ 005" un des items affichés
+   Quand l'utilisateur change l'opérateur entre la rubrique "Personnage" et la rubrique "Récits"
+   Alors l'item "SNZ 005" est affiché 
+   Et l'item "PSM 002" est affiché
