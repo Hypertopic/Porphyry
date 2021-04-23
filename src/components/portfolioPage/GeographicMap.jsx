@@ -4,6 +4,7 @@ import {Items} from '../../model.js';
 import { GoogleMap, Marker, LoadScript } from '@react-google-maps/api';
 import Geocode from 'react-geocode';
 import memoize from 'mem';
+import Selection from '../../Selection.js';
 
 class GeographicMap extends React.PureComponent {
 
@@ -67,7 +68,7 @@ class GeographicMap extends React.PureComponent {
 
   handleClick = (place_id) => {
     let place = this.state.places.find(x => x.place_id === place_id);
-    let uri = `/?t={"type":"intersection","data":[{"type":"intersection","selection":["spatial : ${place.spatial}"],"exclusion":[]}]}`;
+    let uri = new Selection(`spatial : ${place.spatial}`).toURI();
     this.props.history.push(uri);
   }
 

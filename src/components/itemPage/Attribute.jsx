@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { t } from '@lingui/macro';
 import { i18n } from '../../index.js';
+import Selection from '../../Selection.js';
 
 class Attribute extends React.Component {
 
@@ -100,7 +101,8 @@ function AttributeValue(props) {
       {props.value}
     </a>
   );
-  let uri = `../../?t={"type":"intersection","data":[{"type":"intersection","selection":["${props.name} : ${props.value}"],"exclusion":[]}]}`;
+	let criterion = `${props.name} : ${props.value}`;
+	let uri = `../..${(new Selection(criterion)).toURI()}`;
   return (
     <Link className="Value" to={uri}> {props.value} </Link>
   );
