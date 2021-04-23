@@ -76,7 +76,6 @@ Scénario: en sélectionnant negativement des éléments avec un operateur OU
   Et "SM001 m" un des items cachés
   Et "SM 008g" un des items cachés
   Et "SNZ 005" un des items affichés
-  Et "SNZ 006" un des items cachés
   Et "SNZ 009" un des items affichés
   Et "SR 005" un des items cachés
   Quand l'utilisateur change l'opérateur entre la rubrique "Artiste" et la rubrique "Datation"
@@ -87,7 +86,6 @@ Scénario: en sélectionnant negativement des éléments avec un operateur OU
   Et "SM001 m" un des items affichés
   Et "SM 008g" un des items affichés
   Et "SNZ 005" un des items affichés
-  Et "SNZ 006" un des items affichés
   Et "SNZ 009" un des items affichés
   Et "SR 005" un des items affichés
   Et "AXN 001" un des items cachés
