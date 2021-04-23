@@ -67,10 +67,9 @@ Scénario: en remplaçant le ET par un OU
   Et l'item "SNZ 005" est caché
   Et l'item "SR 005" est caché
 
-Scénario: en sélectionnant negativement des éléments 
+Scénario: en sélectionnant negativement des éléments avec un operateur OU
 
   Soit "Artiste|Datation" les rubriques sélectionnées négativement
-  Et "AXN 009" un des items affichés
   Et "AXN 009" un des items affichés
   Et "PSM 002" un des items affichés
   Et "SJ 001" un des items affichés
@@ -91,3 +90,4 @@ Scénario: en sélectionnant negativement des éléments
   Et "SNZ 006" un des items affichés
   Et "SNZ 009" un des items affichés
   Et "SR 005" un des items affichés
+  Et "AXN 001" un des items cachés
