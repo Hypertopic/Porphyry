@@ -53,6 +53,7 @@ end
 
 
 Soit("{string} les rubriques sélectionnées négativement") do |topics|
+   pending
   visit '/'
   topics.split('|').each do |topic|
      click_on topic
