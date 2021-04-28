@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import Selection from '../../Selection.js';
 
 class TopicPath extends React.Component {
 
@@ -60,7 +61,7 @@ class TopicPath extends React.Component {
   _getTopics() {
     return this.state.path.map(t => {
       let name = t.name || '';
-      let uri = `../../?t={"type":"intersection","data":[{"type":"intersection","selection":["${t.id}"],"exclusion":[]}]}`;
+      let uri = `../..${(new Selection(t.id)).toURI()}`;
       return (
         <Link title={t.id} key={t.id} className="Topic" to={uri}>{name}</Link>
       );
