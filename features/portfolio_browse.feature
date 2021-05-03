@@ -85,7 +85,7 @@ Scénario: en sélectionnant négativement des rubriques
   Et "AXN 009" un des items affichés
   Et "PSM 002" un des items affichés
   Et "SJ 001" un des items affichés
-  Et "SM001 m" un des items affichés
+  Et "SM 001 m" un des items affichés
   Et "SM 008 g" un des items affichés
   Et "SNZ 005" un des items affichés
   Et "SNZ 006" un des items affichés
