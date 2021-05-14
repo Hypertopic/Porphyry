@@ -35,3 +35,7 @@ end
 Alors("la page contient {string}") do |localization|
   expect(page).to have_content localization
 end
+
+Alors("le calque {string} est affiché sur la carte") do
+  pending
+end

@@ -50,3 +50,11 @@ end
 Soit("la langue du navigateur est {string}") do |language|
   page.driver.add_headers("Accept-Language" => language)
 end
+
+Soit("{string} le calque sélectionné") do |calque|
+  pending
+end
+
+Soit("{string} les calques sélectionnés") do |calques|
+  pending
+end
