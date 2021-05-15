@@ -25,14 +25,16 @@
   "devDependencies": {
     "@lingui/cli": "^2.9.2",
     "@lingui/macro": "^2.9.2",
+    "cross-env": "^7.0.3",
     "react-scripts": "^4.0.3",
+    "rimraf": "^3.0.2",
     "serve": "^11.3.2"
   },
   "scripts": {
     "add-locale": "lingui add-locale",
     "extract": "lingui extract",
-    "start": "lingui compile && env EXTEND_ESLINT=true react-scripts start",
-    "clean": "rm -f src/locales/*/messages.js && rm -rf build src/locales/_build",
+    "start": "lingui compile && cross-env EXTEND_ESLINT=true react-scripts start",
+    "clean": "rimraf src/locales/*/messages.js && rimraf build src/locales/_build",
     "build": "lingui compile && react-scripts build",
     "preprod": "serve -s build -p 3000"
   },
