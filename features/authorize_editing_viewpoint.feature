@@ -26,7 +26,7 @@ Alors le menu de modification des points de vue s’affiche
 Scénario : L’utilisateur n’est pas connecté 
 
 Soit l’utilisateur n’est pas connecté 
-Alors le bouton “Modifier un point de vue “ est invisible
+Alors le bouton “Modifier un point de vue “ est invisible 
 
 
 
