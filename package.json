@@ -36,7 +36,8 @@
     "start": "lingui compile && cross-env EXTEND_ESLINT=true react-scripts start",
     "clean": "rimraf src/locales/*/messages.js && rimraf build src/locales/_build",
     "build": "lingui compile && react-scripts build",
-    "preprod": "serve -s build -p 3000"
+    "preprod": "serve -s build -p 3000",
+    "test": "docker run --rm --volume ${PWD}:/app --tty --net=\"host\" --env APP_HOST=\"http://host.docker.internal:3000\" benel/cucumber-capybara --fail-fast --no-source"
   },
   "lingui": {
     "localeDir": "src/locales/",
