@@ -16,7 +16,8 @@ Please check that your pull request is correct:
     - [ ] begin with a contribution type
         - `FEATURE` for a behaviour allowing a user to do something new,
         - `FIX` for a behaviour which has been changed in order to meet user’s expectations,
-        - `TEST` when it concerns an acceptance test,
+        - `SCENARIO` for examples showing a given behaviour,
+        - `TEST` when it concerns an acceptance test of a given behaviour,
         - `PROCESS` for a change in the way the software is built, tested, deployed,
         - `DOC` when it concerns only internal documentation (however it is better to combine it with the contribution that required this documentation change),
     - [ ] be followed by a colon (`:`) with one space after and no space before,
