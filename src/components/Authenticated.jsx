@@ -33,7 +33,7 @@ class Authenticated extends Component {
       );
     }
     return (
-      <div className="Authenticated">
+      <div className="Authenticated d-none d-sm-block">
         <a href="#login" onClick={this.handleAsk}><Trans>Se connecter...</Trans></a>
       </div>
     );
