@@ -15,7 +15,7 @@ class ViewpointCreator extends Component {
   render() {
     return (<div className="text-center">
       <button className="btn btn-light creationButton" onClick={_ => this._goToNewViewpoint()}>
-        <Trans>Nouveau point de vue AAAAAA</Trans>
+        <Trans>Nouveau point de vue</Trans>
       </button>
     </div>);
   }
