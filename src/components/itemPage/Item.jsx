@@ -48,8 +48,8 @@ class Item extends Component {
         <div className="container-fluid">
           <div className="App-content row">
             <div className="col-md-4 p-4">
-              <div className="DescriptionA">
-                <h2 className="h4 font-weight-bold text-center"><Trans>Description</Trans></h2>
+              <div className="Description">
+                <h2 className="h4 font-weight-bold text-center"><Trans>DescriptionA</Trans></h2>
                 <div className="p-3">
                   <div className="Attributes">
                     <h3 className="h4"><Trans>Attributs du document</Trans></h3>
