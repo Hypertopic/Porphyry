@@ -2,7 +2,6 @@ import React from 'react';
 import { withRouter } from 'react-router-dom';
 import {Items} from '../../model.js';
 import { GoogleMap, Marker, LoadScript } from '@react-google-maps/api';
-import Geocode from 'react-geocode';
 import memoize from 'mem';
 import Selection from '../../Selection.js';
 
@@ -16,10 +15,11 @@ class GeographicMap extends React.PureComponent {
     if (this.props.items !== prevProps.items) {
       this.props.conf.then((conf) => {
         let api_key = conf.map.key;
-        if (api_key) {
+        let geocoding_uri = conf.map.geocodingService;
+        if (api_key && geocoding_uri) {
+          this.setState({ api_key, geocoding_uri });
           let addresses = new Items(this.props.items).getAttributeValues('spatial');
-          this._fetchPlaces(api_key, addresses);
-          this.setState({ api_key });
+          this._fetchPlaces(addresses);
         }
       });
     }
@@ -62,7 +62,8 @@ class GeographicMap extends React.PureComponent {
     this.props.history.push(uri);
   }
 
-  fromAddress = memoize((address) => Geocode.fromAddress(address)
+  fromAddress = memoize((address) => fetch(`${this.state.geocoding_uri}?address=${address}&key=${this.state.api_key}`)
+    .then(x => x.json())
     .then(x => {
       return {
         place_id: x.results[0].place_id,
@@ -73,8 +74,7 @@ class GeographicMap extends React.PureComponent {
     .catch(x => console.error(x))
   );
 
-  _fetchPlaces = (key, addresses) => {
-    Geocode.setApiKey(key);
+  _fetchPlaces = (addresses) => {
     return Promise.all(addresses.map(this.fromAddress))
       .then(x => x.filter(x => !!x))
       .then(places => this.setState({places}));
