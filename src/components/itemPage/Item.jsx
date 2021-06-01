@@ -12,7 +12,7 @@ import { DiscussionEmbed } from 'disqus-react';
 import { t, Trans } from '@lingui/macro';
 import { i18n } from '../../index.js';
 
-const HIDDEN = ['topic', 'resource', 'thumbnail', 'item'];
+const HIDDEN = ['topic', 'resource', 'thumbnail', 'item', 'record'];
 
 function getString(obj) {
   if (Array.isArray(obj)) {
