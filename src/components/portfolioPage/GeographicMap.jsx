@@ -15,11 +15,11 @@ class GeographicMap extends React.PureComponent {
   componentDidUpdate(prevProps) {
     if (this.props.items !== prevProps.items) {
       this.props.conf.then((conf) => {
-        let api_key = conf.interactiveMap || conf.staticMap;
+        let api_key = conf.map.key;
         if (api_key) {
           let addresses = new Items(this.props.items).getAttributeValues('spatial');
           this._fetchPlaces(api_key, addresses);
-          this.setState({ api_key, interactive: !!conf.interactiveMap });
+          this.setState({ api_key });
         }
       });
     }
@@ -27,34 +27,24 @@ class GeographicMap extends React.PureComponent {
 
   render() {
     if (!this.state.places.length || !this.state.api_key) return null;
-    if (this.state.interactive) {
-      let markers = this.state.places.map(({position, place_id, spatial}) =>
-        <Marker key={spatial}
-          position={position}
-          onClick={() => this.handleClick(place_id)}
-        />
-      );
-      let center = this.bounds ? this.bounds.getCenter : {lat: 0, lng: 0};
-      return (
-        <LoadScript googleMapsApiKey={this.state.api_key} >
-          <GoogleMap
-            mapContainerStyle={{ width: '100%', height: '400px' }}
-            center={center}
-            zoom={2}
-            onLoad={this.handleLoad}
-          >
-            {markers}
-          </GoogleMap>
-        </LoadScript>
-      );
-    }
-    let alt = this.state.places.map(x => x.spatial).join(';');
-    let markers = this.state.places.map(({position}) => `${position.lat},${position.lng}`)
-      .join('|');
-    return (
-      <img alt={alt}
-        src={`https://maps.googleapis.com/maps/api/staticmap?size=640x480&markers=${markers}&key=${this.state.api_key}`}
+    let markers = this.state.places.map(({ position, place_id, spatial }) =>
+      <Marker key={spatial}
+        position={position}
+        onClick={() => this.handleClick(place_id)}
       />
+    );
+    let center = this.bounds ? this.bounds.getCenter : { lat: 0, lng: 0 };
+    return (
+      <LoadScript googleMapsApiKey={this.state.api_key} >
+        <GoogleMap
+          mapContainerStyle={{ width: '100%', height: '400px' }}
+          center={center}
+          zoom={2}
+          onLoad={this.handleLoad}
+        >
+          {markers}
+        </GoogleMap>
+      </LoadScript>
     );
   }
 
