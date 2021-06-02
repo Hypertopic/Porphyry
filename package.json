@@ -20,21 +20,25 @@
     "react-dom": "^16.14.0",
     "react-geocode": "^0.2.2",
     "react-router-dom": "^5.2.0",
+    "voll": "^1.2.6",
     "yaml": "^1.10.0"
   },
   "devDependencies": {
     "@lingui/cli": "^2.9.2",
     "@lingui/macro": "^2.9.2",
+    "cross-env": "^7.0.3",
     "react-scripts": "^4.0.3",
+    "rimraf": "^3.0.2",
     "serve": "^11.3.2"
   },
   "scripts": {
     "add-locale": "lingui add-locale",
     "extract": "lingui extract",
-    "start": "lingui compile && env EXTEND_ESLINT=true react-scripts start",
-    "clean": "rm -f src/locales/*/messages.js && rm -rf build src/locales/_build",
+    "start": "lingui compile && cross-env EXTEND_ESLINT=true react-scripts start",
+    "clean": "rimraf src/locales/*/messages.js && rimraf build src/locales/_build",
     "build": "lingui compile && react-scripts build",
-    "preprod": "serve -s build -p 3000"
+    "preprod": "serve -s build -p 3000",
+    "test": "docker run --rm --volume ${PWD}:/app --tty --net=\"host\" --env APP_HOST=\"http://host.docker.internal:3000\" benel/cucumber-capybara --fail-fast --no-source"
   },
   "lingui": {
     "localeDir": "src/locales/",
