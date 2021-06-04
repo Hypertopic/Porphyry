@@ -1,14 +1,15 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import {Items} from '../../model.js';
-import { GoogleMap, Marker, LoadScript } from '@react-google-maps/api';
+import { GoogleMap, GroundOverlay, Marker, LoadScript } from '@react-google-maps/api';
 import memoize from 'mem';
 import Selection from '../../Selection.js';
 
 class GeographicMap extends React.PureComponent {
 
   state = {
-    places: []
+    places: [],
+    layers: []
   }
 
   componentDidUpdate(prevProps) {
@@ -20,6 +21,11 @@ class GeographicMap extends React.PureComponent {
           this.setState({ api_key, geocoding_uri });
           let addresses = new Items(this.props.items).getAttributeValues('spatial');
           this._fetchPlaces(addresses);
+        }
+        let portfolio = conf.portfolio;
+        if (portfolio && portfolio[conf.user]) {
+          let layers = portfolio[conf.user].layers;
+          this.setState({ layers });
         }
       });
     }
@@ -33,6 +39,9 @@ class GeographicMap extends React.PureComponent {
         onClick={() => this.handleClick(place_id)}
       />
     );
+    let layers = this.state.layers.map(layer =>
+      <GroundOverlay key={layer.uri} url={layer.uri} bounds={layer.bounds} />
+    );
     let center = this.bounds ? this.bounds.getCenter : { lat: 0, lng: 0 };
     return (
       <LoadScript googleMapsApiKey={this.state.api_key} >
@@ -42,6 +51,7 @@ class GeographicMap extends React.PureComponent {
           zoom={2}
           onLoad={this.handleLoad}
         >
+          {layers}
           {markers}
         </GoogleMap>
       </LoadScript>
