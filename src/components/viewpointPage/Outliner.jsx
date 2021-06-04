@@ -7,6 +7,7 @@ import TopicTree from '../../TopicTree.js';
 import Node from './Node.jsx';
 import { t, Trans } from '@lingui/macro';
 import { i18n } from '../../index.js';
+import Contributors from './Contributors.jsx';
 
 const _log = (x) => console.log(JSON.stringify(x, null, 2));
 const _error = (x) => console.error(x.message);
@@ -34,7 +35,10 @@ class Outliner extends React.Component {
         </div>
         <div className="container-fluid">
           <div className="App-content row">
-            <div className="col-md-12 p-4">
+            {this.state.title
+              ? <Contributors viewpoint_id = {this.props.match.params.id} />
+              : ''}
+            <div className="col-md-8 p-4">
               <div className="Description">
                 <h2 className="h4 font-weight-bold text-center">{status}</h2>
                 <div className="p-3">
@@ -48,6 +52,7 @@ class Outliner extends React.Component {
                 </div>
               </div>
             </div>
+
           </div>
         </div>
       </div>
@@ -74,12 +79,20 @@ class Outliner extends React.Component {
     let title = e.target.newTitle.value;
     if (!title) return;
     let SETTINGS = await conf;
-    new Hypertopic(SETTINGS.services)
-      .post({_id: this.props.match.params.id, viewpoint_name: title, topics: {}, users: [SETTINGS.user]})
-      .then(_log)
-      .then(_ => this.setState({ title }))
-      .then(_ => this._fetchData())
-      .catch(_error);
+    let options = {};
+    options.credentials = 'include';
+    fetch(SETTINGS.services[0] + '/_session', options)
+      .then(x => x.json())
+      .then(x => {
+        if (x.name || x.userCtx.name) {
+          new Hypertopic(SETTINGS.services)
+            .post({_id: this.props.match.params.id, viewpoint_name: title, topics: {}, users: [SETTINGS.user], contributors: [ x.name || x.userCtx.name]})
+            .then(_log)
+            .then(_ => this.setState({ title }))
+            .then(_ => this._fetchData())
+            .catch(_error);
+        }
+      }).catch(_error);
   }
 
   activeNode(activeNode) {
