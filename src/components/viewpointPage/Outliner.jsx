@@ -24,6 +24,7 @@ class Outliner extends React.Component {
   render() {
     let status = this._getStatus();
     let topic = {name: this.state.title};
+    let style = this.state.title ? 'col-md-8 p-4' : 'col-md-12 p-4';
     return (
       <div className="App container-fluid">
         <Header conf={conf} />
@@ -38,7 +39,7 @@ class Outliner extends React.Component {
             {this.state.title
               ? <Contributors viewpoint_id = {this.props.match.params.id} />
               : ''}
-            <div className="col-md-8 p-4">
+            <div className={style}>
               <div className="Description">
                 <h2 className="h4 font-weight-bold text-center">{status}</h2>
                 <div className="p-3">
