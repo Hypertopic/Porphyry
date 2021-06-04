@@ -1,7 +1,7 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import {Items} from '../../model.js';
-import { GoogleMap, Marker, LoadScript } from '@react-google-maps/api';
+import { GoogleMap, GroundOverlay, Marker, LoadScript } from '@react-google-maps/api';
 import Geocode from 'react-geocode';
 import memoize from 'mem';
 
@@ -19,6 +19,12 @@ class GeographicMap extends React.PureComponent {
           let addresses = new Items(this.props.items).getAttributeValues('spatial');
           this._fetchPlaces(api_key, addresses);
           this.setState({ api_key, interactive: !!conf.interactiveMap });
+        }
+        let portfolio = conf.portfolio;
+        let layers = [];
+        if (portfolio && portfolio[conf.user]) {
+          layers = portfolio[conf.user].layers;
+          this.setState({ layers });
         }
       });
     }
@@ -42,6 +48,9 @@ class GeographicMap extends React.PureComponent {
             zoom={2}
             onLoad={this.handleLoad}
           >
+            {this.state.layers.map(
+              layer => <GroundOverlay key={layer.uri} url={layer.uri} bounds={layer.bounds}></GroundOverlay>
+            )}
             {markers}
           </GoogleMap>
         </LoadScript>
