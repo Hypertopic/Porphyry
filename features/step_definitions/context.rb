@@ -60,6 +60,6 @@ Soit("la langue du navigateur est {string}") do |language|
 end
 
 Soit("l'utilisateur {string} est l'auteur du point de vue {string}") do |user, viewpoint|
-  visit '/viewpoint/'+ getUUID('')
+  visit getURI(viewpoint)
   expect(page).to have_content user
 end

@@ -58,12 +58,12 @@ Quand("l'utilisateur choisit l'item {string} dans le bloc Items ayant le même n
 end
 
 Quand("l'utilisateur modifie l'appellation du point de vue {string} par {string}") do |oldViewpoint, newViewpoint|
-  click_on oldviewpoint
-  click_on oldviewpoint
+  click_on oldViewpoint
+  click_on oldViewpoint
   fill_in placeholder: oldViewpoint, with: newViewpoint
 end
 
-Quand("l'utilisateur ajoute l'utilisateur {string} à la liste d'édition {string}") do |user, newUser, viewpoint|
+Quand("l'utilisateur ajoute l'utilisateur {string} à la liste d'édition") do |newUser|
   fill_in placeholder: "", with: newUser
   click_on class: 'contributorToAdd'
 end
