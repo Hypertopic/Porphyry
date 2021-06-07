@@ -43,7 +43,7 @@ end
 
 Alors("l'appellation du point de vu est {string}") do |newViewpoint|
   visit getURI(newViewpoint)
-  expect(page).to have_content newViewpont
+  expect(page).to have_content newViewpoint
 end
 
 Alors("l'utilisateur {string} n'est pas noté sur la liste d'édition du point de vue {string}") do |user, viewpoint|
