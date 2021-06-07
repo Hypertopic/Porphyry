@@ -35,3 +35,11 @@ end
 Alors("la page contient {string}") do |localization|
   expect(page).to have_content localization
 end
+
+Alors("l'utilisateur {string} est noté sur la liste d'édition du point de vue") do |user|
+  expect(page).to have_content user
+end
+
+Alors("l'appellation du point de vu est {string}") do |newViewpoint|
+  expect(page).to have_content newViewpont
+end

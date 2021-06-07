@@ -58,3 +58,8 @@ end
 Soit("la langue du navigateur est {string}") do |language|
   page.driver.add_headers("Accept-Language" => language)
 end
+
+Soit("l'utilisateur {string} est l'auteur du point de vue {string}") do |user, viewpoint|
+  visit '/viewpoint/'+ getUUID('')
+  expect(page).to have_content user
+end
