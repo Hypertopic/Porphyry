@@ -59,7 +59,7 @@ end
 
 
 Quand("l’utilisateur {string} modifie l’appellation du point de vue {string} par {string}") do |user, oldViewpoint, newViewpoint|
-  within '.Outliner', do
+  within '.Outliner' do
     visit getURI(oldViewpoint)
     find('input').send_keys newViewpoint
     find('input').send_keys:return
