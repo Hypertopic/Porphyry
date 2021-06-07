@@ -59,7 +59,30 @@ Soit("la langue du navigateur est {string}") do |language|
   page.driver.add_headers("Accept-Language" => language)
 end
 
+Soit("l'utilisateur {string} est connecté") do |user|
+  click_on 'Se connecter...'
+  fill_in placeholder: "nom d'utilisateur", with: user
+  fill_in placeholder: 'mot de passe', with: 'whiterabbit'
+  click_on 'Se connecter'
+  expect(page).to have_content user
+end
+
+Soit("l’utilisateur {string} est noté sur la liste d’édition du point de vue {string}") do |user, viewpoint|
+  visit getURI(viewpoint)
+  expect(page).to have_content user
+end
+
 Soit("l'utilisateur {string} est l'auteur du point de vue {string}") do |user, viewpoint|
   visit getURI(viewpoint)
   expect(page).to have_content user
+end
+
+Soit("l’utilisateur {string} n'est pas noté sur la liste d’édition du point de vue {string}") do |user, viewpoint|
+  visit getURI(viewpoint)
+  expect(page).not_to have_content user
+end
+
+Soit("la liste d’édition du point de vue {string} n’existe pas") do |viewpoint|
+  visit getURI(viewpoint)
+  expect(page).to have_content("Pas de contributeurs")
 end
