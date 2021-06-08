@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Hypertopic from 'hypertopic';
 import groupBy from 'json-groupby';
+import { Helmet } from 'react-helmet';
 import conf from '../../config.js';
 import Viewpoint from './Viewpoint.jsx';
 import Attribute from './Attribute.jsx';
@@ -39,6 +40,9 @@ class Item extends Component {
     return (
       <div className="App container-fluid">
         <Header conf={conf} />
+        <Helmet>
+          <title>{name}</title>
+        </Helmet>
         <div className="Status row h5">
           <Link to="/" className="badge badge-pill badge-light TopicTag">
             <span className="badge badge-pill badge-dark oi oi-chevron-left"> </span>
