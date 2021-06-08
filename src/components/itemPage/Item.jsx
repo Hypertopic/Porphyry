@@ -339,9 +339,10 @@ class Item extends Component {
 }
 
 const Comments = React.memo((props) => {
-  let config = {
+  const config = {
     identifier: props.item.id,
-    title: props.item.name
+    title: props.item.name ? props.item.name[0] : 'null',
+    url: props.item.resource ? props.item.resource[0] : 'null',
   };
   return (props.appId)
     ? <DiscussionEmbed config={config} shortname={props.appId} />
