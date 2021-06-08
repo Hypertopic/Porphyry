@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 import Hypertopic from 'hypertopic';
 import conf from '../../config.js';
 import Header from '../Header.jsx';
@@ -28,6 +29,9 @@ class Outliner extends React.Component {
     return (
       <div className="App container-fluid">
         <Header conf={conf} />
+        <Helmet>
+          <title>{this.state.title}</title>
+        </Helmet>
         <div className="Status row h5">
           <Link to="/" className="badge badge-pill badge-light TopicTag">
             <span className="badge badge-pill badge-dark oi oi-chevron-left"> </span>
