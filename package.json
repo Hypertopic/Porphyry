@@ -5,36 +5,40 @@
   "dependencies": {
     "@lingui/react": "^2.9.2",
     "@react-google-maps/api": "^1.13.0",
-    "bootstrap": "^4.5.3",
+    "bootstrap": "^4.6.0",
     "compare-func": "^2.0.0",
-    "disqus-react": "^1.0.10",
-    "hypertopic": "^3.2.1",
+    "disqus-react": "^1.0.11",
+    "hypertopic": "^3.4.3",
     "js-tree": "^2.0.2",
     "json-groupby": "^1.0.2",
     "mem": "^6.1.1",
-    "memoize-one": "^5.1.1",
+    "memoize-one": "^5.2.1",
     "open-iconic": "^1.1.1",
-    "query-string": "^6.13.7",
+    "query-string": "^6.14.1",
     "react": "^16.14.0",
     "react-autosuggest": "^9.4.3",
     "react-dom": "^16.14.0",
-    "react-geocode": "^0.2.2",
+    "react-helmet": "^6.1.0",
     "react-router-dom": "^5.2.0",
-    "yaml": "^1.10.0"
+    "voll": "^1.2.6",
+    "yaml": "^1.10.2"
   },
   "devDependencies": {
     "@lingui/cli": "^2.9.2",
     "@lingui/macro": "^2.9.2",
+    "cross-env": "^7.0.3",
     "react-scripts": "^4.0.3",
+    "rimraf": "^3.0.2",
     "serve": "^11.3.2"
   },
   "scripts": {
     "add-locale": "lingui add-locale",
     "extract": "lingui extract",
-    "start": "lingui compile && env EXTEND_ESLINT=true react-scripts start",
-    "clean": "rm -f src/locales/*/messages.js && rm -rf build src/locales/_build",
+    "start": "lingui compile && cross-env EXTEND_ESLINT=true react-scripts start",
+    "clean": "rimraf src/locales/*/messages.js && rimraf build src/locales/_build",
     "build": "lingui compile && react-scripts build",
-    "preprod": "serve -s build -p 3000"
+    "preprod": "serve -s build -p 3000",
+    "test": "docker run --rm --volume ${PWD}:/app --tty --net=\"host\" --env APP_HOST=\"http://host.docker.internal:3000\" benel/cucumber-capybara --fail-fast --no-source"
   },
   "lingui": {
     "localeDir": "src/locales/",

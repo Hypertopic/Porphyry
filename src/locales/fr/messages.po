@@ -127,3 +127,15 @@ msgstr "nom d'utilisateur"
 #: src/components/itemPage/Attribute.jsx:89
 msgid "valeur"
 msgstr "valeur"
+
+#: src/components/viewpointPage/Contributors.jsx:28
+msgid "Ajouter"
+msgstr "Ajouter"
+
+#: src/components/viewpointPage/Contributors.jsx:20
+msgid "Contributeurs"
+msgstr "Contributeurs"
+
+#: src/components/viewpointPage/Contributors.jsx:33
+msgid "Pas de contributeurs"
+msgstr "Pas de contributeurs"

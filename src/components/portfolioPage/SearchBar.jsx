@@ -5,6 +5,7 @@ import {Topics, Items} from '../../model.js';
 import InputWithSuggestions from '../InputWithSuggestions.jsx';
 import { t } from '@lingui/macro';
 import { i18n } from '../../index.js';
+import Selection from '../../Selection.js';
 
 class SearchBar extends React.Component {
 
@@ -39,14 +40,7 @@ class SearchBar extends React.Component {
 
   handleSuggestionSelected = (event, { suggestion }) => {
     this.setState({pattern: ''});
-    this.props.history.push('/?t=' + JSON.stringify({
-      type: 'intersection',
-      data: [{
-        type: 'intersection',
-        selection: [suggestion.id],
-        exclusion: []
-      }]
-    }));
+    this.props.history.push((new Selection(suggestion.id)).toURI());
   };
 
   render() {
