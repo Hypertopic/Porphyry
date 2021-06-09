@@ -59,7 +59,7 @@ end
 
 
 Quand("l'utilisateur {string} modifie l'appellation du point de vue {string} par {string}") do |user, oldViewpoint, newViewpoint|
-    find("input[value='oldViewpoint']").send_keys newViewpoint
+    find('input', visible: true).send_keys newViewpoint
     find('input').send_keys:return
 end
 
