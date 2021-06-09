@@ -83,15 +83,11 @@ end
 
 Soit("la liste d'édition du point de vue {string} n'existe pas") do |viewpoint|
     pending
-    #expect(page).to have_content("Pas de contributeurs")
 end
 
 Soit("{string} un nouveau point de vue") do |viewpoint|
    visit '/viewpoint/' + getUUID('')
    find('input[name="newTitle"]').send_keys viewpoint
-   find_button(' ').click
-   #find('button[type="submit"]').click
-   #find_button('btn add').sibling('.oi').click
-   #page.driver.browser.navigate.refresh
-   visit current_path #il faut trouver un moyen de reload la page en gardant le même url obviously
+   find('#addViewpoint', visible: true).click
+   expect(page).to have_content 'Modification'
 end

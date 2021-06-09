@@ -42,10 +42,12 @@ end
 
 Alors("l'utilisateur {string} est noté sur la liste d'édition du point de vue {string}") do |user, viewpoint|
   expect(page).to have_content viewpoint
-  expect(find('ul')).to have_content user
+  expect(page).to have_content user
+  expect(page).not_to have_content 'Pas de contributeurs'
 end
 
 Alors("l'utilisateur {string} n'est pas noté sur la liste d'édition du point de vue {string}") do |user, viewpoint|
   expect(page).to have_content viewpoint
-  expect(find('ul', :className => 'list-group mt-4')).not_to have_content user
+  expect(page).not_to have_content user
+  expect(page).not_to have_content 'Pas de contributeurs'
 end

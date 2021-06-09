@@ -58,7 +58,7 @@ class Outliner extends React.Component {
     return (<form className="input-group" onSubmit={(e) => this._newVP(e)}>
       <input type="text" name="newTitle" className="form-control" placeholder={i18n._(t`Nom du point de vue`)} />
       <div className="input-group-append">
-        <button type="submit" className="btn add btn-sm btn-light"><span className="oi oi-plus"> </span></button>
+        <button type="submit" id="addViewpoint" className="btn add btn-sm btn-light"><span className="oi oi-plus"> </span></button>
       </div>
     </form>);
   }
