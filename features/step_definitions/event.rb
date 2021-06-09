@@ -59,16 +59,13 @@ end
 
 
 Quand("l’utilisateur {string} modifie l’appellation du point de vue {string} par {string}") do |user, oldViewpoint, newViewpoint|
-  within '.Outliner' do
-    visit getURI(oldViewpoint)
-    find('input').send_keys newViewpoint
+    find("input[value='oldViewpoint']").send_keys newViewpoint
     find('input').send_keys:return
   end
 end
 
 
 Quand("l’utilisateur {string} ajoute l’utilisateur {string} à la liste d’édition du point de vue {string}") do |user, newUser, viewpoint|
-  visit getURI(viewpoint)
   find('input[name="contributorToAdd"]').send_keys newUser
   click_button(type: 'submit')
 end

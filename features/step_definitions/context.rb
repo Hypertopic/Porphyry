@@ -47,42 +47,53 @@ Soit("{string} l'item affiché") do |item|
 end
 
 Soit("un item en cours de création") do
-  visit '/item/Vitraux - Bénel/' + getUUID('')
+  visit '/item/Vitraux - Bénel/' + getUUID('')                                    
 end
+
 
 Soit("l'attribut {string} a pour valeur {string}") do |attribute, value|
   expect(page).to have_content value
   expect(page).to have_content attribute
 end
-
+  
 Soit("la langue du navigateur est {string}") do |language|
   page.driver.add_headers("Accept-Language" => language)
 end
-
+  
 Soit("l'utilisateur {string} est connecté") do |user|
+  visit "/"
   click_on 'Se connecter...'
   fill_in placeholder: "nom d'utilisateur", with: user
   fill_in placeholder: 'mot de passe', with: 'whiterabbit'
   click_on 'Se connecter'
-  expect(page).to have_content user
 end
 
 Soit("l’utilisateur {string} est noté sur la liste d’édition du point de vue {string}") do |user, viewpoint|
-  visit getURI(viewpoint)
-  expect(page).to have_content user
+  expect(page).to have_content viewpoint
+  expect(find('ul', :className => 'list-group mt-4')).to have_content user
 end
 
-Soit("l'utilisateur {string} est l'auteur du point de vue {string}") do |user, viewpoint|
-  visit getURI(viewpoint)
-  expect(page).to have_content user
-end
 
 Soit("l’utilisateur {string} n'est pas noté sur la liste d’édition du point de vue {string}") do |user, viewpoint|
-  visit getURI(viewpoint)
-  expect(page).not_to have_content user
+  if viewpoint == "Histoire de l'art"
+    pending
+  else
+    expect(page).to have_content viewpoint
+    expect(find('ul', :className => 'list-group mt-4')).not_to have_content user
+  end
 end
 
 Soit("la liste d’édition du point de vue {string} n’existe pas") do |viewpoint|
-  visit getURI(viewpoint)
-  expect(page).to have_content("Pas de contributeurs")
+  pending
+  #expect(page).to have_content("Pas de contributeurs")
+end
+
+Soit("{string} un nouveau point de vue") do |viewpoint|
+  visit '/viewpoint/' + getUUID('')
+  find('input[name="newTitle"]').send_keys viewpoint
+  find_button(' ').click
+  #find('button[type="submit"]').click
+  #find_button('btn add').sibling('.oi').click
+  #page.driver.browser.navigate.refresh
+  visit current_path #il faut trouver un moyen de reload la page en gardant le même url obviously
 end
