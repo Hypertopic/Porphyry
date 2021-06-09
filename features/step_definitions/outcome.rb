@@ -36,16 +36,17 @@ Alors("la page contient {string}") do |localization|
   expect(page).to have_content localization
 end
 
-Alors("l'appellation du point de vue est {string}") do |viewpoint|
-  expect(page).to have_content viewpoint
+Alors("l'utilisateur {string} est noté sur la liste d'édition du point de vue {string}") do |user, viewpoint|
+  visit getURI(viewpoint)
+  expect(page).to have_content user
 end
 
-Alors("l'utilisateur {string} est noté sur la liste d'édition du point de vue {string}") do |user, viewpoint|
-  expect(page).to have_content viewpoint
-  expect(find('ul')).to have_content user
+Alors("l'appellation du point de vu est {string}") do |newViewpoint|
+  visit getURI(newViewpoint)
+  expect(page).to have_content newViewpoint
 end
 
 Alors("l'utilisateur {string} n'est pas noté sur la liste d'édition du point de vue {string}") do |user, viewpoint|
-  expect(page).to have_content viewpoint
-  expect(find('ul', :className => 'list-group mt-4')).not_to have_content user
+  visit getURI(viewpoint)
+  expect(page).not_to have_content user
 end
