@@ -15,17 +15,19 @@ class GeographicMap extends React.PureComponent {
   componentDidUpdate(prevProps) {
     if (this.props.items !== prevProps.items) {
       this.props.conf.then((conf) => {
-        let api_key = conf.map.key;
-        let geocoding_uri = conf.map.geocodingService;
-        if (api_key && geocoding_uri) {
-          this.setState({ api_key, geocoding_uri });
-          let addresses = new Items(this.props.items).getAttributeValues('spatial');
-          this._fetchPlaces(addresses);
-        }
-        let portfolio = conf.portfolio;
-        if (portfolio && portfolio[conf.user]) {
-          let layers = portfolio[conf.user].layers;
-          this.setState({ layers });
+        if (conf.map) {
+          let api_key = conf.map.key;
+          let geocoding_uri = conf.map.geocodingService;
+          if (api_key && geocoding_uri) {
+            this.setState({ api_key, geocoding_uri });
+            let addresses = new Items(this.props.items).getAttributeValues('spatial');
+            this._fetchPlaces(addresses);
+          }
+          let portfolio = conf.portfolio;
+          if (portfolio && portfolio[conf.user]) {
+            let layers = portfolio[conf.user].layers;
+            this.setState({ layers });
+          }
         }
       });
     }
