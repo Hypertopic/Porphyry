@@ -4,7 +4,7 @@ import Hypertopic from 'hypertopic';
 import groupBy from 'json-groupby';
 import { Helmet } from 'react-helmet';
 import conf from '../../config.js';
-import Viewpoint from './Viewpoint.jsx';
+import Viewpoint, {_fetchViewpointData} from './Viewpoint.jsx';
 import Attribute from './Attribute.jsx';
 import Resource from './Resource.jsx';
 import Header from '../Header.jsx';
@@ -28,10 +28,10 @@ class Item extends Component {
     super();
     this.state = {
       attributeInputValue: '',
-      item: {topic: []}
+      item: {topic: []},
+      copy: {},
     };
   }
-
   render() {
     let name = getString(this.state.item.name);
     let attributes = this._getAttributes();
@@ -54,6 +54,9 @@ class Item extends Component {
       autoStart: false,
       filename: '' + this.state.item.name + '.jpg'
     });
+    if (this.state.item.topic)
+      console.log('ee' + Object.keys(this.state.item.topic).pop());
+
     return (
       <div className="App container-fluid">
         <Header conf={conf} />
@@ -90,14 +93,17 @@ class Item extends Component {
               <div className="Subject">
                 <h2 className="h4 font-weight-bold text-center">{name}</h2>
                 <Resource href={this.state.item.resource} />
-	              <CopyToClipboard text={attributesInstagram} onCopy={() => download.start()
-                  .then(function() { // success
-                  })
-                  .catch(function(error) { // handle errors
-                  })
-                }>
-	              <button>Copy to clipboard</button>
-	               </CopyToClipboard>
+              </div>
+              <div>
+                <CopyToClipboard text={
+                  Object.keys(this.state.item.topic).pop() ? getAndFilterTopics(Object.keys(this.state.item.topic).pop()).then(data => {
+                    console.log(data);
+                    // ici tu filtre ton data pour garder que le topics que tu veux
+                    // tu retournes la valeur qui va etre copier
+                    return data;
+                  }) : ''} onCopy={async() => await download.start()}>
+                  <button className={'btn btn-warning'}>Copy to clipboard</button>
+                </CopyToClipboard>
               </div>
               <Comments appId={this.state.disqus} item={this.state.item} />
             </div>
@@ -374,8 +380,13 @@ const Comments = React.memo((props) => {
     url: props.item.resource ? props.item.resource[0] : 'null',
   };
   return (props.appId)
-    ? <DiscussionEmbed config={config} shortname={props.appId} />
+    ? <><DiscussionEmbed config={config} shortname={props.appId} /> </>
     : null;
 });
+
+const getAndFilterTopics = async (id) => {
+  const {topics} = await _fetchViewpointData(id);
+  return topics;
+};
 
 export default Item;

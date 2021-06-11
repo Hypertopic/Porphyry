@@ -31,7 +31,6 @@ class TopicPath extends React.Component {
       </div>
     );
   }
-
   _updatePath() {
     let topic = this._getTopic(this.props.id);
     let path = [topic];

@@ -73,6 +73,7 @@ class Viewpoint extends React.Component {
 
   render() {
     const paths = this._getPaths();
+    //console.log(paths);
     const inputProps = {
       placeholder: this.state.newTopic ? i18n._(t`Choisir une rubrique parent...`) : i18n._(t`Ajouter une rubrique...`),
       value: this.state.topicInputvalue,
@@ -169,9 +170,11 @@ class Viewpoint extends React.Component {
   componentDidMount() {
     this._fetchViewpoint();
   }
-
   async _fetchViewpoint() {
-    let hypertopic = new Hypertopic((await conf).services);
+    console.log(this.props.id);
+    this.setState(await _fetchViewpointData(this.props.id));
+    console.log(this.state);
+    /* let hypertopic = new Hypertopic((await conf).services);
     return hypertopic.getView(`/viewpoint/${this.props.id}`).then((data) => {
       let viewpoint = data[this.props.id];
       let name = viewpoint.name;
@@ -180,9 +183,8 @@ class Viewpoint extends React.Component {
       delete topics.name;
       delete topics.upper;
       this.setState({name, topics});
-    });
+    });*/
   }
-
   async createTopic(name, parent) {
     var newId;
     let hypertopic = new Hypertopic((await conf).services);
@@ -219,4 +221,18 @@ class Viewpoint extends React.Component {
 
 }
 
+export const _fetchViewpointData = async(id) => {
+  console.log('id  :' + id);
+  let hypertopic = new Hypertopic((await conf).services);
+  return hypertopic.getView(`/viewpoint/${id}`).then((data) => {
+    let viewpoint = data[id];
+    let name = viewpoint.name;
+    let topics = viewpoint;
+    delete topics.user;
+    delete topics.name;
+    delete topics.upper;
+    console.log(topics);
+    return ({name, topics});
+  });
+};
 export default Viewpoint;
