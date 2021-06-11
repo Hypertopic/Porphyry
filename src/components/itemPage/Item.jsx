@@ -11,9 +11,9 @@ import SameNameBlock from './SameNameBlock.jsx';
 import { DiscussionEmbed } from 'disqus-react';
 import { t, Trans } from '@lingui/macro';
 import { i18n } from '../../index.js';
-
+import {CopyToClipboard} from 'react-copy-to-clipboard';
+import JsFileDownloader from 'js-file-downloader';
 const HIDDEN = ['topic', 'resource', 'thumbnail', 'item'];
-
 function getString(obj) {
   if (Array.isArray(obj)) {
     return obj.map(val => getString(val)).join(', ');
@@ -36,6 +36,23 @@ class Item extends Component {
     let attributes = this._getAttributes();
     let viewpoints = this._getViewpoints();
     let sameNameBlock = this._getSameNameBlock();
+    let attributesInstagram;
+    if (typeof this.state.item.creator == 'undefined') {
+      if (typeof this.state.item.spatial == 'undefined') {
+        attributesInstagram = 'Auteur et localisation inconnus';
+      } else {
+        attributesInstagram = this.state.item.spatial;
+      }
+    } else if (typeof this.state.item.spatial == 'undefined') {
+      attributesInstagram = this.state.item.creator;
+    } else {
+      attributesInstagram = this.state.item.creator + ', ' + this.state.item.spatial;
+    }
+    const download = new JsFileDownloader({
+      url: this.state.item.resource,
+      autoStart: false,
+      filename: '' + this.state.item.name + '.jpg'
+    });
     return (
       <div className="App container-fluid">
         <Header conf={conf} />
@@ -69,6 +86,14 @@ class Item extends Component {
               <div className="Subject">
                 <h2 className="h4 font-weight-bold text-center">{name}</h2>
                 <Resource href={this.state.item.resource} />
+	              <CopyToClipboard text={attributesInstagram} onCopy={() => download.start()
+                  .then(function() { // success
+                  })
+                  .catch(function(error) { // handle errors
+                  })
+                }>
+	              <button>Copy to clipboard</button>
+	               </CopyToClipboard>
               </div>
               <Comments appId={this.state.disqus} item={this.state.item} />
             </div>
