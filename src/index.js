@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Portfolio from './components/portfolioPage/Portfolio.jsx';
 import Item from './components/itemPage/Item.jsx';
 import Outliner from './components/viewpointPage/Outliner.jsx';
+import Subscribe from './components/subscribePage/Subscribe';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'open-iconic/font/css/open-iconic-bootstrap.css';
@@ -44,6 +45,7 @@ ReactDOM.render(
       <Switch>
         <Route path="/item/:corpus/:item" component={Item} />
         <Route path="/viewpoint/:id" component={Outliner} />
+        <Route path="/subscribe" component={Subscribe} />
         <Route path="/" component={Portfolio} />
       </Switch>
     </Router>
