@@ -171,19 +171,7 @@ class Viewpoint extends React.Component {
     this._fetchViewpoint();
   }
   async _fetchViewpoint() {
-    console.log(this.props.id);
     this.setState(await _fetchViewpointData(this.props.id));
-    console.log(this.state);
-    /* let hypertopic = new Hypertopic((await conf).services);
-    return hypertopic.getView(`/viewpoint/${this.props.id}`).then((data) => {
-      let viewpoint = data[this.props.id];
-      let name = viewpoint.name;
-      let topics = viewpoint;
-      delete topics.user;
-      delete topics.name;
-      delete topics.upper;
-      this.setState({name, topics});
-    });*/
   }
   async createTopic(name, parent) {
     var newId;
@@ -222,16 +210,12 @@ class Viewpoint extends React.Component {
 }
 
 export const _fetchViewpointData = async(id) => {
-  console.log('id  :' + id);
-  let hypertopic = new Hypertopic((await conf).services);
-  return hypertopic.getView(`/viewpoint/${id}`).then((data) => {
-    let viewpoint = data[id];
-    let name = viewpoint.name;
-    let topics = viewpoint;
+  return new Hypertopic((await conf).services).getView(`/viewpoint/${id}`).then((data) => {
+    let topics = data[id];
+    const name = topics.name;
     delete topics.user;
     delete topics.name;
     delete topics.upper;
-    console.log(topics);
     return ({name, topics});
   });
 };

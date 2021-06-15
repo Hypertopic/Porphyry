@@ -1,19 +1,20 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import React, {Component} from 'react';
+import {Link} from 'react-router-dom';
 import Hypertopic from 'hypertopic';
 import groupBy from 'json-groupby';
-import { Helmet } from 'react-helmet';
+import {Helmet} from 'react-helmet';
 import conf from '../../config.js';
 import Viewpoint, {_fetchViewpointData} from './Viewpoint.jsx';
 import Attribute from './Attribute.jsx';
 import Resource from './Resource.jsx';
 import Header from '../Header.jsx';
 import SameNameBlock from './SameNameBlock.jsx';
-import { DiscussionEmbed } from 'disqus-react';
-import { t, Trans } from '@lingui/macro';
-import { i18n } from '../../index.js';
+import {DiscussionEmbed} from 'disqus-react';
+import {t, Trans} from '@lingui/macro';
+import {i18n} from '../../index.js';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 import JsFileDownloader from 'js-file-downloader';
+
 const HIDDEN = ['topic', 'resource', 'thumbnail', 'item'];
 function getString(obj) {
   if (Array.isArray(obj)) {
@@ -29,33 +30,20 @@ class Item extends Component {
     this.state = {
       attributeInputValue: '',
       item: {topic: []},
-      copy: {},
+      topics: null,
     };
   }
+
   render() {
-    let name = getString(this.state.item.name);
-    let attributes = this._getAttributes();
-    let viewpoints = this._getViewpoints();
-    let sameNameBlock = this._getSameNameBlock();
-    let attributesInstagram;
-    if (typeof this.state.item.creator == 'undefined') {
-      if (typeof this.state.item.spatial == 'undefined') {
-        attributesInstagram = 'Auteur et localisation inconnus';
-      } else {
-        attributesInstagram = this.state.item.spatial;
-      }
-    } else if (typeof this.state.item.spatial == 'undefined') {
-      attributesInstagram = this.state.item.creator;
-    } else {
-      attributesInstagram = this.state.item.creator + ', ' + this.state.item.spatial;
-    }
+    const name = getString(this.state.item.name);
+    const attributes = this._getAttributes();
+    const viewpoints = this._getViewpoints();
+    const sameNameBlock = this._getSameNameBlock();
     const download = new JsFileDownloader({
       url: this.state.item.resource,
       autoStart: false,
       filename: '' + this.state.item.name + '.jpg'
     });
-    if (this.state.item.topic)
-      console.log('ee' + Object.keys(this.state.item.topic).pop());
 
     return (
       <div className="App container-fluid">
@@ -94,17 +82,9 @@ class Item extends Component {
                 <h2 className="h4 font-weight-bold text-center">{name}</h2>
                 <Resource href={this.state.item.resource} />
               </div>
-              <div>
-                <CopyToClipboard text={
-                  Object.keys(this.state.item.topic).pop() ? getAndFilterTopics(Object.keys(this.state.item.topic).pop()).then(data => {
-                    console.log(data);
-                    // ici tu filtre ton data pour garder que le topics que tu veux
-                    // tu retournes la valeur qui va etre copier
-                    return data;
-                  }) : ''} onCopy={async() => await download.start()}>
-                  <button className={'btn btn-warning'}>Copy to clipboard</button>
-                </CopyToClipboard>
-              </div>
+              <CopyToClipboard text={this._textToCopy()} onCopy={async() => await download.start()}>
+                <button className={'btn btn-warning'}>Copy to clipboard</button>
+              </CopyToClipboard>
               <Comments appId={this.state.disqus} item={this.state.item} />
             </div>
           </div>
@@ -173,6 +153,10 @@ class Item extends Component {
                 }
               }
             };
+            // we fetch the topics asynchronously
+            if (Object.keys(this.state.item.topic).pop())
+              getAndFilterTopics(Object.keys(this.state.item.topic).pop()).then(async topicsData => this.setState({'topics': await topicsData}));
+            console.log(this.state.topics);
           } else {
             console.error('eventSource is undefined, updates are impossible');
           }
@@ -371,6 +355,31 @@ class Item extends Component {
         .catch(error => console.error(error));
     }
   };
+
+  _textToCopy = ()=>{
+
+    let text = '';
+    // exemple ici avec le nom de l'objet 44744143fea88349a681530d5f16ad24
+    text = this.state.topics ? this.state.topics['44744143fea88349a681530d5f16ad24'].name[0] + ' ' : 'null';
+
+    if (!this.state.item.creator && !this.state.item.spatial) {
+      text += 'Auteur et localisation inconnus';
+    } else if (this.state.item.spatial && !this.state.item.creator) {
+      text += this.state.item.spatial;
+    } else if (!this.state.item.spatial && this.state.item.creator) {
+      text += this.state.item.creator;
+    } else {
+      text += this.state.item.creator + ', ' + this.state.item.spatial;
+    }
+
+    // ici tu peux rajouter tes filtres pour topics....
+    if (this.state.topics) {
+      console.log(this.state.topics);
+      // text += this.state.topics.....
+    }
+
+    return text;
+  }
 }
 
 const Comments = React.memo((props) => {
@@ -380,13 +389,10 @@ const Comments = React.memo((props) => {
     url: props.item.resource ? props.item.resource[0] : 'null',
   };
   return (props.appId)
-    ? <><DiscussionEmbed config={config} shortname={props.appId} /> </>
+    ? <DiscussionEmbed config={config} shortname={props.appId} />
     : null;
 });
 
-const getAndFilterTopics = async (id) => {
-  const {topics} = await _fetchViewpointData(id);
-  return topics;
-};
+const getAndFilterTopics = (id) => _fetchViewpointData(id).then(({topics})=>topics);
 
 export default Item;
