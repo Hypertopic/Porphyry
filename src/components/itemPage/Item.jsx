@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Hypertopic from 'hypertopic';
 import groupBy from 'json-groupby';
+import { Helmet } from 'react-helmet';
 import conf from '../../config.js';
 import Viewpoint from './Viewpoint.jsx';
 import Attribute from './Attribute.jsx';
@@ -12,7 +13,7 @@ import { DiscussionEmbed } from 'disqus-react';
 import { t, Trans } from '@lingui/macro';
 import { i18n } from '../../index.js';
 
-const HIDDEN = ['topic', 'resource', 'thumbnail', 'item'];
+const HIDDEN = ['topic', 'resource', 'thumbnail', 'item', 'record'];
 
 function getString(obj) {
   if (Array.isArray(obj)) {
@@ -39,6 +40,9 @@ class Item extends Component {
     return (
       <div className="App container-fluid">
         <Header conf={conf} />
+        <Helmet>
+          <title>{name}</title>
+        </Helmet>
         <div className="Status row h5">
           <Link to="/" className="badge badge-pill badge-light TopicTag">
             <span className="badge badge-pill badge-dark oi oi-chevron-left"> </span>
@@ -339,9 +343,10 @@ class Item extends Component {
 }
 
 const Comments = React.memo((props) => {
-  let config = {
+  const config = {
     identifier: props.item.id,
-    title: props.item.name
+    title: props.item.name ? props.item.name[0] : 'null',
+    url: props.item.resource ? props.item.resource[0] : 'null',
   };
   return (props.appId)
     ? <DiscussionEmbed config={config} shortname={props.appId} />
