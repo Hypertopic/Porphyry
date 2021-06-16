@@ -156,7 +156,7 @@ class Item extends Component {
             // we fetch the topics asynchronously
             if (Object.keys(this.state.item.topic).pop())
               getAndFilterTopics(Object.keys(this.state.item.topic).pop()).then(async topicsData => this.setState({'topics': await topicsData}));
-            console.log(this.state.topics);
+            //console.log(this.state.topics);
           } else {
             console.error('eventSource is undefined, updates are impossible');
           }
@@ -356,29 +356,42 @@ class Item extends Component {
     }
   };
 
-  _textToCopy = ()=>{
-
-    let text = '';
-    // exemple ici avec le nom de l'objet 44744143fea88349a681530d5f16ad24
-    text = this.state.topics ? this.state.topics['44744143fea88349a681530d5f16ad24'].name[0] + ' ' : 'null';
-
+  _textToCopy = () => {
+    //IMPORTANT : les tests sont effectuées sur l'item SM 001 m
+    let nomDuTopic = '';
+    let idDuTopic = '';
+    //on récupère l'id du topic, ici l'id du topic XIXe s.
+    idDuTopic = this.state.topic ? this.state.topic['a76306e4f17ed4f79e7e481eb9a1bd06'].[1].id + ' ' : 'null';
+    // on essaye d'extraire le nom du topic
+    nomDuTopic = this.state.topics && this.state.topics[idDuTopic] ? this.state.topics[idDuTopic].name[0] + ' ' : 'null';
     if (!this.state.item.creator && !this.state.item.spatial) {
-      text += 'Auteur et localisation inconnus';
+      nomDuTopic += 'Auteur et localisation inconnus, ';
     } else if (this.state.item.spatial && !this.state.item.creator) {
-      text += this.state.item.spatial;
+      nomDuTopic += this.state.item.spatial;
     } else if (!this.state.item.spatial && this.state.item.creator) {
-      text += this.state.item.creator;
+      nomDuTopic += ',' + this.state.item.creator;
     } else {
-      text += this.state.item.creator + ', ' + this.state.item.spatial;
+      nomDuTopic += this.state.item.creator + ', ' + this.state.item.spatial;
     }
 
     // ici tu peux rajouter tes filtres pour topics....
     if (this.state.topics) {
-      console.log(this.state.topics);
+      let TopicsArray = {};
+      //on récupère les clés de chaque topics
+      TopicsArray = Object.keys(this.state.topics);
+      console.log('TopicsArray = ' + TopicsArray);
+      //on cherche l'index du topic qui correspond à celui récupéré ligne 364
+      for (let i = 0; i < TopicsArray.length;i++) {
+        if (TopicsArray[i] === idDuTopic) {
+          nomDuTopic = this.state.topics && this.state.topics.TopicsArray[i] ? this.state.topics.TopicsArray[i].name[0] + ' ' : 'null';
+        }
+      }
+      console.log('idDuTopic = ' + idDuTopic);
+      console.log('nomDuTopic = ' + nomDuTopic);
       // text += this.state.topics.....
     }
 
-    return text;
+    return nomDuTopic;
   }
 }
 
