@@ -57,3 +57,11 @@ Quand("l'utilisateur choisit l'item {string} dans le bloc Items ayant le même n
   end
 end
 
+Quand (" l'utilisateur clique sur  {string}  ") do  |attribute|
+  fill_in placeholder: 'Ajouter un item', with: "#{item}"
+  click_on class: 'ValidateButton'    
+  click_on item
+  expect(page).to have_content item
+end
+
+
