@@ -57,3 +57,8 @@ Quand("l'utilisateur choisit l'item {string} dans le bloc Items ayant le même n
   end
 end
 
+Quand("l'utilisateur choisit l'item {string} parmi les items affichés") do |item|
+  within '.Items' do
+    click_on item
+  end
+end

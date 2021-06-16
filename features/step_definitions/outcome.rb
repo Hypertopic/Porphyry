@@ -35,3 +35,7 @@ end
 Alors("la page contient {string}") do |localization|
   expect(page).to have_content localization
 end
+
+Alors("la ressource principale est une image optimisée") do
+  expect(page).to have_xpath("//img[contains(@src,'optimized')]")
+end
