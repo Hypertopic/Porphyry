@@ -83,16 +83,16 @@ class Item extends Component {
                 <h2 className="h4 font-weight-bold text-center">{name}</h2>
                 <Resource href={this.state.item.resource} />
               </div>
-              <CopyToClipboard text={this._textToCopy()} onCopy={async() => await download.start().then(this.setState({showPopupInstagram: true}))}>
-                <button className={'btn btn-warning'}>Partager sur Instagram</button>
+              <CopyToClipboard text={this._textToCopy()} onCopy={async() => await download.start().then(()=>this.setState({showPopupInstagram: true}))}>
+                <button className={'btn btn-warning m-3'}>Partager sur Instagram</button>
               </CopyToClipboard>
-              {this.state.showPopupInstagram ? <div class="alert alert-warning alert-dismissible fade show" role="alert" data-dismiss="alert">
+              {this.state.showPopupInstagram
+              && <div className="alert alert-warning alert-dismissible fade show m-3" role="alert" data-dismiss="alert">
                 <strong>Pour partager sur Instagram :</strong> Les attributs et points de vue sont dans votre presse-papier, vous n'avez plus qu'à télécharger l'image et à vous rendre sur Instagram !
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <button type="button" className="close" data-dismiss="alert" aria-label="Close" onClick={()=> this.setState({showPopupInstagram: false})}>
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
-                : null
               }
               <Comments appId={this.state.disqus} item={this.state.item} />
             </div>
