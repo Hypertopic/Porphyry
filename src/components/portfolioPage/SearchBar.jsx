@@ -4,7 +4,6 @@ import memoize from 'memoize-one';
 import {Topics, Items} from '../../model.js';
 import InputWithSuggestions from '../InputWithSuggestions.jsx';
 import { t } from '@lingui/macro';
-import { i18n } from '../../index.js';
 import Selection from '../../Selection.js';
 
 class SearchBar extends React.Component {
@@ -45,7 +44,7 @@ class SearchBar extends React.Component {
 
   render() {
     const inputProps = {
-      placeholder: i18n._(t`Rechercher...`),
+      placeholder: t`Rechercher...`,
       value: this.state.pattern,
       className: 'form-control',
       type: 'search',

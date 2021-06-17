@@ -13,44 +13,52 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: src/components/itemPage/Item.jsx:189
+#: src/components/viewpointPage/Contributors.jsx:28
+msgid "Ajouter"
+msgstr "Ajouter"
+
+#: src/components/itemPage/Item.jsx:234
 msgid "Ajouter un attribut et une valeur..."
 msgstr "Ajouter un attribut et une valeur..."
 
-#: src/components/itemPage/Viewpoint.jsx:71
+#: src/components/itemPage/Viewpoint.jsx:76
 msgid "Ajouter une rubrique..."
 msgstr "Ajouter une rubrique..."
 
-#: src/components/itemPage/Item.jsx:55
+#: src/components/itemPage/Item.jsx:58
 msgid "Attributs du document"
 msgstr "Attributs du document"
 
-#: src/components/itemPage/Viewpoint.jsx:71
+#: src/components/itemPage/Viewpoint.jsx:76
 msgid "Choisir une rubrique parent..."
 msgstr "Choisir une rubrique parent..."
 
-#: src/components/viewpointPage/Outliner.jsx:69
+#: src/components/viewpointPage/Contributors.jsx:20
+msgid "Contributeurs"
+msgstr "Contributeurs"
+
+#: src/components/viewpointPage/Outliner.jsx:78
 msgid "Création du point de vue"
 msgstr "Création du point de vue"
 
-#: src/components/itemPage/Item.jsx:52
+#: src/components/itemPage/Item.jsx:55
 msgid "Description"
 msgstr "Description"
 
-#: src/components/portfolioPage/Badge.jsx:21
+#: src/components/portfolioPage/Badge.jsx:20
 msgid "Déselectionner"
 msgstr "Déselectionner"
 
+#: src/components/portfolioPage/Button.jsx:12
 #: src/components/portfolioPage/Button.jsx:13
-#: src/components/portfolioPage/Button.jsx:14
 msgid "Et"
 msgstr "Et"
 
-#: src/components/portfolioPage/Badge.jsx:17
+#: src/components/portfolioPage/Badge.jsx:16
 msgid "Exclure"
 msgstr "Exclure"
 
-#: src/components/portfolioPage/Badge.jsx:17
+#: src/components/portfolioPage/Badge.jsx:16
 msgid "Inclure"
 msgstr "Inclure"
 
@@ -58,11 +66,11 @@ msgstr "Inclure"
 msgid "Items ayant le même nom"
 msgstr "Items ayant le même nom"
 
-#: src/components/viewpointPage/Outliner.jsx:68
+#: src/components/viewpointPage/Outliner.jsx:77
 msgid "Modification du point de vue"
 msgstr "Modification du point de vue"
 
-#: src/components/viewpointPage/Outliner.jsx:59
+#: src/components/viewpointPage/Outliner.jsx:68
 msgid "Nom du point de vue"
 msgstr "Nom du point de vue"
 
@@ -70,72 +78,64 @@ msgstr "Nom du point de vue"
 msgid "Nouveau point de vue"
 msgstr "Nouveau point de vue"
 
+#: src/components/portfolioPage/Button.jsx:12
 #: src/components/portfolioPage/Button.jsx:13
-#: src/components/portfolioPage/Button.jsx:14
 msgid "Ou"
 msgstr "Ou"
-
-#: src/components/portfolioPage/Portfolio.jsx:45
-msgid "Points de vue"
-msgstr "Points de vue"
-
-#: src/components/portfolioPage/SearchBar.jsx:41
-msgid "Rechercher..."
-msgstr "Rechercher..."
-
-#: src/components/itemPage/Item.jsx:45
-#: src/components/viewpointPage/Outliner.jsx:32
-msgid "Retour à l'accueil"
-msgstr "Retour à l'accueil"
-
-#: src/components/Authenticated.jsx:31
-msgid "Se connecter"
-msgstr "Se connecter"
-
-#: src/components/Authenticated.jsx:37
-msgid "Se connecter..."
-msgstr "Se connecter..."
-
-#: src/components/Authenticated.jsx:22
-msgid "Se déconnecter"
-msgstr "Se déconnecter"
-
-#: src/components/portfolioPage/Status.jsx:26
-msgid "Rubrique inconnue"
-msgstr "Rubrique inconnue"
-
-#: src/components/portfolioPage/Status.jsx:10
-msgid "Tous les items"
-msgstr "Tous les items"
-
-#: src/components/itemPage/Item.jsx:284
-msgid "Voulez-vous réellement que l'item affiché ne soit plus décrit à l'aide de cette rubrique ?"
-msgstr "Voulez-vous réellement que l'item affiché ne soit plus décrit à l'aide de cette rubrique ?"
-
-#: src/components/itemPage/Item.jsx:191
-msgid "attribut : valeur"
-msgstr "attribut : valeur"
-
-#: src/components/Authenticated.jsx:30
-msgid "mot de passe"
-msgstr "mot de passe"
-
-#: src/components/Authenticated.jsx:29
-msgid "nom d'utilisateur"
-msgstr "nom d'utilisateur"
-
-#: src/components/itemPage/Attribute.jsx:89
-msgid "valeur"
-msgstr "valeur"
-
-#: src/components/viewpointPage/Contributors.jsx:28
-msgid "Ajouter"
-msgstr "Ajouter"
-
-#: src/components/viewpointPage/Contributors.jsx:20
-msgid "Contributeurs"
-msgstr "Contributeurs"
 
 #: src/components/viewpointPage/Contributors.jsx:33
 msgid "Pas de contributeurs"
 msgstr "Pas de contributeurs"
+
+#: src/components/portfolioPage/Portfolio.jsx:52
+msgid "Points de vue"
+msgstr "Points de vue"
+
+#: src/components/portfolioPage/SearchBar.jsx:47
+msgid "Rechercher..."
+msgstr "Rechercher..."
+
+#: src/components/itemPage/Item.jsx:48
+#: src/components/viewpointPage/Outliner.jsx:37
+msgid "Retour à l'accueil"
+msgstr "Retour à l'accueil"
+
+#: src/components/portfolioPage/Status.jsx:25
+msgid "Rubrique inconnue"
+msgstr "Rubrique inconnue"
+
+#: src/components/Authenticated.jsx:30
+msgid "Se connecter"
+msgstr "Se connecter"
+
+#: src/components/Authenticated.jsx:36
+msgid "Se connecter..."
+msgstr "Se connecter..."
+
+#: src/components/Authenticated.jsx:21
+msgid "Se déconnecter"
+msgstr "Se déconnecter"
+
+#: src/components/portfolioPage/Status.jsx:11
+msgid "Tous les items"
+msgstr "Tous les items"
+
+#: src/components/itemPage/Item.jsx:325
+msgid "Voulez-vous réellement que l'item affiché ne soit plus décrit à l'aide de cette rubrique ?"
+msgstr "Voulez-vous réellement que l'item affiché ne soit plus décrit à l'aide de cette rubrique ?"
+
+#: src/components/itemPage/Item.jsx:236
+msgid "attribut : valeur"
+msgstr "attribut : valeur"
+
+#: src/components/Authenticated.jsx:29
+msgid "mot de passe"
+msgstr "mot de passe"
+
+#: src/components/Authenticated.jsx:28
+msgid "nom d'utilisateur"
+msgstr "nom d'utilisateur"
+
+#: src/components/itemPage/Attribute.jsx:93
+msgid "valeur"
+msgstr "valeur"
