@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {Link} from 'react-router-dom';
 import { t, Trans } from '@lingui/macro';
 import { i18n } from '../index.js';
 
@@ -35,6 +36,10 @@ class Authenticated extends Component {
     return (
       <div className="Authenticated">
         <a href="#login" onClick={this.handleAsk}><Trans>Se connecter...</Trans></a>
+        <br />
+        <Link to={window.location.pathname.includes('item') ? `/register?item=${window.location.pathname.substring(1)}` : '/register'}>
+          <Trans>S'inscrire...</Trans>
+        </Link>
       </div>
     );
   }
@@ -51,7 +56,6 @@ class Authenticated extends Component {
     e.preventDefault();
     this.setState({ask: true});
   }
-
   handleLogin(e) {
     e.preventDefault();
     this._openSession();

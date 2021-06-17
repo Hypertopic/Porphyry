@@ -127,3 +127,19 @@ msgstr "nom d'utilisateur"
 #: src/components/itemPage/Attribute.jsx:89
 msgid "valeur"
 msgstr "valeur"
+
+#: src/components/registerPage/Register.jsx:42
+msgid "S'inscrire..."
+msgstr "S'inscrire..."
+
+#: src/components/registerPage/Register.jsx:68
+msgid "Pseudonyme"
+msgstr "Pseudonyme"
+
+#: src/components/registerPage/Register.jsx:73
+msgid "Adresse mail"
+msgstr "Adresse mail"
+
+#: src/components/registerPage/Register.jsx:77
+msgid "Mot de passe"
+msgstr "Mot de passe"
