@@ -68,7 +68,29 @@ class Item extends Component {
             <div className="col-md-8 p-4">
               <div className="Subject">
                 <h2 className="h4 font-weight-bold text-center">{name}</h2>
-                <Resource href={this.state.item.resource} />
+                {/* Affichage des ressources de type image */}
+                {this.state.item.resource.map(res => {
+                  if (/picture/.test(res)) {
+                    <Resource href={res} />;
+                  }
+                })}
+                {/* Ajout d'un champs input invisible */}
+                <input type="file" id="file" ref="inputFile" style={{display: 'none'}}/>
+                {/* Bouton qui permet d'ouvrir l'explorateur de fichier en faisant appel au champs input */}
+                <button
+                  type="button"
+                  className="btn btn-sm ValidateButton btn"
+                  id="btn-addResource"
+                  onClick={() => this.refs.inputFile.current.click()}
+                >
+                  Ajouter une ressource
+                </button>
+                {/* Affichage des ressources autres qu'image */}
+                {this.state.item.resource.map(res => {
+                  if (!/picture/.test(res)) {
+                    <Resource href={res} />;
+                  }
+                })}
               </div>
               <Comments appId={this.state.disqus} item={this.state.item} />
             </div>
