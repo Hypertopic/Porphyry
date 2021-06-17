@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { t, Trans } from '@lingui/macro';
-import { i18n } from '../index.js';
 
 class Authenticated extends Component {
 
@@ -26,9 +25,9 @@ class Authenticated extends Component {
     if (this.state.ask) {
       return (
         <form className="Authenticated" onSubmit={this.handleLogin}>
-          <input placeholder={i18n._(t`nom d'utilisateur`)} ref={(x) => this.login = x} />
-          <input placeholder={i18n._(t`mot de passe`)} ref={(x) => this.password = x} type="password" />
-          <input type="submit" value={i18n._(t`Se connecter`)} />
+          <input placeholder={t`nom d'utilisateur`} ref={(x) => this.login = x} />
+          <input placeholder={t`mot de passe`} ref={(x) => this.password = x} type="password" />
+          <input type="submit" value={t`Se connecter`} />
         </form>
       );
     }

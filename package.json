@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@lingui/react": "^2.9.2",
+    "@lingui/react": "^3.10.2",
     "@react-google-maps/api": "^1.13.0",
     "bootstrap": "^4.6.0",
     "compare-func": "^2.0.0",
@@ -24,15 +24,14 @@
     "yaml": "^1.10.2"
   },
   "devDependencies": {
-    "@lingui/cli": "^2.9.2",
-    "@lingui/macro": "^2.9.2",
+    "@lingui/cli": "^3.10.2",
+    "@lingui/macro": "^3.10.2",
     "cross-env": "^7.0.3",
     "react-scripts": "^4.0.3",
     "rimraf": "^3.0.2",
     "serve": "^11.3.2"
   },
   "scripts": {
-    "add-locale": "lingui add-locale",
     "extract": "lingui extract",
     "start": "lingui compile && cross-env EXTEND_ESLINT=true react-scripts start",
     "clean": "rimraf src/locales/*/messages.js && rimraf build src/locales/_build",
@@ -41,9 +40,17 @@
     "test": "docker run --rm --volume ${PWD}:/app --tty --net=\"host\" --env APP_HOST=\"http://host.docker.internal:3000\" benel/cucumber-capybara --fail-fast --no-source"
   },
   "lingui": {
-    "localeDir": "src/locales/",
-    "srcPathDirs": [
-      "src/"
+    "catalogs": [
+      {
+        "path": "src/locales/{locale}/messages",
+        "include": [
+          "src/"
+        ]
+      }
+    ],
+    "locales": [
+      "fr",
+      "en"
     ],
     "format": "po",
     "sourceLocale": "fr"

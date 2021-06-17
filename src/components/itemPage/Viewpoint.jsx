@@ -6,7 +6,6 @@ import TopicPath from './TopicPath.jsx';
 import TopicTree from '../../TopicTree.js';
 import InputWithSuggestions from '../InputWithSuggestions.jsx';
 import { t } from '@lingui/macro';
-import { i18n } from '../../index.js';
 
 class Viewpoint extends React.Component {
   constructor(props) {
@@ -74,7 +73,7 @@ class Viewpoint extends React.Component {
   render() {
     const paths = this._getPaths();
     const inputProps = {
-      placeholder: this.state.newTopic ? i18n._(t`Choisir une rubrique parent...`) : i18n._(t`Ajouter une rubrique...`),
+      placeholder: this.state.newTopic ? t`Choisir une rubrique parent...` : t`Ajouter une rubrique...`,
       value: this.state.topicInputvalue,
       onFocus: this.onTopicInputFocus,
       onBlur: this.onTopicInputBlur,

@@ -7,7 +7,6 @@ import Header from '../Header.jsx';
 import TopicTree from '../../TopicTree.js';
 import Node from './Node.jsx';
 import { t, Trans } from '@lingui/macro';
-import { i18n } from '../../index.js';
 import Contributors from './Contributors.jsx';
 
 const _log = (x) => console.log(JSON.stringify(x, null, 2));
@@ -66,7 +65,7 @@ class Outliner extends React.Component {
 
   _getTitle() {
     return (<form className="input-group" onSubmit={(e) => this._newVP(e)}>
-      <input type="text" name="newTitle" className="form-control" placeholder={i18n._(t`Nom du point de vue`)} />
+      <input type="text" name="newTitle" className="form-control" placeholder={t`Nom du point de vue`} />
       <div className="input-group-append">
         <button type="submit" className="btn add btn-sm btn-light"><span className="oi oi-plus"> </span></button>
       </div>
