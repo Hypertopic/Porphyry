@@ -436,3 +436,18 @@ ul.Outliner,
   bottom: 0;
   background: #e6ecf0;
 }
+
+#subscribeCard {
+  width: 80%;
+  background-color: white;
+  border: 1px black solid;
+  margin: 50px auto 50px auto;
+}
+#headerSubscribeCard {
+  background-color: rgb(105,105,105);
+  padding: 10px 0 10px 0;
+  color: white;
+}
+#bodySubscribeCard {
+  padding: 20px 30px 20px 30px;
+}
