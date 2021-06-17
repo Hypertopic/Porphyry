@@ -154,9 +154,11 @@ class Item extends Component {
               }
             };
             // we fetch the topics asynchronously
-            if (Object.keys(this.state.item.topic).pop())
-              getAndFilterTopics(Object.keys(this.state.item.topic).pop()).then(async topicsData => this.setState({'topics': await topicsData}));
-            //console.log(this.state.topics);
+            if (Object.keys(this.state.item.topic)[0]) {
+              Object.keys(this.state.item.topic).forEach((id)=> {
+                getAndFilterTopics(id).then(async topicsData => this.setState({'topics': {...this.state.topics, ...await topicsData}}));
+              });
+            }
           } else {
             console.error('eventSource is undefined, updates are impossible');
           }
@@ -357,41 +359,28 @@ class Item extends Component {
   };
 
   _textToCopy = () => {
-    //IMPORTANT : les tests sont effectuées sur l'item SM 001 m
-    let nomDuTopic = '';
-    let idDuTopic = '';
-    //on récupère l'id du topic, ici l'id du topic XIXe s.
-    idDuTopic = this.state.topic ? this.state.topic['a76306e4f17ed4f79e7e481eb9a1bd06'].[1].id + ' ' : 'null';
-    // on essaye d'extraire le nom du topic
-    nomDuTopic = this.state.topics && this.state.topics[idDuTopic] ? this.state.topics[idDuTopic].name[0] + ' ' : 'null';
+    let infoStainedGlass = '';
     if (!this.state.item.creator && !this.state.item.spatial) {
-      nomDuTopic += 'Auteur et localisation inconnus, ';
+      infoStainedGlass += 'Auteur et localisation inconnus';
     } else if (this.state.item.spatial && !this.state.item.creator) {
-      nomDuTopic += this.state.item.spatial;
+      infoStainedGlass += this.state.item.spatial ;
     } else if (!this.state.item.spatial && this.state.item.creator) {
-      nomDuTopic += ',' + this.state.item.creator;
+      infoStainedGlass += ', ' + this.state.item.creator ;
     } else {
-      nomDuTopic += this.state.item.creator + ', ' + this.state.item.spatial;
+      infoStainedGlass += this.state.item.creator + ', ' + this.state.item.spatial;
     }
 
-    // ici tu peux rajouter tes filtres pour topics....
-    if (this.state.topics) {
-      let TopicsArray = {};
-      //on récupère les clés de chaque topics
-      TopicsArray = Object.keys(this.state.topics);
-      console.log('TopicsArray = ' + TopicsArray);
-      //on cherche l'index du topic qui correspond à celui récupéré ligne 364
-      for (let i = 0; i < TopicsArray.length;i++) {
-        if (TopicsArray[i] === idDuTopic) {
-          nomDuTopic = this.state.topics && this.state.topics.TopicsArray[i] ? this.state.topics.TopicsArray[i].name[0] + ' ' : 'null';
-        }
-      }
-      console.log('idDuTopic = ' + idDuTopic);
-      console.log('nomDuTopic = ' + nomDuTopic);
-      // text += this.state.topics.....
+    if (this.state.topics && this.state.topic && Object.keys(this.state.topics)) {
+      infoStainedGlass += ', ';
+      //on récupère les noms des topics grace aux ids qui nous interessent
+      Object.values(this.state.topic).forEach((viewPoint)=>{
+        viewPoint.forEach((subViewpoint)=>{
+          infoStainedGlass += nameTopic(this.state.topics, subViewpoint.id) || '';
+        });
+      });
     }
-
-    return nomDuTopic;
+    //on enleve un espace et une virgule à la fin
+    return infoStainedGlass.slice(0, -2);
   }
 }
 
@@ -406,6 +395,13 @@ const Comments = React.memo((props) => {
     : null;
 });
 
-const getAndFilterTopics = (id) => _fetchViewpointData(id).then(({topics})=>topics);
+const getAndFilterTopics = (id) => _fetchViewpointData(id).then(({topics})=> topics);
+
+const nameTopic = (topicsArray, id)=>{
+  if (topicsArray[id] && topicsArray[id].name && topicsArray[id].name[0]) {
+    return topicsArray[id].name[0] + ', ';
+  }
+  return null;
+};
 
 export default Item;

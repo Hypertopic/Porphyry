@@ -68,5 +68,4 @@ class TopicPath extends React.Component {
   }
 
 }
-
 export default TopicPath;

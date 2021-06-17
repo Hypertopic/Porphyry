@@ -73,7 +73,6 @@ class Viewpoint extends React.Component {
 
   render() {
     const paths = this._getPaths();
-    //console.log(paths);
     const inputProps = {
       placeholder: this.state.newTopic ? i18n._(t`Choisir une rubrique parent...`) : i18n._(t`Ajouter une rubrique...`),
       value: this.state.topicInputvalue,
