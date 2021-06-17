@@ -31,6 +31,7 @@ class Item extends Component {
       attributeInputValue: '',
       item: {topic: []},
       topics: null,
+      showPopupInstagram: false,
     };
   }
 
@@ -82,9 +83,17 @@ class Item extends Component {
                 <h2 className="h4 font-weight-bold text-center">{name}</h2>
                 <Resource href={this.state.item.resource} />
               </div>
-              <CopyToClipboard text={this._textToCopy()} onCopy={async() => await download.start()}>
-                <button className={'btn btn-warning'}>Copy to clipboard</button>
+              <CopyToClipboard text={this._textToCopy()} onCopy={async() => await download.start().then(this.setState({showPopupInstagram: true}))}>
+                <button className={'btn btn-warning'}>Partager sur Instagram</button>
               </CopyToClipboard>
+              {this.state.showPopupInstagram ? <div class="alert alert-warning alert-dismissible fade show" role="alert" data-dismiss="alert">
+                <strong>Pour partager sur Instagram :</strong> Les attributs et points de vue sont dans votre presse-papier, vous n'avez plus qu'à télécharger l'image et à vous rendre sur Instagram !
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+                : null
+              }
               <Comments appId={this.state.disqus} item={this.state.item} />
             </div>
           </div>
@@ -359,8 +368,21 @@ class Item extends Component {
   };
 
   _textToCopy = () => {
-    let infoStainedGlass = '';
-    if (!this.state.item.creator && !this.state.item.spatial) {
+    let attributesInstagram;
+    if (this.state.item.creator) {
+      attributesInstagram = '' + this.state.item.creator;
+    }
+    if (this.state.item.created) {
+      attributesInstagram += ', ' + this.state.item.created;
+    }
+    if (this.state.item.spatial) {
+      attributesInstagram += ', ' + this.state.item.spatial;
+    }
+    if (!this.state.item.creator && !this.state.item.created && !this.state.item.spatial) {
+      attributesInstagram = 'Aucune information sur la photo';
+    }
+    let infoStainedGlass = attributesInstagram;
+    /*if (!this.state.item.creator && !this.state.item.spatial) {
       infoStainedGlass += 'Auteur et localisation inconnus';
     } else if (this.state.item.spatial && !this.state.item.creator) {
       infoStainedGlass += this.state.item.spatial ;
@@ -368,7 +390,7 @@ class Item extends Component {
       infoStainedGlass += ', ' + this.state.item.creator ;
     } else {
       infoStainedGlass += this.state.item.creator + ', ' + this.state.item.spatial;
-    }
+    }*/
 
     if (this.state.topics && this.state.topic && Object.keys(this.state.topics)) {
       infoStainedGlass += ', ';
