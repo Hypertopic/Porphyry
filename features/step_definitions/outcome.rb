@@ -14,6 +14,17 @@ Alors("le titre de l'item affiché est {string}") do |item|
   expect(find('.Subject h2')).to have_content item
 end
 
+Alors("{string} est la destination du lien {string} de {string}") do |destination, link, source|
+  expect(page).to have_content destination
+  expect(page).to have_content link
+end
+
+Alors("{string} est la source du lien {string} de {string}") do |source, link, destination|
+  click_on destination
+  expect(page).to have_content source
+  expect(page).to have_content link
+end
+
 Alors("la valeur de l'attribut {string} est {string}") do |attribute, value|
   expect(page).to have_content value
   expect(page).to have_content attribute

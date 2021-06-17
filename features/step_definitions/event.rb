@@ -46,6 +46,14 @@ Quand("l'utilisateur indique {string} pour la rubrique {string} du point de vue 
   end
 end
 
+Quand ("l'utilisateur indique {string} comme {string}") do |item, link| 
+  within '.link'
+    fill_in placeholder: 'Type de lien', with: link
+    fill_in placeholder: 'Item', with: item
+    click_on class: 'ValidateButton'
+  end  
+end
+
 Quand("l'utilisateur recherche {string} puis choisit {string}") do |pattern, attribute|
   find('input[type="search"]').send_keys pattern
   click_link(attribute, href: nil)
