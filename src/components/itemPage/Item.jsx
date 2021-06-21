@@ -368,41 +368,30 @@ class Item extends Component {
   };
 
   _textToCopy = () => {
-    let attributesInstagram;
+    let attributesInstagram = '';
     if (this.state.item.creator) {
-      attributesInstagram = '' + this.state.item.creator;
+      attributesInstagram += '' + this.state.item.creator + ', ';
     }
     if (this.state.item.created) {
-      attributesInstagram += ', ' + this.state.item.created;
+      attributesInstagram += '' + this.state.item.created + ', ';
     }
     if (this.state.item.spatial) {
-      attributesInstagram += ', ' + this.state.item.spatial;
+      attributesInstagram += '' + this.state.item.spatial + ', ';
     }
     if (!this.state.item.creator && !this.state.item.created && !this.state.item.spatial) {
       attributesInstagram = 'Aucune information sur la photo';
     }
-    let infoStainedGlass = attributesInstagram;
-    /*if (!this.state.item.creator && !this.state.item.spatial) {
-      infoStainedGlass += 'Auteur et localisation inconnus';
-    } else if (this.state.item.spatial && !this.state.item.creator) {
-      infoStainedGlass += this.state.item.spatial ;
-    } else if (!this.state.item.spatial && this.state.item.creator) {
-      infoStainedGlass += ', ' + this.state.item.creator ;
-    } else {
-      infoStainedGlass += this.state.item.creator + ', ' + this.state.item.spatial;
-    }*/
-
+    let infoStainedGlass = attributesInstagram + '\n';
     if (this.state.topics && this.state.topic && Object.keys(this.state.topics)) {
-      infoStainedGlass += ', ';
-      //on récupère les noms des topics grace aux ids qui nous interessent
+      infoStainedGlass += ' ';
+      //we fetch every topic's name we need
       Object.values(this.state.topic).forEach((viewPoint)=>{
         viewPoint.forEach((subViewpoint)=>{
           infoStainedGlass += nameTopic(this.state.topics, subViewpoint.id) || '';
         });
       });
     }
-    //on enleve un espace et une virgule à la fin
-    return infoStainedGlass.slice(0, -2);
+    return infoStainedGlass;
   }
 }
 
@@ -421,7 +410,7 @@ const getAndFilterTopics = (id) => _fetchViewpointData(id).then(({topics})=> top
 
 const nameTopic = (topicsArray, id)=>{
   if (topicsArray[id] && topicsArray[id].name && topicsArray[id].name[0]) {
-    return topicsArray[id].name[0] + ', ';
+    return '#' + topicsArray[id].name[0].replace(/\W/g, '') + ' ';
   }
   return null;
 };
