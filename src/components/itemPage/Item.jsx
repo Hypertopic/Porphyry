@@ -376,7 +376,7 @@ class Item extends Component {
       attributesInstagram += '' + this.state.item.created + ', ';
     }
     if (this.state.item.spatial) {
-      attributesInstagram += '' + this.state.item.spatial + ', ';
+      attributesInstagram += '' + this.state.item.spatial + '';
     }
     if (!this.state.item.creator && !this.state.item.created && !this.state.item.spatial) {
       attributesInstagram = 'Aucune information sur la photo';
