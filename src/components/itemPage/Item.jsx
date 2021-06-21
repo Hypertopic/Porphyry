@@ -27,8 +27,15 @@ class Item extends Component {
     super();
     this.state = {
       attributeInputValue: '',
-      item: {topic: []}
+      item: { topic: [] },
+      visitMap: false
     };
+    conf.then(settings => {
+      if (settings.portfolio && settings.portfolio[settings.user])
+        this.setState({
+          visitMap: settings.portfolio[settings.user].visitMap || false,
+        });
+    });
   }
 
   render() {
@@ -36,6 +43,23 @@ class Item extends Component {
     let attributes = this._getAttributes();
     let viewpoints = this._getViewpoints();
     let sameNameBlock = this._getSameNameBlock();
+    const { visitMap } = this.state;
+    const urlParams = new URLSearchParams(window.location.search);
+    const visitName = urlParams.get('visit');
+    const goBackUrlParams = new URLSearchParams();
+    if (visitMap && visitName) {
+      goBackUrlParams.set('t', JSON.stringify({
+        'type': 'intersection',
+        'data': [{
+          'type': 'intersection',
+          'selection': [
+            `spatial : ${visitName}`
+          ],
+          'exclusion': []
+        }]
+      }));
+      goBackUrlParams.set('mode', 'visit');
+    }
     return (
       <div className="App container-fluid">
         <Header conf={conf} />
@@ -43,9 +67,12 @@ class Item extends Component {
           <title>{name}</title>
         </Helmet>
         <div className="Status row h5">
-          <Link to="/" className="badge badge-pill badge-light TopicTag">
+          <Link to={{
+            pathname: '/',
+            search: decodeURIComponent(goBackUrlParams.toString())
+          }} className="badge badge-pill badge-light TopicTag">
             <span className="badge badge-pill badge-dark oi oi-chevron-left"> </span>
-            <Trans>Retour à l'accueil</Trans>
+            <Trans>{visitName ? 'Retour à la visite' : 'Retour à l\'accueil'}</Trans>
           </Link>
         </div>
         <div className="container-fluid">
