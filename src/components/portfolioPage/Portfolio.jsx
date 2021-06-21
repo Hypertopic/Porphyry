@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import by from 'compare-func';
 import queryString from 'query-string';
 import Hypertopic from 'hypertopic';
@@ -9,6 +10,7 @@ import Header from '../Header.jsx';
 import Status from './Status.jsx';
 import SearchBar from './SearchBar.jsx';
 import ViewpointCreator from './ViewpointCreator.jsx';
+import VisitMap from './VisitMap.jsx';
 import { Trans } from '@lingui/macro';
 import { Items } from '../../model.js';
 import Selection from '../../Selection.js';
@@ -21,9 +23,16 @@ class Portfolio extends Component {
       corpora: [],
       items: [],
       selectedItems: [],
-      topicsItems: new Map()
+      topicsItems: new Map(),
+      visitMap: false
     };
     this._updateSelection();
+    conf.then(settings => {
+      if (settings.portfolio && settings.portfolio[settings.user])
+        this.setState({
+          visitMap: settings.portfolio[settings.user].visitMap || false,
+        });
+    });
   }
 
   render() {
@@ -34,6 +43,32 @@ class Portfolio extends Component {
       .map(([key, value]) => key.concat(' : ', value))
       .map(x => ({[x]: {name: x}}));
     let candidates = this.state.viewpoints.concat(attributes);
+    const urlParams = new URLSearchParams(window.location.search);
+    const selectionJSON = JSON.parse(urlParams.get('t'));
+    const visitPossible = this.state.visitMap
+      && selectionJSON
+      && selectionJSON.type === 'intersection'
+      && selectionJSON.data.length === 1
+      && selectionJSON.data[0].type === 'intersection'
+      && selectionJSON.data[0].selection.length === 1
+      && selectionJSON.data[0].exclusion.length === 0
+      && /^spatial : /.test(selectionJSON.data[0].selection[0]);
+    const visitMode = urlParams.get('mode') === 'visit';
+    const visitButton = <div className="col d-block d-sm-none">
+      <input type="button" value={visitMode ? 'Carte' : 'Visiter'} style={{
+        backgroundColor: 'dimgrey',
+        borderColor: 'white',
+        borderRadius: '5px',
+        color: 'white'
+      }} onClick={
+        () => {
+          urlParams.delete('mode');
+          if (!visitMode)
+            urlParams.append('mode', 'visit');
+          this.props.history.push({ search: decodeURIComponent(urlParams.toString()) });
+        }
+      } />
+    </div>;
     return (
       <div className="App container-fluid">
         <Header conf={conf} />
@@ -44,6 +79,7 @@ class Portfolio extends Component {
           <div className="col-md-6">
             <Status candidates={candidates} query={this.query} />
           </div>
+          {visitPossible && visitButton}
         </div>
         <div className="container-fluid">
           <div className="App-content row">
@@ -56,7 +92,7 @@ class Portfolio extends Component {
                 </div>
               </div>
             </div>
-            {corpora}
+            {visitPossible && visitMode ? <VisitMap items={this.state.selectedItems} /> : corpora}
           </div>
         </div>
       </div>
@@ -251,4 +287,4 @@ function push(map, topicId, itemId) {
     map.set(topicId, new Set([itemId]));
   }
 }
-export default Portfolio;
+export default withRouter(Portfolio);
