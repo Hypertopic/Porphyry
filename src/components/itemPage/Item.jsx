@@ -368,30 +368,29 @@ class Item extends Component {
   };
 
   _textToCopy = () => {
-    let attributesInstagram = '';
+    let descriptionInstagram = '';
     if (this.state.item.creator) {
-      attributesInstagram += '' + this.state.item.creator + ', ';
+      descriptionInstagram += this.state.item.creator + ', ';
     }
     if (this.state.item.created) {
-      attributesInstagram += '' + this.state.item.created + ', ';
+      descriptionInstagram += this.state.item.created + ', ';
     }
     if (this.state.item.spatial) {
-      attributesInstagram += '' + this.state.item.spatial + '';
+      descriptionInstagram += this.state.item.spatial + '\n';
     }
     if (!this.state.item.creator && !this.state.item.created && !this.state.item.spatial) {
-      attributesInstagram = 'Aucune information sur la photo';
+      descriptionInstagram = 'Aucune information sur la photo \n';
     }
-    let infoStainedGlass = attributesInstagram + '\n';
     if (this.state.topics && this.state.topic && Object.keys(this.state.topics)) {
-      infoStainedGlass += ' ';
+      descriptionInstagram += ' ';
       //we fetch every topic's name we need
       Object.values(this.state.topic).forEach((viewPoint)=>{
         viewPoint.forEach((subViewpoint)=>{
-          infoStainedGlass += nameTopic(this.state.topics, subViewpoint.id) || '';
+          descriptionInstagram += nameTopic(this.state.topics, subViewpoint.id) || '';
         });
       });
     }
-    return infoStainedGlass;
+    return descriptionInstagram;
   }
 }
 
@@ -410,7 +409,7 @@ const getAndFilterTopics = (id) => _fetchViewpointData(id).then(({topics})=> top
 
 const nameTopic = (topicsArray, id)=>{
   if (topicsArray[id] && topicsArray[id].name && topicsArray[id].name[0]) {
-    return '#' + topicsArray[id].name[0].replace(/\W/g, '') + ' ';
+    return '#' + topicsArray[id].name[0].replace(/\W/g, '').trim() + ' ';
   }
   return null;
 };
