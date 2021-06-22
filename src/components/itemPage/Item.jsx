@@ -370,7 +370,7 @@ class Item extends Component {
   _textToCopy = () => {
     let descriptionInstagram = '';
     if (this.state.item.creator) {
-      descriptionInstagram += this.state.item.creator + ', ';
+      descriptionInstagram += '©' + this.state.item.creator + ', ';
     }
     if (this.state.item.created) {
       descriptionInstagram += this.state.item.created + ', ';
