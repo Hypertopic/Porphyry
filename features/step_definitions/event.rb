@@ -57,3 +57,11 @@ Quand("l'utilisateur choisit l'item {string} dans le bloc Items ayant le même n
   end
 end
 
+Quand ("l'utilisateur indique {string} comme {string}") do |item, link| 
+  within '.link' do
+    fill_in placeholder: 'Type de lien', with: link
+    fill_in placeholder: 'Item', with: item
+    click_on class: 'ValidateButton'
+  end 
+end
+ 

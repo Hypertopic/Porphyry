@@ -35,3 +35,14 @@ end
 Alors("la page contient {string}") do |localization|
   expect(page).to have_content localization
 end
+
+Alors("{string} est la destination du lien {string} de {string}") do |destination, link, source|
+  expect(page).to have_content destination
+  expect(page).to have_content link
+end
+
+Alors("{string} est la source du lien {string} de {string}") do |source, link, destination|
+  click_on destination
+  expect(page).to have_content source
+  expect(page).to have_content link
+end
