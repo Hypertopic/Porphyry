@@ -84,8 +84,10 @@ class Item extends Component {
                 <Resource href={this.state.item.resource} />
               </div>
               <CopyToClipboard text={this._textToCopy()} onCopy={async() => await download.start().then(()=>this.setState({showPopupInstagram: true}))}>
-                <button className={'btn btn-warning m-3'}>Partager sur Instagram</button>
+                <button className={'btn btn-light my-3 btn-sm float-right'}>Partager sur Instagram</button>
               </CopyToClipboard>
+              {/* To remove the float attribute for the next elements */}
+              <div className={'clearfix'}/>
               {this.state.showPopupInstagram
               && <div className="alert alert-warning alert-dismissible fade show m-3" role="alert" data-dismiss="alert">
                 <strong>Pour partager sur Instagram :</strong> Les attributs et points de vue sont dans votre presse-papier, vous n'avez plus qu'à télécharger l'image et à vous rendre sur Instagram !
@@ -95,6 +97,7 @@ class Item extends Component {
               </div>
               }
               <Comments appId={this.state.disqus} item={this.state.item} />
+
             </div>
           </div>
         </div>
@@ -390,7 +393,7 @@ class Item extends Component {
         });
       });
     }
-    return descriptionInstagram;
+    return descriptionInstagram.trim();
   }
 }
 
@@ -409,7 +412,7 @@ const getAndFilterTopics = (id) => _fetchViewpointData(id).then(({topics})=> top
 
 const nameTopic = (topicsArray, id)=>{
   if (topicsArray[id] && topicsArray[id].name && topicsArray[id].name[0]) {
-    return '#' + topicsArray[id].name[0].replace(/\W/g, '').trim() + ' ';
+    return '#' + topicsArray[id].name[0].replace(/\W/g, '') + ' ';
   }
   return null;
 };
