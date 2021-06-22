@@ -7,7 +7,7 @@ let Resource = React.memo((props) => {
 
   let getMediaType = (uri) => {
     try {
-      if (/picture/.test(uri)) return 'image';
+      if (/optimized/.test(uri)) return 'image';
       switch (uri.match(EXTENSION)) {
         case '.gif':
         case '.jpg':
