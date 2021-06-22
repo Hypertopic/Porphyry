@@ -12,7 +12,7 @@ import SameNameBlock from './SameNameBlock.jsx';
 import { DiscussionEmbed } from 'disqus-react';
 import { t, Trans } from '@lingui/macro';
 
-const HIDDEN = ['topic', 'resource', 'thumbnail', 'item', 'record'];
+const HIDDEN = ['topic', 'resource', 'thumbnail', 'item', 'record', 'original'];
 
 function getString(obj) {
   if (Array.isArray(obj)) {
