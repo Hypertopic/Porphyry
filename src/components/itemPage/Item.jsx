@@ -1,19 +1,20 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import React, {Component} from 'react';
+import {Link} from 'react-router-dom';
 import Hypertopic from 'hypertopic';
 import groupBy from 'json-groupby';
-import { Helmet } from 'react-helmet';
+import {Helmet} from 'react-helmet';
 import conf from '../../config.js';
-import Viewpoint from './Viewpoint.jsx';
+import Viewpoint, {_fetchViewpointData} from './Viewpoint.jsx';
 import Attribute from './Attribute.jsx';
 import Resource from './Resource.jsx';
 import Header from '../Header.jsx';
 import SameNameBlock from './SameNameBlock.jsx';
-import { DiscussionEmbed } from 'disqus-react';
-import { t, Trans } from '@lingui/macro';
+import {DiscussionEmbed} from 'disqus-react';
+import {t, Trans} from '@lingui/macro';
+import {CopyToClipboard} from 'react-copy-to-clipboard';
+import JsFileDownloader from 'js-file-downloader';
 
-const HIDDEN = ['topic', 'resource', 'thumbnail', 'item', 'record', 'original'];
-
+const HIDDEN = ['topic', 'resource', 'thumbnail', 'item'];
 function getString(obj) {
   if (Array.isArray(obj)) {
     return obj.map(val => getString(val)).join(', ');
@@ -27,15 +28,23 @@ class Item extends Component {
     super();
     this.state = {
       attributeInputValue: '',
-      item: {topic: []}
+      item: {topic: []},
+      topics: null,
+      showPopupInstagram: false,
     };
   }
 
   render() {
-    let name = getString(this.state.item.name);
-    let attributes = this._getAttributes();
-    let viewpoints = this._getViewpoints();
-    let sameNameBlock = this._getSameNameBlock();
+    const name = getString(this.state.item.name);
+    const attributes = this._getAttributes();
+    const viewpoints = this._getViewpoints();
+    const sameNameBlock = this._getSameNameBlock();
+    const download = new JsFileDownloader({
+      url: this.state.item.resource,
+      autoStart: false,
+      filename: '' + this.state.item.name + '.jpg'
+    });
+
     return (
       <div className="App container-fluid">
         <Header conf={conf} />
@@ -73,7 +82,21 @@ class Item extends Component {
                 <h2 className="h4 font-weight-bold text-center">{name}</h2>
                 <Resource href={this.state.item.resource} />
               </div>
+              <CopyToClipboard text={this._textToCopy()} onCopy={async() => await download.start().then(()=>this.setState({showPopupInstagram: true}))}>
+                <button className={'btn btn-light my-3 btn-sm float-right'}>Partager sur Instagram</button>
+              </CopyToClipboard>
+              {/* To remove the float attribute for the next elements */}
+              <div className={'clearfix'}/>
+              {this.state.showPopupInstagram
+              && <div className="alert alert-warning alert-dismissible fade show m-3" role="alert" data-dismiss="alert">
+                <strong>Pour partager sur Instagram :</strong> Les attributs et points de vue sont dans votre presse-papier, vous n'avez plus qu'à télécharger l'image et à vous rendre sur Instagram !
+                <button type="button" className="close" data-dismiss="alert" aria-label="Close" onClick={()=> this.setState({showPopupInstagram: false})}>
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              }
               <Comments appId={this.state.disqus} item={this.state.item} />
+
             </div>
           </div>
         </div>
@@ -141,6 +164,12 @@ class Item extends Component {
                 }
               }
             };
+            // we fetch the topics asynchronously
+            if (Object.keys(this.state.item.topic)[0]) {
+              Object.keys(this.state.item.topic).forEach((id)=> {
+                getAndFilterTopics(id).then(async topicsData => this.setState({'topics': {...this.state.topics, ...await topicsData}}));
+              });
+            }
           } else {
             console.error('eventSource is undefined, updates are impossible');
           }
@@ -339,6 +368,32 @@ class Item extends Component {
         .catch(error => console.error(error));
     }
   };
+
+  _textToCopy = () => {
+    let descriptionInstagram = '';
+    if (this.state.item.creator) {
+      descriptionInstagram += '©' + this.state.item.creator + ', ';
+    }
+    if (this.state.item.created) {
+      descriptionInstagram += this.state.item.created + ', ';
+    }
+    if (this.state.item.spatial) {
+      descriptionInstagram += this.state.item.spatial + '\n';
+    }
+    if (!this.state.item.creator && !this.state.item.created && !this.state.item.spatial) {
+      descriptionInstagram = 'Aucune information sur la photo \n';
+    }
+    if (this.state.topics && this.state.topic && Object.keys(this.state.topics)) {
+      descriptionInstagram += ' ';
+      //we fetch every topic's name we need
+      Object.values(this.state.topic).forEach((viewPoint)=>{
+        viewPoint.forEach((subViewpoint)=>{
+          descriptionInstagram += nameTopic(this.state.topics, subViewpoint.id) || '';
+        });
+      });
+    }
+    return descriptionInstagram.trim();
+  }
 }
 
 const Comments = React.memo((props) => {
@@ -351,5 +406,14 @@ const Comments = React.memo((props) => {
     ? <DiscussionEmbed config={config} shortname={props.appId} />
     : null;
 });
+
+const getAndFilterTopics = (id) => _fetchViewpointData(id).then(({topics})=> topics);
+
+const nameTopic = (topicsArray, id)=>{
+  if (topicsArray[id] && topicsArray[id].name && topicsArray[id].name[0]) {
+    return '#' + topicsArray[id].name[0].replace(/\W/g, '') + ' ';
+  }
+  return null;
+};
 
 export default Item;
