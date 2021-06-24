@@ -337,15 +337,25 @@ class Item extends Component {
     }
   };
 }
+/*
+const Comments = ((props) => {
+  console.log(props);
+  let config = {
+    identifier: props.item.id ? props.item.id : 'null',
+    title: 'test',
+    url: props.item.resource && props.item.lenght > 0 ? props.item.resource[0] : 'null',
+  };
+  return (props.appId) ? <DiscussionEmbed config={config} shortname={'porphyry-1'} /> : null;
+});*/
 
 const Comments = React.memo((props) => {
+  console.log(props);
   let config = {
-    identifier: props.item.id,
-    title: props.item.name
+    identifier: props.appId,
+    title: 'test',
+    url: props.item.resource && props.item.lenght > 0 ? props.item.resource[0] : 'null',
   };
-  return (props.appId)
-    ? <DiscussionEmbed config={config} shortname={props.appId} />
-    : null;
+  return (props.appId) ? <DiscussionEmbed config={config} shortname={props.appId} /> : null;
 });
 
 export default Item;
