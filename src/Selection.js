@@ -19,10 +19,12 @@ let clauseToString = (x) => (
   (x.data)
     ? x.data.map((y) => `(${clauseToString(y)})`)
     : [
-      ...x.selection.map((y) => `'${y}'`),
-      ...x.exclusion.map((y) => `NOT('${y}')`)
+      ...x.selection.map((y) => `"${y}"`),
+      ...x.exclusion.map((y) => `NOT("${y}")`)
     ]
-).join((x.type === 'intersection') ? ' AND ' : ' OR ');
+)
+  .join((x.type === 'intersection') ? ' AND ' : ' OR ')
+  .replace('\'', '’');
 
 export default class Selection {
 
