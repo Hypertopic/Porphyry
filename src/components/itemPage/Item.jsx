@@ -11,9 +11,8 @@ import Header from '../Header.jsx';
 import SameNameBlock from './SameNameBlock.jsx';
 import { DiscussionEmbed } from 'disqus-react';
 import { t, Trans } from '@lingui/macro';
-import { i18n } from '../../index.js';
 
-const HIDDEN = ['topic', 'resource', 'thumbnail', 'item', 'record'];
+const HIDDEN = ['topic', 'resource', 'thumbnail', 'item', 'record', 'original'];
 
 function getString(obj) {
   if (Array.isArray(obj)) {
@@ -243,7 +242,7 @@ class Item extends Component {
           <input ref={(input) => this.attributeInput = input} value={this.state.attributeInputValue}
             onChange={attributeInputChange} onKeyDown={attributeInputChangeKeyDown}
             onFocus={attributeInputFocus} onBlur={attributeInputBlur}
-            id="new-attribute" className="form-control" placeholder={i18n._(placeholder)} type="text" />
+            id="new-attribute" className="form-control" placeholder={placeholder} type="text" />
         </div>
         <div className="input-group-append">
           <button type="button" className="btn btn-sm ValidateButton btn"
@@ -323,7 +322,7 @@ class Item extends Component {
   };
 
   _removeTopic = async (topicToDelete) => {
-    if (window.confirm(i18n._(t`Voulez-vous réellement que l'item affiché ne soit plus décrit à l'aide de cette rubrique ?`))) {
+    if (window.confirm(t`Voulez-vous réellement que l'item affiché ne soit plus décrit à l'aide de cette rubrique ?`)) {
       return new Hypertopic((await conf).services)
         .item({
           _id: this.props.match.params.item,

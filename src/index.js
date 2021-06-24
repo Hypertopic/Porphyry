@@ -11,35 +11,25 @@ import './styles/index.css';
 import './styles/App.css';
 
 import { I18nProvider } from '@lingui/react';
-import { setupI18n } from '@lingui/core';
-import catalogEn from './locales/en/messages.js';
-import catalogFr from './locales/fr/messages.js';
+import { i18n } from '@lingui/core';
 
-var languages = window.navigator.languages.map(x => x.slice(0, 2));
-const catalogList = {
-  en: catalogEn,
-  fr: catalogFr
+let providedLocales = {
+  en: require('./locales/en/messages.js').messages,
+  fr: require('./locales/fr/messages.js').messages
 };
 
-var hasLanguage = false;
-var lang = 'en';
-languages.forEach((item) => {
-  if (!hasLanguage && catalogList.hasOwnProperty(item)) {
-    lang = item;
-    hasLanguage = true;
-  }
-});
-if (!hasLanguage) {
-  lang = 'en';
-}
+let requestedLocales = window.navigator.languages
+  .map(x => x.match(/\w{2}/).shift());
 
-export const i18n = setupI18n({
-  language: lang,
-  catalogs: catalogList,
-});
+let locale = [...requestedLocales, 'en']
+  .filter(x => x in providedLocales)
+  .shift();
+
+i18n.load(providedLocales);
+i18n.activate(locale);
 
 ReactDOM.render(
-  <I18nProvider i18n={i18n} language="en" catalogs={catalogList}>
+  <I18nProvider i18n={i18n}>
     <Router>
       <Switch>
         <Route path="/item/:corpus/:item" component={Item} />
