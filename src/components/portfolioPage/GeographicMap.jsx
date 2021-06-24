@@ -24,7 +24,7 @@ class GeographicMap extends React.PureComponent {
             this._fetchPlaces(addresses);
           }
           let portfolio = conf.portfolio;
-          if (portfolio && portfolio[conf.user]) {
+          if (portfolio && portfolio[conf.user] && portfolio[conf.user].layers) {
             let layers = portfolio[conf.user].layers;
             this.setState({ layers });
           }
