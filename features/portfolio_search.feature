@@ -5,10 +5,10 @@ Fonctionnalité: Sélectionner des items en cherchant
 Scénario: une valeur d'attribut
 
   Soit "vitraux" le portfolio ouvert
-  Et "AXN 009" un des items affichés
+  Et "SAA B" un des items affichés
   Et "SJ 001" un des items affichés
-  Quand l'utilisateur recherche "auxon" puis choisit "spatial : Église Saint-Loup, Auxon"
-  Alors l'item "AXN 009" est affiché
+  Quand l'utilisateur recherche "acad" puis choisit "spatial : Société académique de l'Aube"
+  Alors l'item "SAA B" est affiché
   Mais l'item "SJ 001" est caché
 
 Scénario: un type d'attribut

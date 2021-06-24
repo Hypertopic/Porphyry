@@ -136,7 +136,7 @@ class Portfolio extends Component {
     return new Items(
       [item]
     ).getAttributes()
-      .map(([key, value]) => key.concat(' : ', value));
+      .map(([key, value]) => key.concat(' : ', value.replace('\'', '’')));
   }
 
   _isSelected(item) {
