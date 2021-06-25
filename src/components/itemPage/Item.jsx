@@ -89,7 +89,7 @@ class Item extends Component {
               <div className={'clearfix'}/>
               {this.state.showPopupInstagram
               && <div className="alert alert-warning alert-dismissible fade show m-3" role="alert" data-dismiss="alert">
-                <strong>Pour partager sur Instagram :</strong> Les attributs et points de vue sont dans votre presse-papier, vous n'avez plus qu'à télécharger l'image et à vous rendre sur Instagram !
+                <strong>Pour partager sur Instagram :</strong> Les attributs et sujets/rubriques des points de vue sont dans votre presse-papier, vous n'avez plus qu'à télécharger l'image et à vous rendre sur Instagram !
                 <button type="button" className="close" data-dismiss="alert" aria-label="Close" onClick={()=> this.setState({showPopupInstagram: false})}>
                   <span aria-hidden="true">&times;</span>
                 </button>

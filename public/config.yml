@@ -1,3 +1,4 @@
 user: vitraux
+disqus: porphyry-1
 services:
   - http://localhost
