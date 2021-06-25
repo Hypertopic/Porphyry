@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Portfolio from './components/portfolioPage/Portfolio.jsx';
 import Item from './components/itemPage/Item.jsx';
 import Outliner from './components/viewpointPage/Outliner.jsx';
+import RSS from './components/rssPage/Rss';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'open-iconic/font/css/open-iconic-bootstrap.css';
@@ -14,6 +15,7 @@ import { I18nProvider } from '@lingui/react';
 import { setupI18n } from '@lingui/core';
 import catalogEn from './locales/en/messages.js';
 import catalogFr from './locales/fr/messages.js';
+import RSSTopic from './components/rssPage/RssTopic';
 
 var languages = window.navigator.languages.map(x => x.slice(0, 2));
 const catalogList = {
@@ -44,6 +46,8 @@ ReactDOM.render(
       <Switch>
         <Route path="/item/:corpus/:item" component={Item} />
         <Route path="/viewpoint/:id" component={Outliner} />
+        <Route path="/rss/topic/" component={RSSTopic} />
+        <Route path="/rss/" component={RSS} />
         <Route path="/" component={Portfolio} />
       </Switch>
     </Router>

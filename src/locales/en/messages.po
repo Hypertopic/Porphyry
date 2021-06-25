@@ -127,3 +127,31 @@ msgstr "Username"
 #: src/components/itemPage/Attribute.jsx:89
 msgid "valeur"
 msgstr "value"
+
+#: src/components/Rss.jsx:37
+msgid "Flux RSS"
+msgstr "RSS"
+
+#: src/components/rssPage/Rss.jsx:59
+msgid "S'abonner à un corpus"
+msgstr "Subscribe to a corpus"
+
+#: src/components/rssPage/Rss.jsx:62
+msgid "S'abonner à un catégorie"
+msgstr "Subscribe to a topic"
+
+#: src/components/rssPage/Rss.jsx:68
+msgid "Qu'est-ce qu'un flux RSS ?"
+msgstr "What is RSS ?"
+
+#: src/components/rssPage/Rss.jsx:71
+msgid "Les flux RSS sont des fils de contenus . Chaque flux correspond à une rubrique ou une sous-rubrique du site. En vous abonnant à un flux, vous recevrez automatiquement le titre, auteur, et informations importantes des derniers items ajoutés ou modifiés."
+msgstr "RSS is a web feed. Each feed is related to a topic of the website. By subscribing to a feed, you will automatically receive the title, the author and the important information about modified of added items."
+
+#: src/components/rssPage/Rss.jsx:76
+msgid "Comment utiliser les flux RSS ?"
+msgstr "How to use RSS feeds ?"
+
+#: src/components/rssPage/Rss.jsx:79
+msgid "Pour pouvoir utiliser les flux RSS, plusieurs solutions existent. Vous pouvez utiliser un agrégateur de flux, via un site web ou une application mobile, comme FlipBoard, Feedly, Netvibes, InoReader ou encore News Blur. Alternativament, un lecteur RSS peut être installé directement sur votre navigateur web."
+msgstr "There are several ways of using RSS feeds. You can use a RSS feed reader, it can take the form of a website or a mobile application, such as FlipBoard, Feedly, Netvives, InoReader or News Blur. Alternatively, a RSS reader can be directly installed on your web browser."

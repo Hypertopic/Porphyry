@@ -15,6 +15,25 @@
   min-height: 55px;
 }
 
+.App header .rss-parte {
+  text-align: center;
+  vertical-align: center;
+}
+
+.App header .rss-icon {
+  display: inline-block;
+  height: 18px;
+  width: 18px;
+  min-width: 14px;
+  min-height: 14px;
+  margin-right: 10px;
+}
+
+
+.ExplicativeText {
+  text-align: left;
+}
+
 h1 a, h1 a:hover {
   color: ivory;
   text-decoration: none;
@@ -27,6 +46,11 @@ h1 a, h1 a:hover {
 }
 
 .Authenticated a {
+  color: lightgrey;
+  padding: 0 8px;
+}
+
+.rss-btn  a{
   color: lightgrey;
   padding: 0 8px;
 }
