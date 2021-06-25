@@ -168,20 +168,9 @@ class Viewpoint extends React.Component {
   componentDidMount() {
     this._fetchViewpoint();
   }
-
   async _fetchViewpoint() {
-    let hypertopic = new Hypertopic((await conf).services);
-    return hypertopic.getView(`/viewpoint/${this.props.id}`).then((data) => {
-      let viewpoint = data[this.props.id];
-      let name = viewpoint.name;
-      let topics = viewpoint;
-      delete topics.user;
-      delete topics.name;
-      delete topics.upper;
-      this.setState({name, topics});
-    });
+    this.setState(await _fetchViewpointData(this.props.id));
   }
-
   async createTopic(name, parent) {
     var newId;
     let hypertopic = new Hypertopic((await conf).services);
@@ -218,4 +207,14 @@ class Viewpoint extends React.Component {
 
 }
 
+export const _fetchViewpointData = async(id) => {
+  return new Hypertopic((await conf).services).getView(`/viewpoint/${id}`).then((data) => {
+    let topics = data[id];
+    const name = topics.name;
+    delete topics.user;
+    delete topics.name;
+    delete topics.upper;
+    return ({name, topics});
+  });
+};
 export default Viewpoint;
