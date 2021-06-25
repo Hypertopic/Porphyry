@@ -57,3 +57,13 @@ Quand("l'utilisateur choisit l'item {string} dans le bloc Items ayant le même n
   end
 end
 
+Quand("{string} souhaite s'enregistrer comme contributeur en tant que {string} avec le mot de passe {string}") do |mail, login, password|
+  click_on "S'inscrire..."
+  expect(page).to have_content("Formulaire d'inscription")
+  range = [*'0'..'9',*'A'..'F']
+  hash = Array.new(36){ range.sample }.join
+  fill_in "email", with: hash + mail
+  fill_in "pseudo", with: login + hash
+  fill_in "password", with: password
+  click_on "Inscription"
+end
