@@ -57,3 +57,32 @@ Quand("l'utilisateur choisit l'item {string} dans le bloc Items ayant le même n
   end
 end
 
+Alors("l'item {string} est au dessus du plan") do |item|
+  within('.Spatial') do
+    find(:xpath, "//div[@class='item' and contains(., '#{item}')]/../following-sibling::div/div[@id='plan']")
+  end
+end
+
+Alors("l'item {string} est au dessus de l'item {string}") do |itemHaut, itemBas|
+  within('.Spatial') do
+    find(:xpath, "//div[@class='item' and contains(., '#{itemHaut}')]/../following-sibling::div/div[contains(.,'#{itemBas}')]")
+  end
+end
+
+Alors("l'item {string} est à droite du plan") do |item|
+  within('.Spatial') do
+    find(:xpath, "//div[@id='plan']/following-sibling::div[@class='item' and contains(., '#{item}')]")
+  end
+end
+
+Alors("l'item {string} est à droite de l'item {string}") do |itemDroite, itemGauche|
+  within('.Spatial') do
+    find(:xpath, "//div[@class='item' and contains(., '#{itemGauche}')]/following-sibling::div[@class='item' and contains(., '#{itemDroite}')]")
+  end
+end
+
+Alors("l'item {string} est à gauche du plan") do |item|
+  within('.Spatial') do
+    find(:xpath, "//div[@id='plan']/preceding-sibling::div[@class='item' and contains(., '#{item}')]")
+  end
+end
