@@ -39,3 +39,15 @@ end
 Alors("la ressource principale est une image optimisée") do
   expect(page).to have_xpath("//img[contains(@src,'optimized')]")
 end
+
+Alors('l’utilisateur {string} est connecté') do |user|
+  expect(page).to have_content user
+end
+
+Alors("l'utilisateur est redirigé vers la page d'édition de l'item {string}") do |item|
+  expect(find('.Subject h2')).to have_content item
+end
+
+Alors("L’utilisateur n’est pas connecté") do
+  expect(page).to have_content "Se connecter..."
+end
