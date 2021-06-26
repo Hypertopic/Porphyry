@@ -58,3 +58,39 @@ end
 Soit("la langue du navigateur est {string}") do |language|
   page.driver.add_headers("Accept-Language" => language)
 end
+
+Soit("l'utilisateur {string} est connecté avec le mot de passe {string}") do |user, password|
+ # visit "/"
+  click_on 'Se connecter...'
+  fill_in placeholder: "nom d'utilisateur", with: user
+  fill_in placeholder: 'mot de passe', with: password
+  click_on 'Se connecter'
+  expect(page).to have_content user
+end
+
+Soit("l’utilisateur {string} est noté sur la liste d’édition du point de vue {string}") do |user, viewpoint|
+  expect(page).to have_content viewpoint
+  expect(find('ul', :className => 'list-group mt-4')).to have_content user
+end
+
+Soit("l'utilisateur {string} n'est pas noté sur la liste d'édition du point de vue {string}") do |user, viewpoint|
+  expect(page).to have_content viewpoint
+  within '.list-group-item' do
+    expect(page).not_to have_content user
+  end
+end
+
+Soit("la liste d'édition du point de vue {string} n'existe pas") do |viewpoint|      pending
+end
+
+Soit("{string} un nouveau point de vue") do |viewpoint|
+  visit '/viewpoint/' + getUUID('')
+  find('input[name="newTitle"]').send_keys viewpoint
+  find('#addViewpoint', visible: true).click
+  expect(page).to have_content 'Modification'
+end
+
+Soit("l'utilisateur {string} est déconnecté") do |user|
+  click_on 'Se déconnecter'
+  expect(page).to have_content "Se connecter..."
+end

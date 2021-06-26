@@ -35,3 +35,20 @@ end
 Alors("la page contient {string}") do |localization|
   expect(page).to have_content localization
 end
+
+Alors("l'appellation du point de vue est {string}") do |viewpoint|
+  expect(page).to have_content viewpoint
+end
+
+Alors("l'utilisateur {string} est noté sur la liste d'édition du point de vue {string}") do |user, viewpoint|
+  expect(page).to have_content viewpoint
+  expect(page).to have_content user
+  expect(page).not_to have_content 'Pas de contributeurs'
+end
+
+Alors("l'utilisateur {string} n'est pas inscrit sur la liste d'édition du point de vue {string}") do |user, viewpoint|
+  expect(page).to have_content viewpoint
+  expect(page).not_to have_content user
+  expect(page).not_to have_content 'Pas de contributeurs'
+end
+

@@ -22,6 +22,7 @@ jobs:
         run: |
           curl --silent -X PUT localhost:5984/_users
           curl --silent -X PUT localhost:5984/_users/org.couchdb.user:alice -H 'Accept:application/json' -H 'Content-Type:application/json' -d '{"name":"alice", "password":"whiterabbit", "roles":[], "type":"user"}'
+           curl --silent -X PUT localhost:5984/_users/org.couchdb.user:charlie -H 'Accept:application/json' -H 'Content-Type:application/json' -d '{"name":"charlie", "password":"chocolatefactory", "roles":[], "type":"user"}'
       - name: Install Porphyry
         run: |
           npm install
