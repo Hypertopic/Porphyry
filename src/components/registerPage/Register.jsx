@@ -13,7 +13,7 @@ class Register extends Component {
   }
   requestLogin = (options) => {
     return conf.then(x => {
-      return fetch(x.services[0] + ':5984/_users', options || {});
+      return fetch(x.services[0] + '/_users', options || {});
     });
   };
   handleConnection = () => {
