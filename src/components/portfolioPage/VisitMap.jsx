@@ -103,7 +103,7 @@ class Item extends Component {
       }}>
         <Link to={{
           pathname: `/item/${corpus}/${id}`,
-          search: `?visit=${spatial[0]}`
+          search: `?visit=${spatial && spatial[0]}`
         }} >
           <img src={thumbnail[0]} alt={name[0]} style={{
             margin: 'auto'
