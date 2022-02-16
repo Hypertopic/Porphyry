@@ -17,7 +17,7 @@ class Corpora extends Component {
   render() {
     let itemsData = this.sort(this.props.items, this.state.criteria);
     let items = itemsData.map(x =>
-      <Item key={x.id} item={x} />
+      <Item key={x.id} item={x} criteria={this.state.criteria} />
     );
     let attributes = new Items(this.props.items).getAttributeKeys().sort(by());
     let options = this._getOptions(attributes);
@@ -35,6 +35,7 @@ class Corpora extends Component {
           </h2>
           <GeographicMap items={this.props.items} conf={this.props.conf} />
           <div className="selectAttributes">
+            triés par&nbsp;
             <select
               id="attribut"
               onChange={this.handleSort}
@@ -66,21 +67,17 @@ class Corpora extends Component {
 
 function Item(props) {
   let uri = `/item/${props.item.corpus}/${props.item.id}`;
-  let thumbnail = props.item.thumbnail;
   let name = [props.item.name].join(', '); //Name can be an array
-  if (thumbnail) return (
-    <div className="Item">
-      <Link to={uri}>
-        <img src={thumbnail} alt={name}/>
-      </Link>
-      <div className="text-center">{name}</div>
-    </div>
-  );
+  let thumbnail = props.item.thumbnail && <img src={props.item.thumbnail} alt={name}/>;
+  let criteria = (props.criteria !== 'name')
+    && <div className="About"> {props.item[props.criteria]} </div>;
   return (
     <div className="Item">
       <Link to={uri}>
-        {name}
+        {thumbnail}
+        <div>{name}</div>
       </Link>
+      {criteria}
     </div>
   );
 }

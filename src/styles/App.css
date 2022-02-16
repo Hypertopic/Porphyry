@@ -154,6 +154,11 @@ h1 a, h1 a:hover {
   color: black;
 }
 
+.About {
+  color: grey;
+  font-size: smaller;
+}
+
 .Attributes > div {
   display: table;
   width: 100%;

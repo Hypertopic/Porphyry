@@ -37,7 +37,7 @@ class Items {
       this.items
         .map(
           x => Object.entries(x).filter(
-            y => !['topic', 'resource', 'thumbnail', 'id', 'item', 'corpus', 'record'].includes(y[0])
+            y => !['topic', 'resource', 'thumbnail', 'id', 'item', 'corpus', 'record', 'original'].includes(y[0])
           )
         )
         .reduce((x, y) => x.concat(y), [])
