@@ -72,7 +72,7 @@ class Item extends Component {
             search: decodeURIComponent(goBackUrlParams.toString())
           }} className="badge badge-pill badge-light TopicTag">
             <span className="badge badge-pill badge-dark oi oi-chevron-left"> </span>
-            <Trans>{visitName ? 'Retour à la visite' : 'Retour à l\'accueil'}</Trans>
+            { visitName ? t`Retour à la visite` : t`Retour à l'accueil` }
           </Link>
         </div>
         <div className="container-fluid">
