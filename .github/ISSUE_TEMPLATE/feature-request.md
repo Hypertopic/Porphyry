@@ -27,3 +27,6 @@ assignees: ''
 #### Phase 2
 - [ ] Acceptance tests (Capybara)
 - [ ] Implementation
+
+### Phase 3
+- [ ] Screencast
