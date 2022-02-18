@@ -35,5 +35,5 @@ jobs:
       - name: Install test tools
         run: docker pull benel/cucumber-capybara
       - name: Run tests
-        run : docker run --rm -v "$(pwd)":/app -t --net="host" --env APP_HOST="http://`hostname`:3000" benel/cucumber-capybara --retry 2 --fail-fast --no-source
+        run : docker run --rm -v "$(pwd)":/app -t --net="host" --env APP_HOST="http://`hostname`:3000" benel/cucumber-capybara --retry 2 --fail-fast --no-source --no-snippets
         shell: 'script -q -e -c "bash {0}"'
