@@ -13,4 +13,14 @@ Scénario: sous une autre rubrique
    Alors "XIIe s." est une rubrique fille de "Datation"
    Et "fin du XIIe s." est une rubrique fille de "XIIe s."
 
+Scénario: à la racine du point de vue
+
+   Soit un point de vue en cours d'édition
+   Et "Récits" une des rubriques du point de vue
+   Et "Personnages" une rubrique fille de "Récits"
+   Et "extrascrituraires" une rubrique fille de "Personnages"
+   Et l'utilisateur est connecté
+   Quand l'utilisateur déplace "Personnages" à la racine du point de vue
+   Alors "Personnages" est à la racine du point de vue
+   Et "extrascripturaires" est une rubrique fille de "Personnages"
 
