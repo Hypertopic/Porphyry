@@ -73,3 +73,8 @@ Quand("{string} souhaite s'enregistrer comme contributeur en tant que {string} a
   fill_in "password", with: password
   click_on "Inscription"
 end
+
+Quand("l'utilisateur crée la rubrique {string} à la racine du point de vue") do |topic|
+  find('.node').click.send_keys(:return)
+  fill_in class:'editedNode', with: topic
+end
