@@ -37,7 +37,7 @@ end
 Quand("l'utilisateur indique {string} comme valeur de l'attribut {string}") do |value, attribute|
   within '.Attributes' do
     fill_in placeholder: 'Ajouter un attribut et une valeur...', with: "#{attribute}:#{value}"
-    click_on class: 'ValidateButton' 
+    click_on class: 'ValidateButton'
   end
 end
 
@@ -96,3 +96,11 @@ Quand("l'utilisateur supprime le point de vue") do
   end
 end
 
+Quand("l'utilisateur désélectionne le corpus {corpus}") do |corpus|
+  uncheck(corpus)
+end
+
+Quand("l'utilisateur sélectionne les corpus {corpus1} et {corpus2}") do |corpus1, corpus2|
+  check(corpus1)
+  check(corpus2)
+end
