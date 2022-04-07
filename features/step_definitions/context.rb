@@ -1,3 +1,7 @@
+Soit("un portfolio ouvert") do
+  visit "/"
+end
+
 Soit("{string} le portfolio ouvert") do |portfolio|
   visit "/"
 end
