@@ -24,6 +24,12 @@ Scénario: en ajoutant une rubrique par sélection
     Et l'item "2018_10-13_KAZ_0053_R_C" est caché
     Et l'item "2018_10-13_SGP_1631_R_C" est caché
 
+<<<<<<< HEAD
+=======
+
+Fonctionnalité: Combiner les critères de sélection des items
+
+>>>>>>> 1c1e602f9a11de6dca5db0060c3d94e5d8f046d8
 Scénario: en ajoutant une rubrique par recherche
 
     Soit "La paix, le bien vivre ensemble" la rubrique sélectionnée
