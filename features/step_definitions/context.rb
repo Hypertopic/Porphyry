@@ -85,3 +85,18 @@ Soit("l'utilisateur est sur mobile") do
   page.current_window.resize_to(320, 480)
 end
 
+Soit("tous les corpus sont sélectionnés") do
+  find(:css, ".corpus_checkbox[value='corpus : Vitraux - Bénel']").set(true)
+  find(:css, ".corpus_checkbox[value='corpus : Vitraux - Dr. Krieger']").set(true)
+  find(:css, ".corpus_checkbox[value='corpus : Vitraux - Recensement']").set(true)
+end
+
+Soit("aucun des corpus n'est sélectionné") do
+  find(".corpus_checkbox[value='corpus : Vitraux - Bénel']").set(false)
+  find(".corpus_checkbox[value='corpus : Vitraux - Dr. Krieger']").set(false)
+  find(".corpus_checkbox[value='corpus : Vitraux - Recensement']").set(false)
+end
+
+Soit("aucun item n'est affiché") do
+  expect(page).not_to have_selector ".Item"
+end

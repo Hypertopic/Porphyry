@@ -5,19 +5,19 @@ Fonctionnalité: (Dé)sélectionner les items d'un ou de plusieurs corpus
 
 Scénario: L'utilisateur désélectionne un corpus parmi plusieurs
 
-    Soit "Glyptique" le portfolio ouvert
+    Soit un portfolio ouvert
     Et tous les corpus sont sélectionnés
-    Et "AGDS Munich n° 2589.png" un des items affichés
-    Et "Boston Fine Arts inv. 23.583.jpg" un des items affichés
-    Quand l'utilisateur désélectionne le corpus "Gemmae Campaniae"
-    Alors l'item "Boston Fine Arts inv. 23.583.jpg" est affiché
-    Mais l'item "AGDS Munich n° 2589.png" est caché     
+    Et "SJ 020" un des items affichés
+    Et "AXN 009" un des items affichés
+    Quand l'utilisateur désélectionne le corpus "corpus : Vitraux - Bénel"
+    Alors l'item "AXN 009" est affiché
+    Mais l'item "SJ 020" est caché
 
 Scénario: L'utilisateur sélectionne plusieurs corpus
 
-    Soit "Glyptique" le portfolio ouvert
-    Et aucun des corpus n'est sélectionnés
+    Soit un portfolio ouvert
+    Et aucun des corpus n'est sélectionné
     Et aucun item n'est affiché
-    Quand l'utilisateur sélectionne les corpus "Gemmae Campaniae" et "Pictures within Pictures"
-    Alors l'item "Boston Fine Arts inv. 23.583.jpg" est affiché
-    Et l'item "AGDS Munich n° 2589.png" est affiché
+    Quand l'utilisateur sélectionne les corpus "corpus : Vitraux - Bénel" et "corpus : Vitraux - Dr. Krieger"
+    Alors l'item "SJ 020" est affiché
+    Et l'item "PSM 002" est affiché
