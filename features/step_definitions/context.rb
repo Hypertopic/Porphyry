@@ -73,3 +73,7 @@ Soit("un point de vue en cours d'édition") do
   click_on 'Créer'
   expect(page).to have_content 'test'
 end
+
+Soit("l'utilisateur est sur mobile") do
+  page.current_window.resize_to(320, 480)
+end

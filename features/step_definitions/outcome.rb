@@ -56,3 +56,11 @@ Alors("la recherche est {string} et {string}") do |search1, search2|
   expect(page).to have_content search1
   expect(page).to have_content search2
 end
+
+Alors("la légende de l’image est {string}") do |legend|
+  expect(find(".Copyright")).to have_content legend
+end
+
+Alors("l'attribut {string} est absent") do |attribute|
+  expect(find(".Attributes")).not_to have_content attribute
+end
