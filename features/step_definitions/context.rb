@@ -66,4 +66,3 @@ end
 Soit("l'utilisateur est sur la page d'édition de l'item {string}") do |item|
   visit getURI(item)
 end
-

@@ -47,3 +47,8 @@ end
 Alors("L’utilisateur n’est pas connecté") do
   expect(page).to have_content "Se connecter..."
 end
+
+Alors("la recherche est {string} et {string}") do |search1, search2|
+  expect(page).to have_content search1
+  expect(page).to have_content search2
+end
