@@ -73,3 +73,7 @@ Quand("{string} souhaite s'enregistrer comme contributeur en tant que {string} a
   fill_in "password", with: password
   click_on "Inscription"
 end
+
+Quand ("on recherche la rubrique {string}") do |value|
+  
+end
