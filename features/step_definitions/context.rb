@@ -83,5 +83,5 @@ Soit("un utilisateur consulte un item") do
 end
 
 Soit("la ressource {string} existe comme ressource") do |string|
-  attach_file('Image', string)
+  expect(page).to have_content string
 end
