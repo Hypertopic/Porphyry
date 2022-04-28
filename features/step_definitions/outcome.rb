@@ -51,3 +51,11 @@ end
 Alors('le point de vue contient la rubrique {string}') do |topic|
   expect(page).to have_content topic
 end
+
+Alors("la ressource {string} est ajoutée") do |string|
+  expect(page).to have_content string
+end
+
+Alors('la ressource {string} est téléchargée') do |string|
+  expect(page).to have_content string
+end

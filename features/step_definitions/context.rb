@@ -73,3 +73,15 @@ Soit("un point de vue en cours d'édition") do
   click_on 'Créer'
   expect(page).to have_content 'test'
 end
+
+Soit("un item en cours d'édition") do
+  visit '/item/Vitraux - Bénel/' + getUUID('')
+end
+
+Soit("un utilisateur consulte un item") do
+  visit '/item/Vitraux - Bénel/' + getUUID('')
+end
+
+Soit("la ressource {string} existe comme ressource") do |string|
+  attach_file('Image', string)
+end
