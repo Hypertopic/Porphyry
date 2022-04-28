@@ -52,6 +52,13 @@ Alors('le point de vue contient la rubrique {string}') do |topic|
   expect(page).to have_content topic
 end
 
+Alors("la ressource {string} est ajoutée") do |string|
+  expect(page).to have_content string
+end
+
+Alors('la ressource {string} est téléchargée') do |string|
+  expect(page).to have_content string
+end
 Alors("la recherche est {string} et {string}") do |search1, search2|
   expect(page).to have_content search1
   expect(page).to have_content search2

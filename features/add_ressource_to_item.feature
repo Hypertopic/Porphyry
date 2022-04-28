@@ -6,7 +6,7 @@ Fonctionnalité: Ajouter une ressource en tant que fichier
 Scénario: Ajouter une ressource en tant que fichier 
 
 Soit un item en cours d'édition
-Et l'utilisateur connecté
+Et l'utilisateur est connecté
 Quand l'utilisateur dépose "pièce de monnaie.png" comme ressource
 Alors la ressource "pièce de monnaie.png" est ajoutée 
 
