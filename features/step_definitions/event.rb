@@ -96,3 +96,8 @@ Quand("l'utilisateur supprime le point de vue") do
   end
 end
 
+Quand("on sélectionne la valeur d'attribut {string} en tant que {string}") do |value, attribute|
+  within '.AttributesSearch' do
+    select value, from: attribute
+  end
+end  
