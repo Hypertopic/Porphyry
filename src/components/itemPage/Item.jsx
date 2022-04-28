@@ -4,6 +4,7 @@ import Hypertopic from 'hypertopic';
 import groupBy from 'json-groupby';
 import { Helmet } from 'react-helmet';
 import conf from '../../config.js';
+import { Items } from '../../model.js';
 import Viewpoint from './Viewpoint.jsx';
 import Attribute from './Attribute.jsx';
 import Resource from './Resource.jsx';
@@ -11,8 +12,6 @@ import Header from '../Header.jsx';
 import SameNameBlock from './SameNameBlock.jsx';
 import { DiscussionEmbed } from 'disqus-react';
 import { t, Trans } from '@lingui/macro';
-
-const HIDDEN = ['topic', 'resource', 'thumbnail', 'item', 'record', 'original'];
 
 function getString(obj) {
   if (Array.isArray(obj)) {
@@ -109,10 +108,9 @@ class Item extends Component {
   }
 
   _getAttributes() {
-    return Object.entries(this.state.item)
-      .filter(x => !HIDDEN.includes(x[0]))
+    return new Items([this.state.item]).getAttributes()
       .map(x => (
-        <Attribute key={x[0]} name={x[0]} value={x[1][0]}
+        <Attribute key={x[0]} name={x[0]} value={x[1]}
           setAttribute={this._setAttribute} deleteAttribute={this._deleteAttribute}/>
       ));
   }

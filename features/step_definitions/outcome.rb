@@ -47,3 +47,7 @@ end
 Alors("L’utilisateur n’est pas connecté") do
   expect(page).to have_content "Se connecter..."
 end
+
+Alors('le point de vue contient la rubrique {string}') do |topic|
+  expect(page).to have_content topic
+end
