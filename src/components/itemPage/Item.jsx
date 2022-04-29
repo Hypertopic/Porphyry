@@ -4,7 +4,7 @@ import Hypertopic from 'hypertopic';
 import groupBy from 'json-groupby';
 import { Helmet } from 'react-helmet';
 import conf from '../../config.js';
-import { Items } from '../../model.js';
+import { HIDDEN_ON_MOBILE, Items } from '../../model.js';
 import Viewpoint from './Viewpoint.jsx';
 import Attribute from './Attribute.jsx';
 import Resource from './Resource.jsx';
@@ -12,7 +12,14 @@ import Header from '../Header.jsx';
 import SameNameBlock from './SameNameBlock.jsx';
 import { DiscussionEmbed } from 'disqus-react';
 import { t, Trans } from '@lingui/macro';
+import Copyright from './Copyright.jsx';
 
+/**
+ * Gets a string representation of an object. If the object is an array,
+ * joins the representations of its elements with commas.
+ * @param {any} obj object to convert
+ * @returns {string} the string representation
+ */
 function getString(obj) {
   if (Array.isArray(obj)) {
     return obj.map(val => getString(val)).join(', ');
@@ -40,6 +47,7 @@ class Item extends Component {
   render() {
     let name = getString(this.state.item.name);
     let attributes = this._getAttributes();
+    const { creator, created } = this.state.item;
     let viewpoints = this._getViewpoints();
     let sameNameBlock = this._getSameNameBlock();
     const { visitMap } = this.state;
@@ -98,6 +106,9 @@ class Item extends Component {
               <div className="Subject">
                 <h2 className="h4 font-weight-bold text-center">{name}</h2>
                 <Resource href={this.state.item.resource} />
+                <div className="d-block d-sm-none">
+                  <Copyright creator={creator} created={created} />
+                </div>
               </div>
               <Comments appId={this.state.disqus} item={this.state.item} />
             </div>
@@ -109,10 +120,19 @@ class Item extends Component {
 
   _getAttributes() {
     return new Items([this.state.item]).getAttributes()
-      .map(x => (
-        <Attribute key={x[0]} name={x[0]} value={x[1]}
-          setAttribute={this._setAttribute} deleteAttribute={this._deleteAttribute}/>
-      ));
+      .map(attribute => {
+        const className = HIDDEN_ON_MOBILE.includes(attribute[0]) ? 'd-none d-sm-table-row' : '';
+        return (
+          <Attribute
+            className={className}
+            key={attribute[0]}
+            name={attribute[0]}
+            value={attribute[1]}
+            setAttribute={this._setAttribute}
+            deleteAttribute={this._deleteAttribute}
+          />
+        );
+      });
   }
 
   _getViewpoints() {
