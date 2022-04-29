@@ -39,9 +39,12 @@ class Outliner extends React.Component {
         </div>
         <div className="container-fluid">
           <div className="App-content row">
-            {this.state.title
-              ? <Contributors viewpoint_id = {this.props.match.params.id} />
-              : ''}
+            <div>
+              {this.state.title
+                ? <Contributors viewpoint_id = {this.props.match.params.id} />
+                : ''}
+              <button onClick={() => this.applyDelete()}>Supprimer</button>
+            </div>
             <div className={style}>
               <div className="Description">
                 <h2 className="h4 font-weight-bold text-center">{status}</h2>
@@ -263,6 +266,15 @@ class Outliner extends React.Component {
         });
     }
     return this.changing;
+  }
+
+  async applyDelete() {
+    let db = new Hypertopic((await conf).services);
+    await db.get({_id: this.props.match.params.id})
+      .then(db.delete)
+      .then(_log)
+      .catch(_error);
+    window.location.href = '/';
   }
 
   async _fetchData() {
