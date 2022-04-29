@@ -456,3 +456,15 @@ ul.Outliner,
 #bodySubscribeCard {
   padding: 20px 30px 20px 30px;
 }
+
+button {
+
+  background-color: #8b0000;
+  border: none;
+  color: white;
+  margin-top: 2%;
+  font-weight: bold;
+  font-size: 1.4em;
+  padding: 2%;
+  border-radius: 5px;
+}

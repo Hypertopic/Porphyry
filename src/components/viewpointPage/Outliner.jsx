@@ -39,11 +39,15 @@ class Outliner extends React.Component {
         </div>
         <div className="container-fluid">
           <div className="App-content row">
-            <div>
+            <div className="col-md-4 p-4 col-sm-12">
               {this.state.title
                 ? <Contributors viewpoint_id = {this.props.match.params.id} />
                 : ''}
-              <button onClick={() => this.applyDelete()}>Supprimer</button>
+              <button onClick={
+                () => {
+                  this.applyDelete();
+                  window.confirm('Êtes-vous sûr de vouloir supprimer le point de vue ?');
+                }}>Supprimer</button>
             </div>
             <div className={style}>
               <div className="Description">
