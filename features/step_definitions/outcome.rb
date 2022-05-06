@@ -47,3 +47,7 @@ end
 Alors("L’utilisateur n’est pas connecté") do
   expect(page).to have_content "Se connecter..."
 end
+
+Alors('le point de vue {string} ne fait plus partie du portfolio') do |viewpoint|
+  expect(page).not_to have_content viewpoint
+end

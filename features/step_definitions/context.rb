@@ -67,3 +67,10 @@ Soit("l'utilisateur est sur la page d'édition de l'item {string}") do |item|
   visit getURI(item)
 end
 
+Soit("le point de vue {string} est en mode édition") do |viewpoint|
+  visit '/viewpoint/' + getUUID('')
+  find('input[class="form-control"]').send_keys viewpoint
+  click_on "Créer"
+  expect(page).to have_content "Modification du point de vue"
+end
+

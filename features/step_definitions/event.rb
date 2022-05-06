@@ -73,3 +73,9 @@ Quand("{string} souhaite s'enregistrer comme contributeur en tant que {string} a
   fill_in "password", with: password
   click_on "Inscription"
 end
+
+Quand("l'utilisateur supprime le point de vue") do 
+  accept_confirm do
+    click_on "Supprimer"
+  end
+end
