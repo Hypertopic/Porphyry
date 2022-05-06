@@ -1,6 +1,6 @@
 #language: fr
 
-Fonctionnalité: Consulter les rubriques et attributs associés à un item sur desktop
+Fonctionnalité: Consulter les rubriques et attributs associés à un item
 
 Scénario: sur desktop
 
@@ -29,6 +29,4 @@ Scénario: qui soit une photo en noir et blanc, sur mobile
   Soit "AXN 009 B&W" l'item affiché
   Et l'utilisateur est sur mobile
   Alors le titre de l'item affiché est "AXN 009"
-  Et l'attribut "creator" est absent
-  Et l'attribut "created" est absent
   Et la légende de l’image est "1907/1914"

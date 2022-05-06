@@ -90,9 +90,12 @@ Quand("l'utilisateur crée la rubrique {string} à la racine du point de vue") d
   fill_in class:'editedNode', with: topic
 end
 
-Quand("l'utilisateur supprime le point de vue") do 
+Quand("l'utilisateur supprime le point de vue") do
   accept_confirm do
     click_on "Supprimer ce point de vue..."
   end
 end
 
+Quand("L'utilisateur choisit d'ouvrir les détails de l'expansion panel {string}") do |panel|
+  click_on panel
+end
