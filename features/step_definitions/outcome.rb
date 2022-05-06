@@ -51,3 +51,8 @@ end
 Alors('le point de vue contient la rubrique {string}') do |topic|
   expect(page).to have_content topic
 end
+
+Alors("la recherche est {string} et {string}") do |search1, search2|
+  expect(page).to have_content search1
+  expect(page).to have_content search2
+end
