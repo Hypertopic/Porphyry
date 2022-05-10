@@ -16,6 +16,7 @@ class VisitMap extends Component {
   render() {
     let { items } = this.props;
     const inputs = items
+      .filter(x => !!x.thumbnail)
       .filter(item => /^[A-Z]+ ?\d*$/.test(item.name[0]))
       .reduce((acc, item) => {
         const results = item.name[0].match(/\d{3}$/);
