@@ -6,17 +6,20 @@ class VisitMap extends Component {
   render() {
     let { items } = this.props;
     let map = items.find(x => /^[A-Z]+$/.test(x.name[0]));
-    let valid_items = items
-      .filter(x =>
-        !!x.thumbnail
-        && /^[A-Z]+ \d{3}$/.test(x.name[0])
-      );
-    // Get the first item of each window
-    let window_items = valid_items
-      .map(x => x.name[0])
-      .map((x, i, arr) => arr.indexOf(x) === i && i)
-      .filter(x => x !== false)
-      .map(x => valid_items[x]);
+    let window_items = Object.values(
+      items
+        .filter(x =>
+          !!x.thumbnail
+          && /^[A-Z]+ \d{3}$/.test(x.name[0])
+        )
+        .reduce((result, x) => {
+          let key = x.name[0];
+          if (!result[key] || (x.plan && x.plan[0] === 'large')) {
+            result[key] = x;
+          }
+          return result;
+        }, {})
+    );
     let two_dimensional_locations = window_items.map(x => x.name[0].match(/\d{3}/)[0])
       .map(x => ({
         elevation: Math.floor(x / 100),
