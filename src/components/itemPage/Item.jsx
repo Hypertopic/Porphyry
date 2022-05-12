@@ -12,6 +12,7 @@ import Header from '../Header.jsx';
 import SameNameBlock from './SameNameBlock.jsx';
 import { DiscussionEmbed } from 'disqus-react';
 import { t, Trans } from '@lingui/macro';
+import AttachmentsList from './AttachmentsList';
 
 function getString(obj) {
   if (Array.isArray(obj)) {
@@ -89,6 +90,11 @@ class Item extends Component {
                     <div className="d-none d-sm-block">{this._getAttributeCreationForm()}</div>
                   </div>
                   {viewpoints}
+                  <div className="Ressources">
+                    <h3 className="h4"><Trans>Ressources</Trans></h3>
+                    <hr/>
+                    <AttachmentsList className="Attachments" />
+                  </div>
                 </div>
               </div>
               <hr className="space" />
