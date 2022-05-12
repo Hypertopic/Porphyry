@@ -296,7 +296,7 @@ div.autosuggest {
   width:85%;
 }
 
-.DeleteButton {
+.DeleteButton, .DeleteResourceButton {
   background-color: #8b0000;
   color: ivory;
 }
