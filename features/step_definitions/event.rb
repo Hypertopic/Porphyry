@@ -78,3 +78,11 @@ Quand("l'utilisateur crée la rubrique {string} à la racine du point de vue") d
   find('.node').click.send_keys(:return)
   fill_in class:'editedNode', with: topic
 end
+
+Quand("l'utilisateur dépose {string} comme ressource") do |string|
+  attach_file('Image', string)
+end
+
+Quand("l'utilisateur consulte la ressource {string}") do |string|
+  click_on string
+end
