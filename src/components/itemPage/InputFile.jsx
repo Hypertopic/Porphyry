@@ -48,9 +48,9 @@ function InputFile ({itemId, propsRev, onUpload, service}) {
 
   return (
     <div>
-      <div className="custom-file">
-        <input multiple type="file" className="custom-file-input" id="inputFiles" onChange={handleFiles} onClick={handleMessage}/>
-        <label className="custom-file-label" htmlFor="inputFiles">Sélectionner des fichiers</label>
+      <div >
+        <button className="inputFiles_Button" onClick={()=>document.getElementById('inputFiles').click() } >Ajouter une ressource </button>
+        <input multiple id="inputFiles" type="file" onChange={handleFiles} onClick={handleMessage} />
       </div>
     </div>
   );

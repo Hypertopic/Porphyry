@@ -10,7 +10,7 @@ function Attachment ({ attachment, itemId, service }) {
   setDefaultUrl();
   return (
     <div>
-      <li className="list-group-item">
+      <li className="item_attachment">
         <a href={url + itemId + '/' + attachment.name} target="_blank" rel="noreferrer">
           {attachment.name}
         </a>

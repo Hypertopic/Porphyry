@@ -42,8 +42,8 @@ function AttachmentsList () {
     setMessage(uploadStatus.message);
   };
   return (
-    <div>
-      <ul className="list-group">
+    <div className="attachment_list_input">
+      <ul className="attachment_list">
         {attachments.map((x) => <Attachment key={x.name} attachment={x} itemId={item} service={getService()} />)}
       </ul>
       <InputFile itemId={item} propsRev={rev} onUpload={uploadFetch} service={getService()}/>
