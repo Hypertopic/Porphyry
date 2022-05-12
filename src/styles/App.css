@@ -296,7 +296,7 @@ div.autosuggest {
   width:85%;
 }
 
-.DeleteButton {
+.DeleteButton, .DeleteResourceButton {
   background-color: #8b0000;
   color: ivory;
 }
@@ -455,4 +455,52 @@ ul.Outliner,
 }
 #bodySubscribeCard {
   padding: 20px 30px 20px 30px;
+}
+#inputFiles{
+  display: none;
+}
+.inputFiles_Button{
+  background-color: #e7e7e7d0;
+  border: none;
+  padding-left:10%;
+  padding-right:10%;
+  padding-top:5%;
+  padding-bottom: 5%;
+  text-align:center;
+  text-decoration: none;
+  margin:2%;
+  width:max-content;
+  font-size: 16px;
+}
+.attachment_list{
+  list-style: none;
+  display:flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0;
+  margin: 2%;
+  text-align: start;
+}
+.attachment_list_input{
+  display:flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.item_attachment{
+  margin-top:10%;
+}
+.inputFiles_Button:hover{
+  background-color: #cdcdcd;
+  border: none;
+  padding-left:10%;
+  padding-right:10%;
+  padding-top:5%;
+  padding-bottom: 5%;
+  width:max-content;
+  text-align: center;
+  text-decoration: none;
+  margin:2%;
+  transform:scale(0.95);
+  font-size: 16px;
+  
 }
