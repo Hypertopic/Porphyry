@@ -85,3 +85,7 @@ Soit("l'utilisateur est sur mobile") do
   page.current_window.resize_to(320, 480)
 end
 
+Soit("{string} la recherche actuelle") do |topic|
+  find('input[type="search"]').send_keys topic
+  click_link(topic, href: nil)
+end

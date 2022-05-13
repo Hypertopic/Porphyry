@@ -78,3 +78,11 @@ end
 Alors('les attributs ne sont pas affichés') do
   expect(page).not_to have_content('Attributs du document')
 end
+
+Alors("l'image item {string} est affichée") do |item|
+  expect(find("img[alt=\"#{item}\"]")).to be_visible
+end
+
+Alors("l'image item {string} est cachée") do |item|
+  expect(page).not_to have_css("img[alt=\"#{item}\"]")
+end
