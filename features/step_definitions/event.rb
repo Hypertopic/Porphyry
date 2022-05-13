@@ -9,8 +9,10 @@ end
 Quand ("l'utilisateur crée un item {string} dans le corpus {string}") do |name, corpus|
   click_on corpus
   expect(page).to have_content("undefined")
-  fill_in placeholder: 'Ajouter un attribut et une valeur...', with: "name:#{name}"
-  click_on 'validateButton-undefined'
+  within '.Attributes' do
+    fill_in placeholder: 'Ajouter un attribut et une valeur...', with: "name:#{name}"
+    click_on class: 'ValidateButton'
+  end
 end
 
 Quand ("l'utilisateur change l'opérateur entre la rubrique {string} et la rubrique {string}") do |topic1, topic2|
