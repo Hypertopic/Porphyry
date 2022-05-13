@@ -2,6 +2,11 @@ Quand("on sélectionne la rubrique {string}") do |topic|
   click_on topic
 end
 
+Quand("on désélectionne la rubrique {string}") do |topic|
+  click_on topic
+  click_on topic
+end
+
 Quand("on choisit l'attribut {string}") do |attribute|
   click_on attribute
 end
