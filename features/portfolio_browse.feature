@@ -24,6 +24,28 @@ Scénario: en ajoutant une rubrique
   Et l'item "SNZ 005" est caché
   Et l'item "SNZ 006" est caché
 
+Scénario: en retirant une rubrique
+
+  Soit "Abram/Abraham|XIXe s." les rubriques sélectionnées
+  Et "SM 001 m" un des items affichés
+  Et "SM 001 n" un des items affichés
+  Et "SR 005" un des items affichés
+  Et "PSM 002" un des items cachés
+  Et "SJ 001" un des items cachés
+  Et "SM 008 g" un des items cachés
+  Et "SNZ 005" un des items cachés
+  Et "SNZ 006" un des items cachés
+  Et "Datation" une des rubriques développées
+  Quand on désélectionne la rubrique "XIXe s."
+  Alors l'item "PSM 002" est affiché
+  Et l'item "SJ 001" est affiché
+  Et l'item "SM 001 m" est affiché
+  Et l'item "SM 001 n" est affiché
+  Et l'item "SM 008 g" est affiché
+  Et l'item "SNZ 005" est affiché
+  Et l'item "SNZ 006" est affiché
+  Et l'item "SR 005" est affiché
+
 Scénario: en excluant une rubrique
 
   Soit "Abram/Abraham|XIXe s." les rubriques sélectionnées
