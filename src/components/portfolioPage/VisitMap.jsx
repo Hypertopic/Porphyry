@@ -4,8 +4,7 @@ import {Link} from 'react-router-dom';
 class VisitMap extends Component {
 
   render() {
-    let { items } = this.props;
-    let map = items.find(x => /^[A-Z]+$/.test(x.name[0]));
+    let { items, map } = this.props;
     let window_items = Object.values(
       items
         .filter(x =>
