@@ -44,7 +44,10 @@ class SameNameBlock extends Component {
         x.corpus.map(y => `/corpus/${y.id}`)
       )
       .then(hypertopic.getView)
-      .then((data) => this._SameName(data));
+      .then((data) => {
+        this.props.setCorpus(data);
+        this._SameName(data);
+      });
   }
 
   _SameName = (data) => {

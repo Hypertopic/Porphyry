@@ -11,6 +11,8 @@ import Header from '../Header.jsx';
 import SameNameBlock from './SameNameBlock.jsx';
 import { DiscussionEmbed } from 'disqus-react';
 import { t, Trans } from '@lingui/macro';
+import { Items } from '../../model.js';
+import InputWithSuggestions from '../InputWithSuggestions.jsx';
 
 const HIDDEN = ['topic', 'resource', 'thumbnail', 'item', 'record', 'original'];
 
@@ -28,7 +30,8 @@ class Item extends Component {
     this.state = {
       attributeInputValue: '',
       item: { topic: [] },
-      visitMap: false
+      visitMap: false,
+      corpus: []
     };
     conf.then(settings => {
       if (settings.portfolio && settings.portfolio[settings.user])
@@ -124,11 +127,15 @@ class Item extends Component {
     );
   }
 
+  handleCallback = (childData) => {
+    this.setState({corpus: childData});
+  }
+
   _getSameNameBlock() {
     //before returning the SameNameBlock Component, we ensure that the consulted item name value is defined
     if (this.state.item.name !== undefined && this.state.item.name !== null) {
       return (
-        <SameNameBlock ID={this.props.match.params.item} itemName={this.state.item.name} />
+        <SameNameBlock ID={this.props.match.params.item} itemName={this.state.item.name} setCorpus={this.handleCallback} />
       );
     }
     //item name has no value
@@ -263,13 +270,47 @@ class Item extends Component {
       placeholder = t`attribut : valeur`;
     }
 
+    const attributesData = (
+      new Items(Object.values(this.state.corpus)
+        .map(corpus => Object.values(corpus))
+        .flat())
+    ).getAttributes();
+
+    const uniquesAttributesNames = [...new Set(attributesData.map(([key]) => key))]
+      .map(x => ({name: x}));
+
+    const onSuggestionSelected = (event, {suggestion}) => {
+      this.setState({attributeInputValue: suggestion.name + (suggestion.name.search(':') !== -1 ? '' : ' : ')});
+    };
+
+    const inputProps = {
+      placeholder,
+      value: this.state.attributeInputValue,
+      id: 'new-attribute',
+      type: 'search',
+      onChange: attributeInputChange,
+      onBlur: attributeInputBlur,
+      onFocus: attributeInputFocus,
+      onKeyDown: attributeInputChangeKeyDown
+    };
+
+    const getCandidates = () => {
+      if (this.state.attributeInputValue.search(':') !== -1) {
+        return [...new Set(attributesData)]
+          .map(x => ({ name: `${x[0]} : ${x[1]}` }));
+      }
+      return uniquesAttributesNames;
+    };
+
     return (
       <form onSubmit={this._submitAttribute} className={classes.join(' ')}>
         <div className="attributeInput">
-          <input ref={(input) => this.attributeInput = input} value={this.state.attributeInputValue}
-            onChange={attributeInputChange} onKeyDown={attributeInputChangeKeyDown}
-            onFocus={attributeInputFocus} onBlur={attributeInputBlur}
-            id="new-attribute" className="form-control" placeholder={placeholder} type="text" />
+          <InputWithSuggestions
+            candidates={getCandidates()}
+            onSuggestionSelected={onSuggestionSelected}
+            inputProps={inputProps}
+            id="new-attribute"
+          />
         </div>
         <div className="input-group-append">
           <button type="button" className="btn btn-sm ValidateButton btn"
@@ -308,7 +349,6 @@ class Item extends Component {
     if (!key || !value) return false;
     this._setAttribute(key, value);
     this.setState({ attributeInputValue: '' });
-    this.attributeInput.focus();
     return false;
   };
 
