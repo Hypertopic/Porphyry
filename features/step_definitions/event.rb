@@ -75,18 +75,16 @@ Quand("{string} souhaite s'enregistrer comme contributeur en tant que {string} a
 end
 
 Quand("l'utilisateur renseigne l'attribut {string} préexistant avec une nouvelle valeur {string} en recherchant {string}") do |attribute, value, pattern|
-  within '.Attributes' do
-    find('#new-attribute').send_keys pattern
-    click_link(attribute, href: nil).send_keys value
-    click_on class: 'ValidateButton'
-  end
+  find('#new-attribute').send_keys pattern
+  click_link(attribute, href: nil)
+  find("#new-attribute").send_keys :end, value
+  click_on class: 'ValidateButton'
 end
 
 Quand("l'utilisateur renseigne l'attribut {string} préexistant avec la valeur {string} proposée parmi les valeurs existantes en recherchant {string} et {string}") do |attribute, value, patternAttribute, patternValue|
-  within '.Attributes' do
-    find('#new-attribute').send_keys patternAttribute
-    click_link(attribute, href: nil).send_keys patternValue
-    click_link("#{attribute}:#{value}", href: nil)
-    click_on class: 'ValidateButton'
-  end
+  find('#new-attribute').send_keys patternAttribute
+  click_link(attribute, href: nil)
+  find('#new-attribute').send_keys :end, patternValue
+  find("a", text: "#{attribute} : #{value}").click
+  click_on class: 'ValidateButton'
 end

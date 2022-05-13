@@ -15,5 +15,5 @@ Scénario:  En renseignant un attribut et une valeur existants
 Soit "vitraux" le portfolio ouvert
 Et l'utilisateur est connecté
 Et l'utilisateur est sur la page d'édition de l'item "SR 005"
-Quand l'utilisateur renseigne l'attribut "spatial" préexistant avec la valeur "Église Sainte-Madeleine, Troyes" proposée parmi les valeurs existantes en recherchant "spat" et "sainte-madeleine"
+Quand l'utilisateur renseigne l'attribut "spatial" préexistant avec la valeur "Église Sainte-Madeleine, Troyes" proposée parmi les valeurs existantes en recherchant "spat" et "église sainte"
 Alors la valeur de l'attribut "spatial" est "Église Sainte-Madeleine, Troyes"
