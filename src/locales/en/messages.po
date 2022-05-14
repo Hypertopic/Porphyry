@@ -13,11 +13,19 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: src/components/viewpointPage/Contributors.jsx:28
+#: src/components/registerPage/Register.jsx:78
+msgid "Adresse email"
+msgstr ""
+
+#: src/components/registerPage/Register.jsx:73
+#~ msgid "Adresse mail"
+#~ msgstr "Email address"
+
+#: src/components/viewpointPage/Contributors.jsx:27
 msgid "Ajouter"
 msgstr "Add"
 
-#: src/components/itemPage/Item.jsx:234
+#: src/components/itemPage/Item.jsx:261
 msgid "Ajouter un attribut et une valeur..."
 msgstr "Add an attribute and a value..."
 
@@ -25,7 +33,11 @@ msgstr "Add an attribute and a value..."
 msgid "Ajouter une rubrique..."
 msgstr "Add a topic..."
 
-#: src/components/itemPage/Item.jsx:58
+#: src/components/viewpointPage/Outliner.jsx:48
+msgid "Attention : Le point de vue sera définitivement supprimé."
+msgstr "Warning: The viewpoint will be permanently deleted."
+
+#: src/components/itemPage/Item.jsx:85
 msgid "Attributs du document"
 msgstr "Document attributes"
 
@@ -33,15 +45,19 @@ msgstr "Document attributes"
 msgid "Choisir une rubrique parent..."
 msgstr "Choose a parent topic..."
 
-#: src/components/viewpointPage/Contributors.jsx:20
+#: src/components/viewpointPage/Contributors.jsx:19
 msgid "Contributeurs"
 msgstr "Contributors"
 
-#: src/components/viewpointPage/Outliner.jsx:78
+#: src/components/viewpointPage/Outliner.jsx:87
 msgid "Création du point de vue"
 msgstr "Create a viewpoint"
 
-#: src/components/itemPage/Item.jsx:55
+#: src/components/viewpointPage/Outliner.jsx:78
+msgid "Créer"
+msgstr ""
+
+#: src/components/itemPage/Item.jsx:82
 msgid "Description"
 msgstr "Description"
 
@@ -66,11 +82,15 @@ msgstr "Include"
 msgid "Items ayant le même nom"
 msgstr "Items having the same name"
 
-#: src/components/viewpointPage/Outliner.jsx:77
+#: src/components/viewpointPage/Outliner.jsx:86
 msgid "Modification du point de vue"
 msgstr "Edit a viewpoint"
 
-#: src/components/viewpointPage/Outliner.jsx:68
+#: src/components/registerPage/Register.jsx:82
+msgid "Mot de passe"
+msgstr "Password"
+
+#: src/components/viewpointPage/Outliner.jsx:75
 msgid "Nom du point de vue"
 msgstr "Viewpoint name"
 
@@ -83,56 +103,72 @@ msgstr "New viewpoint"
 msgid "Ou"
 msgstr "Or"
 
-#: src/components/viewpointPage/Contributors.jsx:33
+#: src/components/viewpointPage/Contributors.jsx:32
 msgid "Pas de contributeurs"
 msgstr "No contributors"
 
-#: src/components/portfolioPage/Portfolio.jsx:52
+#: src/components/portfolioPage/Portfolio.jsx:71
 msgid "Points de vue"
 msgstr "Viewpoints"
+
+#: src/components/registerPage/Register.jsx:73
+msgid "Pseudonyme"
+msgstr "Pseudonym"
 
 #: src/components/portfolioPage/SearchBar.jsx:47
 msgid "Rechercher..."
 msgstr "Search..."
 
-#: src/components/itemPage/Item.jsx:48
+#: src/components/itemPage/Item.jsx:75
 #: src/components/viewpointPage/Outliner.jsx:37
 msgid "Retour à l'accueil"
 msgstr "Go back to home page"
+
+#: src/components/itemPage/Item.jsx:75
+msgid "Retour à la visite"
+msgstr ""
 
 #: src/components/portfolioPage/Status.jsx:25
 msgid "Rubrique inconnue"
 msgstr "Unknown topic"
 
-#: src/components/Authenticated.jsx:30
+#: src/components/Authenticated.jsx:40
+msgid "S'inscrire..."
+msgstr "Register..."
+
+#: src/components/Authenticated.jsx:31
 msgid "Se connecter"
 msgstr "Log in"
 
-#: src/components/Authenticated.jsx:36
+#: src/components/Authenticated.jsx:37
 msgid "Se connecter..."
 msgstr "Log in..."
 
-#: src/components/Authenticated.jsx:21
+#: src/components/Authenticated.jsx:22
 msgid "Se déconnecter"
 msgstr "Log out"
+
+#: src/components/viewpointPage/Outliner.jsx:49
+msgid "Supprimer"
+msgstr "Delete"
 
 #: src/components/portfolioPage/Status.jsx:11
 msgid "Tous les items"
 msgstr "All items"
 
-#: src/components/itemPage/Item.jsx:325
+#: src/components/itemPage/Item.jsx:352
 msgid "Voulez-vous réellement que l'item affiché ne soit plus décrit à l'aide de cette rubrique ?"
 msgstr "Remove this topic for this item?"
 
-#: src/components/itemPage/Item.jsx:236
+#: src/components/itemPage/Item.jsx:263
 msgid "attribut : valeur"
 msgstr "attribute: value"
 
-#: src/components/Authenticated.jsx:29
+#: src/components/Authenticated.jsx:30
 msgid "mot de passe"
 msgstr "Password"
 
-#: src/components/Authenticated.jsx:28
+#: src/components/Authenticated.jsx:29
 msgid "nom d'utilisateur"
 msgstr "Username"
 
@@ -140,18 +176,6 @@ msgstr "Username"
 msgid "valeur"
 msgstr "value"
 
-#: src/components/Authenticated.jsx:42
-msgid "S'inscrire..."
-msgstr "Register..."
-
-#: src/components/registerPage/Register.jsx:68
-msgid "Pseudonyme"
-msgstr "Pseudonym"
-
-#: src/components/registerPage/Register.jsx:73
-msgid "Adresse mail"
-msgstr "Email address"
-
-#: src/components/registerPage/Register.jsx:77
-msgid "Mot de passe"
-msgstr "Password"
+#: src/components/viewpointPage/Outliner.jsx:48
+msgid "Êtes-vous sûr de vouloir supprimer le point de vue ?"
+msgstr "Are you sure you want to delete the viewpoint?"

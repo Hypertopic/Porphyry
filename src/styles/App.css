@@ -456,3 +456,7 @@ ul.Outliner,
 #bodySubscribeCard {
   padding: 20px 30px 20px 30px;
 }
+
+button {
+  margin-top: 2%;
+}

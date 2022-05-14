@@ -89,3 +89,10 @@ Quand("l'utilisateur crée la rubrique {string} à la racine du point de vue") d
   find('.node').click.send_keys(:return)
   fill_in class:'editedNode', with: topic
 end
+
+Quand("l'utilisateur supprime le point de vue") do 
+  accept_confirm do
+    click_on "Supprimer"
+  end
+end
+

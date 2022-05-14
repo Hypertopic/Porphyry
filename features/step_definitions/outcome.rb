@@ -56,3 +56,7 @@ Alors("la recherche est {string} et {string}") do |search1, search2|
   expect(page).to have_content search1
   expect(page).to have_content search2
 end
+
+Alors('le point de vue {string} ne fait plus partie du portfolio') do |viewpoint|
+  expect(page).not_to have_content viewpoint
+end
