@@ -6,3 +6,6 @@ services:
 #  key: #paste your GoogleMaps API key for geocoding and dynamic maps
 #  geocodingService: https://maps.googleapis.com/maps/api/geocode/json
 
+portfolio:
+  vitraux:
+    visitMap: true

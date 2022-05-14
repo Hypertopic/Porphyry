@@ -37,7 +37,6 @@ class Portfolio extends Component {
 
   render() {
     let viewpoints = this._getViewpoints();
-    let corpora = this._getCorpora();
     let attributes = new Items(this.state.items)
       .getAttributes()
       .map(([key, value]) => key.concat(' : ', value))
@@ -45,7 +44,11 @@ class Portfolio extends Component {
     let candidates = this.state.viewpoints.concat(attributes);
     const urlParams = new URLSearchParams(window.location.search);
     const selectionJSON = JSON.parse(urlParams.get('t'));
+    // Normal items have numbers in their names, but building maps don't,
+    // so the regex only matches building maps.
+    const maybeBuildingMap = this.state.selectedItems.find(x => /^[A-Z]+$/.test(x.name[0]));
     const visitPossible = this.state.visitMap
+      && maybeBuildingMap !== undefined
       && selectionJSON
       && selectionJSON.type === 'intersection'
       && selectionJSON.data.length === 1
@@ -75,7 +78,7 @@ class Portfolio extends Component {
                 </div>
               </div>
             </div>
-            {visitPossible ? <VisitMap items={this.state.selectedItems} /> : corpora}
+            {visitPossible ? <VisitMap items={this.state.selectedItems} map={maybeBuildingMap} /> : this._getCorpora()}
           </div>
         </div>
       </div>

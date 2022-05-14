@@ -113,5 +113,3 @@ portfolio:
     visitMap: true
 ```
 where `vitraux` is the ID of your portfolio.
-
-Please note that enabling building maps breaks a few tests (in their current version).
