@@ -81,3 +81,7 @@ Soit("le point de vue {string} est en mode édition") do |viewpoint|
   expect(page).to have_content "Modification du point de vue"
 end
 
+Soit("l'utilisateur est sur mobile") do
+  page.current_window.resize_to(320, 480)
+end
+

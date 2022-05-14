@@ -25,7 +25,7 @@ msgstr ""
 msgid "Ajouter"
 msgstr "Add"
 
-#: src/components/itemPage/Item.jsx:261
+#: src/components/itemPage/Item.jsx:279
 msgid "Ajouter un attribut et une valeur..."
 msgstr "Add an attribute and a value..."
 
@@ -37,7 +37,7 @@ msgstr "Add a topic..."
 msgid "Attention : Le point de vue sera définitivement supprimé."
 msgstr "Warning: The viewpoint will be permanently deleted."
 
-#: src/components/itemPage/Item.jsx:85
+#: src/components/itemPage/Item.jsx:92
 msgid "Attributs du document"
 msgstr "Document attributes"
 
@@ -57,7 +57,7 @@ msgstr "Create a viewpoint"
 msgid "Créer"
 msgstr ""
 
-#: src/components/itemPage/Item.jsx:82
+#: src/components/itemPage/Item.jsx:89
 msgid "Description"
 msgstr "Description"
 
@@ -115,16 +115,16 @@ msgstr "Viewpoints"
 msgid "Pseudonyme"
 msgstr "Pseudonym"
 
-#: src/components/portfolioPage/SearchBar.jsx:47
+#: src/components/portfolioPage/SearchBar.jsx:55
 msgid "Rechercher..."
 msgstr "Search..."
 
-#: src/components/itemPage/Item.jsx:75
+#: src/components/itemPage/Item.jsx:82
 #: src/components/viewpointPage/Outliner.jsx:37
 msgid "Retour à l'accueil"
 msgstr "Go back to home page"
 
-#: src/components/itemPage/Item.jsx:75
+#: src/components/itemPage/Item.jsx:82
 msgid "Retour à la visite"
 msgstr ""
 
@@ -156,11 +156,11 @@ msgstr "Delete"
 msgid "Tous les items"
 msgstr "All items"
 
-#: src/components/itemPage/Item.jsx:352
+#: src/components/itemPage/Item.jsx:370
 msgid "Voulez-vous réellement que l'item affiché ne soit plus décrit à l'aide de cette rubrique ?"
 msgstr "Remove this topic for this item?"
 
-#: src/components/itemPage/Item.jsx:263
+#: src/components/itemPage/Item.jsx:281
 msgid "attribut : valeur"
 msgstr "attribute: value"
 
@@ -179,3 +179,7 @@ msgstr "value"
 #: src/components/viewpointPage/Outliner.jsx:48
 msgid "Êtes-vous sûr de vouloir supprimer le point de vue ?"
 msgstr "Are you sure you want to delete the viewpoint?"
+
+#: src/components/itemPage/Copyright.jsx:21
+msgid "© {creator}, {yearOrDate}"
+msgstr "© {creator}, {yearOrDate}"

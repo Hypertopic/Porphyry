@@ -60,3 +60,12 @@ end
 Alors('le point de vue {string} ne fait plus partie du portfolio') do |viewpoint|
   expect(page).not_to have_content viewpoint
 end
+
+Alors("la légende de l’image est {string}") do |legend|
+  expect(find(".Copyright")).to have_content legend
+end
+
+Alors("l'attribut {string} est absent") do |attribute|
+  expect(find(".Attributes")).not_to have_content attribute
+end
+

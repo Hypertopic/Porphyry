@@ -25,7 +25,7 @@ msgstr "Adresse email"
 msgid "Ajouter"
 msgstr "Ajouter"
 
-#: src/components/itemPage/Item.jsx:261
+#: src/components/itemPage/Item.jsx:279
 msgid "Ajouter un attribut et une valeur..."
 msgstr "Ajouter un attribut et une valeur..."
 
@@ -37,7 +37,7 @@ msgstr "Ajouter une rubrique..."
 msgid "Attention : Le point de vue sera définitivement supprimé."
 msgstr "Attention : Le point de vue sera définitivement supprimé."
 
-#: src/components/itemPage/Item.jsx:85
+#: src/components/itemPage/Item.jsx:92
 msgid "Attributs du document"
 msgstr "Attributs du document"
 
@@ -57,7 +57,7 @@ msgstr "Création du point de vue"
 msgid "Créer"
 msgstr "Créer"
 
-#: src/components/itemPage/Item.jsx:82
+#: src/components/itemPage/Item.jsx:89
 msgid "Description"
 msgstr "Description"
 
@@ -115,16 +115,16 @@ msgstr "Points de vue"
 msgid "Pseudonyme"
 msgstr "Pseudonyme"
 
-#: src/components/portfolioPage/SearchBar.jsx:47
+#: src/components/portfolioPage/SearchBar.jsx:55
 msgid "Rechercher..."
 msgstr "Rechercher..."
 
-#: src/components/itemPage/Item.jsx:75
+#: src/components/itemPage/Item.jsx:82
 #: src/components/viewpointPage/Outliner.jsx:37
 msgid "Retour à l'accueil"
 msgstr "Retour à l'accueil"
 
-#: src/components/itemPage/Item.jsx:75
+#: src/components/itemPage/Item.jsx:82
 msgid "Retour à la visite"
 msgstr "Retour à la visite"
 
@@ -156,11 +156,11 @@ msgstr "Supprimer"
 msgid "Tous les items"
 msgstr "Tous les items"
 
-#: src/components/itemPage/Item.jsx:352
+#: src/components/itemPage/Item.jsx:370
 msgid "Voulez-vous réellement que l'item affiché ne soit plus décrit à l'aide de cette rubrique ?"
 msgstr "Voulez-vous réellement que l'item affiché ne soit plus décrit à l'aide de cette rubrique ?"
 
-#: src/components/itemPage/Item.jsx:263
+#: src/components/itemPage/Item.jsx:281
 msgid "attribut : valeur"
 msgstr "attribut : valeur"
 
@@ -179,3 +179,7 @@ msgstr "valeur"
 #: src/components/viewpointPage/Outliner.jsx:48
 msgid "Êtes-vous sûr de vouloir supprimer le point de vue ?"
 msgstr "Êtes-vous sûr de vouloir supprimer le point de vue ?"
+
+#: src/components/itemPage/Copyright.jsx:21
+msgid "© {creator}, {yearOrDate}"
+msgstr "© {creator}, {yearOrDate}"
