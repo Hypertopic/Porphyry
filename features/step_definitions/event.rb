@@ -92,7 +92,7 @@ end
 
 Quand("l'utilisateur supprime le point de vue") do 
   accept_confirm do
-    click_on "Supprimer"
+    click_on "Supprimer ce point de vue..."
   end
 end
 

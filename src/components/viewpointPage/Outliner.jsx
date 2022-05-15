@@ -46,7 +46,7 @@ class Outliner extends React.Component {
                   () => {
                     this.applyDelete();
                     window.confirm(t`Êtes-vous sûr de vouloir supprimer le point de vue ?` + '\n' + t`Attention : Le point de vue sera définitivement supprimé.`);
-                  }}><Trans>Supprimer</Trans></button>
+                  }}><Trans>Supprimer ce point de vue...</Trans></button>
               </div>
               : ''}
             <div className={style}>

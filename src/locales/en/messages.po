@@ -149,8 +149,8 @@ msgid "Se déconnecter"
 msgstr "Log out"
 
 #: src/components/viewpointPage/Outliner.jsx:49
-msgid "Supprimer"
-msgstr "Delete"
+msgid "Supprimer ce point de vue..."
+msgstr "Delete this viewpoint..."
 
 #: src/components/portfolioPage/Status.jsx:11
 msgid "Tous les items"
