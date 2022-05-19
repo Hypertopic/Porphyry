@@ -15,6 +15,11 @@ class Corpora extends Component {
 
   sort = memoize((items, criteria) => items.sort(by(`${criteria}.0`)));
 
+  componentWillReceiveProps(props) {
+    this.setState({
+      listCorpus: [ ...props.ids]
+    })
+}
   render() {
     let itemsData = this.sort(this.props.items, this.state.criteria);
     let items = itemsData.map(x =>
