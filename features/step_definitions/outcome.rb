@@ -69,3 +69,6 @@ Alors("l'attribut {string} est absent") do |attribute|
   expect(find(".Attributes")).not_to have_content attribute
 end
 
+Alors("la ressource string est supprimée") do |string|
+    expect(find(".attachment_list")).not_to have_content string
+end

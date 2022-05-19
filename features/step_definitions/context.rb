@@ -85,3 +85,7 @@ Soit("l'utilisateur est sur mobile") do
   page.current_window.resize_to(320, 480)
 end
 
+Soit("la ressource {string} existe comme ressource") do |string|
+    expect(find('.attachment_list')).to have_content string
+end
+
