@@ -25,7 +25,7 @@ class Corpora extends Component {
     let count = this.props.items.length;
     let total = this.props.from;
     let listIds = this.props.ids.map((corpus) =>
-      <div key={corpus}> <input type="checkbox" value={corpus} onChange={this.handleChange} />{corpus} <ItemCreator corpus={corpus} conf={this.props.conf} /></div>
+      <div key={corpus}> <input type="checkbox" value={corpus} onChange={this.handleChange} checked={this.isChecked(corpus)}/>{corpus} <ItemCreator corpus={corpus} conf={this.props.conf} /></div>
     );
     return (
       <div className="col-md-8 p-4">
@@ -68,7 +68,7 @@ class Corpora extends Component {
   handleChange = (e) => {
     let list = this.state.listCorpus;
     let index = list.indexOf(e.target.value);
-    if (index != -1) {
+    if (index !== -1) {
       list.splice(index, 1);
     } else {
       list.push(e.target.value);
@@ -77,6 +77,14 @@ class Corpora extends Component {
       listCorpus: list
     });
     console.log('this.state=', this.state);
+  }
+
+  isChecked(corpus) {
+    let list = this.state.listCorpus;
+    if (!list.includes(corpus)) {
+      return true;
+    }
+    return false;
   }
 }
 
