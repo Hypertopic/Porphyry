@@ -96,3 +96,7 @@ Quand("l'utilisateur supprime le point de vue") do
   end
 end
 
+Quand("l'utilisateur supprime la ressource {string}") do |string|
+    find(string).click_on class: "btn"
+end
+
