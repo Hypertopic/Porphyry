@@ -14,12 +14,20 @@ class Corpora extends Component {
   };
 
   sort = memoize((items, criteria) => items.sort(by(`${criteria}.0`)));
+<<<<<<< HEAD
 
   componentWillReceiveProps(props) {
     this.setState({
       listCorpus: [ ...props.ids]
     })
 }
+=======
+  componentWillReceiveProps(props) {
+    this.setState({
+      listCorpus: [ ...props.ids ]
+    });
+  }
+>>>>>>> fix problems on props.ids
   render() {
     let itemsData = this.sort(this.props.items, this.state.criteria);
     let items = itemsData.map(x =>
@@ -86,7 +94,7 @@ class Corpora extends Component {
 
   isChecked(corpus) {
     let list = this.state.listCorpus;
-    if (!list.includes(corpus)) {
+    if (list.includes(corpus)) {
       return true;
     }
     return false;
