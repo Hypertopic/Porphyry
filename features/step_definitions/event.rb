@@ -78,3 +78,9 @@ Quand("l'utilisateur crée la rubrique {string} à la racine du point de vue") d
   find('.node').click.send_keys(:return)
   fill_in class:'editedNode', with: topic
 end
+
+Quand("l'utilisateur dépose {string} comme ressource") do |string|
+    attach_file(File.expand_path("public/favicon.ico")) do
+        click_button("Ajouter une ressource")
+    end
+end

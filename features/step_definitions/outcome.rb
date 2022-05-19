@@ -56,3 +56,8 @@ Alors("la recherche est {string} et {string}") do |search1, search2|
   expect(page).to have_content search1
   expect(page).to have_content search2
 end
+
+Alors("l'item possède la ressource {string}") do |string|
+    expect(page).to have_content "Tous les fichiers ont bien été ajoutés"
+    expect(find('.attachment_list')).to have_content string
+end
