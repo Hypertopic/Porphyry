@@ -10,6 +10,7 @@ class Corpora extends Component {
 
   state = {
     criteria: 'name',
+    listCorpus: []
   };
 
   sort = memoize((items, criteria) => items.sort(by(`${criteria}.0`)));
@@ -24,13 +25,12 @@ class Corpora extends Component {
     let count = this.props.items.length;
     let total = this.props.from;
     let listIds = this.props.ids.map((corpus) =>
-      <div key={corpus}>{corpus} <ItemCreator corpus={corpus} conf={this.props.conf} /></div>
+      <div key={corpus}> <input type="checkbox" value={corpus} onChange={this.handleChange} />{corpus} <ItemCreator corpus={corpus} conf={this.props.conf} /></div>
     );
     return (
       <div className="col-md-8 p-4">
         <div className="Subject">
           <h2 className="h4 font-weight-bold text-center d-none d-sm-block">
-            <input type="checkbox"></input>
             {listIds}
             <span className="badge badge-pill badge-light ml-4">{count} / {total}</span>
           </h2>
@@ -64,12 +64,26 @@ class Corpora extends Component {
       <option key={attribute} value={attribute}> {attribute} </option>
     ));
   }
+
+  handleChange = (e) => {
+    let list = this.state.listCorpus;
+    let index = list.indexOf(e.target.value);
+    if (index != -1) {
+      list.splice(index, 1);
+    } else {
+      list.push(e.target.value);
+    }
+    this.setState({
+      listCorpus: list
+    });
+    console.log('this.state=', this.state);
+  }
 }
 
 function Item(props) {
   let uri = `/item/${props.item.corpus}/${props.item.id}`;
   let name = [props.item.name].join(', '); //Name can be an array
-  let thumbnail = props.item.thumbnail && <img src={props.item.thumbnail} alt={name}/>;
+  let thumbnail = props.item.thumbnail && <img src={props.item.thumbnail} alt={name} />;
   let criteria = (props.criteria !== 'name')
     && <div className="About"> {props.item[props.criteria]} </div>;
   return (
