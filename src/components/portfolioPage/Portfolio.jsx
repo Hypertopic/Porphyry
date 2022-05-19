@@ -155,10 +155,11 @@ class Portfolio extends Component {
   }
 
   _getItemAttributes(item) {
-    return new Items(
+    let result = new Items(
       [item]
     ).getAttributes()
       .map(([key, value]) => key.concat(' : ', value.replace('\'', '’')));
+    return result;
   }
 
   _isSelected(item) {
@@ -260,6 +261,7 @@ class Portfolio extends Component {
         from={this.state.items.length}
         items={this.state.selectedItems}
         conf={conf}
+        history={this.props.history}
       />
     );
   }

@@ -154,6 +154,49 @@ export default class Selection {
     clause.type = (clause.type === 'intersection') ? 'union' : 'intersection';
   }
 
+  addCorpus = (corpusId) => {
+    const existing = this.selectionJSON.data.some(e =>
+      e.selection.find(corpus => corpus === corpusId)
+      || e.exclusion.find(corpus => corpus === corpusId)
+    );
+    if (!existing) {
+      this.selectionJSON.data = [];
+      this.selectionJSON.data.push({type: 'intersection', selection: [], exclusion: [corpusId]});
+    }
+  }
+
+  toggleCorpus = (corpusId) => {
+    const existingClause = this.selectionJSON.data.find(s => {
+      const allTopics = [...s.selection, ...s.exclusion];
+      if (allTopics.length === 0) {
+        return false;
+      }
+      return true;
+    });
+    if (existingClause) {
+      this.testSwitchPlace(existingClause, corpusId, false, true);
+      if ([...existingClause.selection, ...existingClause.exclusion].length === 0)
+        this.selectionJSON.data.splice(this.selectionJSON.data.indexOf(existingClause), 1);
+    } else {
+      this.addCorpus(corpusId);
+    }
+  }
+
+  testSwitchPlace = (clause, criterion, toDelete, threeState) => {
+    let index;
+    if ((index = clause.selection.indexOf(criterion)) > -1) {
+      clause.selection.splice(index, 1);
+      if (!toDelete)
+        clause.exclusion.push(criterion);
+    } else if ((index = clause.exclusion.indexOf(criterion)) > -1) {
+      clause.exclusion.splice(index, 1);
+      if (!toDelete && !threeState)
+        clause.selection.push(criterion);
+    } else {
+      clause.exclusion.push(criterion);
+    }
+  };
+
   getClauses = () => this.selectionJSON.data;
 
   getMainClause = () => this.selectionJSON;

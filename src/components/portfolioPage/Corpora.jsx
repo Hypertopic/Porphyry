@@ -5,14 +5,31 @@ import memoize from 'memoize-one';
 import ItemCreator from './ItemCreator.jsx';
 import GeographicMap from './GeographicMap.jsx';
 import { Items } from '../../model.js';
+import Selection from '../../Selection.js';
 
 class Corpora extends Component {
 
   state = {
-    criteria: 'name'
+    criteria: 'name',
+    listCorpus: [],
+    firstReceive: false,
   };
 
   sort = memoize((items, criteria) => items.sort(by(`${criteria}.0`)));
+
+  componentDidUpdate(prevProps) {
+    if (this.props.ids.length !== prevProps.ids.length) {
+      let listFormated = [...this.props.ids];
+      listFormated = listFormated.map(corpus => {
+        corpus = 'corpus : '.concat(corpus);
+        return corpus;
+      });
+      this.setState({
+        listCorpus: listFormated,
+        firstReceive: true,
+      });
+    }
+  }
 
   render() {
     let itemsData = this.sort(this.props.items, this.state.criteria);
@@ -23,8 +40,10 @@ class Corpora extends Component {
     let options = this._getOptions(attributes);
     let count = this.props.items.length;
     let total = this.props.from;
-    let listIds = this.props.ids.map((corpus) =>
-      <div key={corpus}>{corpus} <ItemCreator corpus={corpus} conf={this.props.conf} /></div>
+    let listIds = this.props.ids.map((corpus) =>{
+      let corpusFormated = 'corpus : '.concat(corpus);
+      return <div key={corpusFormated}> <input className="corpus_checkbox" type="checkbox" value={corpusFormated} onChange={this.handleChange} checked={this.isChecked(corpusFormated)}/> {corpus} <ItemCreator corpus={corpus} conf={this.props.conf} /></div>;
+    }
     );
     return (
       <div className="col-md-8 p-4">
@@ -63,12 +82,37 @@ class Corpora extends Component {
       <option key={attribute} value={attribute}> {attribute} </option>
     ));
   }
+
+  handleChange = (e) => {
+    let list = this.state.listCorpus;
+    let index = list.indexOf(e.target.value);
+    if (index !== -1) {
+      list.splice(index, 1);
+    } else {
+      list.push(e.target.value);
+    }
+    this.setState({
+      listCorpus: list
+    });
+    this.handleCorpusSelected(e.target.value);
+  }
+
+  isChecked(corpus) {
+    const selection = Selection.fromURI();
+    return selection.isSelectedOrExcluded(corpus) !== 'Excluded';
+  }
+
+  handleCorpusSelected(corpusId) {
+    const selection = Selection.fromURI();
+    selection.toggleCorpus(corpusId);
+    this.props.history.push(selection.toURI());
+  }
 }
 
 function Item(props) {
   let uri = `/item/${props.item.corpus}/${props.item.id}`;
   let name = [props.item.name].join(', '); //Name can be an array
-  let thumbnail = props.item.thumbnail && <img src={props.item.thumbnail} alt={name}/>;
+  let thumbnail = props.item.thumbnail && <img src={props.item.thumbnail} alt={name} />;
   let criteria = (props.criteria !== 'name')
     && <div className="About"> {props.item[props.criteria]} </div>;
   return (

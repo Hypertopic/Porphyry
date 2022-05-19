@@ -14,7 +14,7 @@ class Badge extends Component {
         {this.props.name}
         <button className={'badge badge-pill badge-dark oi ml-1 border-0 ' + (this.props.exclusion ? 'oi-plus' : 'oi-minus')}
           title={this.props.exclusion ? t`Inclure` : t`Exclure`}
-          onClick={this.handleChangeState}
+          onClick={!this.props.id.includes('corpus') ? this.handleChangeState : this.handleDeletion}
         > </button>
         <button className="badge badge-pill badge-dark oi oi-x border-0"
           title={t`Déselectionner`}

@@ -20,10 +20,10 @@ class Status extends Component {
         ...clause.exclusion.map(id => ({excluded: true, id, topic: this._getCandidate(id)}))]
         .sort(filter)
         .map(
-          t =>
-            (t.topic === null)
-              ? <Trans>Rubrique inconnue</Trans>
-              : <Badge exclusion={t.excluded} id={t.id} name={t.topic.name} _changeItemState={this._changeItemState}/>
+          t => {
+            let res = (t.topic === null) ? <Trans>Rubrique inconnue</Trans> : <Badge exclusion={t.excluded} id={t.id} name={t.topic.name} _changeItemState={this._changeItemState}/>;
+            return res;
+          }
         );
       status.push(topicsHTML.map((e, i) => i < topicsHTML.length - 1 ? [e, <Button clause={clause} _changeUnionState={this._changeUnionState}/>] : [e]).reduce((a, b) => a.concat(b))
       );
@@ -38,7 +38,9 @@ class Status extends Component {
 
   _getCandidate(id) {
     for (let v of this.props.candidates) {
-      if (v[id]) return v[id];
+      if (v[id]) {
+        return v[id];
+      }
     }
     return null;
   }

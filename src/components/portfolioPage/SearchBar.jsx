@@ -46,7 +46,11 @@ class SearchBar extends React.Component {
   handleSuggestionSelected = (_, { suggestion }) => {
     this.setState({pattern: ''});
     const selection = Selection.fromURI();
-    selection.addTopic(suggestion.id);
+    if (suggestion.id.includes('corpus')) {
+      selection.addCorpus(suggestion.id);
+    } else {
+      selection.addTopic(suggestion.id);
+    }
     this.props.history.push(selection.toURI());
   };
 
