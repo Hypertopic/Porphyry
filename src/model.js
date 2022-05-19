@@ -48,7 +48,8 @@ class Items {
           )
         )
         .reduce((x, y) => x.concat(y), [])
-        .map(([x, y]) => JSON.stringify([x, y[0]]))
+        .map(([x, y]) => Array.isArray(y) ? [x, y[0]] : [x, y])
+        .map(JSON.stringify)
     )].map(JSON.parse);
 
   getAttributeKeys = () => [...new Set(this.getAttributes().map(x => x[0]))];

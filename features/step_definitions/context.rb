@@ -85,3 +85,14 @@ Soit("l'utilisateur est sur mobile") do
   page.current_window.resize_to(320, 480)
 end
 
+Soit("tous les corpus sont sélectionnés") do
+  check('.corpus_checkbox')
+end
+
+Soit("aucun des corpus n'est sélectionné") do
+  uncheck('.corpus_checkbox')
+end
+
+Soit("aucun item n'est affiché") do
+  expect(page).not_to have_selector ".Item"
+end

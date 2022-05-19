@@ -9,11 +9,25 @@ import { Items } from '../../model.js';
 class Corpora extends Component {
 
   state = {
-    criteria: 'name'
+    criteria: 'name',
+    listCorpus: []
   };
 
   sort = memoize((items, criteria) => items.sort(by(`${criteria}.0`)));
+<<<<<<< HEAD
 
+  componentWillReceiveProps(props) {
+    this.setState({
+      listCorpus: [ ...props.ids]
+    })
+}
+=======
+  componentWillReceiveProps(props) {
+    this.setState({
+      listCorpus: [ ...props.ids ]
+    });
+  }
+>>>>>>> fix problems on props.ids
   render() {
     let itemsData = this.sort(this.props.items, this.state.criteria);
     let items = itemsData.map(x =>
@@ -24,7 +38,7 @@ class Corpora extends Component {
     let count = this.props.items.length;
     let total = this.props.from;
     let listIds = this.props.ids.map((corpus) =>
-      <div key={corpus}>{corpus} <ItemCreator corpus={corpus} conf={this.props.conf} /></div>
+      <div key={corpus}> <input type="checkbox" value={corpus} onChange={this.handleChange} checked={this.isChecked(corpus)}/>{corpus} <ItemCreator corpus={corpus} conf={this.props.conf} /></div>
     );
     return (
       <div className="col-md-8 p-4">
@@ -63,12 +77,34 @@ class Corpora extends Component {
       <option key={attribute} value={attribute}> {attribute} </option>
     ));
   }
+
+  handleChange = (e) => {
+    let list = this.state.listCorpus;
+    let index = list.indexOf(e.target.value);
+    if (index !== -1) {
+      list.splice(index, 1);
+    } else {
+      list.push(e.target.value);
+    }
+    this.setState({
+      listCorpus: list
+    });
+    console.log('this.state=', this.state);
+  }
+
+  isChecked(corpus) {
+    let list = this.state.listCorpus;
+    if (list.includes(corpus)) {
+      return true;
+    }
+    return false;
+  }
 }
 
 function Item(props) {
   let uri = `/item/${props.item.corpus}/${props.item.id}`;
   let name = [props.item.name].join(', '); //Name can be an array
-  let thumbnail = props.item.thumbnail && <img src={props.item.thumbnail} alt={name}/>;
+  let thumbnail = props.item.thumbnail && <img src={props.item.thumbnail} alt={name} />;
   let criteria = (props.criteria !== 'name')
     && <div className="About"> {props.item[props.criteria]} </div>;
   return (
