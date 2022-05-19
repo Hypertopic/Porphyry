@@ -155,10 +155,12 @@ class Portfolio extends Component {
   }
 
   _getItemAttributes(item) {
-    return new Items(
+    let result = new Items(
       [item]
     ).getAttributes()
       .map(([key, value]) => key.concat(' : ', value.replace('\'', '’')));
+    console.log(result);
+    return result;
   }
 
   _isSelected(item) {

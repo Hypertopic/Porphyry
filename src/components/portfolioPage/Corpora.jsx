@@ -9,7 +9,7 @@ import { Items } from '../../model.js';
 class Corpora extends Component {
 
   state = {
-    criteria: 'name'
+    criteria: 'name',
   };
 
   sort = memoize((items, criteria) => items.sort(by(`${criteria}.0`)));
@@ -30,6 +30,7 @@ class Corpora extends Component {
       <div className="col-md-8 p-4">
         <div className="Subject">
           <h2 className="h4 font-weight-bold text-center d-none d-sm-block">
+            <input type="checkbox"></input>
             {listIds}
             <span className="badge badge-pill badge-light ml-4">{count} / {total}</span>
           </h2>
