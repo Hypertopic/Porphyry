@@ -60,29 +60,40 @@ class Item extends Component {
       goBackUrlParams.set('mode', 'visit');
     }
     return (
-      <div className="App container-fluid">
+      <div className="App container-fluid px-0 px-md-3">
         <Header conf={conf} />
+        <header id="mobile_header" className="row align-items-center">
+          <h1>
+            <Link to={{
+              pathname: '/',
+              search: decodeURIComponent(goBackUrlParams.toString())
+            }} className="badge badge-pill badge-dark">
+              <span className="badge badge-pill badge-dark oi oi-chevron-left"> </span>
+            </Link>
+            {name}
+          </h1>
+        </header>
         <Helmet>
           <title>{name}</title>
         </Helmet>
-        <div className="Status row h5">
+        <div id="desktop_return_button" className="Status row h5 px-3 mb-0 mb-md-3">
           <Link to={{
             pathname: '/',
             search: decodeURIComponent(goBackUrlParams.toString())
           }} className="badge badge-pill badge-light TopicTag">
             <span className="badge badge-pill badge-dark oi oi-chevron-left"> </span>
-            { visitName ? t`Retour à la visite` : t`Retour à l'accueil` }
+            {visitName ? t`Retour à la visite` : t`Retour à l'accueil`}
           </Link>
         </div>
         <div className="container-fluid">
           <div className="App-content row">
-            <div className="col-md-4 p-4">
+            <div className="col-md-4 p-0 p-md-4">
               <div className="Description">
                 <h2 className="h4 font-weight-bold text-center"><Trans>Description</Trans></h2>
                 <div className="p-3">
                   <div className="Attributes">
                     <h3 className="h4"><Trans>Attributs du document</Trans></h3>
-                    <hr/>
+                    <hr />
                     <div>
                       {attributes}
                     </div>
@@ -91,12 +102,11 @@ class Item extends Component {
                   {viewpoints}
                 </div>
               </div>
-              <hr className="space" />
               {sameNameBlock}
             </div>
-            <div className="col-md-8 p-4">
+            <div className="col-md-8 p-0 p-md-4">
               <div className="Subject">
-                <h2 className="h4 font-weight-bold text-center">{name}</h2>
+                <h2 id="desktop_subject" className="h4 font-weight-bold text-center">{name}</h2>
                 <Resource href={this.state.item.resource} />
               </div>
               <Comments appId={this.state.disqus} item={this.state.item} />
@@ -111,7 +121,7 @@ class Item extends Component {
     return new Items([this.state.item]).getAttributes()
       .map(x => (
         <Attribute key={x[0]} name={x[0]} value={x[1]}
-          setAttribute={this._setAttribute} deleteAttribute={this._deleteAttribute}/>
+          setAttribute={this._setAttribute} deleteAttribute={this._deleteAttribute} />
       ));
   }
 
@@ -137,7 +147,7 @@ class Item extends Component {
     return fetch(SERVICE)
       .then(response => response.json())
       .then(data => {
-        this.setState({update_seq: data.update_seq});
+        this.setState({ update_seq: data.update_seq });
       });
   }
 
@@ -184,7 +194,7 @@ class Item extends Component {
     let uri = this.props.match.url;
     let params = this.props.match.params;
     let SETTINGS = await conf;
-    this.setState({disqus: SETTINGS.disqus});
+    this.setState({ disqus: SETTINGS.disqus });
     let hypertopic = new Hypertopic(SETTINGS.services);
     return hypertopic.getView(uri).then((data) => {
       let item = data[params.corpus][params.item];
@@ -195,7 +205,7 @@ class Item extends Component {
         topics[id] = itemTopics[id];
       }
       item.topic = topics;
-      this.setState({item});
+      this.setState({ item });
     }).catch(e => console.error(e.message))
       .then(() => hypertopic.getView(`/user/${SETTINGS.user}`))
       .then((data) => {
@@ -205,7 +215,7 @@ class Item extends Component {
           for (let vp of user.viewpoint) {
             topic[vp.id] = topic[vp.id] || [];
           }
-          this.setState({topic});
+          this.setState({ topic });
         }
       });
   };
@@ -289,7 +299,7 @@ class Item extends Component {
           _id: this.props.match.params.item,
           item_corpus: this.props.match.params.corpus
         })
-        .setAttributes({[key]: [value]})
+        .setAttributes({ [key]: [value] })
         .then(_ => this.setState(previousState => {
           previousState.item[key] = [value];
           return previousState;
@@ -354,7 +364,7 @@ class Item extends Component {
           item_corpus: this.props.match.params.corpus
         })
         .unsetTopic(topicToDelete.id)
-        .then((res)=> {
+        .then((res) => {
           let newState = this.state;
           newState.topic[topicToDelete.viewpoint] = newState.topic[
             topicToDelete.viewpoint

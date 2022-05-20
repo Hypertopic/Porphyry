@@ -54,9 +54,9 @@ class Portfolio extends Component {
       && selectionJSON.data[0].exclusion.length === 0
       && /^spatial : /.test(selectionJSON.data[0].selection[0]);
     return (
-      <div className="App container-fluid">
+      <div className="App container-fluid px-0 px-md-2">
         <Header conf={conf} />
-        <div className="Status row align-items-center h5">
+        <div className="Status row align-items-center h5 mb-0 mb-md-2">
           <div className="Search col-md-3">
             <SearchBar viewpoints={this.state.viewpoints} items={this.state.items} />
           </div>

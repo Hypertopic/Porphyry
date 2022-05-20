@@ -25,7 +25,7 @@ class SameNameBlock extends Component {
       );
     }
     return (
-      <hr className="space" />
+      <hr className="space d-none d-md-block" />
     );
   }
 
