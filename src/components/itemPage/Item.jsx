@@ -13,6 +13,7 @@ import SameNameBlock from './SameNameBlock.jsx';
 import { DiscussionEmbed } from 'disqus-react';
 import { t, Trans } from '@lingui/macro';
 import Copyright from './Copyright.jsx';
+import TopicPillList from './PillListViewpoint.jsx';
 
 /**
  * Gets a string representation of an object. If the object is an array,
@@ -50,6 +51,7 @@ class Item extends Component {
     const { creator, created } = this.state.item;
     let viewpoints = this._getViewpoints();
     let sameNameBlock = this._getSameNameBlock();
+    const mobileViewpoints = this._getMobileViewpoints();
     const { visitMap } = this.state;
     const urlParams = new URLSearchParams(window.location.search);
     const visitName = urlParams.get('visit');
@@ -84,7 +86,7 @@ class Item extends Component {
         </div>
         <div className="container-fluid">
           <div className="App-content row">
-            <div className="col-md-4 p-4">
+            <div className="col-md-4 p-4 d-none d-sm-block">
               <div className="Description">
                 <h2 className="h4 font-weight-bold text-center"><Trans>Description</Trans></h2>
                 <div className="p-3">
@@ -105,6 +107,7 @@ class Item extends Component {
             <div className="col-md-8 p-4">
               <div className="Subject">
                 <h2 className="h4 font-weight-bold text-center">{name}</h2>
+                <div className="d-sm-none">{mobileViewpoints}</div>
                 <Resource href={this.state.item.resource} />
                 <div className="d-block d-sm-none">
                   <Copyright creator={creator} created={created} />
@@ -139,6 +142,12 @@ class Item extends Component {
     return Object.entries(this.state.item.topic).map(v =>
       <Viewpoint key={v[0]} id={v[0]} topics={v[1]}
         assignTopic={this._assignTopic} removeTopic={this._removeTopic} update_seq={this.state.update_seq} />
+    );
+  }
+
+  _getMobileViewpoints() {
+    return Object.entries(this.state.item.topic).map(([id, value]) =>
+      <TopicPillList key={id} id={id} topics={value} />
     );
   }
 
