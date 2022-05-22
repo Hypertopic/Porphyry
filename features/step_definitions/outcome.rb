@@ -65,7 +65,16 @@ Alors("la légende de l’image est {string}") do |legend|
   expect(find(".Copyright")).to have_content legend
 end
 
-Alors("l'attribut {string} est absent") do |attribute|
-  expect(find(".Attributes")).not_to have_content attribute
+Alors('le point de vue {string} contient la pilule {string}') do |title, pill|
+  expect(page).to have_selector('.MobileViewpoint *', text: title)
+  expect(page).to have_selector('.MobileViewpoint .TopicPill *', text: pill)
 end
 
+Alors('le point de vue {string} ne contient pas la pilule {string}') do |title, pill|
+  expect(page).to have_selector('.MobileViewpoint *', text: title)
+  expect(page).not_to have_selector('.MobileViewpoint .TopicPill *', text: pill)
+end
+
+Alors('les attributs ne sont pas affichés') do
+  expect(page).not_to have_content('Attributs du document')
+end

@@ -2,7 +2,7 @@
 
 Fonctionnalité: Consulter les rubriques et attributs associés à un item
 
-Scénario:
+Scénario: sur desktop
 
   Soit "SNZ 006" l'item affiché
   Alors le titre de l'item affiché est "SNZ 006"
@@ -12,22 +12,21 @@ Scénario:
   Et une des rubriques de l'item est "Isaac"
   Et une des rubriques de l'item est "1er quart XVIe"
 
-Scénario: l’utilisateur sélectionne un item sur un point de vue sur mobile
+Scénario: sur mobile
 
-  Soit "SJ 000" l'item affiché
+  Soit "SNZ 006" l'item affiché
   Et l'utilisateur est sur mobile
-  Alors le titre de l'item affiché est "SJ 000"
-  Et la valeur de l'attribut "spatial" est "Église Saint-Jean-au-Marché, Troyes"
-  Et l'attribut "creator" est absent
-  Et l'attribut "created" est absent
-  Et la légende de l’image est "© Aurélien Bénel, 2016"
+  Alors le titre de l'item affiché est "SNZ 006"
+  Et les attributs ne sont pas affichés
+  Et le point de vue "Histoire de l'art" contient la pilule "Vers 1520"
+  Et le point de vue "Histoire de l'art" ne contient pas la pilule "1er quart XVIe"
+  Et le point de vue "Histoire des religions" contient la pilule "Isaac"
+  Et le point de vue "Histoire des religions" ne contient pas la pilule "Personnages"
+  Et la légende de l’image est "© Aurélien Bénel, 2014"
 
-Scénario: l’utilisateur sélectionne une photo en noir et blanc sur un point de vue sur mobile
+Scénario: qui soit une photo en noir et blanc, sur mobile
 
   Soit "AXN 009 B&W" l'item affiché
   Et l'utilisateur est sur mobile
   Alors le titre de l'item affiché est "AXN 009"
-  Et la valeur de l'attribut "spatial" est "Église Saint-Loup, Auxon"
-  Et l'attribut "creator" est absent
-  Et l'attribut "created" est absent
   Et la légende de l’image est "1907/1914"

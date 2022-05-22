@@ -13,6 +13,8 @@ class TopicPath extends React.Component {
 
   render() {
     let topics = this._getTopics();
+    // Intersperse topic elements with separator <span>s.
+    // [<Link>, <span>, <Link>, <span>, <Link>, ...]
     for (let i = 1; i < topics.length; ++i) {
       let key = `separator-${i}`;
       topics.splice(i, 0, <span key={key} className="TopicSeparator">&gt;</span>);
