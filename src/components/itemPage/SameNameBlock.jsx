@@ -17,8 +17,8 @@ class SameNameBlock extends Component {
     if (this.state.sameNameItemsList.length > 0) {
       return (
         <div className="Description">
-          <h2 className="h4 font-weight-bold text-center"><Trans>Items ayant le même nom</Trans></h2>
-          <div className="Items m-3">
+          <h2 className="h4 font-weight-bold text-center d-none d-sm-block"><Trans>Items ayant le même nom</Trans></h2>
+          <div className="Items m-0 m-md-3">
             {items}
           </div>
         </div>

@@ -97,8 +97,8 @@ class Item extends Component {
         </div>
         <div className="container-fluid">
           <div className="App-content row">
-            <div className="col-md-4 p-4 d-none d-sm-block">
-              <div className="Description">
+            <div className="col-md-4 p-0 p-md-4">
+              <div className="Description d-none d-sm-block">
                 <h2 className="h4 font-weight-bold text-center"><Trans>Description</Trans></h2>
                 <div className="p-3">
                   <div className="Attributes">
