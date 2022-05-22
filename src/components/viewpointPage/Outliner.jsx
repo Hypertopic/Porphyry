@@ -31,7 +31,7 @@ class Outliner extends React.Component {
         <Helmet>
           <title>{this.state.title}</title>
         </Helmet>
-        <div className="Status row h5">
+        <div className="Status row h5 mb-0 mb-md-2">
           <Link to="/" className="badge badge-pill badge-light TopicTag">
             <span className="badge badge-pill badge-dark oi oi-chevron-left"> </span>
             <Trans>Retour à l'accueil</Trans>
