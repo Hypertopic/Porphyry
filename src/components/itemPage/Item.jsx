@@ -71,7 +71,7 @@ class Item extends Component {
       <div className="App container-fluid px-0 px-md-3">
         <Header conf={conf} />
         <header id="mobile_header" className="row align-items-center">
-          <h1>
+          <h1 className="ItemTitle">
             <Link to={{
               pathname: '/',
               search: decodeURIComponent(goBackUrlParams.toString())
@@ -114,7 +114,7 @@ class Item extends Component {
             </div>
             <div className="col-md-8 p-0 p-md-4">
               <div className="Subject">
-                <h2 id="desktop_subject" className="h4 font-weight-bold text-center">{name}</h2>
+                <h2 id="desktop_subject" className="ItemTitle h4 font-weight-bold text-center">{name}</h2>
                 <Resource href={this.state.item.resource} />
                 <div className="d-block d-sm-none">
                   <Copyright creator={creator} created={created} />
