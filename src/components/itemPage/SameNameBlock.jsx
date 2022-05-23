@@ -75,14 +75,14 @@ class SameNameBlock extends Component {
 
   _getItems() {
     return this.state.sameNameItemsList.map(item =>
-      <Item key={item.id} item={item} />
+      <Item key={item.id} item={item} search={this.props.search} />
     );
   }
 
 }
 
 function Item(props) {
-  let uri = `/item/${props.item.corpus}/${props.item.id}`;
+  let uri = `/item/${props.item.corpus}/${props.item.id}?visit=${props.search}`;
   let thumbnail = props.item.thumbnail;
   let name = [props.item.name].join(', '); //Name can be an array
   if (thumbnail) return (

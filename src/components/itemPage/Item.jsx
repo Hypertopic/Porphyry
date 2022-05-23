@@ -53,16 +53,15 @@ class Item extends Component {
     let sameNameBlock = this._getSameNameBlock();
     const mobileViewpoints = this._getMobileViewpoints();
     const { visitMap } = this.state;
-    const urlParams = new URLSearchParams(window.location.search);
-    const visitName = urlParams.get('visit');
+    this.visitName = new URLSearchParams(window.location.search).get('visit');
     const goBackUrlParams = new URLSearchParams();
-    if (visitMap && visitName) {
+    if (visitMap && this.visitName) {
       goBackUrlParams.set('t', JSON.stringify({
         'type': 'intersection',
         'data': [{
           'type': 'intersection',
           'selection': [
-            `spatial : ${visitName}`
+            `spatial : ${this.visitName}`
           ],
           'exclusion': []
         }]
@@ -92,7 +91,7 @@ class Item extends Component {
             search: decodeURIComponent(goBackUrlParams.toString())
           }} className="badge badge-pill badge-light TopicTag">
             <span className="badge badge-pill badge-dark oi oi-chevron-left"> </span>
-            {visitName ? t`Retour à la visite` : t`Retour à l'accueil`}
+            {this.visitName ? t`Retour à la visite` : t`Retour à l'accueil`}
           </Link>
         </div>
         <div className="container-fluid">
@@ -165,7 +164,7 @@ class Item extends Component {
     //before returning the SameNameBlock Component, we ensure that the consulted item name value is defined
     if (this.state.item.name !== undefined && this.state.item.name !== null) {
       return (
-        <SameNameBlock ID={this.props.match.params.item} itemName={this.state.item.name} />
+        <SameNameBlock ID={this.props.match.params.item} itemName={this.state.item.name} search={this.visitName} />
       );
     }
     //item name has no value
