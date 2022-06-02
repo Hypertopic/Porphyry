@@ -70,7 +70,7 @@ end
 
 Quand("l'utilisateur choisit l'item {string} parmi les items affichés") do |item|
   within '.Items' do
-    click_on item
+    first(:link, item).click
   end
 end
 
@@ -123,3 +123,6 @@ Quand("l'utilisateur dépose {string} comme ressource") do |string|
   end
 end
 
+Quand("l'utilisteur clique sur {string}") do |string|
+  click_on string
+end

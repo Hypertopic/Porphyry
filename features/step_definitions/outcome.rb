@@ -96,3 +96,20 @@ Alors("l'image item {string} est cachée") do |item|
   expect(page).not_to have_css("img[alt=\"#{item}\"]")
 end
 
+Alors('{string} sont des rubriques sélectionnées') do |topics|
+  topic_format = '{"type":"intersection","selection":%s,"exclusion":[]}'
+  query_format = '{"type":"intersection","data":[%s]}'
+  selection = topics.split('|').map {|topic| getUUID(topic)}
+  json = topic_format % [*selection.shift].to_s
+  uri = '/?t=' + query_format % json
+  expect(page).to have_current_path(uri)
+end
+
+Alors('{string} sont des rubriques sélectionnées négativement') do |topics|
+  topic_format = '{"type":"intersection","selection":[],"exclusion":%s}'
+  query_format = '{"type":"intersection","data":[%s]}'
+  selection = topics.split('|').map {|topic| getUUID(topic)}
+  json = topic_format % [*selection].to_s 
+  uri = '/?t=' + query_format % json
+  expect(page).to have_current_path(uri)
+end

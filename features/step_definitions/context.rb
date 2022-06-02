@@ -38,6 +38,15 @@ Soit("{string} les rubriques sélectionnées négativement") do |topics|
   end
 end
 
+Soit('{string} les rubriques désélectionnées') do |topics|
+  topic_format = '{"type":"intersection","selection":[],"exclusion":%s}'
+  query_format = '{"type":"intersection","data":[%s]}'
+  selection = topics.split('|').map {|topic| getUUID(topic)}
+  json = topic_format % [*selection].to_s 
+  uri = '/?t=' + query_format % json
+  visit uri
+end
+
 Soit("l'utilisateur est connecté") do
   click_on 'Se connecter...'
   fill_in placeholder: "nom d'utilisateur", with: 'alice'

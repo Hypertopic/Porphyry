@@ -1,4 +1,4 @@
-language: fr
+#language: fr
 
 Fonctionnalité: Les items restent séléctionnées après avoir consulté un item
 
