@@ -11,11 +11,11 @@ Soit("{string} une des rubriques développées") do |topic|
 end
 
 Soit("{string} un des items affichés") do |itemName|
-  expect(page).to have_content itemName
+  expect(find('.Items')).to have_content itemName
 end
 
 Soit("{string} un des items cachés") do |itemName|
-  expect(page).not_to have_content itemName
+  expect(find('.Items')).not_to have_content itemName
 end
 
 Soit("{string} les rubriques sélectionnées") do |topics|
@@ -85,3 +85,6 @@ Soit("l'utilisateur est sur mobile") do
   page.current_window.resize_to(320, 480)
 end
 
+Soit("{string} un item affiché dans la page") do |itemName|
+  expect(page).to have_content itemName
+end

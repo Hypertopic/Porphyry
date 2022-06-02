@@ -69,3 +69,6 @@ Alors("l'attribut {string} est absent") do |attribute|
   expect(find(".Attributes")).not_to have_content attribute
 end
 
+Alors ("{string} est l'item affiché") do |item|
+  expect(page).to have_content item
+end

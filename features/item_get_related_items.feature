@@ -6,11 +6,11 @@ Scénario: par leur nom
 
   Soit "AXN 009" l'item affiché
   Et l'attribut "created" a pour valeur "2017-09-24"
-  Et "AXN 009" un des items affichés
+  Et "AXN 009" un item affiché dans la page
   Quand l'utilisateur choisit l'item "AXN 009" dans le bloc Items ayant le même nom
-  Alors l'item "AXN 009" est affiché
+  Alors "AXN 009" est l'item affiché
   Et la valeur de l'attribut "created" est "1907/1914"
-  Et l'item "AXN 009" est affiché
+  Et "AXN 009" est l'item affiché
 
 Scénario: par une de leurs rubriques
 
