@@ -40,10 +40,10 @@ class VisitMap extends Component {
           : nbFloors + Math.floor((position - 1) / 2);
         return { ...item, coordinates: { x, y } };
       });
-    return (<div className="col-md-8 p-4">
+    return (<div className="col-md-8 p-0 p-md-4">
       <div className="Subject">
         <h2 className="h4 font-weight-bold text-center">{located_items.length === 0 ? 'Chargement en cours' : 'Carte'}</h2>
-        <div className="m-4" style={{
+        <div className="m-0 m-md-4" style={{
           display: 'grid',
           gridTemplateColumns: `repeat(${nbFloors}, minmax(50px, 1fr)) minmax(100px, 2fr) repeat(${nbFloors}, minmax(50px, 1fr))`,
           gridTemplateRows: `repeat(${nbRows + 1}, auto)`,
@@ -92,6 +92,7 @@ class Item extends Component {
 
   render() {
     let {coordinates, corpus, id, spatial, thumbnail, name} = this.props.data;
+    let window_number = parseInt(name[0].match(/\d+/));
     return (
       <div className="Item" style={{
         gridColumn: `${coordinates.x + 1} / ${coordinates.x + 2}`,
@@ -106,6 +107,7 @@ class Item extends Component {
           <img src={thumbnail[0]} alt={name[0]} style={{
             margin: 'auto'
           }} />
+          <div> {window_number} </div>
         </Link>
       </div>
     );

@@ -11,7 +11,7 @@ Alors("la rubrique {string} est sélectionnée") do |topic|
 end
 
 Alors("le titre de l'item affiché est {string}") do |item|
-  expect(find('.Subject h2')).to have_content item
+  expect(find('.ItemTitle')).to have_content item
 end
 
 Alors("la valeur de l'attribut {string} est {string}") do |attribute, value|
@@ -65,10 +65,20 @@ Alors("la légende de l’image est {string}") do |legend|
   expect(find(".Copyright")).to have_content legend
 end
 
-Alors("l'attribut {string} est absent") do |attribute|
-  expect(find(".Attributes")).not_to have_content attribute
+Alors('le point de vue {string} contient la pilule {string}') do |title, pill|
+  expect(page).to have_selector('.MobileViewpoint *', text: title)
+  expect(page).to have_selector('.MobileViewpoint .TopicPill *', text: pill)
+end
+
+Alors('le point de vue {string} ne contient pas la pilule {string}') do |title, pill|
+  expect(page).to have_selector('.MobileViewpoint *', text: title)
+  expect(page).not_to have_selector('.MobileViewpoint .TopicPill *', text: pill)
 end
 
 Alors ("{string} est l'item affiché") do |item|
   expect(page).to have_content item
+end
+
+Alors('les attributs ne sont pas affichés') do
+  expect(page).not_to have_content('Attributs du document')
 end
