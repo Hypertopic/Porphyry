@@ -5,6 +5,7 @@ import queryString from 'query-string';
 import Hypertopic from 'hypertopic';
 import conf from '../../config.js';
 import Viewpoint from './Viewpoint.jsx';
+import AttributeSearch from './AttributeSearch.jsx';
 import Corpora from './Corpora.jsx';
 import Header from '../Header.jsx';
 import Status from './Status.jsx';
@@ -20,6 +21,7 @@ class Portfolio extends Component {
     super();
     this.state = {
       viewpoints: [],
+      attributes: [],
       corpora: [],
       items: [],
       selectedItems: [],
@@ -42,6 +44,7 @@ class Portfolio extends Component {
       .map(([key, value]) => key.concat(' : ', value))
       .map(x => ({[x]: {name: x}}));
     let candidates = this.state.viewpoints.concat(attributes);
+    let attributesSearch = this._getAttributes();
     const urlParams = new URLSearchParams(window.location.search);
     const selectionJSON = JSON.parse(urlParams.get('t'));
     // Normal items have numbers in their names, but building maps don't,
@@ -70,6 +73,12 @@ class Portfolio extends Component {
         <div className="container-fluid">
           <div className="App-content row">
             <div className="col-md-4 p-4 d-none d-sm-block">
+              <div className="AttributesSearch">
+                <h2 className="h4 font-weight-bold text-center"><Trans>Attributs</Trans></h2>
+                <div className="p-3">
+                  {attributesSearch}
+                </div>
+              </div>
               <div className="Description">
                 <h2 className="h4 font-weight-bold text-center"><Trans>Points de vue</Trans></h2>
                 <div className="p-3">
@@ -250,6 +259,12 @@ class Portfolio extends Component {
           topicsItems={this.state.topicsItems} />
       </div>
     );
+  }
+
+  _getAttributes() {
+    let attributesKeys = new Items(this.state.items)
+      .getAttributeKeys();
+    return attributesKeys.map(key => <AttributeSearch key={key} name={key} items={this.state.items} query={this.query} history={this.history} />);
   }
 
   _getCorpora() {

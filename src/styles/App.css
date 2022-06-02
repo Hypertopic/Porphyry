@@ -48,11 +48,12 @@ h1 a, h1 a:hover {
   min-height: 100vh;
 }
 
-.Subject, .Description {
+.Subject, .Description, .AttributesSearch {
   background: #fff;
+  margin-bottom: 2rem;
 }
 
-.Subject h2, .Description h2 {
+.Subject h2, .Description h2, .AttributesSearch h2 {
   color: ivory;
   margin: 0;
   padding: .5rem;
@@ -62,7 +63,7 @@ h1 a, h1 a:hover {
   background-color: dimgrey;
 }
 
-.Description h2 {
+.Description h2, .AttributesSearch h2 {
   background-color: #8b0000;
 }
 
@@ -457,6 +458,12 @@ ul.Outliner,
   padding: 20px 30px 20px 30px;
 }
 
-button {
-  margin-top: 2%;
+.selectValue {
+  width: 18em;
+  float: right;
+}
+
+.AttributesList {
+  flex-direction: column;
+  text-align: left;
 }
