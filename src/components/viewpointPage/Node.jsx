@@ -98,7 +98,6 @@ class Node extends React.Component {
     }
     function onDragStop(e) {
       e.stopPropagation();
-      console.log('dragStop ' + this.props.me.name);
       this.setState({isDragged: false});
       this.props.change(this.props.id, {startDrag: false});
     }

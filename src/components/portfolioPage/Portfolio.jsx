@@ -97,9 +97,7 @@ class Portfolio extends Component {
       this._fetchAll().then(() => {
         let end = new Date().getTime();
         let elapsedTime = end - start;
-        console.log('elapsed time ', elapsedTime);
         let intervalTime = Math.max(10000, elapsedTime * 5);
-        console.log('reload every ', intervalTime);
         this._timer = setInterval(
           async () => {
             this.hasChanged().then(x => {
@@ -219,7 +217,7 @@ class Portfolio extends Component {
             if (!['id', 'name', 'user'].includes(itemId)) {
               let item = data[corpus.id][itemId];
               if (!item.name || !item.name.length) {
-                console.log(`/item/${corpus.id}/${itemId} has no name!`);
+                console.warn(`/item/${corpus.id}/${itemId} has no name!`);
               } else {
                 item.id = itemId;
                 item.corpus = corpus.id;
