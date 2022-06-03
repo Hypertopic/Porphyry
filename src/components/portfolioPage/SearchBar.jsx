@@ -37,9 +37,17 @@ class SearchBar extends React.Component {
     this.setState({pattern: event.target.value});
   };
 
-  handleSuggestionSelected = (event, { suggestion }) => {
+  /**
+   * On suggestion selected, toggle search selection.
+   *
+   * @param {object} selection Selection object
+   * @param {object} selection.suggestion Suggestion selected
+   */
+  handleSuggestionSelected = (_, { suggestion }) => {
     this.setState({pattern: ''});
-    this.props.history.push((new Selection(suggestion.id)).toURI());
+    const selection = Selection.fromURI();
+    selection.addTopic(suggestion.id);
+    this.props.history.push(selection.toURI());
   };
 
   render() {

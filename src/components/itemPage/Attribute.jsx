@@ -41,7 +41,7 @@ class Attribute extends React.Component {
 
   render() {
     return (
-      <div className="Attribute">
+      <div className={`Attribute ${this.props.className}`}>
         <div className="Key">
           {this.props.name}
         </div>

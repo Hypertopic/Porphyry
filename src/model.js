@@ -23,6 +23,13 @@ class Topics {
 
 }
 
+/**
+ * When on mobile,
+ * the attributes in this list shouldn't be displayed in the left sidebar,
+ * because they are already displayed elsewhere in the page.
+ */
+const HIDDEN_ON_MOBILE = ['creator', 'created'];
+
 class Items {
 
   constructor(items) {
@@ -37,7 +44,7 @@ class Items {
       this.items
         .map(
           x => Object.entries(x).filter(
-            y => !['topic', 'resource', 'thumbnail', 'id', 'item', 'corpus', 'record', 'original'].includes(y[0])
+            y => !['topic', 'resource', 'thumbnail', 'id', 'item', 'corpus', 'record', 'original', '_attachments'].includes(y[0])
           )
         )
         .reduce((x, y) => x.concat(y), [])
@@ -51,4 +58,4 @@ class Items {
     .map(([_, value]) => value);
 }
 
-export {Topics, Items};
+export {Topics, Items, HIDDEN_ON_MOBILE};

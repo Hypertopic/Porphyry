@@ -2,6 +2,15 @@ Quand("on sélectionne la rubrique {string}") do |topic|
   click_on topic
 end
 
+Quand("on change en sélection négative la sélection de la rubrique {string}") do |topic|
+  click_on topic
+end
+
+Quand("on désélectionne la rubrique {string}") do |topic|
+  click_on topic
+  click_on topic
+end
+
 Quand("on choisit l'attribut {string}") do |attribute|
   click_on attribute
 end
@@ -9,8 +18,10 @@ end
 Quand ("l'utilisateur crée un item {string} dans le corpus {string}") do |name, corpus|
   click_on corpus
   expect(page).to have_content("undefined")
-  fill_in placeholder: 'Ajouter un attribut et une valeur...', with: "name:#{name}"
-  click_on 'validateButton-undefined'
+  within '.Attributes' do
+    fill_in placeholder: 'Ajouter un attribut et une valeur...', with: "name:#{name}"
+    click_on class: 'ValidateButton'
+  end
 end
 
 Quand ("l'utilisateur change l'opérateur entre la rubrique {string} et la rubrique {string}") do |topic1, topic2|
@@ -87,4 +98,21 @@ Quand("l'utilisateur renseigne l'attribut {string} préexistant avec la valeur {
   find('#new-attribute').send_keys :end, patternValue
   find("a", text: "#{attribute} : #{value}").click
   click_on class: 'ValidateButton'
+end
+
+Quand("l'utilisateur crée la rubrique {string} à la racine du point de vue") do |topic|
+  find('.node').click.send_keys(:return)
+  fill_in class:'editedNode', with: topic
+end
+
+Quand("l'utilisateur supprime le point de vue") do
+  accept_confirm do
+    click_on "Supprimer ce point de vue..."
+  end
+end
+
+Quand("l'utilisateur dépose {string} comme ressource") do |string|
+  attach_file(File.expand_path("public/favicon.ico")) do
+      click_button("Ajouter une ressource")
+  end
 end

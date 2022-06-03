@@ -15,24 +15,22 @@ class Contributors extends React.Component {
   render() {
     let contributors = this.state.contributors;
     return (
-      <div className="col-md-4 p-4 col-sm-12">
-        <div className="Description">
-          <h2 className="h4 font-weight-bold text-center"><Trans>Contributeurs</Trans></h2>
-          <div className="p-3">
-            <form className="" onSubmit={(e) => this._getContributor(e)}>
-              <div className="row">
-                <div className="col-xs-8 mx-2 mt-1">
-                  <input className="form-control" type="text" name="contributorToAdd" id="contributorToAdd"/>
-                </div>
-                <div className="col-xs-3 mt-1">
-                  <button type="submit" className="btn btn-light ml-2"><Trans>Ajouter</Trans></button>
-                </div>
+      <div className="Description">
+        <h2 className="h4 font-weight-bold text-center"><Trans>Contributeurs</Trans></h2>
+        <div className="p-3">
+          <form className="" onSubmit={(e) => this._getContributor(e)}>
+            <div className="row">
+              <div className="col-xs-8 mx-2 mt-1">
+                <input className="form-control" type="text" name="contributorToAdd" id="contributorToAdd"/>
               </div>
-            </form>
-            <ul className="list-group mt-4">
-              {contributors ? contributors.map(item => <li className="list-group-item" key={item}>{item}</li>) : <Trans>Pas de contributeurs</Trans>}
-            </ul>
-          </div>
+              <div className="col-xs-3 mt-1">
+                <button type="submit" className="btn btn-light ml-2"><Trans>Ajouter</Trans></button>
+              </div>
+            </div>
+          </form>
+          <ul className="list-group mt-4">
+            {contributors ? contributors.map(item => <li className="list-group-item" key={item}>{item}</li>) : <Trans>Pas de contributeurs</Trans>}
+          </ul>
         </div>
       </div>
     );

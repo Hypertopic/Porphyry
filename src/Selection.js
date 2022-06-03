@@ -39,6 +39,20 @@ export default class Selection {
     this.selectionJSON = {type: 'intersection', data};
   }
 
+  /**
+   * Loads actual selection from the URI.
+   *
+   * @returns {Selection} current instance
+   */
+  static fromURI = () => {
+    const selection = new Selection();
+    const actualData = JSON.parse((new URLSearchParams(window.location.search)).get('t'));
+    if (actualData) {
+      selection.selectionJSON = actualData;
+    }
+    return selection;
+  }
+
   toJSON = () => JSON.stringify(this.selectionJSON);
 
   toURI = () => `/?t=${this.toJSON()}`;
@@ -62,22 +76,71 @@ export default class Selection {
     this.selectionJSON = JSON.parse(json);
   }
 
-  toggleTopic = (topicID, viewpoint) => {
-    let clause = this.selectionJSON.data.find(s => {
-      let allTopics = [...s.selection, ...s.exclusion];
+  /**
+   * Toggle topic selection.
+   *
+   * Create a new clause.
+   * If there is an existing clause, move it from selection to exclusion,
+   * then delete.
+   *
+   * @param {string} topicID Topic identifier
+   * @param {object} [viewpoint] Viewpoint object
+   */
+  toggleTopic = (topicID, viewpoint = null) => {
+    const existingClause = viewpoint ? this.selectionJSON.data.find(s => {
+      const allTopics = [...s.selection, ...s.exclusion];
       if (allTopics.length === 0 || viewpoint[allTopics[0]] === undefined) {
         return false;
       }
       return (!viewpoint[allTopics[0]].hasOwnProperty('broader') && !viewpoint[topicID].hasOwnProperty('broader'))
-        || (viewpoint[allTopics[0]].hasOwnProperty('broader') && viewpoint[allTopics[0]].broader[0].id) === (viewpoint[topicID].hasOwnProperty('broader') && viewpoint[topicID].broader[0].id);
-    });
-    if (!clause) {
-      this.selectionJSON.data.push({type: 'intersection', selection: [topicID], exclusion: []});
+        || (
+          viewpoint[allTopics[0]].hasOwnProperty('broader')
+          && viewpoint[allTopics[0]].broader[0].id
+        ) === (
+          viewpoint[topicID].hasOwnProperty('broader')
+          && viewpoint[topicID].broader[0].id
+        );
+    }) : false;
+    if (existingClause) {
+      switchPlace(existingClause, topicID, false, true);
+      if ([...existingClause.selection, ...existingClause.exclusion].length === 0)
+        this.selectionJSON.data.splice(this.selectionJSON.data.indexOf(existingClause), 1);
     } else {
-      switchPlace(clause, topicID, false, true);
-      if ([...clause.selection, ...clause.exclusion].length === 0)
-        this.selectionJSON.data.splice(this.selectionJSON.data.indexOf(clause), 1);
+      this.addTopic(topicID);
     }
+  }
+
+  /**
+   * Add topic to selection.
+   *
+   * @param {string} topicID Topic identifier
+   */
+  addTopic = (topicID) => {
+    const existing = this.selectionJSON.data.some(e =>
+      e.selection.find(topic => topic === topicID)
+      || e.exclusion.find(topic => topic === topicID)
+    );
+    if (!existing) {
+      this.selectionJSON.data.push({type: 'intersection', selection: [topicID], exclusion: []});
+    }
+  }
+
+  /**
+   * Remove topic from selection.
+   *
+   * First remove topicID from clause element.
+   * Then remove clause element with empty content.
+   *
+   * @param {string} topicID Topic identifier
+   */
+  removeTopic = (topicID) => {
+    this.selectionJSON.data = this.selectionJSON.data
+      .map(e => ({
+        ...e,
+        selection: e.selection.filter(s => s !== topicID),
+        exclusion: e.exclusion.filter(s => s !== topicID),
+      }))
+      .filter(e => e.selection.length || e.exclusion.length);
   }
 
   toggleCriterion = (criterion, toDelete) => {

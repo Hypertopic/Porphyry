@@ -3,49 +3,47 @@ import {Link} from 'react-router-dom';
 
 class VisitMap extends Component {
 
-  _getItemCoordinates(input, nbFloors) {
-    const y = input % 100 === 0 ? Math.floor(input / 100) : nbFloors + Math.floor((input % 100 - 1) / 2);
-    const sign = 1 - 2 * (input % 2);
-    const x = input % 100 === 0 ? nbFloors : nbFloors + sign * (nbFloors - Math.floor(input / 100));
-    return {
-      x,
-      y
-    };
-  }
-
   render() {
-    let { items } = this.props;
-    const inputs = items
-      .filter(item => /^[A-Z]+ ?\d*$/.test(item.name[0]))
-      .reduce((acc, item) => {
-        const results = item.name[0].match(/\d{3}$/);
-        if (results) {
-          acc.push({
-            item,
-            input: parseInt(results[0], 10)
-          });
-        }
-        return acc;
-      }, []);
-    const nbFloors = inputs.length ? Math.ceil(Math.max(...inputs.map(elt => elt.input)) / 100) : 0;
-    let selectedItems = inputs.map(elt => {
-      return {
-        ...(elt.item),
-        coordinates: this._getItemCoordinates(elt.input, nbFloors)
-      };
-    });
-    selectedItems = selectedItems
-      .map(x => x.name[0])
-      .map((x, i, arr) => arr.indexOf(x) === i && i)
-      .filter(x => selectedItems[x])
-      .map(x => selectedItems[x]);
-    const nbCols = 2 * nbFloors + 1;
-    const nbRows = inputs.length ? Math.max(...selectedItems.map(x => x.coordinates.y)) + 1 : 0;
-    const map = items.find(x => /^[A-Z]+$/.test(x.name[0]));
-    return (<div className="col-md-8 p-4">
+    let { items, map } = this.props;
+    let window_items = Object.values(
+      items
+        .filter(x =>
+          !!x.thumbnail
+          && /^[A-Z]+ \d{3}$/.test(x.name[0])
+        )
+        .reduce((result, x) => {
+          let key = x.name[0];
+          if (!result[key] || (x.plan && x.plan[0] === 'large')) {
+            result[key] = x;
+          }
+          return result;
+        }, {})
+    );
+    let two_dimensional_locations = window_items.map(x => x.name[0].match(/\d{3}/)[0])
+      .map(x => ({
+        elevation: Math.floor(x / 100),
+        position: x % 100,
+      }));
+    let nbFloors = Math.max(...two_dimensional_locations.map(x => x.elevation)) + 1;
+    let nbCols = 2 * nbFloors + 1;
+    let nbPositions = Math.max(...two_dimensional_locations.map(x => x.position));
+    let nbRows = Math.ceil(nbPositions / 2) + nbFloors;
+    let located_items = window_items
+      .map((item, i) => {
+        let {elevation, position} = two_dimensional_locations[i];
+        let sign = 1 - 2 * (position % 2);
+        let x = (position === 0)
+          ? nbFloors
+          : nbFloors + sign * (nbFloors - elevation);
+        let y = (position === 0)
+          ? elevation
+          : nbFloors + Math.floor((position - 1) / 2);
+        return { ...item, coordinates: { x, y } };
+      });
+    return (<div className="col-md-8 p-0 p-md-4">
       <div className="Subject">
-        <h2 className="h4 font-weight-bold text-center">{selectedItems.length === 0 ? 'Chargement en cours' : 'Carte'}</h2>
-        <div className="m-4" style={{
+        <h2 className="h4 font-weight-bold text-center">{located_items.length === 0 ? 'Chargement en cours' : 'Carte'}</h2>
+        <div className="m-0 m-md-4" style={{
           display: 'grid',
           gridTemplateColumns: `repeat(${nbFloors}, minmax(50px, 1fr)) minmax(100px, 2fr) repeat(${nbFloors}, minmax(50px, 1fr))`,
           gridTemplateRows: `repeat(${nbRows + 1}, auto)`,
@@ -70,7 +68,7 @@ class VisitMap extends Component {
             Allée centrale
           </div>
           {
-            selectedItems.map(x => <Item key={x.id} data={x} />)
+            located_items.map(x => <Item key={x.id} data={x} />)
           }
           {
             map && <Link id="plan" to={{
@@ -94,6 +92,7 @@ class Item extends Component {
 
   render() {
     let {coordinates, corpus, id, spatial, thumbnail, name} = this.props.data;
+    let window_number = parseInt(name[0].match(/\d+/));
     return (
       <div className="Item" style={{
         gridColumn: `${coordinates.x + 1} / ${coordinates.x + 2}`,
@@ -108,6 +107,7 @@ class Item extends Component {
           <img src={thumbnail[0]} alt={name[0]} style={{
             margin: 'auto'
           }} />
+          <div> {window_number} </div>
         </Link>
       </div>
     );

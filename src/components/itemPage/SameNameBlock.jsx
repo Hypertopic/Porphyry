@@ -17,15 +17,15 @@ class SameNameBlock extends Component {
     if (this.state.sameNameItemsList.length > 0) {
       return (
         <div className="Description">
-          <h2 className="h4 font-weight-bold text-center"><Trans>Items ayant le même nom</Trans></h2>
-          <div className="Items m-3">
+          <h2 className="h4 font-weight-bold text-center d-none d-sm-block"><Trans>Items ayant le même nom</Trans></h2>
+          <div className="Items m-0 m-md-3">
             {items}
           </div>
         </div>
       );
     }
     return (
-      <hr className="space" />
+      <hr className="space d-none d-md-block" />
     );
   }
 
@@ -78,14 +78,14 @@ class SameNameBlock extends Component {
 
   _getItems() {
     return this.state.sameNameItemsList.map(item =>
-      <Item key={item.id} item={item} />
+      <Item key={item.id} item={item} search={this.props.search} />
     );
   }
 
 }
 
 function Item(props) {
-  let uri = `/item/${props.item.corpus}/${props.item.id}`;
+  let uri = `/item/${props.item.corpus}/${props.item.id}?visit=${props.search}`;
   let thumbnail = props.item.thumbnail;
   let name = [props.item.name].join(', '); //Name can be an array
   if (thumbnail) return (
