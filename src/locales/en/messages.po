@@ -25,9 +25,13 @@ msgstr ""
 msgid "Ajouter"
 msgstr "Add"
 
-#: src/components/itemPage/Item.jsx:279
+#: src/components/itemPage/Item.jsx:303
 msgid "Ajouter un attribut et une valeur..."
 msgstr "Add an attribute and a value..."
+
+#: src/components/itemPage/InputFile.jsx:45
+msgid "Ajouter une ressource"
+msgstr "Add a resource"
 
 #: src/components/itemPage/Viewpoint.jsx:76
 msgid "Ajouter une rubrique..."
@@ -37,7 +41,7 @@ msgstr "Add a topic..."
 msgid "Attention : Le point de vue sera définitivement supprimé."
 msgstr "Warning: The viewpoint will be permanently deleted."
 
-#: src/components/itemPage/Item.jsx:92
+#: src/components/itemPage/Item.jsx:105
 msgid "Attributs du document"
 msgstr "Document attributes"
 
@@ -57,7 +61,7 @@ msgstr "Create a viewpoint"
 msgid "Créer"
 msgstr ""
 
-#: src/components/itemPage/Item.jsx:89
+#: src/components/itemPage/Item.jsx:102
 msgid "Description"
 msgstr "Description"
 
@@ -65,7 +69,6 @@ msgstr "Description"
 msgid "Déselectionner"
 msgstr "Deselect"
 
-#: src/components/portfolioPage/Button.jsx:12
 #: src/components/portfolioPage/Button.jsx:13
 msgid "Et"
 msgstr "And"
@@ -98,7 +101,6 @@ msgstr "Viewpoint name"
 msgid "Nouveau point de vue"
 msgstr "New viewpoint"
 
-#: src/components/portfolioPage/Button.jsx:12
 #: src/components/portfolioPage/Button.jsx:13
 msgid "Ou"
 msgstr "Or"
@@ -119,12 +121,15 @@ msgstr "Pseudonym"
 msgid "Rechercher..."
 msgstr "Search..."
 
-#: src/components/itemPage/Item.jsx:82
-#: src/components/viewpointPage/Outliner.jsx:37
+#: src/components/itemPage/Item.jsx:114
+msgid "Ressources"
+msgstr "Resources"
+
+#: src/components/itemPage/Item.jsx:95
 msgid "Retour à l'accueil"
 msgstr "Go back to home page"
 
-#: src/components/itemPage/Item.jsx:82
+#: src/components/itemPage/Item.jsx:95
 msgid "Retour à la visite"
 msgstr ""
 
@@ -152,15 +157,23 @@ msgstr "Log out"
 msgid "Supprimer ce point de vue..."
 msgstr "Delete this viewpoint..."
 
+#: src/components/itemPage/InputFile.jsx:34
+msgid "Tous les fichiers ont bien été ajoutés"
+msgstr "All files have been uploaded"
+
 #: src/components/portfolioPage/Status.jsx:11
 msgid "Tous les items"
 msgstr "All items"
 
-#: src/components/itemPage/Item.jsx:370
+#: src/components/itemPage/Item.jsx:394
 msgid "Voulez-vous réellement que l'item affiché ne soit plus décrit à l'aide de cette rubrique ?"
 msgstr "Remove this topic for this item?"
 
-#: src/components/itemPage/Item.jsx:281
+#: src/components/itemPage/InputFile.jsx:15
+msgid "Une erreur est survenue"
+msgstr "An error occurred"
+
+#: src/components/itemPage/Item.jsx:305
 msgid "attribut : valeur"
 msgstr "attribute: value"
 

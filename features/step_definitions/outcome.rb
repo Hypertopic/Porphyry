@@ -78,3 +78,8 @@ end
 Alors('les attributs ne sont pas affichés') do
   expect(page).not_to have_content('Attributs du document')
 end
+
+Alors("l'item possède la ressource {string}") do |string|
+    expect(page).to have_content "Tous les fichiers ont bien été ajoutés"
+    expect(find('.attachment_list')).to have_content string
+end

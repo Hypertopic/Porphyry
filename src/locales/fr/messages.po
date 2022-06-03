@@ -25,9 +25,13 @@ msgstr "Adresse email"
 msgid "Ajouter"
 msgstr "Ajouter"
 
-#: src/components/itemPage/Item.jsx:279
+#: src/components/itemPage/Item.jsx:303
 msgid "Ajouter un attribut et une valeur..."
 msgstr "Ajouter un attribut et une valeur..."
+
+#: src/components/itemPage/InputFile.jsx:45
+msgid "Ajouter une ressource"
+msgstr "Ajouter une ressource"
 
 #: src/components/itemPage/Viewpoint.jsx:76
 msgid "Ajouter une rubrique..."
@@ -37,7 +41,7 @@ msgstr "Ajouter une rubrique..."
 msgid "Attention : Le point de vue sera définitivement supprimé."
 msgstr "Attention : Le point de vue sera définitivement supprimé."
 
-#: src/components/itemPage/Item.jsx:92
+#: src/components/itemPage/Item.jsx:105
 msgid "Attributs du document"
 msgstr "Attributs du document"
 
@@ -57,7 +61,7 @@ msgstr "Création du point de vue"
 msgid "Créer"
 msgstr "Créer"
 
-#: src/components/itemPage/Item.jsx:89
+#: src/components/itemPage/Item.jsx:102
 msgid "Description"
 msgstr "Description"
 
@@ -119,12 +123,15 @@ msgstr "Pseudonyme"
 msgid "Rechercher..."
 msgstr "Rechercher..."
 
-#: src/components/itemPage/Item.jsx:82
-#: src/components/viewpointPage/Outliner.jsx:37
+#: src/components/itemPage/Item.jsx:114
+msgid "Ressources"
+msgstr "Ressources"
+
+#: src/components/itemPage/Item.jsx:95
 msgid "Retour à l'accueil"
 msgstr "Retour à l'accueil"
 
-#: src/components/itemPage/Item.jsx:82
+#: src/components/itemPage/Item.jsx:95
 msgid "Retour à la visite"
 msgstr "Retour à la visite"
 
@@ -152,15 +159,23 @@ msgstr "Se déconnecter"
 msgid "Supprimer ce point de vue..."
 msgstr "Supprimer ce point de vue..."
 
+#: src/components/itemPage/InputFile.jsx:34
+msgid "Tous les fichiers ont bien été ajoutés"
+msgstr "Tous les fichiers ont bien été ajoutés"
+
 #: src/components/portfolioPage/Status.jsx:11
 msgid "Tous les items"
 msgstr "Tous les items"
 
-#: src/components/itemPage/Item.jsx:370
+#: src/components/itemPage/Item.jsx:394
 msgid "Voulez-vous réellement que l'item affiché ne soit plus décrit à l'aide de cette rubrique ?"
 msgstr "Voulez-vous réellement que l'item affiché ne soit plus décrit à l'aide de cette rubrique ?"
 
-#: src/components/itemPage/Item.jsx:281
+#: src/components/itemPage/InputFile.jsx:15
+msgid "Une erreur est survenue"
+msgstr "Une erreur est survenue"
+
+#: src/components/itemPage/Item.jsx:305
 msgid "attribut : valeur"
 msgstr "attribut : valeur"
 
@@ -183,3 +198,4 @@ msgstr "Êtes-vous sûr de vouloir supprimer le point de vue ?"
 #: src/components/itemPage/Copyright.jsx:21
 msgid "© {creator}, {yearOrDate}"
 msgstr "© {creator}, {yearOrDate}"
+

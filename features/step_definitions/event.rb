@@ -96,6 +96,8 @@ Quand("l'utilisateur supprime le point de vue") do
   end
 end
 
-Quand("L'utilisateur choisit d'ouvrir les détails de l'expansion panel {string}") do |panel|
-  click_on panel
+Quand("l'utilisateur dépose {string} comme ressource") do |string|
+  attach_file(File.expand_path("public/favicon.ico")) do
+      click_button("Ajouter une ressource")
+  end
 end
