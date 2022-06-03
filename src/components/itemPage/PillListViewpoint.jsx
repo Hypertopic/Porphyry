@@ -43,17 +43,13 @@ class TopicPillList extends React.Component {
 
   _getTopics() {
     const everyTopic = this.state.topics;
-    // console.log('leaf topics', this.props.topics, 'everyTopic', everyTopic);
     return this.props.topics
       .filter(({ id }) => id in everyTopic)
 
       .map(({ id }) => {
-        console.log('id', id);
-        console.log('everyjtopic', everyTopic);
         return (
           <div className="badge badge-pill badge-light" key={id}>
             <TopicPill id={id} name={everyTopic[id].name} />
-            {/* <TopicPill id={id} name={id} /> */}
           </div>
         );
       });
