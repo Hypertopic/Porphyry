@@ -13,7 +13,7 @@ class Header extends Component {
 
   render() {
     return (
-      <header className="row align-items-center">
+      <header id="desktop_header" className="row align-items-center">
         <Helmet>
           <title>{this.state.user}</title>
         </Helmet>

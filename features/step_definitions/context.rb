@@ -67,3 +67,25 @@ Soit("l'utilisateur est sur la page d'édition de l'item {string}") do |item|
   visit getURI(item)
 end
 
+Soit("un point de vue en cours d'édition") do
+  click_on 'Nouveau point de vue'
+  fill_in placeholder: 'Nom du point de vue', with: 'test'
+  click_on 'Créer'
+  expect(page).to have_content 'test'
+end
+
+Soit("le point de vue {string} est en mode édition") do |viewpoint|
+  visit '/viewpoint/' + getUUID('')
+  find('input[class="form-control"]').send_keys viewpoint
+  click_on "Créer"
+  expect(page).to have_content "Modification du point de vue"
+end
+
+Soit("l'utilisateur est sur mobile") do
+  page.current_window.resize_to(320, 480)
+end
+
+Soit("{string} la recherche actuelle") do |topic|
+  find('input[type="search"]').send_keys topic
+  click_link(topic, href: nil)
+end

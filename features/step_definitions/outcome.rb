@@ -11,7 +11,7 @@ Alors("la rubrique {string} est sélectionnée") do |topic|
 end
 
 Alors("le titre de l'item affiché est {string}") do |item|
-  expect(find('.Subject h2')).to have_content item
+  expect(find('.ItemTitle')).to have_content item
 end
 
 Alors("la valeur de l'attribut {string} est {string}") do |attribute, value|
@@ -46,4 +46,48 @@ end
 
 Alors("L’utilisateur n’est pas connecté") do
   expect(page).to have_content "Se connecter..."
+end
+
+Alors('le point de vue contient la rubrique {string}') do |topic|
+  expect(page).to have_content topic
+end
+
+Alors("la recherche est {string} et {string}") do |search1, search2|
+  expect(page).to have_content search1
+  expect(page).to have_content search2
+end
+
+Alors('le point de vue {string} ne fait plus partie du portfolio') do |viewpoint|
+  expect(page).not_to have_content viewpoint
+end
+
+Alors("la légende de l’image est {string}") do |legend|
+  expect(find(".Copyright")).to have_content legend
+end
+
+Alors('le point de vue {string} contient la pilule {string}') do |title, pill|
+  expect(page).to have_selector('.MobileViewpoint *', text: title)
+  expect(page).to have_selector('.MobileViewpoint .TopicPill *', text: pill)
+end
+
+Alors('le point de vue {string} ne contient pas la pilule {string}') do |title, pill|
+  expect(page).to have_selector('.MobileViewpoint *', text: title)
+  expect(page).not_to have_selector('.MobileViewpoint .TopicPill *', text: pill)
+end
+
+Alors('les attributs ne sont pas affichés') do
+  expect(page).not_to have_content('Attributs du document')
+end
+
+Alors("l'item possède la ressource {string}") do |string|
+    expect(page).to have_content "Tous les fichiers ont bien été ajoutés"
+    expect(find('.attachment_list')).to have_content string
+end
+
+Alors("l'image item {string} est affichée") do |item|
+  expect(find("img[alt=\"#{item}\"]")).to be_visible
+end
+
+Alors("l'image item {string} est cachée") do |item|
+  expect(page).not_to have_css("img[alt=\"#{item}\"]")
 end

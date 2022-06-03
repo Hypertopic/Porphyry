@@ -13,19 +13,35 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: src/components/viewpointPage/Contributors.jsx:28
+#: src/components/registerPage/Register.jsx:78
+msgid "Adresse email"
+msgstr ""
+
+#: src/components/registerPage/Register.jsx:73
+#~ msgid "Adresse mail"
+#~ msgstr "Email address"
+
+#: src/components/viewpointPage/Contributors.jsx:27
 msgid "Ajouter"
 msgstr "Add"
 
-#: src/components/itemPage/Item.jsx:234
+#: src/components/itemPage/Item.jsx:303
 msgid "Ajouter un attribut et une valeur..."
 msgstr "Add an attribute and a value..."
+
+#: src/components/itemPage/InputFile.jsx:45
+msgid "Ajouter une ressource"
+msgstr "Add a resource"
 
 #: src/components/itemPage/Viewpoint.jsx:76
 msgid "Ajouter une rubrique..."
 msgstr "Add a topic..."
 
-#: src/components/itemPage/Item.jsx:58
+#: src/components/viewpointPage/Outliner.jsx:48
+msgid "Attention : Le point de vue sera définitivement supprimé."
+msgstr "Warning: The viewpoint will be permanently deleted."
+
+#: src/components/itemPage/Item.jsx:105
 msgid "Attributs du document"
 msgstr "Document attributes"
 
@@ -33,15 +49,19 @@ msgstr "Document attributes"
 msgid "Choisir une rubrique parent..."
 msgstr "Choose a parent topic..."
 
-#: src/components/viewpointPage/Contributors.jsx:20
+#: src/components/viewpointPage/Contributors.jsx:19
 msgid "Contributeurs"
 msgstr "Contributors"
 
-#: src/components/viewpointPage/Outliner.jsx:78
+#: src/components/viewpointPage/Outliner.jsx:87
 msgid "Création du point de vue"
 msgstr "Create a viewpoint"
 
-#: src/components/itemPage/Item.jsx:55
+#: src/components/viewpointPage/Outliner.jsx:78
+msgid "Créer"
+msgstr ""
+
+#: src/components/itemPage/Item.jsx:102
 msgid "Description"
 msgstr "Description"
 
@@ -49,7 +69,6 @@ msgstr "Description"
 msgid "Déselectionner"
 msgstr "Deselect"
 
-#: src/components/portfolioPage/Button.jsx:12
 #: src/components/portfolioPage/Button.jsx:13
 msgid "Et"
 msgstr "And"
@@ -66,11 +85,15 @@ msgstr "Include"
 msgid "Items ayant le même nom"
 msgstr "Items having the same name"
 
-#: src/components/viewpointPage/Outliner.jsx:77
+#: src/components/viewpointPage/Outliner.jsx:86
 msgid "Modification du point de vue"
 msgstr "Edit a viewpoint"
 
-#: src/components/viewpointPage/Outliner.jsx:68
+#: src/components/registerPage/Register.jsx:82
+msgid "Mot de passe"
+msgstr "Password"
+
+#: src/components/viewpointPage/Outliner.jsx:75
 msgid "Nom du point de vue"
 msgstr "Viewpoint name"
 
@@ -78,61 +101,87 @@ msgstr "Viewpoint name"
 msgid "Nouveau point de vue"
 msgstr "New viewpoint"
 
-#: src/components/portfolioPage/Button.jsx:12
 #: src/components/portfolioPage/Button.jsx:13
 msgid "Ou"
 msgstr "Or"
 
-#: src/components/viewpointPage/Contributors.jsx:33
+#: src/components/viewpointPage/Contributors.jsx:32
 msgid "Pas de contributeurs"
 msgstr "No contributors"
 
-#: src/components/portfolioPage/Portfolio.jsx:52
+#: src/components/portfolioPage/Portfolio.jsx:71
 msgid "Points de vue"
 msgstr "Viewpoints"
 
-#: src/components/portfolioPage/SearchBar.jsx:47
+#: src/components/registerPage/Register.jsx:73
+msgid "Pseudonyme"
+msgstr "Pseudonym"
+
+#: src/components/portfolioPage/SearchBar.jsx:55
 msgid "Rechercher..."
 msgstr "Search..."
 
-#: src/components/itemPage/Item.jsx:48
-#: src/components/viewpointPage/Outliner.jsx:37
+#: src/components/itemPage/Item.jsx:114
+msgid "Ressources"
+msgstr "Resources"
+
+#: src/components/itemPage/Item.jsx:95
 msgid "Retour à l'accueil"
 msgstr "Go back to home page"
+
+#: src/components/itemPage/Item.jsx:95
+msgid "Retour à la visite"
+msgstr ""
 
 #: src/components/portfolioPage/Status.jsx:25
 msgid "Rubrique inconnue"
 msgstr "Unknown topic"
 
-#: src/components/Authenticated.jsx:30
+#: src/components/Authenticated.jsx:40
+msgid "S'inscrire..."
+msgstr "Register..."
+
+#: src/components/Authenticated.jsx:31
 msgid "Se connecter"
 msgstr "Log in"
 
-#: src/components/Authenticated.jsx:36
+#: src/components/Authenticated.jsx:37
 msgid "Se connecter..."
 msgstr "Log in..."
 
-#: src/components/Authenticated.jsx:21
+#: src/components/Authenticated.jsx:22
 msgid "Se déconnecter"
 msgstr "Log out"
+
+#: src/components/viewpointPage/Outliner.jsx:49
+msgid "Supprimer ce point de vue..."
+msgstr "Delete this viewpoint..."
+
+#: src/components/itemPage/InputFile.jsx:34
+msgid "Tous les fichiers ont bien été ajoutés"
+msgstr "All files have been uploaded"
 
 #: src/components/portfolioPage/Status.jsx:11
 msgid "Tous les items"
 msgstr "All items"
 
-#: src/components/itemPage/Item.jsx:325
+#: src/components/itemPage/Item.jsx:394
 msgid "Voulez-vous réellement que l'item affiché ne soit plus décrit à l'aide de cette rubrique ?"
 msgstr "Remove this topic for this item?"
 
-#: src/components/itemPage/Item.jsx:236
+#: src/components/itemPage/InputFile.jsx:15
+msgid "Une erreur est survenue"
+msgstr "An error occurred"
+
+#: src/components/itemPage/Item.jsx:305
 msgid "attribut : valeur"
 msgstr "attribute: value"
 
-#: src/components/Authenticated.jsx:29
+#: src/components/Authenticated.jsx:30
 msgid "mot de passe"
 msgstr "Password"
 
-#: src/components/Authenticated.jsx:28
+#: src/components/Authenticated.jsx:29
 msgid "nom d'utilisateur"
 msgstr "Username"
 
@@ -140,18 +189,10 @@ msgstr "Username"
 msgid "valeur"
 msgstr "value"
 
-#: src/components/Authenticated.jsx:42
-msgid "S'inscrire..."
-msgstr "Register..."
+#: src/components/viewpointPage/Outliner.jsx:48
+msgid "Êtes-vous sûr de vouloir supprimer le point de vue ?"
+msgstr "Are you sure you want to delete the viewpoint?"
 
-#: src/components/registerPage/Register.jsx:68
-msgid "Pseudonyme"
-msgstr "Pseudonym"
-
-#: src/components/registerPage/Register.jsx:73
-msgid "Adresse mail"
-msgstr "Email address"
-
-#: src/components/registerPage/Register.jsx:77
-msgid "Mot de passe"
-msgstr "Password"
+#: src/components/itemPage/Copyright.jsx:21
+msgid "© {creator}, {yearOrDate}"
+msgstr "© {creator}, {yearOrDate}"

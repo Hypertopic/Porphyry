@@ -31,7 +31,7 @@ class Outliner extends React.Component {
         <Helmet>
           <title>{this.state.title}</title>
         </Helmet>
-        <div className="Status row h5">
+        <div className="Status row h5 mb-0 mb-md-2">
           <Link to="/" className="badge badge-pill badge-light TopicTag">
             <span className="badge badge-pill badge-dark oi oi-chevron-left"> </span>
             <Trans>Retour à l'accueil</Trans>
@@ -40,7 +40,14 @@ class Outliner extends React.Component {
         <div className="container-fluid">
           <div className="App-content row">
             {this.state.title
-              ? <Contributors viewpoint_id = {this.props.match.params.id} />
+              ? <div className="col-md-4 p-4 col-sm-12">
+                <Contributors viewpoint_id = {this.props.match.params.id} />
+                <button className="btn btn-light" onClick={
+                  () => {
+                    this.applyDelete();
+                    window.confirm(t`Êtes-vous sûr de vouloir supprimer le point de vue ?` + '\n' + t`Attention : Le point de vue sera définitivement supprimé.`);
+                  }}><Trans>Supprimer ce point de vue...</Trans></button>
+              </div>
               : ''}
             <div className={style}>
               <div className="Description">
@@ -263,6 +270,14 @@ class Outliner extends React.Component {
         });
     }
     return this.changing;
+  }
+
+  async applyDelete() {
+    let db = new Hypertopic((await conf).services);
+    await db.get({_id: this.props.match.params.id})
+      .then(db.delete)
+      .catch(_error);
+    this.props.history.push('/');
   }
 
   async _fetchData() {
