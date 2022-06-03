@@ -83,3 +83,11 @@ Alors("l'item possède la ressource {string}") do |string|
     expect(page).to have_content "Tous les fichiers ont bien été ajoutés"
     expect(find('.attachment_list')).to have_content string
 end
+
+Alors("l'image item {string} est affichée") do |item|
+  expect(find("img[alt=\"#{item}\"]")).to be_visible
+end
+
+Alors("l'image item {string} est cachée") do |item|
+  expect(page).not_to have_css("img[alt=\"#{item}\"]")
+end
