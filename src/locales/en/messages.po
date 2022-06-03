@@ -98,6 +98,10 @@ msgstr "Viewpoint name"
 msgid "Nouveau point de vue"
 msgstr "New viewpoint"
 
+#: src/components/portfolioPage/GeographicMap.jsx:63
+msgid "Opacité du calque"
+msgstr "Layer opacity"
+
 #: src/components/portfolioPage/Button.jsx:12
 #: src/components/portfolioPage/Button.jsx:13
 msgid "Ou"
@@ -107,7 +111,7 @@ msgstr "Or"
 msgid "Pas de contributeurs"
 msgstr "No contributors"
 
-#: src/components/portfolioPage/Portfolio.jsx:71
+#: src/components/portfolioPage/Portfolio.jsx:74
 msgid "Points de vue"
 msgstr "Viewpoints"
 
@@ -176,10 +180,10 @@ msgstr "Username"
 msgid "valeur"
 msgstr "value"
 
-#: src/components/viewpointPage/Outliner.jsx:48
-msgid "Êtes-vous sûr de vouloir supprimer le point de vue ?"
-msgstr "Are you sure you want to delete the viewpoint?"
-
 #: src/components/itemPage/Copyright.jsx:21
 msgid "© {creator}, {yearOrDate}"
 msgstr "© {creator}, {yearOrDate}"
+
+#: src/components/viewpointPage/Outliner.jsx:48
+msgid "Êtes-vous sûr de vouloir supprimer le point de vue ?"
+msgstr "Are you sure you want to delete the viewpoint?"

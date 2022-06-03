@@ -44,9 +44,9 @@ class Corpora extends Component {
               {options}
             </select>
           </div>
-          <div className="Items m-3">
-            {items}
-          </div>
+        </div>
+        <div className="Items m-3">
+          {items}
         </div>
       </div>
     );
@@ -68,7 +68,7 @@ class Corpora extends Component {
 function Item(props) {
   let uri = `/item/${props.item.corpus}/${props.item.id}`;
   let name = [props.item.name].join(', '); //Name can be an array
-  let thumbnail = props.item.thumbnail && <img src={props.item.thumbnail} alt={name}/>;
+  let thumbnail = props.item.thumbnail && <img src={props.item.thumbnail} alt={name} />;
   let criteria = (props.criteria !== 'name')
     && <div className="About"> {props.item[props.criteria]} </div>;
   return (

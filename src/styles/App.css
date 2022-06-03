@@ -424,6 +424,17 @@ ul.Outliner,
   padding: 0.3rem!important;
 }
 
+.sliderProperties {
+  margin-top: 10px;
+}
+
+#opacitySlider{
+  width: 10%;
+  margin-left: 5px;
+  margin-right: 5px;
+  height: 10px;
+}
+
 .selectAttributes {
   margin-top: 10px;
 }
