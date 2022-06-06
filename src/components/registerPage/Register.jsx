@@ -55,7 +55,7 @@ class Register extends Component {
       this.props.history.push({
         pathname: param ? `/${param}` : '/'
       });
-    }).catch((e) => console.log('Openning session failed !'));
+    }).catch((e) => console.error('Openning session failed !'));
   }
   render() {
     return (

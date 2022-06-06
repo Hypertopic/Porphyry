@@ -6,8 +6,8 @@ Scénario: ayant pour valeur de courts textes
 
   Soit un item en cours de création
   Et l'utilisateur est connecté
-  Quand l'utilisateur indique "Musée de Vauluisant, Troyes" comme valeur de l'attribut "spatial"
-  Alors la valeur de l'attribut "spatial" est "Musée de Vauluisant, Troyes"
+  Quand l'utilisateur indique "bleu" comme valeur de l'attribut "couleur dominante"
+  Alors la valeur de l'attribut "couleur dominante" est "bleu"
 
 Scénario: ayant pour valeur des URI
 

@@ -85,12 +85,27 @@ Quand("{string} souhaite s'enregistrer comme contributeur en tant que {string} a
   click_on "Inscription"
 end
 
+Quand("l'utilisateur renseigne l'attribut {string} préexistant avec une nouvelle valeur {string} en recherchant {string}") do |attribute, value, pattern|
+  find('#new-attribute').send_keys pattern
+  click_link(attribute, href: nil)
+  find("#new-attribute").send_keys :end, value
+  click_on class: 'ValidateButton'
+end
+
+Quand("l'utilisateur renseigne l'attribut {string} préexistant avec la valeur {string} proposée parmi les valeurs existantes en recherchant {string} et {string}") do |attribute, value, patternAttribute, patternValue|
+  find('#new-attribute').send_keys patternAttribute
+  click_link(attribute, href: nil)
+  find('#new-attribute').send_keys :end, patternValue
+  find("a", text: "#{attribute} : #{value}").click
+  click_on class: 'ValidateButton'
+end
+
 Quand("l'utilisateur crée la rubrique {string} à la racine du point de vue") do |topic|
   find('.node').click.send_keys(:return)
   fill_in class:'editedNode', with: topic
 end
 
-Quand("l'utilisateur supprime le point de vue") do 
+Quand("l'utilisateur supprime le point de vue") do
   accept_confirm do
     click_on "Supprimer ce point de vue..."
   end
@@ -101,3 +116,10 @@ Quand("on sélectionne la valeur d'attribut {string} en tant que {string}") do |
     select value, from: attribute
   end
 end  
+
+Quand("l'utilisateur dépose {string} comme ressource") do |string|
+  attach_file(File.expand_path("public/favicon.ico")) do
+      click_button("Ajouter une ressource")
+  end
+end
+

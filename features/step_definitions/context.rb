@@ -88,3 +88,8 @@ end
 Soit("{string} un item affiché dans la page") do |itemName|
   expect(page).to have_content itemName
 end
+
+Soit("{string} la recherche actuelle") do |topic|
+  find('input[type="search"]').send_keys topic
+  click_link(topic, href: nil)
+end

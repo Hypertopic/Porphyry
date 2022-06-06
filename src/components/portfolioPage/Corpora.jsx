@@ -27,14 +27,14 @@ class Corpora extends Component {
       <div key={corpus}>{corpus} <ItemCreator corpus={corpus} conf={this.props.conf} /></div>
     );
     return (
-      <div className="col-md-8 p-4">
+      <div className="col-md-8 p-0 p-md-4">
         <div className="Subject">
           <h2 className="h4 font-weight-bold text-center d-none d-sm-block">
             {listIds}
             <span className="badge badge-pill badge-light ml-4">{count} / {total}</span>
           </h2>
           <GeographicMap items={this.props.items} conf={this.props.conf} />
-          <div className="selectAttributes">
+          <div className="selectAttributes mt-0 mt-md-2">
             triés par&nbsp;
             <select
               id="attribut"

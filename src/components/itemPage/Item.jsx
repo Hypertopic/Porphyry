@@ -12,7 +12,10 @@ import Header from '../Header.jsx';
 import SameNameBlock from './SameNameBlock.jsx';
 import { DiscussionEmbed } from 'disqus-react';
 import { t, Trans } from '@lingui/macro';
+import InputWithSuggestions from '../InputWithSuggestions.jsx';
 import Copyright from './Copyright.jsx';
+import TopicPillList from './PillListViewpoint.jsx';
+import AttachmentsList from './AttachmentsList';
 
 /**
  * Gets a string representation of an object. If the object is an array,
@@ -34,7 +37,8 @@ class Item extends Component {
     this.state = {
       attributeInputValue: '',
       item: { topic: [] },
-      visitMap: false
+      visitMap: false,
+      corpus: []
     };
     conf.then(settings => {
       if (settings.portfolio && settings.portfolio[settings.user])
@@ -50,17 +54,17 @@ class Item extends Component {
     const { creator, created } = this.state.item;
     let viewpoints = this._getViewpoints();
     let sameNameBlock = this._getSameNameBlock();
+    const mobileViewpoints = this._getMobileViewpoints();
     const { visitMap } = this.state;
-    const urlParams = new URLSearchParams(window.location.search);
-    const visitName = urlParams.get('visit');
+    this.visitName = new URLSearchParams(window.location.search).get('visit');
     const goBackUrlParams = new URLSearchParams();
-    if (visitMap && visitName) {
+    if (visitMap && this.visitName) {
       goBackUrlParams.set('t', JSON.stringify({
         'type': 'intersection',
         'data': [{
           'type': 'intersection',
           'selection': [
-            `spatial : ${visitName}`
+            `spatial : ${this.visitName}`
           ],
           'exclusion': []
         }]
@@ -68,43 +72,59 @@ class Item extends Component {
       goBackUrlParams.set('mode', 'visit');
     }
     return (
-      <div className="App container-fluid">
+      <div className="App container-fluid px-0 px-md-3">
         <Header conf={conf} />
+        <header id="mobile_header" className="row align-items-center">
+          <h1 className="ItemTitle">
+            <Link to={{
+              pathname: '/',
+              search: decodeURIComponent(goBackUrlParams.toString())
+            }} className="badge badge-pill badge-dark">
+              <span className="badge badge-pill badge-dark oi oi-chevron-left"> </span>
+            </Link>
+            {name}
+          </h1>
+        </header>
         <Helmet>
           <title>{name}</title>
         </Helmet>
-        <div className="Status row h5">
+        <div id="desktop_return_button" className="Status row h5 px-3 mb-0 mb-md-3">
           <Link to={{
             pathname: '/',
             search: decodeURIComponent(goBackUrlParams.toString())
           }} className="badge badge-pill badge-light TopicTag">
             <span className="badge badge-pill badge-dark oi oi-chevron-left"> </span>
-            { visitName ? t`Retour à la visite` : t`Retour à l'accueil` }
+            {this.visitName ? t`Retour à la visite` : t`Retour à l'accueil`}
           </Link>
         </div>
         <div className="container-fluid">
           <div className="App-content row">
-            <div className="col-md-4 p-4">
-              <div className="Description">
+            <div className="col-md-4 p-0 p-md-4">
+              <div className="Description d-none d-sm-block">
                 <h2 className="h4 font-weight-bold text-center"><Trans>Description</Trans></h2>
                 <div className="p-3">
                   <div className="Attributes">
                     <h3 className="h4"><Trans>Attributs du document</Trans></h3>
-                    <hr/>
+                    <hr />
                     <div>
                       {attributes}
                     </div>
                     <div className="d-none d-sm-block">{this._getAttributeCreationForm()}</div>
                   </div>
                   {viewpoints}
+                  <div className="Ressources">
+                    <h3 className="h4"><Trans>Ressources</Trans></h3>
+                    <hr/>
+                    <AttachmentsList className="Attachments"/>
+                  </div>
                 </div>
               </div>
-              <hr className="space" />
               {sameNameBlock}
             </div>
-            <div className="col-md-8 p-4">
+            <div className="col-md-8 p-0 p-md-4">
               <div className="Subject">
-                <h2 className="h4 font-weight-bold text-center">{name}</h2>
+                <h2 id="desktop_subject" className="ItemTitle h4 font-weight-bold text-center">{name}</h2>
+                <div className="d-sm-none">{mobileViewpoints}</div>
                 <Resource href={this.state.item.resource} />
                 <div className="d-block d-sm-none">
                   <Copyright creator={creator} created={created} />
@@ -142,11 +162,21 @@ class Item extends Component {
     );
   }
 
+  handleCallback = (childData) => {
+    this.setState({corpus: childData});
+  }
+
+  _getMobileViewpoints() {
+    return Object.entries(this.state.item.topic).map(([id, value]) =>
+      <TopicPillList key={id} id={id} topics={value} />
+    );
+  }
+
   _getSameNameBlock() {
     //before returning the SameNameBlock Component, we ensure that the consulted item name value is defined
     if (this.state.item.name !== undefined && this.state.item.name !== null) {
       return (
-        <SameNameBlock ID={this.props.match.params.item} itemName={this.state.item.name} />
+        <SameNameBlock ID={this.props.match.params.item} itemName={this.state.item.name} setCorpus={this.handleCallback} />
       );
     }
     //item name has no value
@@ -157,7 +187,7 @@ class Item extends Component {
     return fetch(SERVICE)
       .then(response => response.json())
       .then(data => {
-        this.setState({update_seq: data.update_seq});
+        this.setState({ update_seq: data.update_seq });
       });
   }
 
@@ -204,7 +234,7 @@ class Item extends Component {
     let uri = this.props.match.url;
     let params = this.props.match.params;
     let SETTINGS = await conf;
-    this.setState({disqus: SETTINGS.disqus});
+    this.setState({ disqus: SETTINGS.disqus });
     let hypertopic = new Hypertopic(SETTINGS.services);
     return hypertopic.getView(uri).then((data) => {
       let item = data[params.corpus][params.item];
@@ -215,7 +245,7 @@ class Item extends Component {
         topics[id] = itemTopics[id];
       }
       item.topic = topics;
-      this.setState({item});
+      this.setState({ item });
     }).catch(e => console.error(e.message))
       .then(() => hypertopic.getView(`/user/${SETTINGS.user}`))
       .then((data) => {
@@ -225,7 +255,7 @@ class Item extends Component {
           for (let vp of user.viewpoint) {
             topic[vp.id] = topic[vp.id] || [];
           }
-          this.setState({topic});
+          this.setState({ topic });
         }
       });
   };
@@ -281,13 +311,47 @@ class Item extends Component {
       placeholder = t`attribut : valeur`;
     }
 
+    const attributesData = (
+      new Items(Object.values(this.state.corpus)
+        .map(corpus => Object.values(corpus))
+        .flat())
+    ).getAttributes();
+
+    const uniquesAttributesNames = [...new Set(attributesData.map(([key]) => key))]
+      .map(x => ({name: x}));
+
+    const onSuggestionSelected = (event, {suggestion}) => {
+      this.setState({attributeInputValue: suggestion.name + (suggestion.name.search(':') !== -1 ? '' : ' : ')});
+    };
+
+    const inputProps = {
+      placeholder,
+      value: this.state.attributeInputValue,
+      id: 'new-attribute',
+      type: 'search',
+      onChange: attributeInputChange,
+      onBlur: attributeInputBlur,
+      onFocus: attributeInputFocus,
+      onKeyDown: attributeInputChangeKeyDown
+    };
+
+    const getCandidates = () => {
+      if (this.state.attributeInputValue.search(':') !== -1) {
+        return [...new Set(attributesData)]
+          .map(x => ({ name: `${x[0]} : ${x[1]}` }));
+      }
+      return uniquesAttributesNames;
+    };
+
     return (
       <form onSubmit={this._submitAttribute} className={classes.join(' ')}>
         <div className="attributeInput">
-          <input ref={(input) => this.attributeInput = input} value={this.state.attributeInputValue}
-            onChange={attributeInputChange} onKeyDown={attributeInputChangeKeyDown}
-            onFocus={attributeInputFocus} onBlur={attributeInputBlur}
-            id="new-attribute" className="form-control" placeholder={placeholder} type="text" />
+          <InputWithSuggestions
+            candidates={getCandidates()}
+            onSuggestionSelected={onSuggestionSelected}
+            inputProps={inputProps}
+            id="new-attribute"
+          />
         </div>
         <div className="input-group-append">
           <button type="button" className="btn btn-sm ValidateButton btn"
@@ -309,7 +373,7 @@ class Item extends Component {
           _id: this.props.match.params.item,
           item_corpus: this.props.match.params.corpus
         })
-        .setAttributes({[key]: [value]})
+        .setAttributes({ [key]: [value] })
         .then(_ => this.setState(previousState => {
           previousState.item[key] = [value];
           return previousState;
@@ -326,7 +390,6 @@ class Item extends Component {
     if (!key || !value) return false;
     this._setAttribute(key, value);
     this.setState({ attributeInputValue: '' });
-    this.attributeInput.focus();
     return false;
   };
 
@@ -374,7 +437,7 @@ class Item extends Component {
           item_corpus: this.props.match.params.corpus
         })
         .unsetTopic(topicToDelete.id)
-        .then((res)=> {
+        .then((res) => {
           let newState = this.state;
           newState.topic[topicToDelete.viewpoint] = newState.topic[
             topicToDelete.viewpoint

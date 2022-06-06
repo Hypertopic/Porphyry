@@ -49,20 +49,19 @@ class Portfolio extends Component {
     const selectionJSON = JSON.parse(urlParams.get('t'));
     // Normal items have numbers in their names, but building maps don't,
     // so the regex only matches building maps.
-    const maybeBuildingMap = this.state.selectedItems.find(x => /^[A-Z]+$/.test(x.name[0]));
     const visitPossible = this.state.visitMap
-      && maybeBuildingMap !== undefined
       && selectionJSON
       && selectionJSON.type === 'intersection'
-      && selectionJSON.data.length === 1
+      && selectionJSON.data.length >= 1
       && selectionJSON.data[0].type === 'intersection'
       && selectionJSON.data[0].selection.length === 1
       && selectionJSON.data[0].exclusion.length === 0
       && /^spatial : /.test(selectionJSON.data[0].selection[0]);
+    const { items, map } = visitPossible ? this._getVisitItems() : { items: [], map: null };
     return (
-      <div className="App container-fluid">
+      <div className="App container-fluid px-0 px-md-2">
         <Header conf={conf} />
-        <div className="Status row align-items-center h5">
+        <div className="Status row align-items-center h5 mb-0 mb-md-2">
           <div className="Search col-md-3">
             <SearchBar viewpoints={this.state.viewpoints} items={this.state.items} />
           </div>
@@ -87,7 +86,7 @@ class Portfolio extends Component {
                 </div>
               </div>
             </div>
-            {visitPossible ? <VisitMap items={this.state.selectedItems} map={maybeBuildingMap} /> : this._getCorpora()}
+            {visitPossible && map ? <VisitMap items={items} map={map} /> : this._getCorpora()}
           </div>
         </div>
       </div>
@@ -170,6 +169,25 @@ class Portfolio extends Component {
       .map(([key, value]) => key.concat(' : ', value.replace('\'', '’')));
   }
 
+  /**
+   * Give the visit items from selection.
+   *
+   * Add the visit map to the selection if not exist.
+   *
+   * @returns {{items: object[], map: object?}} Selected items plus the visit map related to the selection
+   */
+  _getVisitItems() {
+    if (!this.state.selectedItems.length) {
+      return {items: []};
+    }
+    const visitMapName = this.state.selectedItems[0].name[0].split(' ')[0];
+    let visitMap = this.state.selectedItems.find(item => item.name.includes(visitMapName));
+    if (!visitMap) {
+      visitMap = this.state.items.find(item => item.name.includes(visitMapName));
+    }
+    return {items: this.state.selectedItems, map: visitMap};
+  }
+
   _isSelected(item) {
     let filter = this.query.toFilter();
     return filter(this._getRecursiveItemTopics(item).concat(this._getItemAttributes(item)));
@@ -228,7 +246,7 @@ class Portfolio extends Component {
             if (!['id', 'name', 'user'].includes(itemId)) {
               let item = data[corpus.id][itemId];
               if (!item.name || !item.name.length) {
-                console.log(`/item/${corpus.id}/${itemId} has no name!`);
+                console.warn(`/item/${corpus.id}/${itemId} has no name!`);
               } else {
                 item.id = itemId;
                 item.corpus = corpus.id;
