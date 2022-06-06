@@ -32,7 +32,7 @@ class AttributeSearch extends Component {
       <div className={'AttributesList ' + this.props.name}>
         {this.props.name}
         <select id={this.props.name} onChange={handleChange} className="selectValue">
-          <option value="">Choisir</option>
+          <option value="" />
           {options}
         </select>
       </div>

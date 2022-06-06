@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { Trans } from '@lingui/macro';
 import by from 'compare-func';
 import memoize from 'memoize-one';
 import ItemCreator from './ItemCreator.jsx';
@@ -35,7 +36,8 @@ class Corpora extends Component {
           </h2>
           <GeographicMap items={this.props.items} conf={this.props.conf} />
           <div className="selectAttributes mt-0 mt-md-2">
-            triés par&nbsp;
+            <Trans>triés par</Trans>
+            &nbsp;
             <select
               id="attribut"
               onChange={this.handleSort}

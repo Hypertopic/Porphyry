@@ -14,18 +14,14 @@ msgstr ""
 "Plural-Forms: \n"
 
 #: src/components/registerPage/Register.jsx:78
-msgid "Adresse email"
-msgstr "Adresse email"
-
-#: src/components/registerPage/Register.jsx:73
-#~ msgid "Adresse mail"
-#~ msgstr "Adresse mail"
+msgid "Adresse électronique"
+msgstr "Adresse électronique"
 
 #: src/components/viewpointPage/Contributors.jsx:27
 msgid "Ajouter"
 msgstr "Ajouter"
 
-#: src/components/itemPage/Item.jsx:303
+#: src/components/itemPage/Item.jsx:309
 msgid "Ajouter un attribut et une valeur..."
 msgstr "Ajouter un attribut et une valeur..."
 
@@ -41,7 +37,11 @@ msgstr "Ajouter une rubrique..."
 msgid "Attention : Le point de vue sera définitivement supprimé."
 msgstr "Attention : Le point de vue sera définitivement supprimé."
 
-#: src/components/itemPage/Item.jsx:105
+#: src/components/portfolioPage/Portfolio.jsx:76
+msgid "Attributs"
+msgstr "Attributs"
+
+#: src/components/itemPage/Item.jsx:107
 msgid "Attributs du document"
 msgstr "Attributs du document"
 
@@ -61,7 +61,7 @@ msgstr "Création du point de vue"
 msgid "Créer"
 msgstr "Créer"
 
-#: src/components/itemPage/Item.jsx:102
+#: src/components/itemPage/Item.jsx:104
 msgid "Description"
 msgstr "Description"
 
@@ -111,7 +111,7 @@ msgstr "Ou"
 msgid "Pas de contributeurs"
 msgstr "Pas de contributeurs"
 
-#: src/components/portfolioPage/Portfolio.jsx:71
+#: src/components/portfolioPage/Portfolio.jsx:82
 msgid "Points de vue"
 msgstr "Points de vue"
 
@@ -123,15 +123,16 @@ msgstr "Pseudonyme"
 msgid "Rechercher..."
 msgstr "Rechercher..."
 
-#: src/components/itemPage/Item.jsx:114
+#: src/components/itemPage/Item.jsx:116
 msgid "Ressources"
 msgstr "Ressources"
 
-#: src/components/itemPage/Item.jsx:95
+#: src/components/itemPage/Item.jsx:97
+#: src/components/viewpointPage/Outliner.jsx:37
 msgid "Retour à l'accueil"
 msgstr "Retour à l'accueil"
 
-#: src/components/itemPage/Item.jsx:95
+#: src/components/itemPage/Item.jsx:97
 msgid "Retour à la visite"
 msgstr "Retour à la visite"
 
@@ -167,15 +168,16 @@ msgstr "Tous les fichiers ont bien été ajoutés"
 msgid "Tous les items"
 msgstr "Tous les items"
 
-#: src/components/itemPage/Item.jsx:394
-msgid "Voulez-vous réellement que l'item affiché ne soit plus décrit à l'aide de cette rubrique ?"
-msgstr "Voulez-vous réellement que l'item affiché ne soit plus décrit à l'aide de cette rubrique ?"
-
+#: src/components/itemPage/InputFile.jsx:15
 #: src/components/itemPage/InputFile.jsx:15
 msgid "Une erreur est survenue"
 msgstr "Une erreur est survenue"
 
-#: src/components/itemPage/Item.jsx:305
+#: src/components/itemPage/Item.jsx:433
+msgid "Voulez-vous réellement que l'item affiché ne soit plus décrit à l'aide de cette rubrique ?"
+msgstr "Voulez-vous réellement que l'item affiché ne soit plus décrit à l'aide de cette rubrique ?"
+
+#: src/components/itemPage/Item.jsx:311
 msgid "attribut : valeur"
 msgstr "attribut : valeur"
 
@@ -187,15 +189,18 @@ msgstr "mot de passe"
 msgid "nom d'utilisateur"
 msgstr "nom d'utilisateur"
 
+#: src/components/portfolioPage/Corpora.jsx:39
+msgid "triés par"
+msgstr "triés par"
+
 #: src/components/itemPage/Attribute.jsx:93
 msgid "valeur"
 msgstr "valeur"
-
-#: src/components/viewpointPage/Outliner.jsx:48
-msgid "Êtes-vous sûr de vouloir supprimer le point de vue ?"
-msgstr "Êtes-vous sûr de vouloir supprimer le point de vue ?"
 
 #: src/components/itemPage/Copyright.jsx:21
 msgid "© {creator}, {yearOrDate}"
 msgstr "© {creator}, {yearOrDate}"
 
+#: src/components/viewpointPage/Outliner.jsx:48
+msgid "Êtes-vous sûr de vouloir supprimer le point de vue ?"
+msgstr "Êtes-vous sûr de vouloir supprimer le point de vue ?"

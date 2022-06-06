@@ -75,7 +75,7 @@ class Register extends Component {
                       placeholder="bob" name="pseudo" ref={(x) => this.pseudo = x}/>
                   </div>
                   <div className="form-group">
-                    <label htmlFor="email"><Trans>Adresse email</Trans></label>
+                    <label htmlFor="email"><Trans>Adresse électronique</Trans></label>
                     <input type="email" className="form-control" id="email" placeholder="bob@gmail.com" name="email" ref={(x) => this.email = x}/>
                   </div>
                   <div className="form-group">

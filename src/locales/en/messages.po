@@ -14,18 +14,14 @@ msgstr ""
 "Plural-Forms: \n"
 
 #: src/components/registerPage/Register.jsx:78
-msgid "Adresse email"
-msgstr ""
-
-#: src/components/registerPage/Register.jsx:73
-#~ msgid "Adresse mail"
-#~ msgstr "Email address"
+msgid "Adresse électronique"
+msgstr "Email address"
 
 #: src/components/viewpointPage/Contributors.jsx:27
 msgid "Ajouter"
 msgstr "Add"
 
-#: src/components/itemPage/Item.jsx:303
+#: src/components/itemPage/Item.jsx:309
 msgid "Ajouter un attribut et une valeur..."
 msgstr "Add an attribute and a value..."
 
@@ -41,7 +37,11 @@ msgstr "Add a topic..."
 msgid "Attention : Le point de vue sera définitivement supprimé."
 msgstr "Warning: The viewpoint will be permanently deleted."
 
-#: src/components/itemPage/Item.jsx:105
+#: src/components/portfolioPage/Portfolio.jsx:76
+msgid "Attributs"
+msgstr "Attributes"
+
+#: src/components/itemPage/Item.jsx:107
 msgid "Attributs du document"
 msgstr "Document attributes"
 
@@ -59,9 +59,9 @@ msgstr "Create a viewpoint"
 
 #: src/components/viewpointPage/Outliner.jsx:78
 msgid "Créer"
-msgstr ""
+msgstr "Create"
 
-#: src/components/itemPage/Item.jsx:102
+#: src/components/itemPage/Item.jsx:104
 msgid "Description"
 msgstr "Description"
 
@@ -69,6 +69,7 @@ msgstr "Description"
 msgid "Déselectionner"
 msgstr "Deselect"
 
+#: src/components/portfolioPage/Button.jsx:12
 #: src/components/portfolioPage/Button.jsx:13
 msgid "Et"
 msgstr "And"
@@ -101,6 +102,7 @@ msgstr "Viewpoint name"
 msgid "Nouveau point de vue"
 msgstr "New viewpoint"
 
+#: src/components/portfolioPage/Button.jsx:12
 #: src/components/portfolioPage/Button.jsx:13
 msgid "Ou"
 msgstr "Or"
@@ -109,7 +111,7 @@ msgstr "Or"
 msgid "Pas de contributeurs"
 msgstr "No contributors"
 
-#: src/components/portfolioPage/Portfolio.jsx:71
+#: src/components/portfolioPage/Portfolio.jsx:82
 msgid "Points de vue"
 msgstr "Viewpoints"
 
@@ -121,17 +123,18 @@ msgstr "Pseudonym"
 msgid "Rechercher..."
 msgstr "Search..."
 
-#: src/components/itemPage/Item.jsx:114
+#: src/components/itemPage/Item.jsx:116
 msgid "Ressources"
 msgstr "Resources"
 
-#: src/components/itemPage/Item.jsx:95
+#: src/components/itemPage/Item.jsx:97
+#: src/components/viewpointPage/Outliner.jsx:37
 msgid "Retour à l'accueil"
 msgstr "Go back to home page"
 
-#: src/components/itemPage/Item.jsx:95
+#: src/components/itemPage/Item.jsx:97
 msgid "Retour à la visite"
-msgstr ""
+msgstr "Go back to visit"
 
 #: src/components/portfolioPage/Status.jsx:25
 msgid "Rubrique inconnue"
@@ -165,15 +168,15 @@ msgstr "All files have been uploaded"
 msgid "Tous les items"
 msgstr "All items"
 
-#: src/components/itemPage/Item.jsx:394
-msgid "Voulez-vous réellement que l'item affiché ne soit plus décrit à l'aide de cette rubrique ?"
-msgstr "Remove this topic for this item?"
-
 #: src/components/itemPage/InputFile.jsx:15
 msgid "Une erreur est survenue"
 msgstr "An error occurred"
 
-#: src/components/itemPage/Item.jsx:305
+#: src/components/itemPage/Item.jsx:433
+msgid "Voulez-vous réellement que l'item affiché ne soit plus décrit à l'aide de cette rubrique ?"
+msgstr "Remove this topic for this item?"
+
+#: src/components/itemPage/Item.jsx:311
 msgid "attribut : valeur"
 msgstr "attribute: value"
 
@@ -185,14 +188,18 @@ msgstr "Password"
 msgid "nom d'utilisateur"
 msgstr "Username"
 
+#: src/components/portfolioPage/Corpora.jsx:39
+msgid "triés par"
+msgstr "sort by"
+
 #: src/components/itemPage/Attribute.jsx:93
 msgid "valeur"
 msgstr "value"
 
-#: src/components/viewpointPage/Outliner.jsx:48
-msgid "Êtes-vous sûr de vouloir supprimer le point de vue ?"
-msgstr "Are you sure you want to delete the viewpoint?"
-
 #: src/components/itemPage/Copyright.jsx:21
 msgid "© {creator}, {yearOrDate}"
 msgstr "© {creator}, {yearOrDate}"
+
+#: src/components/viewpointPage/Outliner.jsx:48
+msgid "Êtes-vous sûr de vouloir supprimer le point de vue ?"
+msgstr "Are you sure you want to delete the viewpoint?"
