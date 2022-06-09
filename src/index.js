@@ -5,12 +5,10 @@ import Portfolio from './components/portfolioPage/Portfolio.jsx';
 import Item from './components/itemPage/Item.jsx';
 import Outliner from './components/viewpointPage/Outliner.jsx';
 import Register from './components/registerPage/Register';
-
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'open-iconic/font/css/open-iconic-bootstrap.css';
 import './styles/index.css';
 import './styles/App.css';
-
 import { I18nProvider } from '@lingui/react';
 import { i18n } from '@lingui/core';
 

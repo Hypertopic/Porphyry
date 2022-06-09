@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Hypertopic from 'hypertopic';
 import conf from '../../config.js';
 import { Trans } from '@lingui/macro';
+import { Link } from 'react-router-dom';
 
 class SameNameBlock extends Component {
 
@@ -78,7 +79,7 @@ class SameNameBlock extends Component {
 
   _getItems() {
     return this.state.sameNameItemsList.map(item =>
-      <Item key={item.id} item={item} search={this.props.search} />
+      <Item key={item.id} item={item} selectedUri={this.props.selectedUri} />
     );
   }
 
@@ -90,16 +91,23 @@ function Item(props) {
   let name = [props.item.name].join(', '); //Name can be an array
   if (thumbnail) return (
     <div className="Item">
-      <a href={uri}>
+      <Link to={{
+        pathname: uri,
+        state: {selectedUri: props.selectedUri}
+      }}>
         <img src={thumbnail} alt={name}/>
-      </a>
+      </Link>
     </div>
   );
+
   return (
     <div className="Item">
-      <a href={uri}>
+      <Link to={{
+        pathname: uri,
+        state: {selectedUri: props.selectedUri}
+      }}>
         {name}
-      </a>
+      </Link>
     </div>
   );
 }

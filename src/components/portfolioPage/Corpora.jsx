@@ -75,7 +75,10 @@ function Item(props) {
     && <div className="About"> {props.item[props.criteria]} </div>;
   return (
     <div className="Item">
-      <Link to={uri}>
+      <Link to={{
+        pathname: uri,
+        state: { selectedUri: window.location.search }
+      }}>
         {thumbnail}
         <div>{name}</div>
       </Link>

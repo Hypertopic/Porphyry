@@ -1,6 +1,8 @@
 user: vitraux
 services:
   - http://localhost
+
+
 #disqus: #paste your Disqus 'shortname'
 #map:
 #  key: #paste your GoogleMaps API key for geocoding and dynamic maps
