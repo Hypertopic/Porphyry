@@ -48,6 +48,11 @@ class Item extends Component {
     });
   }
 
+  componentDidUpdate(prevProps) {
+    if (this.props.match.params.item !== prevProps.match.params.item) {
+      window.location.reload(false);
+    }
+  }
   render() {
     let name = getString(this.state.item.name);
     let attributes = this._getAttributes();
@@ -91,7 +96,7 @@ class Item extends Component {
         <div id="desktop_return_button" className="Status row h5 px-3 mb-0 mb-md-3">
           <Link to={{
             pathname: '/',
-            search: decodeURIComponent(goBackUrlParams.toString())
+            search: this.props.location.state ? this.props.location.state.selectedUri : '',
           }} className="badge badge-pill badge-light TopicTag">
             <span className="badge badge-pill badge-dark oi oi-chevron-left"> </span>
             {this.visitName ? t`Retour à la visite` : t`Retour à l'accueil`}
@@ -176,7 +181,7 @@ class Item extends Component {
     //before returning the SameNameBlock Component, we ensure that the consulted item name value is defined
     if (this.state.item.name !== undefined && this.state.item.name !== null) {
       return (
-        <SameNameBlock ID={this.props.match.params.item} itemName={this.state.item.name} setCorpus={this.handleCallback} />
+        <SameNameBlock ID={this.props.match.params.item} itemName={this.state.item.name} selectedUri={this.props.location.state ? this.props.location.state.selectedUri : ''} setCorpus={this.handleCallback} />
       );
     }
     //item name has no value
