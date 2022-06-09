@@ -93,3 +93,7 @@ Soit("{string} la recherche actuelle") do |topic|
   find('input[type="search"]').send_keys topic
   click_link(topic, href: nil)
 end
+
+Soit("{string} le paramètre appliqué à l'attribut {string}") do |setting, attribute|
+  find('.AttributeList ' + attribute).to have_css("." + setting)
+end

@@ -123,3 +123,10 @@ Quand("l'utilisateur dépose {string} comme ressource") do |string|
   end
 end
 
+Quand("l'utilisateur sélectionne un intervalle entre {int} et {int} pour l'attribut {string}") do |min, max, attribute|
+  within '.' + attribute do
+    find_all('input[type="range"]')[0].set(min)
+    find_all('input[type="range"]')[1].set(max)
+  end
+end
+
