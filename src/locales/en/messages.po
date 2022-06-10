@@ -102,6 +102,10 @@ msgstr "Viewpoint name"
 msgid "Nouveau point de vue"
 msgstr "New viewpoint"
 
+#: src/components/portfolioPage/GeographicMap.jsx:63
+msgid "Opacité du calque"
+msgstr "Layer opacity"
+
 #: src/components/portfolioPage/Button.jsx:12
 #: src/components/portfolioPage/Button.jsx:13
 msgid "Ou"

@@ -102,6 +102,10 @@ msgstr "Nom du point de vue"
 msgid "Nouveau point de vue"
 msgstr "Nouveau point de vue"
 
+#: src/components/portfolioPage/GeographicMap.jsx:63
+msgid "Opacité du calque"
+msgstr "Opacité du calque"
+
 #: src/components/portfolioPage/Button.jsx:12
 #: src/components/portfolioPage/Button.jsx:13
 msgid "Ou"

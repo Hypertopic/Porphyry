@@ -4,11 +4,13 @@ import {Items} from '../../model.js';
 import { GoogleMap, GroundOverlay, Marker, LoadScript } from '@react-google-maps/api';
 import memoize from 'mem';
 import Selection from '../../Selection.js';
+import { Trans } from '@lingui/macro';
 
 class GeographicMap extends React.PureComponent {
 
   state = {
     places: [],
+    sliderValue: 70,
     layers: []
   }
 
@@ -42,22 +44,31 @@ class GeographicMap extends React.PureComponent {
       />
     );
     let layers = this.state.layers.map(layer =>
-      <GroundOverlay key={layer.uri} url={layer.uri} bounds={layer.bounds} />
+      <GroundOverlay key={layer.uri} url={layer.uri} bounds={layer.bounds} opacity={this.state.sliderValue / 100} />
     );
     let center = this.bounds ? this.bounds.getCenter : { lat: 0, lng: 0 };
     return (
-      <LoadScript googleMapsApiKey={this.state.api_key} >
-        <GoogleMap
-          mapContainerStyle={{ width: '100%', height: '400px' }}
-          center={center}
-          zoom={2}
-          onLoad={this.handleLoad}
-        >
-          {layers}
-          {markers}
-        </GoogleMap>
-      </LoadScript>
+      <>
+        <LoadScript googleMapsApiKey={this.state.api_key} >
+          <GoogleMap
+            mapContainerStyle={{ width: '100%', height: '400px' }}
+            center={center}
+            zoom={2}
+            onLoad={this.handleLoad}
+          >
+            {layers}
+            {markers}
+          </GoogleMap>
+        </LoadScript>
+        <div className="sliderProperties"><Trans>Opacité du calque&nbsp;</Trans><input type="range" min="1" max="100" value={this.state.sliderValue} className="slider" id="opacitySlider" onChange={this.handleSlider}></input>{this.state.sliderValue}%</div>
+      </>
     );
+  }
+
+  handleSlider = (e) => {
+    this.setState({
+      sliderValue: e.target.value
+    });
   }
 
   handleLoad = (map) => {
