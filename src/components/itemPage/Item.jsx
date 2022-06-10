@@ -37,15 +37,8 @@ class Item extends Component {
     this.state = {
       attributeInputValue: '',
       item: { topic: [] },
-      visitMap: false,
       corpus: []
     };
-    conf.then(settings => {
-      if (settings.portfolio && settings.portfolio[settings.user])
-        this.setState({
-          visitMap: settings.portfolio[settings.user].visitMap || false,
-        });
-    });
   }
 
   componentDidUpdate(prevProps) {
@@ -60,22 +53,6 @@ class Item extends Component {
     let viewpoints = this._getViewpoints();
     let sameNameBlock = this._getSameNameBlock();
     const mobileViewpoints = this._getMobileViewpoints();
-    const { visitMap } = this.state;
-    this.visitName = new URLSearchParams(window.location.search).get('visit');
-    const goBackUrlParams = new URLSearchParams();
-    if (visitMap && this.visitName) {
-      goBackUrlParams.set('t', JSON.stringify({
-        'type': 'intersection',
-        'data': [{
-          'type': 'intersection',
-          'selection': [
-            `spatial : ${this.visitName}`
-          ],
-          'exclusion': []
-        }]
-      }));
-      goBackUrlParams.set('mode', 'visit');
-    }
     return (
       <div className="App container-fluid px-0 px-md-3">
         <Header conf={conf} />
@@ -83,7 +60,7 @@ class Item extends Component {
           <h1 className="ItemTitle">
             <Link to={{
               pathname: '/',
-              search: decodeURIComponent(goBackUrlParams.toString())
+              search: this.props.location.state ? this.props.location.state.selectedUri : '',
             }} className="badge badge-pill badge-dark">
               <span className="badge badge-pill badge-dark oi oi-chevron-left"> </span>
             </Link>
@@ -99,7 +76,7 @@ class Item extends Component {
             search: this.props.location.state ? this.props.location.state.selectedUri : '',
           }} className="badge badge-pill badge-light TopicTag">
             <span className="badge badge-pill badge-dark oi oi-chevron-left"> </span>
-            {this.visitName ? t`Retour à la visite` : t`Retour à l'accueil`}
+            <Trans>Retour à l'accueil</Trans>
           </Link>
         </div>
         <div className="container-fluid">

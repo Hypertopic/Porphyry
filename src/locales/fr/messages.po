@@ -132,10 +132,6 @@ msgstr "Ressources"
 msgid "Retour à l'accueil"
 msgstr "Retour à l'accueil"
 
-#: src/components/itemPage/Item.jsx:97
-msgid "Retour à la visite"
-msgstr "Retour à la visite"
-
 #: src/components/portfolioPage/Status.jsx:25
 msgid "Rubrique inconnue"
 msgstr "Rubrique inconnue"

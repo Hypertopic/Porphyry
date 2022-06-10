@@ -123,6 +123,6 @@ Quand("l'utilisateur dépose {string} comme ressource") do |string|
   end
 end
 
-Quand("l'utilisteur clique sur {string}") do |string|
+Quand("l'utilisateur clique sur {string}") do |string|
   click_on string
 end
