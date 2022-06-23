@@ -125,6 +125,22 @@ export default class Selection {
     }
   }
 
+  addTopicArray = (arrayAttributes) => {
+    const data = this.selectionJSON.data;
+    try {
+      for (let i = 0; i < data.length; i++) {
+        if (data[i].selection[0].includes(':')) {
+          if (data[i].selection[0].split(':')[0] === arrayAttributes[0].split(':')[0]) {
+            data.splice(i, 1);
+          }
+        }
+      }
+      this.selectionJSON.data.push({type: 'union', selection: arrayAttributes, exclusion: []});
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   /**
    * Remove topic from selection.
    *

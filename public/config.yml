@@ -9,3 +9,6 @@ services:
 portfolio:
   vitraux:
     visitMap: true
+  dessins:
+    slider:
+     - année
