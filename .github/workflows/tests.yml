@@ -1,43 +1,69 @@
 name: Acceptance tests
-on: 
+on:
   - push
   - pull_request
 jobs:
-  test:
+
+  build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Download Porphyry
+        uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
           node-version: 16
           cache: 'npm'
-      - name: Install and run Argos with proxy and test data
+      - name: Install Porphyry dependencies
+        run:
+          npm install
+      - name: Build Porphyry
+        run:
+          npm run build
+      - name: Save Porphyry build for later
+        uses: actions/upload-artifact@v3
+        with:
+          name: porphyry-build
+          path: build
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Porphyry
+        uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: 'npm'
+      - name: Download Argos
         run: |
           wget https://github.com/Hypertopic/Argos/archive/v4.zip
           unzip v4.zip
+      - name: Install and launch Argos with proxy and test data
+        run: |
           cd Argos-4
           docker-compose up -d
           cd ..
-      - uses: nev7n/wait_for_response@v1
+      - name: Wait for Argos
+        uses: nev7n/wait_for_response@v1
         with:
           url: http://localhost
           responseCode: 200
-      - name: Create test users
+      - name: Create test user
         run: |
           curl --silent -X PUT localhost:5984/_users
           curl --silent -X PUT localhost:5984/_users/org.couchdb.user:alice -H 'Accept:application/json' -H 'Content-Type:application/json' -d '{"name":"alice", "password":"whiterabbit", "roles":[], "type":"user"}'
-      - name: Install Porphyry
-        run: |
-          npm install
-          npm run build
+      - name: Get Porphyry build
+        uses: actions/download-artifact@v3
+        with:
+          name: porphyry-build
+          path: build
       - name: Start Porphyry
-        run: npm run preprod &
-      - uses: nev7n/wait_for_response@v1
+        run: npx serve -s build -p 3000 &
+      - name: Wait for Porphyry
+        uses: nev7n/wait_for_response@v1
         with:
           url: http://localhost:3000/
           responseCode: 200
-      - name: Install test tools
-        run: docker pull benel/cucumber-capybara
       - name: Run tests
         run : docker run --rm -v "$(pwd)":/app -t --net="host" --env APP_HOST="http://`hostname`:3000" benel/cucumber-capybara --retry 2 --fail-fast --no-source --no-snippets
         shell: 'script -q -e -c "bash {0}"'
