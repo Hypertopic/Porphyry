@@ -58,7 +58,7 @@ jobs:
           name: porphyry-build
           path: build
       - name: Start Porphyry
-        run: npx serve -s build -p 3000 &
+        run: npm run preprod &
       - name: Wait for Porphyry
         uses: nev7n/wait_for_response@v1
         with:
