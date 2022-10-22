@@ -31,14 +31,6 @@ Soit("{string} les rubriques sélectionnées") do |topics|
 end
 
 Soit("{string} les rubriques sélectionnées négativement") do |topics|
-  visit '/'
-  topics.split('|').each do |topic|
-    click_on topic
-    click_on topic
-  end
-end
-
-Soit('{string} les rubriques désélectionnées') do |topics|
   topic_format = '{"type":"intersection","selection":[],"exclusion":%s}'
   query_format = '{"type":"intersection","data":[%s]}'
   selection = topics.split('|').map {|topic| getUUID(topic)}
