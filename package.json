@@ -25,18 +25,14 @@
   },
   "devDependencies": {
     "@lingui/cli": "^3.13.3",
-    "@lingui/macro": "^3.13.3",
-    "cross-env": "^7.0.3",
-    "react-scripts": "^4.0.3",
-    "rimraf": "^3.0.2",
-    "serve": "^13.0.2"
+    "@lingui/macro": "^3.13.3"
   },
   "scripts": {
     "extract": "lingui extract",
-    "start": "lingui compile && cross-env EXTEND_ESLINT=true react-scripts start",
-    "clean": "rimraf src/locales/*/messages.js && rimraf build src/locales/_build",
-    "build": "lingui compile && react-scripts build",
-    "preprod": "serve -s build -p 3000"
+    "start": "lingui compile && npx --yes cross-env EXTEND_ESLINT=true npx --yes react-scripts@4 start",
+    "clean": "npx --yes rimraf src/locales/*/messages.js && npx --yes rimraf build src/locales/_build",
+    "build": "lingui compile && npx --yes react-scripts@4 build",
+    "preprod": "npx --yes serve -s build -p 3000"
   },
   "lingui": {
     "catalogs": [
@@ -55,9 +51,6 @@
     "sourceLocale": "fr"
   },
   "eslintConfig": {
-    "extends": [
-      "react-app"
-    ],
     "rules": {
       "object-shorthand": 2,
       "brace-style": 2,
